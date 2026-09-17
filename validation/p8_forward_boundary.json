@@ -1,0 +1,17 @@
+{
+  "phase": "P8",
+  "purpose": "Prospective forward-testing boundary, established BEFORE any post-boundary outcome is observed. Genuine intraday Bar Replay was re-confirmed unavailable at declaration time (see docs/PINE_P8.md Section 3) -- Daily-only replay is NOT used as a substitute for 5m/15m/30m evidence, per the explicit P8 instruction against fake replay.",
+  "p8_boundary_utc": "2026-09-17T13:47:01Z",
+  "p8_boundary_local": "declared in UTC only; no local-timezone offset applies to this environment's session",
+  "source_commit": "d276af41fb9fbe459a94edb0ea54d02815f98bfa",
+  "candidate_lock_hash": "4c821c9a9baf97437ea50bde1e7d760f1d6d118fb42ec5f216d42ad493e7990f",
+  "symbol": "OANDA:XAUUSD",
+  "timeframes": ["5", "15", "30"],
+  "boundary_chart_bar_time": {
+    "5m":  { "last_confirmed_bar_time_unix": 1789652700, "last_confirmed_bar_time_utc": "2026-09-17T13:45:00.000Z", "last_confirmed_bar_index": 299 },
+    "15m": { "last_confirmed_bar_time_unix": 1789652700, "last_confirmed_bar_time_utc": "2026-09-17T13:45:00.000Z", "last_confirmed_bar_index": 299 },
+    "30m": { "last_confirmed_bar_time_unix": 1789651800, "last_confirmed_bar_time_utc": "2026-09-17T13:30:00.000Z", "last_confirmed_bar_index": 299 }
+  },
+  "eligibility_rule": "A signal qualifies as a P8 forward observation on timeframe TF if and only if its SIGNAL_BAR_TIME (unix ms from the frozen contract's SIGNAL_BAR_TIME field, converted to unix seconds) is STRICTLY GREATER than boundary_chart_bar_time[TF].last_confirmed_bar_time_unix. Any signal at or before this value is historical (already reflected in P6/P7 development statistics) and is EXCLUDED from the P8 forward ledger, with no exception.",
+  "boundary_immutability_statement": "This boundary was written before observing any post-boundary outcome and must never be moved, regardless of how many or how few qualifying signals accumulate, and regardless of whether early forward results are favorable or unfavorable."
+}

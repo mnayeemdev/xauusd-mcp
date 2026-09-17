@@ -1,0 +1,8 @@
+{
+  "phase": "P8",
+  "purpose": "Deterministic, append-only ledger of C4 signals whose SIGNAL_BAR_TIME is strictly after the locked p8_forward_boundary.json cutoff. Historical P5/P7 statistics are explicitly excluded -- see validation/p8_results.json's historical_reference_not_forward_evidence section for the separated pre-boundary data.",
+  "boundary_reference": "validation/p8_forward_boundary.json",
+  "candidate_lock_reference": "validation/p8_candidate_lock.json",
+  "ledger_rule": "A record may be appended to this ledger only if SIGNAL_BAR_TIME > boundary_chart_bar_time[timeframe].last_confirmed_bar_time_unix for its timeframe. Once appended, ENTRY, SL, TP1, TP2/EXIT_TARGET, side, model, regime, signal_id, and signal_bar_time fields are immutable. Only 'status' (OPEN -> PASS or OPEN -> FAIL) and terminal resolution fields may be updated, and only once (PASS/FAIL are themselves terminal and immutable thereafter).",
+  "observations": []
+}

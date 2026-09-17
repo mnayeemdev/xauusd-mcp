@@ -1,0 +1,34 @@
+{
+  "phase": "P8",
+  "purpose": "Immutable lock of the P7 research candidate (C4) BEFORE any P8 outcome is observed. No P8 finding may change any value in this file.",
+  "candidate_lock_created_at_utc": "2026-09-17T13:45:18Z",
+  "source_p7_commit": "d276af41fb9fbe459a94edb0ea54d02815f98bfa",
+  "source_p7_commit_message": "PINE P7: freeze controlled optimization research",
+  "candidate_id": "C4",
+  "candidate_lock_hash": "4c821c9a9baf97437ea50bde1e7d760f1d6d118fb42ec5f216d42ad493e7990f",
+  "candidate_lock_hash_method": "sha256 of JSON.stringify({candidate_id, locked_parameters, indicator_sha256, strategy_sha256, contract_version}) with keys in that exact order",
+  "locked_parameters": {
+    "minRR": 1.7,
+    "corrResolveConfirmBars": 3,
+    "qualityThreshold": 65
+  },
+  "unchanged_from_p6_baseline": {
+    "overextendAtrMult": 2.5,
+    "boMaxEntryLateBars": 10,
+    "note": "All 54 non-selected P7 parameters (see docs/PINE_P7_PARAMETER_AUDIT.md) also remain at their frozen P6/P5 default values -- unchanged by C4 by definition, since C4 overrides only minRR and corrResolveConfirmBars."
+  },
+  "frozen_source_integrity": {
+    "indicator_path": "pine/XAUUSD_Adaptive_Master.pine",
+    "indicator_sha256": "6c4dbba9105db1f75a07682408a8d91f34929d594cf8ddf7eaaea0defa57d3b6",
+    "strategy_path": "pine/XAUUSD_Adaptive_Master_Strategy.pine",
+    "strategy_sha256": "947b6852d3ae60fc236854c0b6604b7af15f355a58340d5b5eca79db37797911",
+    "contract_version": 1,
+    "indicator_version": "0.4.0"
+  },
+  "target": {
+    "symbol": "OANDA:XAUUSD",
+    "required_timeframes": ["5", "15", "30"],
+    "provider_note": "No substitute symbol/provider permitted; matches P6/P7 target exactly."
+  },
+  "immutability_statement": "After this timestamp, no P8 finding, loss, WAIT streak, or observation of any kind may cause minRR, corrResolveConfirmBars, qualityThreshold, or any other trading parameter recorded here to change. Any such change would invalidate the P8 phase and must instead be recorded as a 'P8 OBSERVATION / FUTURE RESEARCH NOTE' for a possible future P9+, never implemented within P8 itself."
+}
