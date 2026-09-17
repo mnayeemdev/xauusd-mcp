@@ -65,21 +65,45 @@ only post-boundary findings.
 
 ## 7. Forward observation window
 
-Checked from boundary declaration (`13:47:01Z`) through
-`13:55:02Z` (~8 minutes elapsed). In that window:
+**Observability method**: each check reads both the live contract
+table's current-bar `SIGNAL_ID`/`SIGNAL_BAR_TIME`/`ACTION` fields AND
+the P5 recorder's lifetime `P5_TOTAL_SIGNALS` counter and
+`P5_LAST_SIGNAL_TIME` pointer. These are persistent `var` accumulators
+that update the instant any new signal is authorized on any bar, and are
+never reset by display/history eviction — so an unchanged counter
+between two checks is complete proof that zero signals occurred
+anywhere in the entire elapsed interval, not just on the single bar
+visible at check time. This holds only as long as the same indicator
+instance (entity `TYuV4V`) keeps running without being removed/re-added,
+which it has.
+
+**Run 1** — checked from boundary declaration (`13:47:01Z`) through
+`13:55:02Z` (~8 minutes): 5m 2 new confirmed bars/0 signals, 15m/30m
+still in the boundary-reference bar.
+
+**Run 2** — checked from `13:55:02Z` through `14:23:03Z` (~28 more
+minutes): 5m 6 new confirmed bars (13:50→14:15), 15m 1 new confirmed bar
+(14:00:00), 30m 0 new *eligible* confirmed bars yet (the 13:30-14:00 bar
+closed but its bar time equals the boundary reference exactly, so it is
+excluded by the strict-greater-than rule). All three timeframes'
+`P5_TOTAL_SIGNALS` and `P5_LAST_SIGNAL_TIME` were confirmed unchanged
+from their pre-boundary values (5m=50, 15m=60, 30m=106 — each matching
+the P7 development reference exactly), proving zero new signals in
+either run.
+
+**Cumulative since boundary** (through `14:23:03Z`, ~36 minutes):
 
 | TF | Post-boundary confirmed bars | Qualifying signals | Last action | Last WAIT reason |
 |---|---|---|---|---|
-| 5m | 2 | 0 | WAIT | NO_ELIGIBLE_STRATEGY |
-| 15m | 0 (still in the boundary-reference bar) | 0 | WAIT | NO_TRIGGER |
-| 30m | 0 (still in the boundary-reference bar) | 0 | WAIT | NO_TRIGGER |
+| 5m | 8 | 0 | WAIT | NO_ELIGIBLE_STRATEGY |
+| 15m | 1 | 0 | WAIT | NO_TRIGGER |
+| 30m | 0 (first eligible bar still forming) | 0 | WAIT | NO_TRIGGER |
 
 **Sample sufficiency**: `NO FORWARD SIGNALS YET` on all three timeframes.
 This is expected — the system's documented signal sparsity is
-~10-14 signals per 1000 bars, and only a few minutes (a fraction of one
-bar on 15m/30m) have elapsed. Zero signals in this tiny window neither
-confirms nor refutes C4; it is simply the honest, unpadded state of
-evidence at execution time.
+~10-14 signals per 1000 bars, and only ~36 minutes have elapsed. Zero
+signals in this window neither confirms nor refutes C4; it is simply the
+honest, unpadded state of evidence at execution time.
 
 ## 8. WAIT/no-signal behavior
 

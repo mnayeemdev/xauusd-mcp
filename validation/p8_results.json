@@ -13,27 +13,71 @@
     "intraday_replay_availability_recheck": "UNAVAILABLE -- re-confirmed at P8 start: replay_start failed on 5m/15m/30m for OANDA:XAUUSD with the same error as the P6 continuation ('Replay failed to start... Try a higher timeframe'). Consistent with the previously-documented Basic-plan restriction. Not re-litigated exhaustively (e.g. not re-tested cross-symbol) per the explicit P8 instruction not to repeatedly fight a clearly-still-present restriction.",
     "mode_selected": "PROSPECTIVE FORWARD BOUNDARY (validation/p8_forward_boundary.json)"
   },
+  "observability_method": "Each check reads the live contract table's per-bar SIGNAL_ID/SIGNAL_BAR_TIME/ACTION fields AND the P5 recorder's lifetime P5_TOTAL_SIGNALS counter and P5_LAST_SIGNAL_TIME pointer. The lifetime counter/pointer are 'var' accumulators that update the instant ANY new signal is authorized on ANY bar (confirmed or not) and are never reset by display/history eviction -- they are immune to gaps between manual checks as long as the same indicator instance keeps running without being removed/re-added. This instance (entity TYuV4V) has run continuously since C4 was applied and has not been removed/re-added, so an unchanged P5_TOTAL_SIGNALS and an unchanged, still-pre-boundary P5_LAST_SIGNAL_TIME between two checks is complete, authoritative proof that zero new signals occurred anywhere in the elapsed interval -- not merely on the single bar visible at check time.",
+  "observation_runs": [
+    {
+      "run_utc": "2026-09-17T13:55:02Z",
+      "previous_checked_through_utc": "2026-09-17T13:47:01Z (boundary declaration)",
+      "new_checked_through_utc": "2026-09-17T13:55:02Z",
+      "5m":  { "new_confirmed_bars_inspected": 2, "new_qualifying_signals": 0, "existing_open_resolved": 0, "last_state": "WAIT / NO_ELIGIBLE_STRATEGY" },
+      "15m": { "new_confirmed_bars_inspected": 0, "new_qualifying_signals": 0, "existing_open_resolved": 0, "last_state": "WAIT / NO_TRIGGER (still-forming boundary-reference bar)" },
+      "30m": { "new_confirmed_bars_inspected": 0, "new_qualifying_signals": 0, "existing_open_resolved": 0, "last_state": "WAIT / NO_TRIGGER (still-forming boundary-reference bar)" }
+    },
+    {
+      "run_utc": "2026-09-17T14:23:03Z",
+      "previous_checked_through_utc": "2026-09-17T13:55:02Z",
+      "new_checked_through_utc": "2026-09-17T14:23:03Z",
+      "5m":  {
+        "new_confirmed_bars_inspected": 6,
+        "new_confirmed_bar_times_utc": ["13:50:00", "13:55:00", "14:00:00", "14:05:00", "14:10:00", "14:15:00"],
+        "new_qualifying_signals": 0,
+        "existing_open_resolved": 0,
+        "evidence": "P5_TOTAL_SIGNALS unchanged at 50 (matches P7 C4 reference exactly); P5_LAST_SIGNAL_TIME unchanged at 1789628700000ms (~07:05 UTC, well before the 13:45 boundary)",
+        "last_state": "WAIT / NO_ELIGIBLE_STRATEGY (bar forming at 14:20:00)"
+      },
+      "15m": {
+        "new_confirmed_bars_inspected": 1,
+        "new_confirmed_bar_times_utc": ["14:00:00"],
+        "new_qualifying_signals": 0,
+        "existing_open_resolved": 0,
+        "evidence": "P5_TOTAL_SIGNALS unchanged at 60 (matches P7 C4 reference exactly); P5_OPEN unchanged at 1; P5_LAST_SIGNAL_TIME unchanged at 1789650000000ms (~13:00 UTC, before the 13:45 boundary)",
+        "last_state": "WAIT / NO_TRIGGER (bar forming at 14:15:00)"
+      },
+      "30m": {
+        "new_confirmed_bars_inspected": 0,
+        "new_confirmed_bar_times_utc": [],
+        "new_qualifying_signals": 0,
+        "existing_open_resolved": 0,
+        "note": "the 13:30-14:00 bar closed but its bar_time (13:30:00) equals the boundary reference exactly, so per the strict-greater-than eligibility rule it remains excluded, not counted as a new eligible bar; the first eligible bar (14:00:00) is still forming",
+        "evidence": "P5_TOTAL_SIGNALS unchanged at 106 (matches P7 C4 reference exactly); P5_LAST_SIGNAL_TIME unchanged at 1789516800000ms, well before the 13:30 boundary",
+        "last_state": "WAIT / NO_TRIGGER (bar forming at 14:00:00)"
+      }
+    }
+  ],
   "forward_observation_window": {
     "boundary_utc": "2026-09-17T13:47:01Z",
-    "checked_through_utc": "2026-09-17T13:55:02Z",
-    "elapsed_wall_clock": "~8 minutes -- genuinely insufficient for any meaningful forward sample; reported honestly rather than padded or extended artificially",
-    "5m":  { "post_boundary_confirmed_bars_elapsed": 2, "qualifying_signals": 0, "last_checked_action": "WAIT", "last_checked_wait_reason": "NO_ELIGIBLE_STRATEGY", "bar_time_checked_utc": "2026-09-17T13:55:00.000Z" },
-    "15m": { "post_boundary_confirmed_bars_elapsed": 0, "qualifying_signals": 0, "last_checked_action": "WAIT", "last_checked_wait_reason": "NO_TRIGGER", "note": "current forming bar (13:45-14:00) is the SAME bar that was already forming at boundary declaration -- has not yet confirmed" },
-    "30m": { "post_boundary_confirmed_bars_elapsed": 0, "qualifying_signals": 0, "last_checked_action": "WAIT", "last_checked_wait_reason": "NO_TRIGGER", "note": "current forming bar (13:30-14:00) is the SAME bar that was already forming at boundary declaration -- has not yet confirmed" }
+    "checked_through_utc": "2026-09-17T14:23:03Z",
+    "elapsed_wall_clock": "~36 minutes since boundary -- still genuinely insufficient for any meaningful forward sample; reported honestly rather than padded or extended artificially",
+    "5m":  { "post_boundary_confirmed_bars_elapsed": 8, "qualifying_signals": 0, "last_checked_action": "WAIT", "last_checked_wait_reason": "NO_ELIGIBLE_STRATEGY" },
+    "15m": { "post_boundary_confirmed_bars_elapsed": 1, "qualifying_signals": 0, "last_checked_action": "WAIT", "last_checked_wait_reason": "NO_TRIGGER" },
+    "30m": { "post_boundary_confirmed_bars_elapsed": 0, "qualifying_signals": 0, "last_checked_action": "WAIT", "last_checked_wait_reason": "NO_TRIGGER", "note": "first eligible 30m bar (14:00:00) is still forming as of this check" }
   },
   "sample_sufficiency": {
     "5m": "NO FORWARD SIGNALS YET (0 closed)",
     "15m": "NO FORWARD SIGNALS YET (0 closed)",
     "30m": "NO FORWARD SIGNALS YET (0 closed)",
-    "note": "These labels do not mean statistical validation. Zero signals in ~4 minutes of elapsed time is expected given the system's documented signal sparsity (~10-14 signals per 1000 bars) and is not itself informative -- it neither confirms nor refutes C4."
+    "note": "These labels do not mean statistical validation. Zero signals in ~36 minutes of elapsed time is expected given the system's documented signal sparsity (~10-14 signals per 1000 bars) and is not itself informative -- it neither confirms nor refutes C4."
   },
   "forward_metrics": {
     "note": "All forward metrics (PASS rate, mean R, cumulative R, profit factor, drawdown, model/regime/session/BUY-SELL breakdown) are UNDEFINED -- zero qualifying post-boundary signals exist. No metric was fabricated or estimated in their place."
   },
   "wait_observation_log": [
     { "timeframe": "5m", "bar_time_utc": "2026-09-17T13:50:00.000Z", "action": "WAIT", "wait_reason": "NO_ELIGIBLE_STRATEGY", "post_boundary": true },
-    { "timeframe": "15m", "bar_time_utc": "2026-09-17T13:45:00.000Z", "action": "WAIT", "wait_reason": "NO_TRIGGER", "post_boundary": false, "note": "still-forming boundary-reference bar, listed for completeness only" },
-    { "timeframe": "30m", "bar_time_utc": "2026-09-17T13:30:00.000Z", "action": "WAIT", "wait_reason": "NO_TRIGGER", "post_boundary": false, "note": "still-forming boundary-reference bar, listed for completeness only" }
+    { "timeframe": "5m", "bar_time_utc": "2026-09-17T14:20:00.000Z", "action": "WAIT", "wait_reason": "NO_ELIGIBLE_STRATEGY", "post_boundary": true },
+    { "timeframe": "15m", "bar_time_utc": "2026-09-17T13:45:00.000Z", "action": "WAIT", "wait_reason": "NO_TRIGGER", "post_boundary": false, "note": "the boundary-reference bar itself, listed for completeness only" },
+    { "timeframe": "15m", "bar_time_utc": "2026-09-17T14:15:00.000Z", "action": "WAIT", "wait_reason": "NO_TRIGGER", "post_boundary": true },
+    { "timeframe": "30m", "bar_time_utc": "2026-09-17T13:30:00.000Z", "action": "WAIT", "wait_reason": "NO_TRIGGER", "post_boundary": false, "note": "the boundary-reference bar itself, listed for completeness only" },
+    { "timeframe": "30m", "bar_time_utc": "2026-09-17T14:00:00.000Z", "action": "WAIT", "wait_reason": "NO_TRIGGER", "post_boundary": true }
   ],
-  "next_required_action": "Continued observation over future wall-clock time. Re-run the P8 forward-ledger capture procedure (read the live contract table's SIGNAL_ID/SIGNAL_BAR_TIME/ACTION fields per timeframe) periodically going forward; append any signal whose SIGNAL_BAR_TIME exceeds the locked boundary in validation/p8_forward_boundary.json to validation/p8_forward_ledger.json without altering its frozen fields. Do not shorten, extend, or move the boundary in response to how much or how little evidence accumulates."
+  "next_required_action": "Continued observation over future wall-clock time. Re-run the P8 forward-ledger capture procedure (read the live contract table's SIGNAL_ID/SIGNAL_BAR_TIME/ACTION fields plus P5_TOTAL_SIGNALS/P5_LAST_SIGNAL_TIME per timeframe) periodically going forward; append any signal whose SIGNAL_BAR_TIME exceeds the locked boundary in validation/p8_forward_boundary.json to validation/p8_forward_ledger.json without altering its frozen fields. Do not shorten, extend, or move the boundary in response to how much or how little evidence accumulates. Do not remove/re-add the live indicator instance without first confirming a fresh clean re-add reproduces the identical historical reference figures, since removal resets the persistent counters this observability method depends on."
 }

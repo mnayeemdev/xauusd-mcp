@@ -202,8 +202,14 @@ describe('Profile security', () => {
     assert.equal(upstream.length, 84, 'ground-truth upstream tool count changed — update the partition, not this assertion');
     assert.equal(new Set(upstream).size, 84, 'source scan itself found a duplicate registration — investigate tools/*.js');
 
-    const researchUpstreamOnly = APPROVED_RESEARCH_TOOLS.filter((t) => upstream.includes(t)); // exclude our own 3 new tools
-    const classified = [...researchUpstreamOnly, ...APPROVED_DEVELOPMENT_EXTRA_TOOLS, ...PROHIBITED_MUTATING_TOOLS, ...OTHER_UPSTREAM_TOOLS_NOT_EXPOSED_BY_SCOPE];
+    // Exclude this project's own native tools (never part of the upstream
+    // tradingview-mcp package) from the upstream partition check: the
+    // original 3 xauusd research tools, plus P9's xauusd_calculate_entry
+    // (the independent MCP calculation engine — a brand-new tool, not a
+    // reclassified upstream one).
+    const researchUpstreamOnly = APPROVED_RESEARCH_TOOLS.filter((t) => upstream.includes(t));
+    const developmentUpstreamOnly = APPROVED_DEVELOPMENT_EXTRA_TOOLS.filter((t) => upstream.includes(t));
+    const classified = [...researchUpstreamOnly, ...developmentUpstreamOnly, ...PROHIBITED_MUTATING_TOOLS, ...OTHER_UPSTREAM_TOOLS_NOT_EXPOSED_BY_SCOPE];
 
     assert.equal(classified.length, 84, `classification lists cover ${classified.length} tools, expected exactly 84`);
     assert.deepEqual([...classified].sort(), [...upstream].sort(), 'classification lists must exactly equal the upstream tool set (a diff here means a tool is either missing or double-counted)');

@@ -71,17 +71,28 @@ export const APPROVED_RESEARCH_TOOLS = Object.freeze([
   'xauusd_research_health',
 ]);
 
-// ── C. Development adds ONLY these five Pine read/write tools on top of
-// Research. pine_compile/pine_save/pine_new/pine_open/pine_list_scripts/
-// pine_analyze/pine_check are intentionally NOT included — they either
-// mutate the chart/cloud (compile adds a study; save writes to TradingView's
-// cloud; new/open replace the editor contents) or weren't asked for. ────
+// ── C. Development adds these Pine read/write tools on top of Research.
+// pine_compile/pine_save/pine_new/pine_open/pine_list_scripts/pine_analyze/
+// pine_check are intentionally NOT included — they either mutate the
+// chart/cloud (compile adds a study; save writes to TradingView's cloud;
+// new/open replace the editor contents) or weren't asked for.
+//
+// P9: xauusd_calculate_entry is ALSO Development-only, for a different
+// reason than the Pine tools above — it is the independent MCP
+// calculation engine (src/core/xauusd_calculate.js), which must switch
+// the chart's visible timeframe across 5m/15m/30m to gather each
+// timeframe's OHLCV (this single-chart CDP architecture has no way to
+// read a non-active timeframe's bars). It restores the original
+// timeframe afterward, but it genuinely mutates chart.resolution during
+// the call, which disqualifies it from the non-mutating Research
+// profile exactly like any other timeframe-changing tool. ────────────
 export const APPROVED_DEVELOPMENT_EXTRA_TOOLS = Object.freeze([
   'pine_get_source',
   'pine_set_source',
   'pine_smart_compile',
   'pine_get_errors',
   'pine_get_console',
+  'xauusd_calculate_entry',
 ]);
 
 // ── A. Truly state-changing / code-execution / process-control tools —

@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { jsonResult } from './_format.js';
 import * as core from '../core/xauusd.js';
+import { calculateEntry } from '../core/xauusd_calculate.js';
 
 /**
  * @param {object} gate - a ProfileGate (or the raw McpServer) with a .tool() method
@@ -17,6 +18,11 @@ export function registerXauusdTools(gate, { profile } = {}) {
 
   gate.tool('xauusd_master_state', 'Read-only structured reader for the XAUUSD Adaptive Master Pine indicator, parsed through a versioned contract (market/setup/decision/signal). Pine remains authoritative: this tool never derives regime/setup/action independently and never promotes WAIT/UNKNOWN into BUY/SELL. Status is one of NOT_FOUND / AMBIGUOUS / READ_ERROR / NO_CONTRACT / UNSUPPORTED_CONTRACT_VERSION / MALFORMED_CONTRACT / CONTRACT_CONTRADICTION / SOURCE_UNCONFIRMED / OK — decision.action stays UNKNOWN on every status except a fully-validated OK.', {}, async () => {
     try { return jsonResult(await core.getMasterState()); }
+    catch (err) { return jsonResult({ success: false, error: err.message }, true); }
+  });
+
+  gate.tool('xauusd_calculate_entry', 'MUTATING (switches chart timeframe internally, restores it afterward): the independent MCP calculation engine (src/core/xauusd_calculate.js). Fetches raw OHLCV directly from TradingView for 5m/15m/30m and computes regime/structure/correction/setup-model/quality/risk from scratch — it does NOT require or read the Pine indicator ACTION to produce a decision. Returns WAIT with null trade geometry, or BUY/SELL with entry/sl/tp1/tp2/rr computed by this engine. If the Pine indicator is present, its state is attached read-only as `pine_reference` for comparison only; a materially opposing actionable disagreement between the two engines fails closed to WAIT. Never places broker orders.', {}, async () => {
+    try { return jsonResult(await calculateEntry()); }
     catch (err) { return jsonResult({ success: false, error: err.message }, true); }
   });
 
