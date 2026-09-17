@@ -14,79 +14,93 @@ import { registerWatchlistTools } from './tools/watchlist.js';
 import { registerUiTools } from './tools/ui.js';
 import { registerPaneTools } from './tools/pane.js';
 import { registerTabTools } from './tools/tab.js';
+import { registerXauusdTools } from './tools/xauusd.js';
+import { resolveProfile, PROFILE_ENV_VAR } from './profiles.js';
+import { createProfileGate } from './profile_gate.js';
+import { PRODUCT_NAME, PRODUCT_DEVELOPER, PRODUCT_VERSION, UPSTREAM_URL } from './branding.js';
 
-const server = new McpServer(
-  {
-    name: 'tradingview',
-    version: '2.0.0',
-    description: 'AI-assisted TradingView chart analysis and Pine Script development via Chrome DevTools Protocol',
-  },
-  {
-    instructions: `TradingView MCP — 84 tools for reading and controlling a live TradingView Desktop chart.
+// Profile selection is explicit and fails closed: an unknown/malformed
+// profile name refuses to start the server rather than silently exposing
+// every tool. See src/profiles.js.
+let profile;
+try {
+  profile = resolveProfile(process.env[PROFILE_ENV_VAR]);
+} catch (err) {
+  process.stderr.write(`FATAL: ${err.message}\n`);
+  process.exit(1);
+}
 
-TOOL SELECTION GUIDE — use this to pick the right tool:
+const RESEARCH_INSTRUCTIONS = `${PRODUCT_NAME} — profile: XAUUSD_RESEARCH (read-only).
 
-Reading your chart:
-- chart_get_state → get symbol, timeframe, all indicator names + entity IDs (call first)
-- data_get_study_values → get current numeric values from ALL visible indicators (RSI, MACD, BB, EMA, etc.)
-- quote_get → get real-time price snapshot (last, OHLC, volume)
-- data_get_ohlcv → get price bars. ALWAYS pass summary=true unless you need individual bars
+This profile exposes ONLY read-only tools. Chart mutation, Pine writes, drawings,
+alerts, watchlist changes, replay, UI automation, and arbitrary JS execution are
+NOT registered in this profile — they do not exist as callable tools here.
 
-Reading custom Pine indicator output (line.new/label.new/table.new/box.new drawings):
-- data_get_pine_lines → horizontal price levels from custom indicators (deduplicated, sorted)
-- data_get_pine_labels → text annotations with prices ("PDH 24550", "Bias Long", etc.)
-- data_get_pine_tables → table data as formatted rows (session stats, analytics dashboards)
-- data_get_pine_boxes → price zones as {high, low} pairs
-- ALWAYS pass study_filter to target a specific indicator by name (e.g., study_filter="Profiler")
-- Indicators must be VISIBLE on chart for these to work
-
-Changing the chart:
-- chart_set_symbol, chart_set_timeframe, chart_set_type → change ticker/resolution/style
-- chart_manage_indicator → add/remove studies. USE FULL NAMES: "Relative Strength Index" not "RSI"
-- chart_scroll_to_date → jump to a date (ISO format)
-- indicator_set_inputs → change indicator settings (length, source, etc.)
-
-Pine Script development:
-- pine_set_source → inject code, pine_smart_compile → compile + check errors
-- pine_get_errors → read errors, pine_get_console → read log output
-- WARNING: pine_get_source can return 200KB+ for complex scripts — avoid unless editing
-
-Screenshots: capture_screenshot → regions: "full", "chart", "strategy_tester"
-Replay: replay_start → replay_step → replay_trade → replay_status → replay_stop
-Batch: batch_run → run action across multiple symbols/timeframes
-Drawing: draw_shape → horizontal_line, trend_line, rectangle, text
-Alerts: alert_create, alert_list, alert_delete
-Launch: tv_launch → auto-detect and start TradingView with CDP on any platform
-Panes: pane_list, pane_set_layout (s, 2h, 2v, 4, 6, 8), pane_focus, pane_set_symbol
-Tabs: tab_list, tab_new, tab_close, tab_switch
+TOOL SELECTION GUIDE:
+- xauusd_research_health → connectivity + guard + exposed-tools self-check (call first)
+- xauusd_market_snapshot → one deterministic call for quote + OHLCV + studies + Pine graphics
+- xauusd_master_state → structured read of the XAUUSD Adaptive Master Pine indicator (Pine is authoritative; never a fabricated BUY/SELL)
+- chart_get_state → symbol, timeframe, all indicator names + entity IDs
+- data_get_study_values → current numeric values from ALL visible indicators
+- quote_get → real-time price snapshot for the CURRENT chart symbol only (cannot switch symbols in this profile)
+- data_get_ohlcv → price bars; ALWAYS pass summary=true unless you need individual bars
+- data_get_pine_lines / _labels / _tables / _boxes → custom Pine indicator output; pass study_filter when you know the indicator name
+- capture_screenshot → CDP screenshot only (method is always "cdp" in this profile)
 
 CONTEXT MANAGEMENT:
 - ALWAYS use summary=true on data_get_ohlcv
 - ALWAYS use study_filter on pine tools when you know which indicator you want
-- NEVER use verbose=true unless user specifically asks for raw data
-- Prefer capture_screenshot for visual context over pulling large datasets
-- Call chart_get_state ONCE at start, reuse entity IDs`,
+- Prefer xauusd_market_snapshot over several separate calls when you need a full picture`;
+
+const DEVELOPMENT_INSTRUCTIONS = `${RESEARCH_INSTRUCTIONS}
+
+This profile ALSO exposes Pine Script development tools (still no chart mutation
+beyond the Pine Editor's own study):
+- pine_get_source → read current Pine source (can be 200KB+ — avoid unless editing)
+- pine_set_source → inject Pine source into the editor
+- pine_smart_compile → compile + check errors (adds/updates the Pine-Editor study on the chart)
+- pine_get_errors → read compiler errors
+- pine_get_console → read log.info()/console output`;
+
+const server = new McpServer(
+  {
+    name: 'xauusd-adaptive-master-mcp',
+    version: PRODUCT_VERSION,
+    description: `${PRODUCT_NAME} (by ${PRODUCT_DEVELOPER}) — a profile-gated, XAUUSD-focused customization of the open-source TradingView MCP Bridge (${UPSTREAM_URL})`,
+  },
+  {
+    instructions: profile.name === 'XAUUSD_DEVELOPMENT' ? DEVELOPMENT_INSTRUCTIONS : RESEARCH_INSTRUCTIONS,
   }
 );
 
-// Register all tool groups
-registerHealthTools(server);
-registerChartTools(server);
-registerPineTools(server);
-registerDataTools(server);
-registerCaptureTools(server);
-registerDrawingTools(server);
-registerAlertTools(server);
-registerBatchTools(server);
-registerReplayTools(server);
-registerIndicatorTools(server);
-registerWatchlistTools(server);
-registerUiTools(server);
-registerPaneTools(server);
-registerTabTools(server);
+// Register all tool groups THROUGH THE GATE, not the raw server. The gate
+// only forwards registrations whose tool name is in the active profile's
+// allowlist — everything else is never registered with the MCP SDK at all.
+// None of the register*Tools functions below needed to change: the gate
+// duck-types the same `.tool(name, description, schema, handler)` interface
+// as the real McpServer.
+const gate = createProfileGate(server, profile);
+registerHealthTools(gate);
+registerChartTools(gate);
+registerPineTools(gate);
+registerDataTools(gate);
+registerCaptureTools(gate);
+registerDrawingTools(gate);
+registerAlertTools(gate);
+registerBatchTools(gate);
+registerReplayTools(gate);
+registerIndicatorTools(gate);
+registerWatchlistTools(gate);
+registerUiTools(gate);
+registerPaneTools(gate);
+registerTabTools(gate);
+registerXauusdTools(gate, { profile });
 
 // Startup notice (stderr so it doesn't interfere with MCP stdio protocol)
-process.stderr.write('⚠  tradingview-mcp  |  Unofficial tool. Not affiliated with TradingView Inc. or Anthropic.\n');
+process.stderr.write(`${PRODUCT_NAME} by ${PRODUCT_DEVELOPER} — v${PRODUCT_VERSION}\n`);
+process.stderr.write(`Based on the open-source TradingView MCP Bridge (${UPSTREAM_URL})\n`);
+process.stderr.write(`Profile: ${profile.name} — ${gate.getRegisteredTools().length} tools exposed, ${gate.getBlockedTools().length} blocked\n`);
+process.stderr.write('⚠  Unofficial tool. Not affiliated with TradingView Inc. or Anthropic.\n');
 process.stderr.write('   Ensure your usage complies with TradingView\'s Terms of Use.\n\n');
 
 // Start stdio transport

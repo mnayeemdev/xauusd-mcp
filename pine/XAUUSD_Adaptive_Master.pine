@@ -1,0 +1,1375 @@
+//@version=6
+// =============================================================================
+// XAUUSD Adaptive Master — PINE P3: GOOD-ENTRY-ONLY DECISION ENGINE
+// =============================================================================
+// This is the canonical Pine source for the XAUUSD Adaptive Master indicator.
+// Do not fork a second competing script — extend this one in later phases.
+//
+// P1 gave regime + correction. P2 gave confirmed market structure (pivots,
+// HH/HL/LH/LL, BOS/CHoCH, sweeps, PDH/PDL, displacement, anchored range).
+// P3 is the FIRST phase authorized to reach BUY/SELL — it adds the five
+// approved entry models (TC/PB/BO/MR/SR), a regime×model×direction
+// eligibility matrix, setup/trigger/confirmation states, an entry-location
+// (do-not-chase) gate, logical SL→targets→RR construction (in that order,
+// never reverse-engineered), a 0-100 quality score, and a freeze-once
+// signal state machine. See the "DECISION ENGINE (P3)" section below for
+// the full pipeline and docs/PINE_P3.md for the complete specification.
+//
+// THE PERMANENT INVARIANT (unchanged in spirit since P1, now finally load-
+// bearing): WAIT is the default and the common case. `contractAction` is
+// computed as `finalTradeApproved ? (side) : "WAIT"` — `finalTradeApproved`
+// is the conjunction of EVERY gate in the pipeline; if even one is false,
+// the result is always "WAIT". Trend alone, a bare BOS, a bare CHoCH, a
+// bare sweep, an active correction, a late/overextended entry, RR below
+// minimum, or quality below threshold can never by themselves produce a
+// trade — see the "FINAL PROOF" table in docs/PINE_P3.md and the review
+// report for the exhaustive list of what was verified.
+// =============================================================================
+
+indicator("XAUUSD Adaptive Master", overlay = true, max_lines_count = 20, max_labels_count = 20)
+
+// ── Version constants ────────────────────────────────────────────────────
+CONTRACT_VERSION = 1
+INDICATOR_VERSION = "0.3.0"
+
+// ── Inputs ────────────────────────────────────────────────────────────────
+debugMode = input.bool(false, "Debug Mode (show internal state table + regime tint)", group = "Debug")
+
+// Regime engine
+persistenceBars      = input.int(3, "Regime Persistence (confirmed bars before an official regime change)", minval = 1, group = "Regime")
+emaFastLen           = input.int(20, "EMA Fast Length", minval = 1, group = "Regime")
+emaSlowLen           = input.int(50, "EMA Slow Length", minval = 1, group = "Regime")
+emaSlopeLookback     = input.int(5, "EMA Slow Slope Lookback (bars)", minval = 1, group = "Regime")
+adxDiLen             = input.int(14, "DI Length", minval = 1, group = "Regime")
+adxSmoothing         = input.int(14, "ADX Smoothing", minval = 1, group = "Regime")
+adxTrendThreshold    = input.float(20.0, "ADX Trend Threshold", minval = 0.0, group = "Regime")
+atrLen               = input.int(14, "ATR Length", minval = 1, group = "Regime")
+atrAvgLen            = input.int(100, "ATR% Rolling Average Length", minval = 10, group = "Regime")
+highVolMultiplier    = input.float(1.5, "High-Volatility ATR-Ratio Threshold", minval = 1.0, group = "Regime")
+bbLen                = input.int(20, "Bollinger Length (Compression Measure)", minval = 1, group = "Regime")
+bbMult               = input.float(2.0, "Bollinger Mult", minval = 0.5, group = "Regime")
+bbWidthAvgLen        = input.int(100, "BB-Width Rolling Average Length", minval = 10, group = "Regime")
+compressionRatioMax  = input.float(0.6, "Compression: BB-Width Ratio Threshold (<=)", minval = 0.05, group = "Regime")
+diBalanceThreshold   = input.float(6.0, "Range: |DI+ - DI-| Balance Threshold (<=)", minval = 0.0, group = "Regime")
+transitionLookback   = input.int(5, "Transition Lookback (bars since EMA cross / trend loss)", minval = 1, group = "Regime")
+flipLookback         = input.int(10, "Chop: Direction-Flip Lookback (bars)", minval = 4, group = "Regime")
+flipCountThreshold   = input.int(4, "Chop: Direction-Flip Count Threshold", minval = 1, group = "Regime")
+
+// Higher-timeframe context (foundation only — not used to gate anything in P1/P2)
+// NOTE: "60" is a fixed placeholder default, not an approved 5m/15m/30m→HTF
+// mapping. That mapping is an architecture decision for a later phase; this
+// input exists so an operator/later phase can override it per execution
+// timeframe without editing code.
+htfTimeframe = input.timeframe("60", "Higher-Timeframe Context (placeholder default — override per execution TF)", group = "HTF")
+
+// Correction engine
+swingLookback        = input.int(20, "Correction: Swing High/Low Lookback (prior confirmed bars)", minval = 3, group = "Correction")
+corrAtrMultiplier    = input.float(1.2, "Correction: Displacement ATR Multiplier", minval = 0.1, group = "Correction")
+corrMomentumLookback = input.int(3, "Correction: Momentum (EMA-fast) Lookback Bars", minval = 1, group = "Correction")
+corrResolveConfirmBars = input.int(2, "Correction: Resolution Confirm Bars", minval = 1, group = "Correction")
+
+// Session (deterministic UTC hour boundaries — a documented placeholder
+// baseline, not a claim of exact interbank session accuracy)
+asiaStartUtc   = input.int(0, "Asia Session Start (UTC hour)", minval = 0, maxval = 23, group = "Session")
+londonStartUtc = input.int(8, "London Session Start (UTC hour)", minval = 0, maxval = 23, group = "Session")
+nyStartUtc     = input.int(13, "New York Session Start (UTC hour)", minval = 0, maxval = 23, group = "Session")
+otherStartUtc  = input.int(21, "Other/Off-Session Start (UTC hour)", minval = 0, maxval = 23, group = "Session")
+
+// Structure engine (new in P2)
+pivotLeftBars        = input.int(5, "Pivot Left Bars", minval = 1, group = "Structure")
+pivotRightBars       = input.int(5, "Pivot Right Bars (confirmation lag)", minval = 1, group = "Structure")
+swingEqAtrMult       = input.float(0.1, "Swing Equality Tolerance (x ATR)", minval = 0.0, group = "Structure")
+displacementAtrMult  = input.float(1.5, "Displacement: Min Body Size (x ATR)", minval = 0.1, group = "Structure")
+displacementBodyRatioMin = input.float(0.6, "Displacement: Min Body/Range Ratio", minval = 0.1, maxval = 1.0, group = "Structure")
+displacementCloseLocMin  = input.float(0.7, "Displacement: Min/Max Close-Location Within Candle", minval = 0.5, maxval = 1.0, group = "Structure")
+rangeAnchorPersistBars = input.int(5, "Anchored Range: Persistence Bars Required to Anchor", minval = 2, group = "Structure")
+maxActiveLevels      = input.int(3, "Structure: Max Retained Active Levels Per Side", minval = 1, maxval = 10, group = "Structure")
+
+// Decision engine (P3) — setup/trigger recency windows, per model
+tcSetupLookback   = input.int(10, "TC: Displacement Recency Lookback (bars)", minval = 1, group = "P3 Models")
+pbSetupLookback   = input.int(10, "PB: Correction-Resolution Recency Lookback (bars)", minval = 1, group = "P3 Models")
+boRetestAtrTol    = input.float(0.3, "BO: Retest ATR Tolerance", minval = 0.05, group = "P3 Models")
+boRetestMaxBars   = input.int(15, "BO: Max Bars to Wait for Retest", minval = 1, group = "P3 Models")
+mrBoundaryAtrTol  = input.float(0.5, "MR: Range-Boundary Overshoot ATR Tolerance", minval = 0.05, group = "P3 Models")
+mrDisplacementBlockBars = input.int(2, "MR: Opposing-Displacement Block Recency (bars)", minval = 0, group = "P3 Models")
+
+// Decision engine (P3) — entry-location / do-not-chase. Overextension is
+// price-distance-based (ATR-normalized). Lateness is CHRONOLOGICAL —
+// bars elapsed since each model's own setup-origin event — and is
+// deliberately a SEPARATE, TIGHTER threshold than that model's own
+// setup-recency window (tcSetupLookback/pbSetupLookback/boRetestMaxBars
+// above), so a trigger can be technically still-eligible per its setup
+// window yet independently flagged ENTRY_LATE for being stale relative to
+// this stricter bound (see the P3 review's §2 fix). MR and SR have no
+// entry here — their triggers are same-bar by construction (see
+// candSetupOriginBar below) and are therefore provably never late.
+overextendAtrMult  = input.float(2.5, "Entry Location: Overextension ATR Multiple", minval = 0.5, group = "P3 Entry")
+tcMaxEntryLateBars = input.int(5, "TC: Max Bars From Displacement to Trigger", minval = 1, group = "P3 Entry")
+pbMaxEntryLateBars = input.int(5, "PB: Max Bars From Resolution to Trigger", minval = 1, group = "P3 Entry")
+boMaxEntryLateBars = input.int(10, "BO: Max Bars From Breakout to Reclaim", minval = 1, group = "P3 Entry")
+
+// Decision engine (P3) — SL/TP construction
+slAtrBuffer        = input.float(0.25, "SL: ATR Buffer Beyond Structure", minval = 0.0, group = "P3 Risk")
+slAtrFallback      = input.float(1.5, "SL: ATR Fallback Distance (no structural anchor found)", minval = 0.5, group = "P3 Risk")
+tp1RMultiple       = input.float(1.0, "TP1: R-Multiple", minval = 0.1, group = "P3 Risk")
+tp2RMultipleDefault = input.float(2.0, "TP2: Default R-Multiple (no structural objective found)", minval = 0.5, group = "P3 Risk")
+tp2RMultipleCap    = input.float(3.0, "TP2: Max R-Multiple Cap", minval = 1.0, group = "P3 Risk")
+minRR              = input.float(1.5, "Minimum RR", minval = 0.1, group = "P3 Risk")
+
+// Decision engine (P3) — quality gate
+qualityThreshold = input.float(65, "Quality Threshold (0-100)", minval = 0, maxval = 100, group = "P3 Quality")
+
+// Decision engine (P3) — manual news suppression (Pine cannot know live news;
+// this is a manual, user-controlled toggle only — never automatic).
+newsSuppressed = input.bool(false, "News Suppression Active (manual)", group = "P3 Safety")
+
+// ── Confirmed-bar discipline ──────────────────────────────────────────────
+// Every PERSISTENT state transition in this script (regime, structure,
+// correction) is gated behind `confirmedBar`. Candidates/raw measurements
+// may be computed every bar (for debug visibility of "what would happen if
+// this bar closed"), but nothing persistent commits until the bar is
+// confirmed — this is what makes every *official*/tracked field
+// non-repainting.
+confirmedBar = barstate.isconfirmed
+
+// ── Core measurements (each one documented — no indicator stacking) ──────
+emaFast = ta.ema(close, emaFastLen)
+emaSlow = ta.ema(close, emaSlowLen)
+// Slow-EMA slope over N bars — smoother/more reliable trend-direction
+// confirmation than a single-bar EMA delta.
+emaSlope = emaSlow - emaSlow[emaSlopeLookback]
+
+[diPlus, diMinus, adxVal] = ta.dmi(adxDiLen, adxSmoothing)
+
+atrVal = ta.atr(atrLen)
+atrPct = close != 0 ? atrVal / close * 100.0 : 0.0
+atrPctAvg = ta.sma(atrPct, atrAvgLen)
+atrRatio = atrPctAvg > 0 ? atrPct / atrPctAvg : 1.0
+
+[bbBasis, bbUpper, bbLower] = ta.bb(close, bbLen, bbMult)
+bbWidth = bbBasis != 0 ? (bbUpper - bbLower) / bbBasis : 0.0
+bbWidthAvg = ta.sma(bbWidth, bbWidthAvgLen)
+bbWidthRatio = bbWidthAvg > 0 ? bbWidth / bbWidthAvg : 1.0
+
+// ── Higher-timeframe context (foundation only) ────────────────────────────
+// Non-repaint pattern: the `[1]` INSIDE the request.security() expression
+// asks for the value as of the PREVIOUS, already-closed HTF bar — never the
+// currently-forming one — regardless of how far into the current HTF bar the
+// chart's own execution-timeframe clock currently is. Combined with
+// `lookahead = barmerge.lookahead_off` (never lookahead_on), this guarantees
+// the HTF value used here was fully knowable at the time it is read; it is
+// never a "future" HTF bar leaking backward onto earlier execution-TF bars.
+// HTF information becomes knowable exactly at the close of each HTF bar —
+// not before, and (via the `[1]` shift) never mid-formation.
+htfEmaFastExpr() => ta.ema(close, emaFastLen)
+htfEmaSlowExpr() => ta.ema(close, emaSlowLen)
+htfEmaFast = request.security(syminfo.tickerid, htfTimeframe, htfEmaFastExpr()[1], lookahead = barmerge.lookahead_off)
+htfEmaSlow = request.security(syminfo.tickerid, htfTimeframe, htfEmaSlowExpr()[1], lookahead = barmerge.lookahead_off)
+htfBias = htfEmaFast > htfEmaSlow ? "BULL" : (htfEmaFast < htfEmaSlow ? "BEAR" : "FLAT")
+
+// ── Regime candidate (raw, recomputed every bar; NOT the official regime) ─
+strongTrend = adxVal >= adxTrendThreshold
+trendUp     = emaFast > emaSlow and emaSlope > 0
+trendDown   = emaFast < emaSlow and emaSlope < 0
+highVol     = atrRatio >= highVolMultiplier
+compressed  = (adxVal < adxTrendThreshold) and (bbWidthRatio <= compressionRatioMax)
+diBalanced  = math.abs(diPlus - diMinus) <= diBalanceThreshold
+
+barsSinceCross     = ta.barssince(ta.cross(emaFast, emaSlow))
+barsSinceCrossSafe = na(barsSinceCross) ? transitionLookback + 1 : barsSinceCross
+recentCross        = barsSinceCrossSafe <= transitionLookback
+
+// "Trend strength lost recently" — was strong within the lookback, isn't now.
+strongTrendPrior      = strongTrend[1]
+barsSinceStrongTrend  = ta.barssince(strongTrend)
+recentTrendLoss       = (not strongTrend) and strongTrendPrior and not na(barsSinceStrongTrend) and barsSinceStrongTrend <= transitionLookback
+
+transitionCond = recentCross or recentTrendLoss
+
+// Direction-flip count over a short lookback — evidence for CHOP_UNCERTAIN.
+// Deliberately a small, fixed-size loop (bounded by flipLookback, a small
+// input) — not a performance concern, and fully deterministic.
+int flipCount = 0
+for i = 1 to flipLookback - 1
+    dirNow  = close[i] - close[i + 1] > 0 ? 1 : (close[i] - close[i + 1] < 0 ? -1 : 0)
+    dirPrev = close[i + 1] - close[i + 2] > 0 ? 1 : (close[i + 1] - close[i + 2] < 0 ? -1 : 0)
+    if dirNow != dirPrev and dirNow != 0 and dirPrev != 0
+        flipCount += 1
+choppy = flipCount >= flipCountThreshold
+
+// Deterministic priority chain — first match wins, so branches never overlap
+// ambiguously. Each rule's evidence is named above and documented inline.
+regimeCandidate = highVol ? "HIGH_VOLATILITY" :
+     compressed ? "COMPRESSION" :
+     (trendUp and strongTrend) ? "BULL_TREND" :
+     (trendDown and strongTrend) ? "BEAR_TREND" :
+     transitionCond ? "TRANSITION" :
+     (diBalanced and not choppy) ? "RANGE" :
+     "CHOP_UNCERTAIN"
+
+// ── Regime persistence / hysteresis (confirmed-bar gated) ─────────────────
+// A candidate must hold for `persistenceBars` CONSECUTIVE CONFIRMED bars
+// before it becomes the official regime — this is the deterministic
+// anti-flicker mechanism. Defaults to CHOP_UNCERTAIN (the most conservative
+// state) until enough history accumulates, rather than an undefined value.
+var string officialRegime   = "CHOP_UNCERTAIN"
+var string lastCandidate    = "CHOP_UNCERTAIN"
+var int    regimeStreak     = 0
+var string priorOfficialRegime = "CHOP_UNCERTAIN"
+
+if confirmedBar
+    priorOfficialRegime := officialRegime
+    if regimeCandidate == lastCandidate
+        regimeStreak := regimeStreak + 1
+    else
+        lastCandidate := regimeCandidate
+        regimeStreak := 1
+    if regimeStreak >= persistenceBars
+        officialRegime := regimeCandidate
+
+isDirectionalTrend(r) => r == "BULL_TREND" or r == "BEAR_TREND"
+
+// ── Session classification (context only — never gates a decision) ───────
+utcHour = hour(time, "UTC")
+session = (utcHour >= asiaStartUtc and utcHour < londonStartUtc) ? "ASIA" :
+     (utcHour >= londonStartUtc and utcHour < nyStartUtc) ? "LONDON" :
+     (utcHour >= nyStartUtc and utcHour < otherStartUtc) ? "NEW_YORK" :
+     "OTHER"
+
+// =============================================================================
+// STRUCTURE ENGINE (P2, REVISED in the P2 review/fix pass) — confirmed
+// pivots, HH/HL/LH/LL, split close/wick born-consumed protection, a bounded
+// multi-level structural retention store, BOS/CHoCH, sweeps, PDH/PDL,
+// displacement, structure direction, and an anchored structural range.
+// =============================================================================
+
+// ── Confirmed pivots ───────────────────────────────────────────────────────
+// ta.pivothigh/ta.pivotlow are Pine's own non-repaint pivot primitives: a
+// pivot at physical bar (bar_index - pivotRightBars) only becomes non-na
+// HERE, on the bar where all `pivotRightBars` confirming bars have already
+// closed. Location bar and confirmation bar are therefore ALWAYS distinct
+// (confirmBar = location + pivotRightBars) and are tracked as two separate
+// fields below — never conflated.
+pivotHighVal = ta.pivothigh(pivotLeftBars, pivotRightBars)
+pivotLowVal  = ta.pivotlow(pivotLeftBars, pivotRightBars)
+
+// ── Born-consumed protection: CLOSE vs WICK, explicitly separated ────────
+// (P2 review fix — a prior version checked only CLOSE-based consumption and
+// asserted, without proof, that this covered "born consumed" entirely.)
+//
+// The UNKNOWABLE interval for a pivot at physical bar P confirmed at bar
+// C = P + pivotRightBars is the OPEN range of bars (P, C) — i.e. bars
+// P+1 .. C-1 (length pivotRightBars-1). Bar P itself is the pivot's own
+// location bar (already known the moment it happens, not "unknowable"), and
+// bar C is the confirmation bar itself (evaluated separately, not part of
+// the gap). A prior version's window inadvertently included bar P; fixed
+// here to cover exactly P+1..C-1.
+//
+// Two DISTINCT questions are asked over that exact window, using `high`/
+// `low` (relevant to WICK/sweep semantics — a level whose wick was already
+// touched during the unknowable window must never later masquerade as a
+// fresh sweep) and `close` (relevant to BOS/CHoCH semantics — a level
+// already validly closed-through during the unknowable window must never
+// later fire a fake first BOS/CHoCH) separately:
+//   bornWickInteractedHigh/Low — did HIGH/LOW already cross the level?
+//   bornCloseConsumedHigh/Low  — did CLOSE already cross the level?
+// (close-consumed implies wick-interacted, never the reverse.)
+//
+// PROOF both are structurally impossible for NATIVE ta.pivothigh/pivotlow —
+// not merely asserted: ta.pivothigh(left,right) requires EVERY one of the
+// `right` confirming bars to have a HIGH strictly LOWER than the pivot's
+// high (mirrored for pivotlow / LOW). That is the pivot definition itself —
+// if any confirming bar's high were >= the candidate, that candidate simply
+// would not confirm as a pivot at bar C in the first place. So within
+// P+1..C-1, every bar's HIGH < pivotHigh — and since CLOSE <= HIGH for the
+// same bar, every one of those bars' CLOSE < pivotHigh too. Both checks are
+// therefore provably always false for this specific pivot source. They are
+// implemented anyway, split and named explicitly, as tested defense-in-
+// depth against a future change (e.g. a different pivot/level source that
+// does not carry the same built-in guarantee) — never trusted implicitly.
+gapLen = math.max(pivotRightBars - 1, 1)   // ta.highest/lowest need length >= 1; gated by hasConfirmGap below
+hasConfirmGap = pivotRightBars > 1          // false when rightBars=1 (no bars physically exist between P and C)
+
+// Called unconditionally every bar (compiler requirement for history-
+// referencing functions) — offset by [1] so the window is exactly
+// bars C-1 .. C-gapLen = P+1 .. C-1, EXCLUDING the pivot's own location bar.
+gapHighestHigh  = ta.highest(high[1], gapLen)
+gapLowestLow    = ta.lowest(low[1], gapLen)
+gapHighestClose = ta.highest(close[1], gapLen)
+gapLowestClose  = ta.lowest(close[1], gapLen)
+
+bornWickInteractedHigh = not na(pivotHighVal) and hasConfirmGap and gapHighestHigh  > pivotHighVal
+bornWickInteractedLow  = not na(pivotLowVal)  and hasConfirmGap and gapLowestLow    < pivotLowVal
+bornCloseConsumedHigh  = not na(pivotHighVal) and hasConfirmGap and gapHighestClose > pivotHighVal
+bornCloseConsumedLow   = not na(pivotLowVal)  and hasConfirmGap and gapLowestClose  < pivotLowVal
+
+// ── Bounded active structural level storage (P2 review fix) ──────────────
+// A prior version tracked only the SINGLE most recent confirmed swing per
+// side, silently discarding an older, still-unbroken, structurally relevant
+// level the moment a newer pivot confirmed — so a later close that broke
+// the OLDER level would never be detected. Fixed with a small, BOUNDED
+// (never unlimited) FIFO store per side: up to `maxActiveLevels` levels are
+// retained until each is individually retired (see below), not merely
+// superseded by recency.
+//
+// Documented supersession/invalidation rule (the ONLY ways a level ever
+// leaves the active store):
+//   1. CONSUMED — its close was validly broken (BOS/CHoCH fired for it).
+//   2. SWEPT — for sweep-eligibility purposes only; a swept-but-not-closed
+//      level remains active for a LATER genuine close-based break.
+//   3. CAPACITY EVICTION — if adding a new level would exceed
+//      `maxActiveLevels`, the OLDEST active entry (by confirmBar, FIFO) is
+//      evicted. This is the one deliberate, bounded-memory trade-off: if
+//      more than `maxActiveLevels` levels are simultaneously unconsumed,
+//      the very oldest is dropped rather than growing storage without
+//      limit. Documented explicitly, not silent.
+type StructLevel
+    float  price
+    string kind                 // HH/LH/EQH or HL/LL/EQL
+    int    locationBar
+    int    confirmBar
+    bool   bornCloseConsumed
+    bool   bornWickInteracted
+    bool   consumed             // retired: already generated its one BOS/CHoCH
+    bool   swept                // retired-for-sweep: already generated its one sweep
+
+var array<StructLevel> activeHighLevels = array.new<StructLevel>()
+var array<StructLevel> activeLowLevels  = array.new<StructLevel>()
+
+// ── Swing identity + HH/HL/LH/LL classification ───────────────────────────
+// Classification (HH/LH/EQH, HL/LL/EQL) is UNCHANGED from the prior version:
+// a new pivot classifies itself against the single PREVIOUS tracked swing of
+// the same type, written exactly once at its own confirmation bar, and that
+// classification is never revisited later. `lastSwingHigh`/`lastSwingLow`
+// (and friends) remain simple "most recent" mirrors for the contract/debug
+// tables; the array above is what BOS/CHoCH/sweep detection actually uses.
+var float  lastSwingHigh             = na
+var string lastSwingHighType         = "NA"
+var int    lastSwingHighBar          = na
+var int    lastSwingHighConfirmBar   = na
+var bool   lastSwingHighBornConsumed = false   // mirrors bornCloseConsumed for the most recent level
+var float  prevSwingHighForCompare   = na
+
+var float  lastSwingLow              = na
+var string lastSwingLowType          = "NA"
+var int    lastSwingLowBar           = na
+var int    lastSwingLowConfirmBar    = na
+var bool   lastSwingLowBornConsumed  = false
+var float  prevSwingLowForCompare    = na
+
+if confirmedBar and not na(pivotHighVal)
+    swingTol = atrVal * swingEqAtrMult
+    newHighType = na(prevSwingHighForCompare) ? "HH" :
+         (pivotHighVal - prevSwingHighForCompare > swingTol) ? "HH" :
+         (pivotHighVal - prevSwingHighForCompare < -swingTol) ? "LH" :
+         "EQH"
+    prevSwingHighForCompare := pivotHighVal
+    lastSwingHigh := pivotHighVal
+    lastSwingHighType := newHighType
+    lastSwingHighBar := bar_index - pivotRightBars
+    lastSwingHighConfirmBar := bar_index
+    lastSwingHighBornConsumed := bornCloseConsumedHigh
+
+    newHighLevel = StructLevel.new(pivotHighVal, newHighType, bar_index - pivotRightBars, bar_index, bornCloseConsumedHigh, bornWickInteractedHigh, bornCloseConsumedHigh, bornWickInteractedHigh)
+    array.push(activeHighLevels, newHighLevel)
+    if array.size(activeHighLevels) > maxActiveLevels
+        array.shift(activeHighLevels)  // documented FIFO capacity eviction — see rule 3 above
+
+if confirmedBar and not na(pivotLowVal)
+    swingTolL = atrVal * swingEqAtrMult
+    newLowType = na(prevSwingLowForCompare) ? "HL" :
+         (pivotLowVal - prevSwingLowForCompare > swingTolL) ? "HL" :
+         (pivotLowVal - prevSwingLowForCompare < -swingTolL) ? "LL" :
+         "EQL"
+    prevSwingLowForCompare := pivotLowVal
+    lastSwingLow := pivotLowVal
+    lastSwingLowType := newLowType
+    lastSwingLowBar := bar_index - pivotRightBars
+    lastSwingLowConfirmBar := bar_index
+    lastSwingLowBornConsumed := bornCloseConsumedLow
+
+    newLowLevel = StructLevel.new(pivotLowVal, newLowType, bar_index - pivotRightBars, bar_index, bornCloseConsumedLow, bornWickInteractedLow, bornCloseConsumedLow, bornWickInteractedLow)
+    array.push(activeLowLevels, newLowLevel)
+    if array.size(activeLowLevels) > maxActiveLevels
+        array.shift(activeLowLevels)
+
+// ── BOS / CHoCH / sweep detection over the bounded active-level store ────
+// structureDirection is deterministic and INDEPENDENT of officialRegime
+// (EMA-based) — see §14 of the P2 spec. 3 states (BULLISH/BEARISH/NEUTRAL):
+// the first-ever break from NEUTRAL establishes structure via BOS (no prior
+// "character" to change away from); only a break AGAINST an established
+// direction counts as CHoCH.
+//
+// LEVEL-SELECTION PRIORITY (P2 review fix, §3/§4): a single confirmed bar
+// can cross more than one retained active level on the same side. Exactly
+// ONE authoritative semantic event fires per side per bar — the level with
+// the MOST RECENT confirmBar among those actually crossed (most immediately
+// relevant to current structure). Every OTHER active level also genuinely
+// crossed by this same bar is retired (marked consumed/swept) so it can
+// never later re-fire, but does not generate its own separate event.
+//
+// Dedup / lifecycle: each level fires AT MOST ONE sweep event and AT MOST
+// ONE break (BOS/CHoCH) event during its lifetime in the store — the
+// `.consumed`/`.swept` flags latch true and are checked before a level is
+// even considered eligible.
+//
+// Chronology guard: a level can only be evaluated for a break/sweep on bars
+// STRICTLY AFTER its own confirmBar (`bar_index > level.confirmBar`) — the
+// bar that confirms a level is never also treated as "the break bar" of
+// that same level.
+var string structureDirection    = "NEUTRAL"   // BULLISH / BEARISH / NEUTRAL
+var string lastStructureEvent    = "NONE"
+var int    lastStructureEventBar = na
+var string lastBosDirection      = "NA"
+var int    lastBosBar            = na
+var string lastChochDirection    = "NA"
+var int    lastChochBar          = na
+var string lastSweepType         = "NA"
+var int    lastSweepBar          = na
+
+if confirmedBar
+    // ── HIGH side ──────────────────────────────────────────────────────
+    int authHighBreakIdx = -1
+    int authHighBreakConfirmBar = -1
+    for i = 0 to array.size(activeHighLevels) - 1
+        lvl = array.get(activeHighLevels, i)
+        if not lvl.consumed and bar_index > lvl.confirmBar and close > lvl.price and lvl.confirmBar > authHighBreakConfirmBar
+            authHighBreakConfirmBar := lvl.confirmBar
+            authHighBreakIdx := i
+
+    if authHighBreakIdx >= 0
+        highEvent = structureDirection == "BEARISH" ? "BULLISH_CHOCH" : "BULLISH_BOS"
+        lastStructureEvent := highEvent
+        lastStructureEventBar := bar_index
+        if highEvent == "BULLISH_BOS"
+            lastBosDirection := "BULLISH"
+            lastBosBar := bar_index
+        else
+            lastChochDirection := "BULLISH"
+            lastChochBar := bar_index
+        structureDirection := "BULLISH"
+        // Retire EVERY active high level this same close genuinely broke —
+        // not just the authoritative one — so none can re-fire later.
+        for i = 0 to array.size(activeHighLevels) - 1
+            lvl2 = array.get(activeHighLevels, i)
+            if not lvl2.consumed and bar_index > lvl2.confirmBar and close > lvl2.price
+                lvl2.consumed := true   // UDT is a reference type — mutates the stored object directly
+    else
+        int authHighSweepIdx = -1
+        int authHighSweepConfirmBar = -1
+        for i = 0 to array.size(activeHighLevels) - 1
+            lvl = array.get(activeHighLevels, i)
+            if not lvl.consumed and not lvl.swept and bar_index > lvl.confirmBar and high > lvl.price and lvl.confirmBar > authHighSweepConfirmBar
+                authHighSweepConfirmBar := lvl.confirmBar
+                authHighSweepIdx := i
+        if authHighSweepIdx >= 0
+            lastSweepType := "SWEEP_HIGH"
+            lastSweepBar := bar_index
+            for i = 0 to array.size(activeHighLevels) - 1
+                lvl2 = array.get(activeHighLevels, i)
+                if not lvl2.consumed and not lvl2.swept and bar_index > lvl2.confirmBar and high > lvl2.price
+                    lvl2.swept := true
+
+    // ── LOW side (mirror) ──────────────────────────────────────────────
+    int authLowBreakIdx = -1
+    int authLowBreakConfirmBar = -1
+    for i = 0 to array.size(activeLowLevels) - 1
+        lvl = array.get(activeLowLevels, i)
+        if not lvl.consumed and bar_index > lvl.confirmBar and close < lvl.price and lvl.confirmBar > authLowBreakConfirmBar
+            authLowBreakConfirmBar := lvl.confirmBar
+            authLowBreakIdx := i
+
+    if authLowBreakIdx >= 0
+        lowEvent = structureDirection == "BULLISH" ? "BEARISH_CHOCH" : "BEARISH_BOS"
+        lastStructureEvent := lowEvent
+        lastStructureEventBar := bar_index
+        if lowEvent == "BEARISH_BOS"
+            lastBosDirection := "BEARISH"
+            lastBosBar := bar_index
+        else
+            lastChochDirection := "BEARISH"
+            lastChochBar := bar_index
+        structureDirection := "BEARISH"
+        for i = 0 to array.size(activeLowLevels) - 1
+            lvl2 = array.get(activeLowLevels, i)
+            if not lvl2.consumed and bar_index > lvl2.confirmBar and close < lvl2.price
+                lvl2.consumed := true
+    else
+        int authLowSweepIdx = -1
+        int authLowSweepConfirmBar = -1
+        for i = 0 to array.size(activeLowLevels) - 1
+            lvl = array.get(activeLowLevels, i)
+            if not lvl.consumed and not lvl.swept and bar_index > lvl.confirmBar and low < lvl.price and lvl.confirmBar > authLowSweepConfirmBar
+                authLowSweepConfirmBar := lvl.confirmBar
+                authLowSweepIdx := i
+        if authLowSweepIdx >= 0
+            lastSweepType := "SWEEP_LOW"
+            lastSweepBar := bar_index
+            for i = 0 to array.size(activeLowLevels) - 1
+                lvl2 = array.get(activeLowLevels, i)
+                if not lvl2.consumed and not lvl2.swept and bar_index > lvl2.confirmBar and low < lvl2.price
+                    lvl2.swept := true
+
+// ── PDH / PDL (confirmed previous day only) ───────────────────────────────
+// `high[1]`/`low[1]` INSIDE the daily security context is the same
+// non-repaint pattern used for HTF above: it is always the PRIOR, fully
+// completed daily bar's high/low — never the current, still-forming day's
+// running high/low. No current-day leakage is possible.
+pdh = request.security(syminfo.tickerid, "D", high[1], lookahead = barmerge.lookahead_off)
+pdl = request.security(syminfo.tickerid, "D", low[1], lookahead = barmerge.lookahead_off)
+
+var float  trackedPdh          = na
+var float  trackedPdl          = na
+var bool   pdhSweptForValue    = false
+var bool   pdlSweptForValue    = false
+var string lastDailySweep      = "NA"
+var int    lastDailySweepBar   = na
+
+if confirmedBar
+    // A new PDH/PDL value (i.e. a new calendar day rolled over) resets that
+    // side's one-sweep-per-value eligibility.
+    if pdh != trackedPdh
+        trackedPdh := pdh
+        pdhSweptForValue := false
+    if pdl != trackedPdl
+        trackedPdl := pdl
+        pdlSweptForValue := false
+
+    if not na(pdh) and not pdhSweptForValue and high > pdh and close <= pdh
+        lastDailySweep := "PDH_SWEEP"
+        lastDailySweepBar := bar_index
+        pdhSweptForValue := true
+
+    if not na(pdl) and not pdlSweptForValue and low < pdl and close >= pdl
+        lastDailySweep := "PDL_SWEEP"
+        lastDailySweepBar := bar_index
+        pdlSweptForValue := true
+
+// ── Displacement (normalized, not "big candle") ───────────────────────────
+bodySize   = math.abs(close - open)
+rangeSize  = high - low
+bodyRatio  = rangeSize > 0 ? bodySize / rangeSize : 0.0
+closeLoc   = rangeSize > 0 ? (close - low) / rangeSize : 0.5   // 0 = at low, 1 = at high
+bigBody    = bodySize >= displacementAtrMult * atrVal
+bullishDisplacement = bigBody and close > open and bodyRatio >= displacementBodyRatioMin and closeLoc >= displacementCloseLocMin
+bearishDisplacement = bigBody and close < open and bodyRatio >= displacementBodyRatioMin and closeLoc <= (1.0 - displacementCloseLocMin)
+displacementState = bullishDisplacement ? "BULLISH_DISPLACEMENT" : bearishDisplacement ? "BEARISH_DISPLACEMENT" : "NONE"
+
+// ── Anchored structural range ──────────────────────────────────────────────
+// Distinct from the ROLLING compression/range candidate detection used by
+// the regime engine above. A range only becomes ANCHORED (boundaries
+// frozen) after `rangeAnchorPersistBars` CONSECUTIVE CONFIRMED bars of
+// COMPRESSION/RANGE regime — at that point rangeHigh/rangeLow are set once
+// and never move again while this range identity is ACTIVE or BROKEN. A
+// genuine breakout terminates it; the NEXT anchor creates a brand-new
+// identity rather than rewriting this one's boundaries.
+var string rangeState        = "NONE"   // NONE / ACTIVE / BROKEN
+var float  rangeHigh         = na
+var float  rangeLow          = na
+var int    rangeAnchorBar    = na
+var int    rangeConfirmBar   = na
+var int    rangeId           = 0
+var int    rangeRegimeStreak = 0
+
+// Called unconditionally every bar (compiler requirement for
+// history-referencing functions) and only USED at the moment of anchoring.
+candidateRangeHigh = ta.highest(high, rangeAnchorPersistBars)
+candidateRangeLow  = ta.lowest(low, rangeAnchorPersistBars)
+
+if confirmedBar
+    if officialRegime == "COMPRESSION" or officialRegime == "RANGE"
+        rangeRegimeStreak := rangeRegimeStreak + 1
+    else
+        rangeRegimeStreak := 0
+
+    if rangeState != "ACTIVE" and rangeRegimeStreak >= rangeAnchorPersistBars
+        rangeHigh := candidateRangeHigh
+        rangeLow := candidateRangeLow
+        rangeAnchorBar := bar_index - rangeAnchorPersistBars + 1
+        rangeConfirmBar := bar_index
+        rangeId := rangeId + 1
+        rangeState := "ACTIVE"
+
+    // Chronology guard: breakout can only be evaluated strictly AFTER the
+    // range's own confirmation bar — never on the anchoring bar itself.
+    if rangeState == "ACTIVE" and bar_index > rangeConfirmBar
+        if close > rangeHigh or close < rangeLow
+            rangeState := "BROKEN"
+            rangeRegimeStreak := 0  // force a fresh persistence count before any NEW range can anchor
+
+// =============================================================================
+// CORRECTION ENGINE (P1, EXTENDED in P2 with structural evidence) —
+// persistent state machine, confirmed-bar gated.
+// =============================================================================
+var bool   correctionActive   = false
+var string correctionSide     = "NA"      // "BULL" (correcting a bull trend) or "BEAR"
+var int    corrStartBar       = na
+var int    corrStartTime      = na
+var string correctionEvidence = "NA"
+var bool   correctionResolved = false     // transient: true only on the bar it resolves
+var int    corrResolvedBar    = na        // audit trail — preserved across future corrections
+var string corrResolvedSide   = "NA"      // audit trail — preserved across future corrections
+var int    corrRecoverStreak  = 0
+
+// Swing anchors use ONLY prior, already-closed bars (`high[1]`/`low[1]` as
+// the series root) — the current, possibly-still-forming bar's extreme can
+// never itself become the correction-displacement anchor.
+recentSwingHigh = ta.highest(high[1], swingLookback)
+recentSwingLow  = ta.lowest(low[1], swingLookback)
+
+// P2: a freshly confirmed, matching-direction structural event is
+// additional, independent activation/recovery evidence alongside P1's
+// existing EMA-based evidence — never a replacement for it, and never
+// sufficient on its own to SKIP the multi-bar recovery-confirmation streak
+// required for resolution (see the resolution block below).
+freshBearishStructureThisBar = lastStructureEventBar == bar_index and (lastStructureEvent == "BEARISH_CHOCH" or lastStructureEvent == "BEARISH_BOS")
+freshBullishStructureThisBar = lastStructureEventBar == bar_index and (lastStructureEvent == "BULLISH_CHOCH" or lastStructureEvent == "BULLISH_BOS")
+
+if confirmedBar
+    correctionResolved := false // reset the transient one-bar-only flag every confirmed bar
+
+    // Trend-side flip (BULL_TREND <-> BEAR_TREND directly): the correction
+    // context no longer means anything relative to the new direction, so
+    // fully reset the transient fields. The audit trail
+    // (corrResolvedBar/corrResolvedSide) is left untouched on purpose.
+    if isDirectionalTrend(officialRegime) and isDirectionalTrend(priorOfficialRegime) and officialRegime != priorOfficialRegime
+        correctionActive := false
+        correctionSide := "NA"
+        corrStartBar := na
+        corrStartTime := na
+        correctionEvidence := "NA"
+        corrRecoverStreak := 0
+
+    // Leaving directional trend context entirely (e.g. into RANGE/CHOP/
+    // COMPRESSION/TRANSITION/HIGH_VOLATILITY) while a correction was active:
+    // clear the now-meaningless transient correction state. This is NOT a
+    // resolution — corrResolvedBar/corrResolvedSide are left untouched.
+    if correctionActive and not isDirectionalTrend(officialRegime)
+        correctionActive := false
+        correctionSide := "NA"
+        corrStartBar := na
+        corrStartTime := na
+        correctionEvidence := "NA"
+        corrRecoverStreak := 0
+
+    // ── Activation — only from a valid directional context. Either P1's
+    // original two-piece evidence (structural displacement vs swing anchor
+    // + EMA momentum fading), OR a freshly confirmed matching-direction
+    // structural event (itself already a rigorously confirmed, non-
+    // arbitrary piece of evidence) — never a single arbitrary candle. ─────
+    if not correctionActive and officialRegime == "BULL_TREND"
+        displacementVsSwing = recentSwingHigh - close
+        momentumFading = emaFast < emaFast[corrMomentumLookback]
+        emaEvidence = displacementVsSwing >= corrAtrMultiplier * atrVal and momentumFading
+        if emaEvidence or freshBearishStructureThisBar
+            correctionActive := true
+            correctionSide := "BULL"
+            corrStartBar := bar_index
+            corrStartTime := time
+            correctionEvidence := emaEvidence ? "displacement_vs_swing_high+ema_fast_declining" : "structural_bearish_break"
+            corrRecoverStreak := 0
+
+    if not correctionActive and officialRegime == "BEAR_TREND"
+        displacementVsSwingL = close - recentSwingLow
+        momentumFadingL = emaFast > emaFast[corrMomentumLookback]
+        emaEvidenceL = displacementVsSwingL >= corrAtrMultiplier * atrVal and momentumFadingL
+        if emaEvidenceL or freshBullishStructureThisBar
+            correctionActive := true
+            correctionSide := "BEAR"
+            corrStartBar := bar_index
+            corrStartTime := time
+            correctionEvidence := emaEvidenceL ? "displacement_vs_swing_low+ema_fast_rising" : "structural_bullish_break"
+            corrRecoverStreak := 0
+
+    // ── Resolution — CHRONOLOGY-PROTECTED: strictly requires
+    // bar_index > corrStartBar (never the activation bar itself), plus
+    // multiple consecutive confirmed bars of recovery evidence (never a
+    // single tick — a fresh matching structural event on its own bar counts
+    // as evidence FOR that one bar, it does not shortcut the streak), and
+    // can only use information knowable as of THIS confirmed bar — no
+    // future pivot, no backdating. ─────────────────────────────────────────
+    if correctionActive and bar_index > corrStartBar
+        recoveredEma = correctionSide == "BULL" ? (close > emaFast) : (correctionSide == "BEAR" ? (close < emaFast) : false)
+        recoveredStructure = correctionSide == "BULL" ? freshBullishStructureThisBar : (correctionSide == "BEAR" ? freshBearishStructureThisBar : false)
+        recovered = recoveredEma or recoveredStructure
+        if recovered
+            corrRecoverStreak := corrRecoverStreak + 1
+        else
+            corrRecoverStreak := 0
+
+        if corrRecoverStreak >= corrResolveConfirmBars
+            correctionResolved := true
+            corrResolvedBar := bar_index
+            corrResolvedSide := correctionSide
+            correctionActive := false
+            correctionSide := "NA"
+            corrStartBar := na
+            corrStartTime := na
+            correctionEvidence := "NA"
+            corrRecoverStreak := 0
+
+correctionStateStr = correctionActive ? "ACTIVE" : "NONE"
+
+// =============================================================================
+// DECISION ENGINE (P3) — the first phase authorized to reach BUY/SELL.
+//
+// Pipeline (§2 of the P3 spec): REGIME → STRUCTURE → IS TRADING APPROPRIATE?
+// → MODEL ELIGIBILITY → SETUP → CORRECTION BLOCKER → TRIGGER → CONFIRMATION
+// → ENTRY LOCATION → QUALITY GATE → LOGICAL STOP → LOGICAL TARGETS →
+// RR VALIDATION → FINAL ACTION. Every gate below can only ever narrow the
+// outcome toward WAIT — none can loosen, repair, or manufacture a result.
+// =============================================================================
+
+// ── Shared structural-anchor helpers ──────────────────────────────────────
+// Nearest ACTIVE (not yet consumed) level in `store` beyond `refPrice`, in
+// the given direction — used for both SL anchoring (nearest opposing-side
+// level = invalidation point) and TP2 objective (nearest same-side-as-
+// direction level beyond entry = realistic structural target). Reuses the
+// P2 bounded active-level arrays directly; never invents a level.
+f_nearestAbove(store, refPrice) =>
+    float best = na
+    for i = 0 to array.size(store) - 1
+        lvl = array.get(store, i)
+        if not lvl.consumed and lvl.price > refPrice and (na(best) or lvl.price < best)
+            best := lvl.price
+    best
+
+f_nearestBelow(store, refPrice) =>
+    float best = na
+    for i = 0 to array.size(store) - 1
+        lvl = array.get(store, i)
+        if not lvl.consumed and lvl.price < refPrice and (na(best) or lvl.price > best)
+            best := lvl.price
+    best
+
+// ── §4 Regime × Model × Direction eligibility matrix (documented, exact) ──
+// HIGH_VOLATILITY: explicitly gated OFF for every model — "do not assume
+// volatility means opportunity" (§25). No model is currently approved to
+// trade through it; a later phase may add explicit extra-confirmation
+// handling, but P3 does not.
+// COMPRESSION: eligible for BO only (breakout/retest architecture) — never
+// TC/PB/MR/SR, since compression has no established trend or range to
+// pull back from or mean-revert within yet.
+// CORRECTION: correctionActive is a regime-independent hard blocker,
+// checked separately below — it is never encoded as a "regime" here.
+tcLongEligible  = officialRegime == "BULL_TREND"
+tcShortEligible = officialRegime == "BEAR_TREND"
+pbLongEligible  = officialRegime == "BULL_TREND"
+pbShortEligible = officialRegime == "BEAR_TREND"
+boLongEligible  = officialRegime == "BULL_TREND" or officialRegime == "RANGE" or officialRegime == "COMPRESSION"
+boShortEligible = officialRegime == "BEAR_TREND" or officialRegime == "RANGE" or officialRegime == "COMPRESSION"
+mrLongEligible  = officialRegime == "RANGE"   // MR blocked in every trend regime, per §10 — RANGE only
+mrShortEligible = officialRegime == "RANGE"
+srLongEligible  = officialRegime == "BULL_TREND" or officialRegime == "BEAR_TREND" or officialRegime == "RANGE"
+srShortEligible = officialRegime == "BULL_TREND" or officialRegime == "BEAR_TREND" or officialRegime == "RANGE"
+
+// ── TC — Trend Continuation ────────────────────────────────────────────────
+// Setup: structure direction already agrees with the trend AND a matching
+// displacement occurred recently (trend alone is never a setup by itself).
+// Trigger: a FRESH continuation BOS in the trend direction (CHoCH would
+// mean the trend is changing character, not continuing — never a TC
+// trigger). Anchor (SL basis / overextension reference): the most recent
+// tracked swing on the opposing side.
+barsSinceBullishDisp = ta.barssince(displacementState == "BULLISH_DISPLACEMENT")
+barsSinceBearishDisp = ta.barssince(displacementState == "BEARISH_DISPLACEMENT")
+
+tcLongSetupReady  = tcLongEligible  and not correctionActive and structureDirection == "BULLISH" and not na(barsSinceBullishDisp) and barsSinceBullishDisp <= tcSetupLookback
+tcShortSetupReady = tcShortEligible and not correctionActive and structureDirection == "BEARISH" and not na(barsSinceBearishDisp) and barsSinceBearishDisp <= tcSetupLookback
+tcLongTrigger  = tcLongSetupReady  and lastStructureEventBar == bar_index and lastStructureEvent == "BULLISH_BOS"
+tcShortTrigger = tcShortSetupReady and lastStructureEventBar == bar_index and lastStructureEvent == "BEARISH_BOS"
+tcLongAnchor  = lastSwingLow
+tcShortAnchor = lastSwingHigh
+
+// ── PB — Trend Pullback ────────────────────────────────────────────────────
+// Setup: the trend's correction resolved RECENTLY (not stale) and
+// correctionActive is currently false — resolution alone is never a setup;
+// it only PERMITS looking for one (§8). Trigger: a fresh matching-direction
+// continuation BOS or "back with trend" CHoCH, strictly after the
+// resolution bar. Anchor: the pullback's own low/high — approximated by the
+// most recent tracked swing, which is the pullback extreme itself in the
+// common case (the correction's retracement swing).
+pbLongSetupReady  = pbLongEligible  and not correctionActive and not na(corrResolvedBar) and corrResolvedSide == "BULL" and (bar_index - corrResolvedBar) <= pbSetupLookback
+pbShortSetupReady = pbShortEligible and not correctionActive and not na(corrResolvedBar) and corrResolvedSide == "BEAR" and (bar_index - corrResolvedBar) <= pbSetupLookback
+pbLongTrigger  = pbLongSetupReady  and lastStructureEventBar == bar_index and lastStructureEventBar > corrResolvedBar and (lastStructureEvent == "BULLISH_BOS" or lastStructureEvent == "BULLISH_CHOCH")
+pbShortTrigger = pbShortSetupReady and lastStructureEventBar == bar_index and lastStructureEventBar > corrResolvedBar and (lastStructureEvent == "BEARISH_BOS" or lastStructureEvent == "BEARISH_CHOCH")
+pbLongAnchor  = lastSwingLow
+pbShortAnchor = lastSwingHigh
+
+// ── BO — Breakout / Retest ─────────────────────────────────────────────────
+// Setup: the P2 anchored range must have already been confirmed BEFORE any
+// breakout (reusing P2's own chronology-protected rangeState/rangeConfirmBar
+// directly — never a fresh ad-hoc breakout check).
+//
+// P3 review §3 fix: BREAKOUT, RETEST, and RECLAIM are now three explicitly
+// DISTINCT bars, never collapsible into one. A prior version could satisfy
+// the retest touch and the reclaim close on the SAME candle (setting
+// `boLongRetested := true` and then, on that identical bar's continued
+// script execution, `boLongTrigger` immediately reading the just-updated
+// flag). Fixed by recording the retest's OWN bar (`boLongRetestBar`) and
+// requiring the reclaim to occur STRICTLY AFTER it — so:
+//   breakout bar (boLongBar) < retest bar (boLongRetestBar) < reclaim bar
+// is enforced by construction, never merely by convention.
+// Deterministic invalidation: if price closes back THROUGH the broken
+// boundary (beyond the ATR tolerance, in the wrong direction) after a
+// retest was already recorded, the sequence is invalidated outright —
+// a failed retest does not linger indefinitely waiting for a reclaim that
+// contradicts what the retest just showed. Pending sequences also expire
+// after boRetestMaxBars measured from the breakout bar.
+var string priorRangeState  = "NONE"
+var bool  boLongActive      = false
+var float boLongLevel       = na
+var int   boLongBar         = na       // breakout bar
+var bool  boLongRetested    = false
+var int   boLongRetestBar   = na       // retest bar — always > boLongBar
+var bool  boShortActive     = false
+var float boShortLevel      = na
+var int   boShortBar        = na
+var bool  boShortRetested   = false
+var int   boShortRetestBar  = na
+
+if confirmedBar
+    if rangeState == "BROKEN" and priorRangeState == "ACTIVE"
+        if close > rangeHigh
+            boLongActive := true
+            boLongLevel := rangeHigh
+            boLongBar := bar_index
+            boLongRetested := false
+            boLongRetestBar := na
+        else if close < rangeLow
+            boShortActive := true
+            boShortLevel := rangeLow
+            boShortBar := bar_index
+            boShortRetested := false
+            boShortRetestBar := na
+    priorRangeState := rangeState
+
+    if boLongActive and (bar_index - boLongBar) > boRetestMaxBars
+        boLongActive := false   // expired — no retest arrived in time
+    // Retest: only on a bar STRICTLY AFTER the breakout bar.
+    if boLongActive and not boLongRetested and bar_index > boLongBar and low <= boLongLevel + boRetestAtrTol * atrVal
+        boLongRetested := true
+        boLongRetestBar := bar_index
+    // Retest failure: after a retest was recorded, price closes back
+    // through the broken boundary (beyond tolerance) rather than holding —
+    // invalidate rather than leave the sequence dangling.
+    if boLongActive and boLongRetested and bar_index > boLongRetestBar and close < boLongLevel - boRetestAtrTol * atrVal
+        boLongActive := false
+
+    if boShortActive and (bar_index - boShortBar) > boRetestMaxBars
+        boShortActive := false
+    if boShortActive and not boShortRetested and bar_index > boShortBar and high >= boShortLevel - boRetestAtrTol * atrVal
+        boShortRetested := true
+        boShortRetestBar := bar_index
+    if boShortActive and boShortRetested and bar_index > boShortRetestBar and close > boShortLevel + boRetestAtrTol * atrVal
+        boShortActive := false
+
+boLongSetupReady  = boLongEligible  and not correctionActive and boLongActive
+boShortSetupReady = boShortEligible and not correctionActive and boShortActive
+// Reclaim trigger: STRICTLY after the retest bar — never the retest bar
+// itself, never the breakout bar.
+boLongTrigger  = boLongSetupReady  and boLongRetested  and not na(boLongRetestBar)  and bar_index > boLongRetestBar  and close > boLongLevel
+boShortTrigger = boShortSetupReady and boShortRetested and not na(boShortRetestBar) and bar_index > boShortRetestBar and close < boShortLevel
+boLongAnchor  = boLongLevel
+boShortAnchor = boShortLevel
+
+// ── MR — Mean Reversion ────────────────────────────────────────────────────
+// Setup: RANGE regime only (hard-blocked in every trend regime, §10).
+// Trigger (P3 review §1 fix): price must GENUINELY WICK BEYOND the anchored
+// range boundary AND close back INSIDE it this same confirmed bar — every
+// condition is written EXPLICITLY and self-contained directly on the
+// trigger line (never relying only on mrLongSetupReady's own low/high
+// check, which a future edit to that variable could otherwise silently
+// decouple from). Concretely, for LONG: `low <= rangeLow` (a genuine touch
+// or undercut — not merely "close" to it) AND `close > rangeLow` (closed
+// back inside) AND the overshoot `(rangeLow - low)` bounded by the ATR
+// tolerance. Because `low <= rangeLow` is now required explicitly and
+// unconditionally on this line, a candle that stays entirely ABOVE
+// rangeLow (never touching it) makes `rangeLow - low` NEGATIVE, but the
+// mandatory `low <= rangeLow` term independently fails first — so a
+// negative overshoot value can never satisfy this condition on its own.
+//
+// Opposing-displacement blocker: MR must never fade a genuine breakout — a
+// STRONG opposing displacement within the last `mrDisplacementBlockBars`
+// bars (not just this exact candle) blocks the setup entirely, reusing the
+// existing P2 `barsSinceBullishDisp`/`barsSinceBearishDisp` series computed
+// above for TC — no new indicator is introduced.
+mrLongDisplacementBlocked  = not na(barsSinceBearishDisp) and barsSinceBearishDisp <= mrDisplacementBlockBars
+mrShortDisplacementBlocked = not na(barsSinceBullishDisp) and barsSinceBullishDisp <= mrDisplacementBlockBars
+
+mrLongSetupReady  = mrLongEligible  and not correctionActive and not na(rangeLow)  and rangeState == "ACTIVE" and low  <= rangeLow and not mrLongDisplacementBlocked
+mrShortSetupReady = mrShortEligible and not correctionActive and not na(rangeHigh) and rangeState == "ACTIVE" and high >= rangeHigh and not mrShortDisplacementBlocked
+mrLongTrigger  = mrLongSetupReady  and low  <= rangeLow  and close > rangeLow  and (rangeLow - low)   <= mrBoundaryAtrTol * atrVal and not mrLongDisplacementBlocked
+mrShortTrigger = mrShortSetupReady and high >= rangeHigh and close < rangeHigh and (high - rangeHigh) <= mrBoundaryAtrTol * atrVal and not mrShortDisplacementBlocked
+mrLongAnchor  = low    // the sweep bar's own low is the invalidation reference
+mrShortAnchor = high
+
+// ── SR — Structure / Rejection ────────────────────────────────────────────
+// Setup: any regime where structure is meaningful (not COMPRESSION/
+// TRANSITION/CHOP/HIGH_VOLATILITY). Trigger requires one of the SAME
+// deterministic, already-confirmed P2 events used elsewhere — never a bare
+// wick: a genuine swing-level sweep, a PDH/PDL sweep, or a CHoCH — firing
+// on THIS confirmed bar. One wick alone (without a P2-confirmed sweep
+// event) is never sufficient.
+srLongSetupReady  = srLongEligible  and not correctionActive
+srShortSetupReady = srShortEligible and not correctionActive
+srLongTrigger  = srLongSetupReady  and ((lastSweepType == "SWEEP_LOW"  and lastSweepBar == bar_index) or (lastDailySweep == "PDL_SWEEP" and lastDailySweepBar == bar_index) or (lastStructureEventBar == bar_index and lastStructureEvent == "BULLISH_CHOCH"))
+srShortTrigger = srShortSetupReady and ((lastSweepType == "SWEEP_HIGH" and lastSweepBar == bar_index) or (lastDailySweep == "PDH_SWEEP" and lastDailySweepBar == bar_index) or (lastStructureEventBar == bar_index and lastStructureEvent == "BEARISH_CHOCH"))
+srLongAnchor  = lastSwingLow
+srShortAnchor = lastSwingHigh
+
+// ── §12 Model selection priority (documented, exact) ──────────────────────
+// PB > BO > TC > MR > SR — a resolved trend correction is the most specific,
+// highest-conviction context; an anchored breakout/retest is the next most
+// structurally rigorous; plain continuation is common but least specific;
+// range mean-reversion and structural rejection are the most opportunistic
+// and sit last. Only the FIRST eligible model with a CONFIRMED TRIGGER this
+// bar is ever considered — never more than one model per bar, never both
+// directions.
+anySetupReady = tcLongSetupReady or tcShortSetupReady or pbLongSetupReady or pbShortSetupReady or boLongSetupReady or boShortSetupReady or mrLongSetupReady or mrShortSetupReady or srLongSetupReady or srShortSetupReady
+anyEligible = tcLongEligible or tcShortEligible or pbLongEligible or pbShortEligible or boLongEligible or boShortEligible or mrLongEligible or mrShortEligible or srLongEligible or srShortEligible
+
+candModel  = pbLongTrigger or pbShortTrigger ? "PB" :
+     boLongTrigger or boShortTrigger ? "BO" :
+     tcLongTrigger or tcShortTrigger ? "TC" :
+     mrLongTrigger or mrShortTrigger ? "MR" :
+     srLongTrigger or srShortTrigger ? "SR" :
+     "NA"
+candIsLong = pbLongTrigger or boLongTrigger or tcLongTrigger or mrLongTrigger or srLongTrigger
+candTriggered = candModel != "NA"
+candAnchor = candModel == "PB" ? (candIsLong ? pbLongAnchor : pbShortAnchor) :
+     candModel == "BO" ? (candIsLong ? boLongAnchor : boShortAnchor) :
+     candModel == "TC" ? (candIsLong ? tcLongAnchor : tcShortAnchor) :
+     candModel == "MR" ? (candIsLong ? mrLongAnchor : mrShortAnchor) :
+     candModel == "SR" ? (candIsLong ? srLongAnchor : srShortAnchor) :
+     na
+// ── §16 Entry location: CHRONOLOGICAL staleness (P3 review §2 fix) ───────
+// A prior version set `candTriggerBar = bar_index` unconditionally, making
+// `candEntryLate` structurally always false — every trigger is "this bar"
+// by definition, so comparing bar_index to itself can never exceed any
+// positive threshold. That satisfied nothing.
+//
+// The fix distinguishes TWO different bars per model:
+//   - candSetupOriginBar: when the underlying OPPORTUNITY first became
+//     knowable (the displacement bar for TC, the resolution bar for PB,
+//     the breakout bar for BO) — this can be, and usually is, OLDER than
+//     the current bar.
+//   - the current confirmed bar: when the TRIGGER itself fires.
+// candEntryLate compares their gap against a threshold that is DELIBERATELY
+// TIGHTER than each model's own setup-recency window (tcSetupLookback,
+// pbSetupLookback, boRetestMaxBars) — so a trigger can be technically still
+// "setup-ready" per that wider window yet independently flagged stale by
+// this narrower one. This is what makes the gate genuinely reachable
+// rather than vacuous (proven in tests/pine_p3_decision_model.test.js and
+// tests/pine_p3_contract.test.js).
+//
+// MR and SR are same-bar by construction: their trigger conditions require
+// the qualifying wick/sweep/CHoCH to occur on THIS confirmed bar (see their
+// trigger definitions above) — there is no multi-bar setup-to-trigger gap
+// to become stale. Their origin bar is therefore always bar_index, making
+// `bar_index - candSetupOriginBar` always exactly 0, provably never late —
+// documented here rather than silently relying on an unreachable generic
+// gate (see the P3 review's explicit instruction).
+tcOriginOffset = candIsLong ? barsSinceBullishDisp : barsSinceBearishDisp
+candSetupOriginBar = candModel == "TC" ? (na(tcOriginOffset) ? na : bar_index - tcOriginOffset) :
+     candModel == "PB" ? corrResolvedBar :
+     candModel == "BO" ? (candIsLong ? boLongBar : boShortBar) :
+     candModel == "MR" ? bar_index :
+     candModel == "SR" ? bar_index :
+     na
+candMaxLateBars = candModel == "TC" ? tcMaxEntryLateBars :
+     candModel == "PB" ? pbMaxEntryLateBars :
+     candModel == "BO" ? boMaxEntryLateBars :
+     0   // MR/SR: origin is always bar_index, so 0 > 0 is always false regardless of this value
+
+// ── §5 (P3 review) Stale-event / duplicate-signal identity ────────────────
+// SIGNAL_ID alone (model + side + bar_index) does not prove a NEW
+// opportunity — bar_index changes every bar regardless of whether anything
+// new actually happened. The real anti-recycling protection is that every
+// model's OWN trigger condition already requires a fresh, this-bar
+// confirmed event (see each model's trigger definition above: P2's
+// consumed/swept latches prevent the same structural level firing twice,
+// and `lastStructureEventBar == bar_index` / `lastSweepBar == bar_index`
+// checks prevent an old event from re-qualifying on a later bar). This key
+// adds one further, explicit, defense-in-depth layer: it identifies a
+// candidate by its MODEL + DIRECTION + ORIGIN bar (not just the current
+// bar), and a trade is only approved if that exact origin has never
+// already produced an emitted signal — so even a hypothetical future
+// change that let the same origin re-qualify across multiple bars could
+// not silently emit a second signal from it.
+candOriginKey = candTriggered and not na(candSetupOriginBar) ? candModel + "_" + (candIsLong ? "BULLISH" : "BEARISH") + "_" + str.tostring(candSetupOriginBar) : "NA"
+
+// ── §17 Entry semantics ────────────────────────────────────────────────────
+// ENTRY = the confirmed trigger bar's close. Never a historical idealized
+// price unavailable at signal time, never a future bar's price.
+candEntry = close
+
+// ── §16 Entry location / do-not-chase (ATR-normalized, never raw dollars) ─
+candOverextended = candTriggered and not na(candAnchor) and math.abs(candEntry - candAnchor) > overextendAtrMult * atrVal
+candEntryLate = candTriggered and not na(candSetupOriginBar) and (bar_index - candSetupOriginBar) > candMaxLateBars
+candLocationOk = candTriggered and not candOverextended and not candEntryLate
+
+// ── §18/§19 Logical SL then targets, in order — never reverse-engineered ──
+candIsValidDir = candTriggered and candLocationOk
+slAnchor = candIsValidDir ? candAnchor : na
+slRaw = na(slAnchor) ? (candIsLong ? candEntry - slAtrFallback * atrVal : candEntry + slAtrFallback * atrVal) : (candIsLong ? slAnchor - slAtrBuffer * atrVal : slAnchor + slAtrBuffer * atrVal)
+slGeometryOk = candIsValidDir and (candIsLong ? slRaw < candEntry : slRaw > candEntry)
+candSl = slGeometryOk ? slRaw : na
+candRisk = slGeometryOk ? math.abs(candEntry - candSl) : na
+
+candTp1 = slGeometryOk ? (candIsLong ? candEntry + tp1RMultiple * candRisk : candEntry - tp1RMultiple * candRisk) : na
+tp2Objective = slGeometryOk ? (candIsLong ? f_nearestAbove(activeHighLevels, candEntry) : f_nearestBelow(activeLowLevels, candEntry)) : na
+tp2Default = slGeometryOk ? (candIsLong ? candEntry + tp2RMultipleDefault * candRisk : candEntry - tp2RMultipleDefault * candRisk) : na
+tp2Cap = slGeometryOk ? (candIsLong ? candEntry + tp2RMultipleCap * candRisk : candEntry - tp2RMultipleCap * candRisk) : na
+tp2Raw = na(tp2Objective) ? tp2Default : tp2Objective
+// A structural objective on the WRONG side of the default (i.e. offering
+// LESS than 1R) is not a usable target — fall back to the default rather
+// than publish a sub-1R objective.
+tp2RawUsable = na(tp2Raw) ? na : (candIsLong ? (tp2Raw > candEntry ? tp2Raw : tp2Default) : (tp2Raw < candEntry ? tp2Raw : tp2Default))
+candTp2 = slGeometryOk ? (candIsLong ? math.min(tp2RawUsable, tp2Cap) : math.max(tp2RawUsable, tp2Cap)) : na
+candRr = slGeometryOk and not na(candTp2) ? math.abs(candTp2 - candEntry) / candRisk : na
+
+// ── §21 Quality score 0-100 — independent, documented, non-overlapping
+// components, each with an exact maximum, summing to exactly 100 at best
+// case. NOT a probability/confidence/win-rate claim of any kind — a
+// transparent, deterministic setup-quality score only.
+//   component        max   rule
+//   structure        15    confirmed swing type: HH/LL=15, LH/HL=10, EQH/EQL=5
+//   trigger          15    fresh BOS=15, fresh CHoCH=12, MR/SR sweep-class=10
+//   entry location   15    linear falloff to 0 as extension approaches the
+//                          overextension ATR multiple (never negative)
+//   momentum         10    ADX scaled linearly to the trend threshold, capped
+//   volatility       10    full marks inside a "normal" 0.7-1.3 ATR-ratio
+//                          band, linear falloff outside it
+//   MTF alignment    15    HTF bias matches direction=15, flat=7.5, opposes=0
+//   session          10    LONDON/NEW_YORK=10, ASIA=6, OTHER=2
+//   RR quality       10    0 at minRR, scales up to +100% over minRR, capped
+//
+// P3 review §6 double-counting audit — two pairs deliberately share an
+// input measurement but score a DIFFERENT property, not the same evidence
+// twice:
+//   qStructure vs qTrigger — qStructure scores the SWING PATTERN itself
+//     (is the sequence of confirmed highs/lows genuinely trending: HH/LL
+//     vs LH/HL vs EQH/EQL), independent of any single event. qTrigger
+//     scores the TYPE OF THE SPECIFIC BREAK that fired THIS bar (a fresh
+//     continuation BOS vs a character-changing CHoCH vs a liquidity-class
+//     MR/SR event) relative to the already-established structureDirection.
+//     A strong swing pattern (high qStructure) can pair with any trigger
+//     type, and a BOS (high qTrigger) can occur against a weak or EQH/EQL
+//     swing pattern — they are independent axes, not a restatement of one
+//     fact under two names.
+//   qEntryLocation vs candOverextended — both read the same underlying
+//     ATR-normalized distance-from-anchor measurement, but for DIFFERENT
+//     purposes: candOverextended is a binary HARD GATE (reject outright
+//     beyond the threshold); qEntryLocation is a CONTINUOUS score that
+//     rewards a closer entry among otherwise-ACCEPTABLE (not overextended)
+//     candidates. Reusing one measurement as both an elimination gate and a
+//     graduated ranking signal is a standard, non-duplicative pattern — it
+//     is never counted as two separate pieces of independent evidence.
+qStructure = candModel == "NA" ? 0.0 : (candIsLong ? (lastSwingHighType == "HH" ? 15.0 : lastSwingHighType == "LH" ? 10.0 : 5.0) : (lastSwingLowType == "LL" ? 15.0 : lastSwingLowType == "HL" ? 10.0 : 5.0))
+qTrigger = lastStructureEventBar == bar_index and (lastStructureEvent == "BULLISH_BOS" or lastStructureEvent == "BEARISH_BOS") ? 15.0 :
+     lastStructureEventBar == bar_index and (lastStructureEvent == "BULLISH_CHOCH" or lastStructureEvent == "BEARISH_CHOCH") ? 12.0 :
+     candModel == "MR" or candModel == "SR" ? 10.0 : 0.0
+qEntryLocation = candTriggered and not na(candAnchor) and atrVal > 0 ? math.max(0.0, 15.0 - 15.0 * (math.abs(candEntry - candAnchor) / (overextendAtrMult * atrVal))) : 0.0
+qMomentum = adxTrendThreshold > 0 ? math.min(10.0, 10.0 * (adxVal / adxTrendThreshold)) : 0.0
+qVolatility = atrRatio >= 0.7 and atrRatio <= 1.3 ? 10.0 : math.max(0.0, 10.0 - 10.0 * math.abs(atrRatio - 1.0))
+qMtf = candModel == "NA" ? 0.0 : (candIsLong ? (htfBias == "BULL" ? 15.0 : htfBias == "FLAT" ? 7.5 : 0.0) : (htfBias == "BEAR" ? 15.0 : htfBias == "FLAT" ? 7.5 : 0.0))
+qSession = session == "LONDON" or session == "NEW_YORK" ? 10.0 : session == "ASIA" ? 6.0 : 2.0
+qRr = not na(candRr) and minRR > 0 ? math.min(10.0, math.max(0.0, 10.0 * (candRr - minRR) / minRR)) : 0.0
+candQualityRaw = qStructure + qTrigger + qEntryLocation + qMomentum + qVolatility + qMtf + qSession + qRr
+candQuality = math.min(100.0, math.max(0.0, candQualityRaw))   // defensive clamp — components sum to exactly 100 at best case (15+15+15+10+10+15+10+10)
+
+// ── §27 WAIT-reason precedence (single authoritative reason, documented) ──
+//  1. NEWS_SUPPRESSION   6. NO_TRIGGER
+//  2. CHOP / TRANSITION  7. CONFIRMATION_INCOMPLETE
+//  3. CORRECTION_ACTIVE  8. ENTRY_LATE
+//  4. NO_ELIGIBLE_STRATEGY  9. OVEREXTENDED
+//  5. NO_SETUP           10. NO_GOOD_ENTRY (quality)   11. RR_NOT_ACCEPTABLE
+// NO_SETUP/NO_TRIGGER/RR_NOT_ACCEPTABLE now genuinely used for the first
+// time in P3 — P1/P2 never had setups/triggers/RR to report on.
+tradeReady = candTriggered and candLocationOk and slGeometryOk and not na(candRr)
+qualityOk = tradeReady and candQuality >= qualityThreshold
+rrOk = tradeReady and qualityOk and candRr >= minRR
+
+waitReason = newsSuppressed ? "NEWS_SUPPRESSION" :
+     officialRegime == "CHOP_UNCERTAIN" ? "CHOP" :
+     officialRegime == "TRANSITION" ? "TRANSITION" :
+     correctionActive ? "CORRECTION_ACTIVE" :
+     not anyEligible ? "NO_ELIGIBLE_STRATEGY" :
+     not anySetupReady ? "NO_SETUP" :
+     not candTriggered ? "NO_TRIGGER" :
+     not confirmedBar ? "CONFIRMATION_INCOMPLETE" :
+     candEntryLate ? "ENTRY_LATE" :
+     candOverextended ? "OVEREXTENDED" :
+     not qualityOk ? "NO_GOOD_ENTRY" :
+     not rrOk ? "RR_NOT_ACCEPTABLE" :
+     "UNKNOWN"   // unreachable in practice — every gate above is exhaustive; UNKNOWN is the safe enum fallback if it were ever hit
+
+// ── §14 Correction hard blocker + §15 confirmation gate + all gates ───────
+// combined into the single final boolean — every one of these must hold,
+// with NO exception, for ANY trade to be considered.
+var string lastEmittedOriginKey = "NA"
+candOriginFresh = candOriginKey != "NA" and candOriginKey != lastEmittedOriginKey
+
+finalTradeApproved = newsSuppressed == false and
+     officialRegime != "CHOP_UNCERTAIN" and officialRegime != "TRANSITION" and
+     not correctionActive and
+     anyEligible and anySetupReady and candTriggered and
+     confirmedBar and
+     not candEntryLate and not candOverextended and
+     qualityOk and rrOk and
+     slGeometryOk and not na(candRr) and
+     candOriginFresh
+
+// ── §28/§29 Signal state machine — freeze-once, deterministic identity ───
+// Freezing happens ONLY on the bar a trade is genuinely approved. Every
+// frozen field is a `var` written exactly once per signal — later bars
+// (including the very next one) never rewrite an already-frozen signal's
+// historical values; a DIFFERENT later signal gets a brand-new identity
+// instead of overwriting fields in place for audit purposes, but the
+// contract only ever needs to report the MOST RECENT one, matching how
+// every other "last event" field in this file already behaves.
+var string signalId        = "NA"
+var string signalSide      = "NA"       // "BULLISH" / "BEARISH" — the internal direction record; ACTION itself is computed fresh below, never derived backward from this
+var float  signalEntry     = na
+var float  signalSl        = na
+var float  signalTp1       = na
+var float  signalTp2       = na
+var float  signalRr        = na
+var string signalModel     = "NA"
+var string signalRegime    = "NA"
+var float  signalQuality   = na
+var int    signalBarTime   = na
+var string signalTimeframe = "NA"
+var string signalSession   = "NA"
+
+if confirmedBar and finalTradeApproved
+    // Includes the ORIGIN bar (not just the trigger/current bar) so the ID
+    // is self-documenting about which underlying setup opportunity produced
+    // it, and remains unique even if the same model+direction fires again
+    // later from a genuinely different origin.
+    newSignalId = candModel + "_" + (candIsLong ? "BULLISH" : "BEARISH") + "_O" + str.tostring(candSetupOriginBar) + "_T" + str.tostring(bar_index)
+    if newSignalId != signalId   // defensive dedup — bar_index is unique per bar so this is always true in practice, but never re-freeze the identical id
+        lastEmittedOriginKey := candOriginKey   // latch this origin so finalTradeApproved can never approve it again
+        signalId := newSignalId
+        signalSide := candIsLong ? "BULLISH" : "BEARISH"
+        signalEntry := candEntry
+        signalSl := candSl
+        signalTp1 := candTp1
+        signalTp2 := candTp2
+        signalRr := candRr
+        signalModel := candModel
+        signalRegime := officialRegime
+        signalQuality := candQuality
+        signalBarTime := time
+        signalTimeframe := timeframe.period
+        signalSession := session
+
+// One-time consumption: a triggered-and-approved BO retest sequence (or a
+// still-pending one that was merely evaluated) must not remain "active" to
+// re-trigger on a later bar. TC/PB/MR/SR triggers are already inherently
+// single-bar (gated on lastStructureEventBar/lastSweepBar == bar_index),
+// so only BO's multi-bar pending state needs explicit consumption here.
+if confirmedBar and boLongTrigger
+    boLongActive := false
+if confirmedBar and boShortTrigger
+    boShortActive := false
+
+// ── THE ACTION FIELD ───────────────────────────────────────────────────
+// The ONLY place in this entire file where "BUY"/"SELL" can be produced —
+// gated behind `finalTradeApproved`, itself the conjunction of every gate
+// above. If ANY gate is false, this always evaluates to "WAIT". There is no
+// other assignment to contractAction anywhere else in the file.
+contractAction = finalTradeApproved ? (candIsLong ? "BUY" : "SELL") : "WAIT"
+
+// Published trade fields mirror the FROZEN signal on the bar it was
+// approved, and stay NA on every other bar — never the live/current
+// candidate values, which could differ bar-to-bar before/after approval.
+outEntry      = finalTradeApproved ? signalEntry      : na
+outSl         = finalTradeApproved ? signalSl         : na
+outTp1        = finalTradeApproved ? signalTp1        : na
+outTp2        = finalTradeApproved ? signalTp2        : na
+outRr         = finalTradeApproved ? signalRr         : na
+outModel      = finalTradeApproved ? signalModel      : "NA"
+outSignalId   = finalTradeApproved ? signalId         : "NA"
+outSignalTime = finalTradeApproved ? signalBarTime    : na
+outQuality    = candTriggered ? candQuality : na   // quality is informative context even without a full approval — displayed whenever a trigger was at least evaluated
+outSetupState = anySetupReady ? "SETUP_READY" : "NO_SETUP"
+outTriggerState = candTriggered ? "TRIGGER_CONFIRMED" : (anySetupReady ? "TRIGGER_PENDING" : "NO_TRIGGER")
+outConfirmationState = confirmedBar ? "CONFIRMED" : "PENDING"
+outOverextensionState = candEntryLate ? "ENTRY_LATE" : candOverextended ? "OVEREXTENDED" : "NONE"
+outRrValidationState = na(candRr) ? "NA" : (rrOk ? "ACCEPTABLE" : "RR_NOT_ACCEPTABLE")
+
+// ── §35 Alert conditions — prepared, never auto-configured/sent ──────────
+// alertcondition() only registers a condition an operator may manually wire
+// up inside TradingView's own Alert dialog; it never creates an alert,
+// sends a webhook, or executes anything by itself.
+alertcondition(finalTradeApproved and candIsLong, title = "XAUUSD Adaptive Master — Confirmed BUY", message = "XAUUSD Adaptive Master: confirmed BUY signal ({{ticker}}, {{interval}})")
+alertcondition(finalTradeApproved and not candIsLong, title = "XAUUSD Adaptive Master — Confirmed SELL", message = "XAUUSD Adaptive Master: confirmed SELL signal ({{ticker}}, {{interval}})")
+
+// =============================================================================
+// CONTRACT TABLE — Phase 2B CONTRACT_VERSION=1 (unchanged — this is an
+// additive extension, not a breaking contract change). P1 fields unchanged;
+// P2 adds 20 structure-owned fields. Every field this indicator does not yet
+// own is emitted as literal "NA", matching the MCP parser's null-compatible
+// representation. Nothing here is fabricated on Pine's behalf.
+// =============================================================================
+var table contractTable = table.new(position.top_right, 2, 50, border_width = 1, border_color = color.gray, frame_width = 1, frame_color = color.gray)
+
+f_row(tbl, r, k, v) =>
+    table.cell(tbl, 0, r, k, text_size = size.tiny, text_color = color.white, bgcolor = color.new(color.black, 0), text_halign = text.align_left)
+    table.cell(tbl, 1, r, v, text_size = size.tiny, text_color = color.yellow, bgcolor = color.new(color.black, 0), text_halign = text.align_left)
+
+if barstate.islast
+    f_row(contractTable, 0,  "CONTRACT_VERSION", str.tostring(CONTRACT_VERSION))
+    f_row(contractTable, 1,  "INDICATOR_VERSION", INDICATOR_VERSION)
+    f_row(contractTable, 2,  "SYMBOL", syminfo.tickerid)
+    f_row(contractTable, 3,  "EXECUTION_TF", timeframe.period)
+    f_row(contractTable, 4,  "CONTEXT_TF", htfTimeframe)
+    f_row(contractTable, 5,  "BAR_TIME", str.tostring(time))
+    f_row(contractTable, 6,  "BAR_INDEX", str.tostring(bar_index))
+    f_row(contractTable, 7,  "BAR_CONFIRMED", confirmedBar ? "1" : "0")
+    f_row(contractTable, 8,  "REGIME", officialRegime)
+    f_row(contractTable, 9,  "CORRECTION_STATE", correctionStateStr)
+    f_row(contractTable, 10, "CORRECTION_REASON", correctionActive ? correctionEvidence : "NA")
+    f_row(contractTable, 11, "MODEL", finalTradeApproved ? outModel : "NA")
+    f_row(contractTable, 12, "SETUP_STATE", outSetupState)
+    f_row(contractTable, 13, "TRIGGER_STATE", outTriggerState)
+    f_row(contractTable, 14, "CONFIRMATION_STATE", outConfirmationState)
+    f_row(contractTable, 15, "QUALITY", na(outQuality) ? "NA" : str.tostring(outQuality, "#.#"))
+    f_row(contractTable, 16, "QUALITY_THRESHOLD", str.tostring(qualityThreshold, "#.#"))
+    f_row(contractTable, 17, "OVEREXTENSION_STATE", outOverextensionState)
+    f_row(contractTable, 18, "RR_VALIDATION_STATE", outRrValidationState)
+    f_row(contractTable, 19, "ACTION", contractAction)
+    f_row(contractTable, 20, "WAIT_REASON", finalTradeApproved ? "NA" : waitReason)
+    f_row(contractTable, 21, "ENTRY", na(outEntry) ? "NA" : str.tostring(outEntry))
+    f_row(contractTable, 22, "SL", na(outSl) ? "NA" : str.tostring(outSl))
+    f_row(contractTable, 23, "TP1", na(outTp1) ? "NA" : str.tostring(outTp1))
+    f_row(contractTable, 24, "TP2", na(outTp2) ? "NA" : str.tostring(outTp2))
+    f_row(contractTable, 25, "EXIT_TARGET", "NA")
+    f_row(contractTable, 26, "RR", na(outRr) ? "NA" : str.tostring(outRr, "#.##"))
+    f_row(contractTable, 27, "SESSION", session)
+    f_row(contractTable, 28, "SIGNAL_ID", outSignalId)
+    f_row(contractTable, 29, "SIGNAL_BAR_TIME", na(outSignalTime) ? "NA" : str.tostring(outSignalTime))
+    // P2 additions ────────────────────────────────────────────────────────
+    f_row(contractTable, 30, "STRUCTURE_STATE", structureDirection)
+    f_row(contractTable, 31, "LAST_STRUCTURE_EVENT", lastStructureEvent)
+    f_row(contractTable, 32, "LAST_STRUCTURE_EVENT_BAR", na(lastStructureEventBar) ? "NA" : str.tostring(lastStructureEventBar))
+    f_row(contractTable, 33, "LAST_SWING_HIGH", na(lastSwingHigh) ? "NA" : str.tostring(lastSwingHigh))
+    f_row(contractTable, 34, "LAST_SWING_HIGH_TYPE", lastSwingHighType)
+    f_row(contractTable, 35, "LAST_SWING_LOW", na(lastSwingLow) ? "NA" : str.tostring(lastSwingLow))
+    f_row(contractTable, 36, "LAST_SWING_LOW_TYPE", lastSwingLowType)
+    f_row(contractTable, 37, "LAST_BOS_DIRECTION", lastBosDirection)
+    f_row(contractTable, 38, "LAST_BOS_BAR", na(lastBosBar) ? "NA" : str.tostring(lastBosBar))
+    f_row(contractTable, 39, "LAST_CHOCH_DIRECTION", lastChochDirection)
+    f_row(contractTable, 40, "LAST_CHOCH_BAR", na(lastChochBar) ? "NA" : str.tostring(lastChochBar))
+    f_row(contractTable, 41, "LAST_SWEEP_TYPE", lastSweepType)
+    f_row(contractTable, 42, "LAST_SWEEP_BAR", na(lastSweepBar) ? "NA" : str.tostring(lastSweepBar))
+    f_row(contractTable, 43, "PDH", na(pdh) ? "NA" : str.tostring(pdh))
+    f_row(contractTable, 44, "PDL", na(pdl) ? "NA" : str.tostring(pdl))
+    f_row(contractTable, 45, "LAST_DAILY_SWEEP", lastDailySweep)
+    f_row(contractTable, 46, "DISPLACEMENT_STATE", displacementState)
+    f_row(contractTable, 47, "RANGE_STATE", rangeState)
+    f_row(contractTable, 48, "RANGE_HIGH", na(rangeHigh) ? "NA" : str.tostring(rangeHigh))
+    f_row(contractTable, 49, "RANGE_LOW", na(rangeLow) ? "NA" : str.tostring(rangeLow))
+
+// =============================================================================
+// DEBUG TABLE — internal audit state, OFF by default (debugMode input).
+// Extended in P2 with structure/pivot/range chronology detail not carried
+// in the compact contract table.
+// =============================================================================
+var table debugTable = table.new(position.bottom_right, 2, 56, border_width = 1, border_color = color.gray, frame_width = 1, frame_color = color.gray)
+
+// Most-recent-level convenience reads for the debug table — the active
+// arrays themselves (not these) are what BOS/CHoCH/sweep detection uses.
+activeHighCount = array.size(activeHighLevels)
+activeLowCount  = array.size(activeLowLevels)
+lastHighLevelConsumed = activeHighCount > 0 ? array.get(activeHighLevels, activeHighCount - 1).consumed : false
+lastHighLevelSwept    = activeHighCount > 0 ? array.get(activeHighLevels, activeHighCount - 1).swept : false
+lastLowLevelConsumed  = activeLowCount  > 0 ? array.get(activeLowLevels, activeLowCount - 1).consumed : false
+lastLowLevelSwept     = activeLowCount  > 0 ? array.get(activeLowLevels, activeLowCount - 1).swept : false
+
+if debugMode and barstate.islast
+    f_row(debugTable, 0,  "regime_candidate", regimeCandidate)
+    f_row(debugTable, 1,  "regime_streak", str.tostring(regimeStreak))
+    f_row(debugTable, 2,  "official_regime", officialRegime)
+    f_row(debugTable, 3,  "prior_official_regime", priorOfficialRegime)
+    f_row(debugTable, 4,  "htf_bias", htfBias)
+    f_row(debugTable, 5,  "correction_active", str.tostring(correctionActive))
+    f_row(debugTable, 6,  "correction_side", correctionSide)
+    f_row(debugTable, 7,  "corr_start_bar", na(corrStartBar) ? "NA" : str.tostring(corrStartBar))
+    f_row(debugTable, 8,  "corr_resolved_bar", na(corrResolvedBar) ? "NA" : str.tostring(corrResolvedBar))
+    f_row(debugTable, 9,  "corr_resolved_side", corrResolvedSide)
+    f_row(debugTable, 10, "corr_recover_streak", str.tostring(corrRecoverStreak))
+    f_row(debugTable, 11, "adx", str.tostring(adxVal, "#.##"))
+    f_row(debugTable, 12, "atr_ratio", str.tostring(atrRatio, "#.##"))
+    f_row(debugTable, 13, "bb_width_ratio", str.tostring(bbWidthRatio, "#.##"))
+    f_row(debugTable, 14, "flip_count", str.tostring(flipCount))
+    f_row(debugTable, 15, "wait_reason", waitReason)
+    f_row(debugTable, 16, "swing_high_loc_bar", na(lastSwingHighBar) ? "NA" : str.tostring(lastSwingHighBar))
+    f_row(debugTable, 17, "swing_high_confirm_bar", na(lastSwingHighConfirmBar) ? "NA" : str.tostring(lastSwingHighConfirmBar))
+    f_row(debugTable, 18, "swing_high_born_close_consumed", str.tostring(lastSwingHighBornConsumed))
+    f_row(debugTable, 19, "active_high_levels_count", str.tostring(activeHighCount))
+    f_row(debugTable, 20, "last_high_level_consumed", str.tostring(lastHighLevelConsumed))
+    f_row(debugTable, 21, "last_high_level_swept", str.tostring(lastHighLevelSwept))
+    f_row(debugTable, 22, "swing_low_loc_bar", na(lastSwingLowBar) ? "NA" : str.tostring(lastSwingLowBar))
+    f_row(debugTable, 23, "swing_low_confirm_bar", na(lastSwingLowConfirmBar) ? "NA" : str.tostring(lastSwingLowConfirmBar))
+    f_row(debugTable, 24, "swing_low_born_close_consumed", str.tostring(lastSwingLowBornConsumed))
+    f_row(debugTable, 25, "active_low_levels_count", str.tostring(activeLowCount))
+    f_row(debugTable, 26, "last_low_level_consumed", str.tostring(lastLowLevelConsumed))
+    f_row(debugTable, 27, "last_low_level_swept", str.tostring(lastLowLevelSwept))
+    f_row(debugTable, 28, "regime_vs_structure_agree", str.tostring(not isDirectionalTrend(officialRegime) or (officialRegime == "BULL_TREND" and structureDirection == "BULLISH") or (officialRegime == "BEAR_TREND" and structureDirection == "BEARISH")))
+    f_row(debugTable, 29, "range_id", str.tostring(rangeId))
+    f_row(debugTable, 30, "range_anchor_bar", na(rangeAnchorBar) ? "NA" : str.tostring(rangeAnchorBar))
+    f_row(debugTable, 31, "range_confirm_bar", na(rangeConfirmBar) ? "NA" : str.tostring(rangeConfirmBar))
+    f_row(debugTable, 32, "range_regime_streak", str.tostring(rangeRegimeStreak))
+    f_row(debugTable, 33, "displacement_body_ratio", str.tostring(bodyRatio, "#.##"))
+    f_row(debugTable, 34, "max_active_levels", str.tostring(maxActiveLevels))
+    f_row(debugTable, 35, "pivot_right_bars", str.tostring(pivotRightBars))
+    f_row(debugTable, 36, "candidate_model", candModel)
+    f_row(debugTable, 37, "candidate_triggered", str.tostring(candTriggered))
+    f_row(debugTable, 38, "candidate_quality", str.tostring(candQuality, "#.#"))
+    f_row(debugTable, 39, "candidate_rr", na(candRr) ? "NA" : str.tostring(candRr, "#.##"))
+    f_row(debugTable, 40, "candidate_overextended", str.tostring(candOverextended))
+    f_row(debugTable, 41, "candidate_entry_late", str.tostring(candEntryLate))
+    f_row(debugTable, 42, "quality_ok", str.tostring(qualityOk))
+    f_row(debugTable, 43, "rr_ok", str.tostring(rrOk))
+    f_row(debugTable, 44, "final_trade_approved", str.tostring(finalTradeApproved))
+    f_row(debugTable, 45, "bo_long_active", str.tostring(boLongActive))
+    f_row(debugTable, 46, "bo_short_active", str.tostring(boShortActive))
+    f_row(debugTable, 47, "bo_long_retest_bar", na(boLongRetestBar) ? "NA" : str.tostring(boLongRetestBar))
+    f_row(debugTable, 48, "bo_short_retest_bar", na(boShortRetestBar) ? "NA" : str.tostring(boShortRetestBar))
+    f_row(debugTable, 49, "candidate_setup_origin_bar", na(candSetupOriginBar) ? "NA" : str.tostring(candSetupOriginBar))
+    f_row(debugTable, 50, "candidate_max_late_bars", str.tostring(candMaxLateBars))
+    f_row(debugTable, 51, "candidate_origin_key", candOriginKey)
+    f_row(debugTable, 52, "last_emitted_origin_key", lastEmittedOriginKey)
+    f_row(debugTable, 53, "candidate_origin_fresh", str.tostring(candOriginFresh))
+    f_row(debugTable, 54, "mr_long_displacement_blocked", str.tostring(mrLongDisplacementBlocked))
+    f_row(debugTable, 55, "mr_short_displacement_blocked", str.tostring(mrShortDisplacementBlocked))
+
+// ── Minimal default visuals ────────────────────────────────────────────────
+plot(emaFast, "EMA Fast", color = color.new(color.aqua, 0), linewidth = 1)
+plot(emaSlow, "EMA Slow", color = color.new(color.orange, 0), linewidth = 1)
+
+// Signal markers — ONLY for an actually-approved signal, on the bar it was
+// approved (never a repainted/backdated marker; `finalTradeApproved` is
+// itself confirmed-bar gated so this can never mark an unconfirmed bar).
+plotshape(finalTradeApproved and candIsLong, title = "BUY Signal", style = shape.triangleup, location = location.belowbar, color = color.new(color.green, 0), size = size.small)
+plotshape(finalTradeApproved and not candIsLong, title = "SELL Signal", style = shape.triangledown, location = location.abovebar, color = color.new(color.red, 0), size = size.small)
+
+// Correction (a sub-state of a directional trend, not a regime value itself)
+// overrides the base regime tint so it's visually distinct in debug mode.
+regimeTintColor = correctionActive ? color.new(color.purple, 92) :
+     officialRegime == "BULL_TREND" ? color.new(color.green, 92) :
+     officialRegime == "BEAR_TREND" ? color.new(color.red, 92) :
+     officialRegime == "COMPRESSION" ? color.new(color.blue, 92) :
+     officialRegime == "HIGH_VOLATILITY" ? color.new(color.fuchsia, 92) :
+     officialRegime == "TRANSITION" ? color.new(color.yellow, 92) :
+     na
+bgcolor(debugMode ? regimeTintColor : na, title = "Regime Tint (debug only)")
+
+// Bounded recent-event structure visuals — debug only, last swing levels
+// only (never hundreds of historical labels).
+plot(debugMode and not na(lastSwingHigh) ? lastSwingHigh : na, "Last Swing High", color = color.new(color.red, 40), style = plot.style_circles)
+plot(debugMode and not na(lastSwingLow) ? lastSwingLow : na, "Last Swing Low", color = color.new(color.green, 40), style = plot.style_circles)
+plot(debugMode and rangeState == "ACTIVE" and not na(rangeHigh) ? rangeHigh : na, "Anchored Range High", color = color.new(color.blue, 30), style = plot.style_linebr)
+plot(debugMode and rangeState == "ACTIVE" and not na(rangeLow) ? rangeLow : na, "Anchored Range Low", color = color.new(color.blue, 30), style = plot.style_linebr)

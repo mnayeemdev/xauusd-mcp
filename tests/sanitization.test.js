@@ -4,8 +4,9 @@
  */
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { safeString, requireFinite } from '../src/connection.js';
 import { setSymbol, setTimeframe, setType, manageIndicator, setVisibleRange } from '../src/core/chart.js';
 import { drawShape } from '../src/core/drawing.js';
@@ -287,7 +288,11 @@ describe('drawing.js — sanitized evaluate calls', () => {
 // ── Source-level audit ───────────────────────────────────────────────────
 
 describe('source audit — no unsafe interpolation patterns', () => {
-  const CORE_DIR = new URL('../src/core/', import.meta.url).pathname;
+  // fileURLToPath (not .pathname) — on Windows, a file:// URL's .pathname is
+  // "/C:/Users/.../src/core/" (a leading slash before the drive letter),
+  // which readdirSync/join then mangle into "C:\C:\Users\..." (ENOENT).
+  // fileURLToPath handles the platform-specific conversion correctly.
+  const CORE_DIR = fileURLToPath(new URL('../src/core/', import.meta.url));
   const coreFiles = readdirSync(CORE_DIR).filter(f => f.endsWith('.js'));
 
   for (const file of coreFiles) {
@@ -313,6 +318,23 @@ describe('source audit — no unsafe interpolation patterns', () => {
       }
     });
   }
+});
+
+// ── Windows path resolution regression (double drive-letter prefix) ─────
+
+describe('cross-platform module path resolution', () => {
+  it('fileURLToPath resolves src/core without a doubled drive-letter prefix', () => {
+    const p = fileURLToPath(new URL('../src/core/', import.meta.url));
+    assert.ok(!/^[A-Za-z]:[\\/][A-Za-z]:[\\/]/.test(p), `path must not double-prefix a Windows drive letter, got: ${p}`);
+    assert.ok(existsSync(p), `resolved core directory must actually exist: ${p}`);
+  });
+
+  it('.pathname alone would have produced the broken double-prefixed path (documents the defect)', () => {
+    const broken = new URL('../src/core/', import.meta.url).pathname;
+    if (process.platform === 'win32') {
+      assert.ok(/^\/[A-Za-z]:/.test(broken), 'on Windows, .pathname carries a leading slash before the drive letter — this is exactly what caused ENOENT when passed to readdirSync/join');
+    }
+  });
 });
 
 // ── Path traversal prevention ────────────────────────────────────────────

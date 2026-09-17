@@ -24,6 +24,10 @@ function printHelp() {
     }
   }
   console.log('\nRun "tv <command> --help" for command-specific options.');
+  console.log('\nSECURITY NOTE');
+  console.log('  MCP profile security (XAUUSD_RESEARCH/XAUUSD_DEVELOPMENT) applies only to');
+  console.log('  the MCP server (node src/server.js). This CLI always has full, ungated');
+  console.log('  access to every command, including chart/Pine/alert/watchlist mutations.');
   console.log('\nDISCLAIMER');
   console.log('  Not affiliated with TradingView Inc. or Anthropic, PBC.');
   console.log('  Use subject to TradingView\'s Terms of Use: tradingview.com/policies');

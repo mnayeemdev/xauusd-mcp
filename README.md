@@ -2,6 +2,15 @@
 
 [![MCP Toplist](https://mcptoplist.com/badge/glama%2Ftradesdontlie%2Ftradingview-mcp.svg)](https://mcptoplist.com/server/glama%2Ftradesdontlie%2Ftradingview-mcp)
 
+> **This checkout is customized as "XAUUSD Adaptive Master MCP" (developed by
+> Mohamed Nayeem, v0.1.0), a profile-gated, XAUUSD-focused layer built on top
+> of this project.** XAUUSD Adaptive Master MCP is a customized/extended
+> research implementation based on the open-source TradingView MCP Bridge
+> project below — it does not replace or claim authorship of it. See
+> [docs/XAUUSD_ADAPTIVE_MASTER.md](docs/XAUUSD_ADAPTIVE_MASTER.md) for the
+> profile system, security model, and new tools. Everything below this note
+> is the original upstream documentation and still applies.
+
 Personal AI assistant for your TradingView Desktop charts. Connects Claude Code to your locally running TradingView app via Chrome DevTools Protocol for AI-assisted chart analysis, Pine Script development, and workflow automation.
 
 > [!WARNING]
