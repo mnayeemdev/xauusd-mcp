@@ -1,6 +1,21 @@
 //@version=6
 // =============================================================================
-// XAUUSD Adaptive Master — PINE P3: GOOD-ENTRY-ONLY DECISION ENGINE
+// XAUUSD Adaptive Master STRATEGY — P5 Strategy Tester counterpart
+// =============================================================================
+// STRATEGY/INDICATOR PARITY: this file is a byte-for-byte duplicate of the
+// canonical pine/XAUUSD_Adaptive_Master.pine decision logic (everything
+// from the version constants through the P5 recorder/statistics), with
+// exactly two differences: (1) this declaration line (indicator() ->
+// strategy()), and (2) a "STRATEGY EXECUTION" block appended at the very
+// end that places real strategy.entry()/strategy.exit() orders using the
+// SAME finalTradeApproved/candIsLong/signalSl/signalTp2 values the
+// indicator already computes — never a second, independently-derived
+// trading algorithm. Parity is enforced by an exact-text-diff test
+// (tests/pine_p5_strategy_parity.test.js), not by a shared library import
+// (Pine has no local multi-file import mechanism without publishing a
+// library to TradingView's cloud, which is out of scope for this phase).
+// Do NOT hand-edit this file's decision logic independently of the
+// indicator — regenerate it from the indicator source instead.
 // =============================================================================
 // This is the canonical Pine source for the XAUUSD Adaptive Master indicator.
 // Do not fork a second competing script — extend this one in later phases.
@@ -26,7 +41,7 @@
 // report for the exhaustive list of what was verified.
 // =============================================================================
 
-indicator("XAUUSD Adaptive Master", overlay = true, max_lines_count = 20, max_labels_count = 20)
+strategy("XAUUSD Adaptive Master Strategy", overlay = true, max_lines_count = 20, max_labels_count = 20, pyramiding = 0, calc_on_every_tick = false, process_orders_on_close = true, default_qty_type = strategy.fixed, default_qty_value = 1, commission_type = strategy.commission.cash_per_contract, commission_value = 0)
 
 // ── Version constants ────────────────────────────────────────────────────
 CONTRACT_VERSION = 1
@@ -1815,3 +1830,40 @@ plot(debugMode and not na(lastSwingHigh) ? lastSwingHigh : na, "Last Swing High"
 plot(debugMode and not na(lastSwingLow) ? lastSwingLow : na, "Last Swing Low", color = color.new(color.green, 40), style = plot.style_circles)
 plot(debugMode and rangeState == "ACTIVE" and not na(rangeHigh) ? rangeHigh : na, "Anchored Range High", color = color.new(color.blue, 30), style = plot.style_linebr)
 plot(debugMode and rangeState == "ACTIVE" and not na(rangeLow) ? rangeLow : na, "Anchored Range Low", color = color.new(color.blue, 30), style = plot.style_linebr)
+
+// =============================================================================
+// STRATEGY EXECUTION (strategy counterpart ONLY — this section does not
+// exist in the indicator file; everything above this point is byte-for-
+// byte identical to pine/XAUUSD_Adaptive_Master.pine, enforced by
+// tests/pine_p5_strategy_parity.test.js).
+//
+// Places real strategy.entry()/strategy.exit() orders using the IDENTICAL
+// finalTradeApproved/candIsLong/signalSl/signalTp2 values the indicator
+// already computes and freezes above — never a second, independently-
+// derived trading algorithm. No hidden Strategy-Tester-only entry filter
+// and no hidden favorable-exit logic exists anywhere in this block.
+//
+// DOCUMENTED EXECUTION-MODEL DIFFERENCE FROM THE P5 CUSTOM RECORDER (see
+// docs/PINE_P5.md "Strategy Tester vs custom recorder" for full detail):
+// pyramiding=0 means TradingView's Strategy Tester broker emulator can
+// hold at most ONE open position at a time, whereas the indicator's P5
+// openSignals array can legitimately track MULTIPLE simultaneous OPEN
+// signals if the frozen engine produces them (see §12 of the P5 spec).
+// This is a genuine, disclosed difference in the two systems' execution
+// models — it is never hidden. The P5 recorder inside the indicator
+// remains the authoritative, deterministic PASS/FAIL source of truth,
+// exactly as documented; Strategy Tester here is an additional technical
+// cross-check on entry/SL/TP parity only, never a second source of truth
+// for win-rate statistics, and its P&L must never be interpreted as proof
+// of future performance.
+// =============================================================================
+if confirmedBar and finalTradeApproved
+    if candIsLong
+        strategy.entry("Long", strategy.long)
+    else
+        strategy.entry("Short", strategy.short)
+
+if strategy.position_size > 0
+    strategy.exit("Exit Long", "Long", stop = signalSl, limit = signalTp2)
+if strategy.position_size < 0
+    strategy.exit("Exit Short", "Short", stop = signalSl, limit = signalTp2)
