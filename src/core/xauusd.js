@@ -24,7 +24,7 @@ import { PROHIBITED_MUTATING_TOOLS } from '../profiles.js';
 import { PRODUCT_NAME, PRODUCT_VERSION } from '../branding.js';
 
 const SNAPSHOT_SCHEMA_VERSION = '1.0.0';
-const MASTER_SCHEMA_VERSION = '2.1.0'; // 2.1.0: Pine P2 additive `structure` group (market/setup/decision/signal unchanged)
+const MASTER_SCHEMA_VERSION = '2.1.1'; // 2.1.1: P4A transport-layer hardening — exact-match study/table selection only (no first-match fallback), fail-closed on ambiguous contract tables. No field shape change.
 const HEALTH_SCHEMA_VERSION = '1.0.0';
 const MAX_SNAPSHOT_OHLCV = 500;
 const CONTRACT_TABLE_ANCHOR = 'CONTRACT_VERSION'; // identifies which of a study's tables (if it draws more than one) is the machine contract
@@ -258,11 +258,40 @@ export async function getMasterState({ _deps } = {}) {
     }, { source: 'pine_table', sourceStudyId: identity.entity_id, captureTime });
   }
 
-  const studyTables = tablesResult?.studies?.find((s) => s.name === identity.display_name) ?? tablesResult?.studies?.[0];
-  const contractTable = studyTables?.tables?.find((t) => (t.rows ?? []).some((r) => r.toString().toUpperCase().startsWith(`${CONTRACT_TABLE_ANCHOR} |`)));
+  // P4A fix: this MUST be an exact name match with no fallback. The previous
+  // `?? tablesResult?.studies?.[0]` fallback meant that if the table-read
+  // response ever came back without an entry exactly matching
+  // identity.display_name (e.g. a CDP/study_filter quirk), the code would
+  // silently fall through to "the first study in the list" — which could be
+  // a completely unrelated indicator's table. That is exactly the "read
+  // another indicator's table accidentally" failure this discovery layer
+  // exists to prevent (see master_identity.js's own exact-match rationale).
+  // No match here now means "treat as no usable contract data", never "guess
+  // the first one" — see the NO_CONTRACT fallthrough below via rows: [].
+  const studyTables = tablesResult?.studies?.find((s) => s.name === identity.display_name);
+
+  // P4A fix: fail closed on multiple candidate contract tables within the
+  // SAME confirmed study, instead of silently taking the first with `.find`.
+  // This cannot happen with the current frozen Pine source (it draws exactly
+  // one CONTRACT_VERSION-bearing table), but the read layer must not assume
+  // that invariant forever — reusing the existing AMBIGUOUS status (already
+  // means "more than one candidate exists, refusing to guess") rather than
+  // inventing a new one, distinguished by the warning text.
+  const contractTables = (studyTables?.tables ?? []).filter((t) => (t.rows ?? []).some((r) => r.toString().toUpperCase().startsWith(`${CONTRACT_TABLE_ANCHOR} |`)));
+  if (contractTables.length > 1) {
+    return withProvenance({
+      schema_version: MASTER_SCHEMA_VERSION,
+      status: 'AMBIGUOUS',
+      indicator_found: true,
+      indicator_identity: identity,
+      candidate_table_count: contractTables.length,
+      ...emptyContractShape(state.symbol, state.resolution),
+      warnings: [`Study "${identity.display_name}" drew ${contractTables.length} tables that each contain a CONTRACT_VERSION row. Refusing to guess which is authoritative.`],
+    }, { source: 'pine_table', sourceStudyId: identity.entity_id, captureTime });
+  }
 
   const contract = buildMasterContract({
-    rows: contractTable?.rows ?? [],
+    rows: contractTables[0]?.rows ?? [],
     chartSymbol: state.symbol,
     chartTimeframe: state.resolution,
   });

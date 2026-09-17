@@ -53,10 +53,11 @@ export const WAIT_REASONS = Object.freeze([
 
 // Transport key → parse kind. 'enum:ACTION' / 'enum:WAIT_REASON' get strict
 // enum validation; 'numeric' fields must be "NA" or a finite number;
-// everything else is an opaque pass-through string (trimmed, "NA" → null) —
-// Pine hasn't been designed yet, so REGIME/MODEL/etc. vocabularies aren't
-// fixed enums here; only the two safety-critical fields (ACTION, WAIT_REASON)
-// are closed enums.
+// 'boolean' (BAR_CONFIRMED only) gets strict single-token parsing — see
+// parseBarConfirmed(); everything else is an opaque pass-through string
+// (trimmed, "NA" → null) — REGIME/MODEL/etc. vocabularies aren't fixed
+// enums here; only ACTION, WAIT_REASON, and BAR_CONFIRMED get closed/strict
+// parsing, since those are the fields that actually gate BUY/SELL.
 const FIELD_KINDS = Object.freeze({
   CONTRACT_VERSION: 'integer',
   INDICATOR_VERSION: 'string',
@@ -177,10 +178,33 @@ function parseNumeric(raw) {
   return Number.isFinite(n) ? { ok: true, value: n } : { ok: false, value: undefined };
 }
 
-function parseBoolean(raw) {
+/**
+ * BAR_CONFIRMED is the ONE safety-critical boolean in the contract — it
+ * gates whether a BUY/SELL is trusted as reported on a confirmed,
+ * non-repainting bar (SOURCE_UNCONFIRMED otherwise). It is deliberately NOT
+ * parsed with generic truthy-string leniency.
+ *
+ * P4A review/fix: audited the frozen P3 Pine source directly —
+ * `pine/XAUUSD_Adaptive_Master.pine`: `f_row(contractTable, 7,
+ * "BAR_CONFIRMED", confirmedBar ? "1" : "0")`. Frozen Pine emits this field
+ * EXCLUSIVELY as the literal string "1" (true) or "0" (false) — it never
+ * emits "TRUE"/"true"/anything else. The only provably-frozen encoding is
+ * the exact string "1"; every other value (including "TRUE", which an
+ * earlier provisional/pre-Pine draft of this doc speculatively allowed, and
+ * looser strings like "yes"/"on"/"2") now parses to `false`, not a special
+ * "truthy" case — so an ambiguous or unexpected encoding can never
+ * authorize a trade. Missing/blank/"NA" still returns `null` (distinct from
+ * an explicit `false`), consistent with every other field's no-fabrication
+ * rule, but functionally both `null` and `false` fail the `=== true` check
+ * a BUY/SELL requires, so this is a no-op change for existing gate
+ * strength — it only removes a formerly-accepted-but-never-emitted
+ * alternate encoding, and closes the door on future encodings this project
+ * has never verified against the real indicator.
+ */
+function parseBarConfirmed(raw) {
   const na = normalizeNA(raw);
   if (na === null) return null;
-  return na === '1' || na.toUpperCase() === 'TRUE';
+  return na === '1';
 }
 
 function parseEnum(raw, allowed) {
@@ -269,7 +293,7 @@ export function buildMasterContract({ rows, chartSymbol, chartTimeframe } = {}) 
       const r = parseNumeric(raw);
       if (!r.ok) invalidFields.push(key); else parsed[key] = r.value;
     } else if (kind === 'boolean') {
-      parsed[key] = parseBoolean(raw);
+      parsed[key] = parseBarConfirmed(raw);
     } else if (kind === 'enum:ACTION') {
       const r = parseEnum(raw, ACTIONS);
       if (!r.ok) invalidFields.push(key); else parsed[key] = r.value ?? 'UNKNOWN';
@@ -367,6 +391,32 @@ export function buildMasterContract({ rows, chartSymbol, chartTimeframe } = {}) 
   if (parsed.QUALITY !== null && parsed.QUALITY_THRESHOLD !== null && parsed.QUALITY < parsed.QUALITY_THRESHOLD) {
     contradictions.push(`${action} reported with quality (${parsed.QUALITY}) below quality_threshold (${parsed.QUALITY_THRESHOLD}).`);
   }
+
+  // 3b. Price-geometry validation (P4A review/fix). This is CONTRACT
+  // VALIDATION, not trading strategy logic: MCP never derives, moves, or
+  // repairs a level — it only checks that the levels Pine already supplied
+  // are directionally self-consistent for the action Pine itself claims.
+  // ENTRY/SL/TP1 are already confirmed finite non-null numbers at this point
+  // (step 1's structural-completeness check already rejected non-finite/
+  // missing values); TP2/EXIT_TARGET are checked only when present, since the
+  // contract requires just one of the two (step 1's hasExit check), and
+  // both must be validated independently when both exist — neither is
+  // silently discarded. Equality (ENTRY == SL, ENTRY == target) is rejected
+  // by the same strict inequality, not as a separate special case.
+  const isLong = action === 'BUY';
+  if (isLong ? parsed.SL >= parsed.ENTRY : parsed.SL <= parsed.ENTRY) {
+    contradictions.push(`${action} reported with STOP_LOSS (${parsed.SL}) on the wrong side of ENTRY (${parsed.ENTRY}) — ${isLong ? 'a long stop must be below entry' : 'a short stop must be above entry'}.`);
+  }
+  if (isLong ? parsed.TP1 <= parsed.ENTRY : parsed.TP1 >= parsed.ENTRY) {
+    contradictions.push(`${action} reported with TP1 (${parsed.TP1}) on the wrong side of ENTRY (${parsed.ENTRY}) — ${isLong ? 'a long target must be above entry' : 'a short target must be below entry'}.`);
+  }
+  if (parsed.TP2 !== null && (isLong ? parsed.TP2 <= parsed.ENTRY : parsed.TP2 >= parsed.ENTRY)) {
+    contradictions.push(`${action} reported with TP2 (${parsed.TP2}) on the wrong side of ENTRY (${parsed.ENTRY}).`);
+  }
+  if (parsed.EXIT_TARGET !== null && (isLong ? parsed.EXIT_TARGET <= parsed.ENTRY : parsed.EXIT_TARGET >= parsed.ENTRY)) {
+    contradictions.push(`${action} reported with EXIT_TARGET (${parsed.EXIT_TARGET}) on the wrong side of ENTRY (${parsed.ENTRY}).`);
+  }
+
   if (contradictions.length > 0) {
     return { ...base, status: 'CONTRACT_CONTRADICTION', contradictions, warnings: ['Authoritative contract contains an internal contradiction — refusing to surface the trade. See `contradictions`.'] };
   }

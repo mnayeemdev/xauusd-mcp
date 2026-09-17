@@ -79,7 +79,7 @@ contain a `CONTRACT_VERSION | ...` row — see `CONTRACT_TABLE_ANCHOR` in
 | `CONTEXT_TF` | *(pass-through only)* | string | Higher-timeframe context Pine used — informational only in Phase 2B. |
 | `BAR_TIME` | *(pass-through only)* | numeric | |
 | `BAR_INDEX` | *(pass-through only)* | numeric | |
-| `BAR_CONFIRMED` | `signal.bar_confirmed` | boolean | `1`/`true` = confirmed; anything else (including missing) = **not confirmed**, fail-safe. |
+| `BAR_CONFIRMED` | `signal.bar_confirmed` | boolean | **P4A review/fix: strict single-token parsing.** Only the exact literal `1` (trimmed) = confirmed — the frozen Pine source's sole true encoding (`f_row(contractTable, 7, "BAR_CONFIRMED", confirmedBar ? "1" : "0")`). Anything else, including `TRUE`/`true`/`yes`/`0`/missing, parses `false` = **not confirmed**, fail-safe. (An earlier draft of this doc, written before real Pine existed, additionally allowed case-insensitive `TRUE`; that leniency was removed once the frozen wire format was provably `1`/`0`-only.) |
 | `REGIME` | `market.regime` | string | Opaque Pine-defined label (e.g. `BULL_TREND`) — no fixed enum yet. |
 | `CORRECTION_STATE` | `market.correction_state` | string | `ACTIVE` is the one value the parser checks structurally (§6). |
 | `CORRECTION_REASON` | *(pass-through only)* | string | |
@@ -154,7 +154,7 @@ evaluated once one fails, and none of them "fix" the data:
    be exactly `true`. Missing/`0`/`false`/anything else fails safe — a
    candidate on a still-forming (repainting) bar can never be presented as a
    confirmed trade.
-3. **Contradiction checks** (`CONTRACT_CONTRADICTION`, all four evaluated
+3. **Contradiction checks** (`CONTRACT_CONTRADICTION`, all evaluated
    together and listed in `contradictions[]`):
    - `CORRECTION_STATE == ACTIVE` (§ correction safety — a trade during an
      active correction is never trusted, and MCP never reinterprets raw
@@ -163,7 +163,17 @@ evaluated once one fails, and none of them "fix" the data:
      chases price or recomputes a new entry to "fix" this).
    - `RR_VALIDATION_STATE == RR_NOT_ACCEPTABLE`.
    - `QUALITY < QUALITY_THRESHOLD` (both present).
-4. Only if all three gates pass: `status: 'OK'`, `decision` populated
+   - **P4A review/fix — price-geometry validation:** SL must be on the
+     correct side of ENTRY for the reported direction (`SL < ENTRY` for
+     BUY, `SL > ENTRY` for SELL — strict inequality, so `SL == ENTRY` is
+     also a contradiction); TP1 must be on the correct side too
+     (`TP1 > ENTRY` for BUY, `TP1 < ENTRY` for SELL); TP2 and EXIT_TARGET
+     are each independently checked the same way whenever present (neither
+     is skipped just because the other passed). This is transport-layer
+     **validation** of levels Pine already supplied — MCP never derives,
+     moves, or repairs a level; an invalid level is reported as a
+     contradiction, never corrected.
+4. Only if every gate passes: `status: 'OK'`, `decision` populated
    exactly with Pine's reported values, plus an informational `rr_check`
    (see §7).
 
