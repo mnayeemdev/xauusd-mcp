@@ -30,7 +30,7 @@ indicator("XAUUSD Adaptive Master", overlay = true, max_lines_count = 20, max_la
 
 // ── Version constants ────────────────────────────────────────────────────
 CONTRACT_VERSION = 1
-INDICATOR_VERSION = "0.3.0"
+INDICATOR_VERSION = "0.3.1"
 
 // ── Inputs ────────────────────────────────────────────────────────────────
 debugMode = input.bool(false, "Debug Mode (show internal state table + regime tint)", group = "Debug")
@@ -431,11 +431,21 @@ if confirmedBar
     // ── HIGH side ──────────────────────────────────────────────────────
     int authHighBreakIdx = -1
     int authHighBreakConfirmBar = -1
-    for i = 0 to array.size(activeHighLevels) - 1
-        lvl = array.get(activeHighLevels, i)
-        if not lvl.consumed and bar_index > lvl.confirmBar and close > lvl.price and lvl.confirmBar > authHighBreakConfirmBar
-            authHighBreakConfirmBar := lvl.confirmBar
-            authHighBreakIdx := i
+    // P4B runtime-safety patch: Pine's `for` loop auto-reverses direction
+    // when `to < from` (which happens whenever the array is empty, since
+    // `size - 1 == -1`), and does NOT execute zero times in that case — it
+    // executes for i = 0 and i = -1, calling array.get() on an out-of-bounds
+    // index. Every loop below is guarded by an explicit `array.size(...) > 0`
+    // check so an empty array is never indexed at all. This is a pure
+    // runtime-safety guard: when the array has 1+ elements, behavior,
+    // iteration order, and priority/consumption/sweep logic are all
+    // byte-for-byte identical to before this patch.
+    if array.size(activeHighLevels) > 0
+        for i = 0 to array.size(activeHighLevels) - 1
+            lvl = array.get(activeHighLevels, i)
+            if not lvl.consumed and bar_index > lvl.confirmBar and close > lvl.price and lvl.confirmBar > authHighBreakConfirmBar
+                authHighBreakConfirmBar := lvl.confirmBar
+                authHighBreakIdx := i
 
     if authHighBreakIdx >= 0
         highEvent = structureDirection == "BEARISH" ? "BULLISH_CHOCH" : "BULLISH_BOS"
@@ -450,34 +460,38 @@ if confirmedBar
         structureDirection := "BULLISH"
         // Retire EVERY active high level this same close genuinely broke —
         // not just the authoritative one — so none can re-fire later.
-        for i = 0 to array.size(activeHighLevels) - 1
-            lvl2 = array.get(activeHighLevels, i)
-            if not lvl2.consumed and bar_index > lvl2.confirmBar and close > lvl2.price
-                lvl2.consumed := true   // UDT is a reference type — mutates the stored object directly
+        if array.size(activeHighLevels) > 0
+            for i = 0 to array.size(activeHighLevels) - 1
+                lvl2 = array.get(activeHighLevels, i)
+                if not lvl2.consumed and bar_index > lvl2.confirmBar and close > lvl2.price
+                    lvl2.consumed := true   // UDT is a reference type — mutates the stored object directly
     else
         int authHighSweepIdx = -1
         int authHighSweepConfirmBar = -1
-        for i = 0 to array.size(activeHighLevels) - 1
-            lvl = array.get(activeHighLevels, i)
-            if not lvl.consumed and not lvl.swept and bar_index > lvl.confirmBar and high > lvl.price and lvl.confirmBar > authHighSweepConfirmBar
-                authHighSweepConfirmBar := lvl.confirmBar
-                authHighSweepIdx := i
+        if array.size(activeHighLevels) > 0
+            for i = 0 to array.size(activeHighLevels) - 1
+                lvl = array.get(activeHighLevels, i)
+                if not lvl.consumed and not lvl.swept and bar_index > lvl.confirmBar and high > lvl.price and lvl.confirmBar > authHighSweepConfirmBar
+                    authHighSweepConfirmBar := lvl.confirmBar
+                    authHighSweepIdx := i
         if authHighSweepIdx >= 0
             lastSweepType := "SWEEP_HIGH"
             lastSweepBar := bar_index
-            for i = 0 to array.size(activeHighLevels) - 1
-                lvl2 = array.get(activeHighLevels, i)
-                if not lvl2.consumed and not lvl2.swept and bar_index > lvl2.confirmBar and high > lvl2.price
-                    lvl2.swept := true
+            if array.size(activeHighLevels) > 0
+                for i = 0 to array.size(activeHighLevels) - 1
+                    lvl2 = array.get(activeHighLevels, i)
+                    if not lvl2.consumed and not lvl2.swept and bar_index > lvl2.confirmBar and high > lvl2.price
+                        lvl2.swept := true
 
     // ── LOW side (mirror) ──────────────────────────────────────────────
     int authLowBreakIdx = -1
     int authLowBreakConfirmBar = -1
-    for i = 0 to array.size(activeLowLevels) - 1
-        lvl = array.get(activeLowLevels, i)
-        if not lvl.consumed and bar_index > lvl.confirmBar and close < lvl.price and lvl.confirmBar > authLowBreakConfirmBar
-            authLowBreakConfirmBar := lvl.confirmBar
-            authLowBreakIdx := i
+    if array.size(activeLowLevels) > 0
+        for i = 0 to array.size(activeLowLevels) - 1
+            lvl = array.get(activeLowLevels, i)
+            if not lvl.consumed and bar_index > lvl.confirmBar and close < lvl.price and lvl.confirmBar > authLowBreakConfirmBar
+                authLowBreakConfirmBar := lvl.confirmBar
+                authLowBreakIdx := i
 
     if authLowBreakIdx >= 0
         lowEvent = structureDirection == "BULLISH" ? "BEARISH_CHOCH" : "BEARISH_BOS"
@@ -490,25 +504,28 @@ if confirmedBar
             lastChochDirection := "BEARISH"
             lastChochBar := bar_index
         structureDirection := "BEARISH"
-        for i = 0 to array.size(activeLowLevels) - 1
-            lvl2 = array.get(activeLowLevels, i)
-            if not lvl2.consumed and bar_index > lvl2.confirmBar and close < lvl2.price
-                lvl2.consumed := true
+        if array.size(activeLowLevels) > 0
+            for i = 0 to array.size(activeLowLevels) - 1
+                lvl2 = array.get(activeLowLevels, i)
+                if not lvl2.consumed and bar_index > lvl2.confirmBar and close < lvl2.price
+                    lvl2.consumed := true
     else
         int authLowSweepIdx = -1
         int authLowSweepConfirmBar = -1
-        for i = 0 to array.size(activeLowLevels) - 1
-            lvl = array.get(activeLowLevels, i)
-            if not lvl.consumed and not lvl.swept and bar_index > lvl.confirmBar and low < lvl.price and lvl.confirmBar > authLowSweepConfirmBar
-                authLowSweepConfirmBar := lvl.confirmBar
-                authLowSweepIdx := i
+        if array.size(activeLowLevels) > 0
+            for i = 0 to array.size(activeLowLevels) - 1
+                lvl = array.get(activeLowLevels, i)
+                if not lvl.consumed and not lvl.swept and bar_index > lvl.confirmBar and low < lvl.price and lvl.confirmBar > authLowSweepConfirmBar
+                    authLowSweepConfirmBar := lvl.confirmBar
+                    authLowSweepIdx := i
         if authLowSweepIdx >= 0
             lastSweepType := "SWEEP_LOW"
             lastSweepBar := bar_index
-            for i = 0 to array.size(activeLowLevels) - 1
-                lvl2 = array.get(activeLowLevels, i)
-                if not lvl2.consumed and not lvl2.swept and bar_index > lvl2.confirmBar and low < lvl2.price
-                    lvl2.swept := true
+            if array.size(activeLowLevels) > 0
+                for i = 0 to array.size(activeLowLevels) - 1
+                    lvl2 = array.get(activeLowLevels, i)
+                    if not lvl2.consumed and not lvl2.swept and bar_index > lvl2.confirmBar and low < lvl2.price
+                        lvl2.swept := true
 
 // ── PDH / PDL (confirmed previous day only) ───────────────────────────────
 // `high[1]`/`low[1]` INSIDE the daily security context is the same
@@ -728,18 +745,20 @@ correctionStateStr = correctionActive ? "ACTIVE" : "NONE"
 // P2 bounded active-level arrays directly; never invents a level.
 f_nearestAbove(store, refPrice) =>
     float best = na
-    for i = 0 to array.size(store) - 1
-        lvl = array.get(store, i)
-        if not lvl.consumed and lvl.price > refPrice and (na(best) or lvl.price < best)
-            best := lvl.price
+    if array.size(store) > 0
+        for i = 0 to array.size(store) - 1
+            lvl = array.get(store, i)
+            if not lvl.consumed and lvl.price > refPrice and (na(best) or lvl.price < best)
+                best := lvl.price
     best
 
 f_nearestBelow(store, refPrice) =>
     float best = na
-    for i = 0 to array.size(store) - 1
-        lvl = array.get(store, i)
-        if not lvl.consumed and lvl.price < refPrice and (na(best) or lvl.price > best)
-            best := lvl.price
+    if array.size(store) > 0
+        for i = 0 to array.size(store) - 1
+            lvl = array.get(store, i)
+            if not lvl.consumed and lvl.price < refPrice and (na(best) or lvl.price > best)
+                best := lvl.price
     best
 
 // ── §4 Regime × Model × Direction eligibility matrix (documented, exact) ──

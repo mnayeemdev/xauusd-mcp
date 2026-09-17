@@ -18,8 +18,8 @@ const codeLines = source.split('\n').filter((l) => !l.trim().startsWith('//'));
 const codeSource = codeLines.join('\n');
 
 describe('Pine P3 decision-engine source audit', () => {
-  it('INDICATOR_VERSION is 0.3.0, CONTRACT_VERSION is unchanged at 1', () => {
-    assert.ok(/INDICATOR_VERSION\s*=\s*"0\.3\.0"/.test(source));
+  it('INDICATOR_VERSION is 0.3.x (P4B bumped it to 0.3.1 for the runtime-safety patch), CONTRACT_VERSION is unchanged at 1', () => {
+    assert.ok(/INDICATOR_VERSION\s*=\s*"0\.3\.\d+"/.test(source));
     assert.ok(/CONTRACT_VERSION\s*=\s*1\b/.test(source));
   });
 
