@@ -9,15 +9,16 @@ reference/comparison source, never deleted.
 ## Architecture
 
 ```
-TradingView (OANDA:XAUUSD, 5m/15m/30m raw OHLCV)
+TradingView (OANDA:XAUUSD, 5m/15m/30m + 1H/2H/4H/8H/1D/1W/1M raw OHLCV)
   → src/core/xauusd_calculate.js  (orchestrator: fetch, validate, restore chart)
     → src/engine/regime.js        (BULL_TREND/BEAR_TREND/RANGE/COMPRESSION/TRANSITION/HIGH_VOLATILITY/CHOP_UNCERTAIN)
     → src/engine/structure.js     (pivots, HH/HL/LH/LL, BOS/CHoCH, sweeps, range — no lookahead)
     → src/engine/correction.js    (ACTIVE/RESOLVED/NONE, 3-bar confirmation)
-    → src/engine/models.js        (TC/PB/BO/MR/SR eligibility + trigger)
-    → src/engine/risk.js          (entry/SL/TP1/TP2/RR, overextension + RR gates)
-    → src/engine/quality.js       (0-100 quality score, threshold gate)
-    → src/engine/mtf.js           (30m context / 15m primary / 5m conflict check)
+    → src/engine/models.js        (TC/PB/BO/MR/SR eligibility + trigger — 5m/15m/30m only)
+    → src/engine/risk.js          (entry/SL/TP1/TP2/RR, overextension + RR gates — 5m/15m/30m only)
+    → src/engine/quality.js       (0-100 quality score, threshold gate — 5m/15m/30m only)
+    → src/engine/mtf.js           (30m context / 15m primary / 5m conflict check — unchanged)
+    → src/engine/htf.js           (1H/2H/4H/8H/1D/1W/1M context + single 1H conflict gate — new)
     → src/engine/signalStore.js   (dedup, entry freeze, OPEN→PASS/FAIL)
   → src/core/presentation.js::formatEngineDecision()  (Claude-readable text)
 ```
@@ -57,6 +58,40 @@ unless it materially conflicts with 30m's trend or an actively opposing
 fresh 5m structural break, in which case the result is
 `WAIT / ENTRY_CONFLICT`. If 30m's context itself is unclear, the result
 is `WAIT / HTF_CONTEXT_UNCLEAR`.
+
+## Higher-timeframe context (1H/2H/4H/8H/1D/1W/1M)
+
+`src/engine/htf.js` adds a read-only context/filtering layer above the
+unchanged 5m/15m/30m entry pipeline:
+
+```
+1M + 1W   -> macro direction/regime/structure only, never gate or generate an entry
+1D+8H+4H  -> major trend/regime/structure (informational)
+2H+1H     -> intermediate trend, correction/pullback state (informational)
+```
+
+Each context timeframe reuses the SAME `classifyRegime`/`computeStructure`/
+`computeCorrection` primitives the entry pipeline already uses (same
+params, not retuned) but never runs model eligibility, risk, or quality —
+it never produces a BUY/SELL candidate by itself.
+
+The **only** way a higher timeframe changes the outcome is a single
+explicit gate at 1H (`HTF_GATE_TIMEFRAME`), which reuses the exact same
+regime-opposition rule already applied by 30m against 15m, one tier
+higher: if 1H's regime is a clear, currently-available opposing trend
+(`BEAR_TREND` vs. a BUY, `BULL_TREND` vs. a SELL), the result is
+`WAIT / HTF_CONFLICT` with null trade geometry. This is **one**
+authoritative layer, not majority voting across all context timeframes,
+and an unavailable/unclear 1H context never blocks (informational only —
+the engine does not WAIT merely because every timeframe isn't perfectly
+aligned). 1M/1W are never read by this gate.
+
+Each context timeframe's data is fetched and validated exactly like an
+entry timeframe (confirmed/forming split, monotonic-timestamp and OHLC
+geometry checks, staleness heuristic) but a context timeframe's own data
+failure only degrades that one timeframe's reported context to
+`DATA_UNAVAILABLE` — unlike 5m/15m/30m, it never fails the whole call
+closed to `DATA_UNAVAILABLE`.
 
 ## BUY/SELL output
 
@@ -112,8 +147,9 @@ original Pine-reading tool) remains in both profiles unchanged.
 ## How to test
 
 ```
-node --test tests/engine_calculation.test.js   # engine unit tests, synthetic fixtures only
-npm run test:unit                              # full project regression
+node --test tests/engine_calculation.test.js    # entry-tier (5m/15m/30m) engine unit tests, synthetic fixtures only
+node --test tests/engine_htf_context.test.js    # higher-timeframe context + gate unit tests, synthetic fixtures only
+npm run test:unit                               # full project regression
 ```
 
 ## Notes

@@ -34,7 +34,7 @@ register('xauusd', {
       handler: () => getLaunchReadiness(),
     }],
     ['calculate', {
-      description: 'Run the independent MCP calculation engine (raw OHLCV -> regime/structure/setup/quality/risk -> decision) for 5m/15m/30m. Full structured result. Never places trades. MUTATES chart timeframe temporarily (restores it afterward).',
+      description: 'Run the independent MCP calculation engine (raw OHLCV -> regime/structure/setup/quality/risk -> decision) for 5m/15m/30m (entry) plus 1H/2H/4H/8H/1D/1W/1M (higher-timeframe context/filtering). Full structured result. Never places trades. MUTATES chart timeframe temporarily for each timeframe (restores it afterward, even on partial failure).',
       handler: () => calculateEntry(),
     }],
     ['check', {

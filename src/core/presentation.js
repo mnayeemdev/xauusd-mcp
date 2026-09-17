@@ -145,6 +145,7 @@ export function formatEngineDecision(calcResult) {
       `TP1: ${fmtNum(calcResult.tp1)}`,
       `TP2: ${fmtNum(calcResult.tp2)}`,
       `RR: ${fmtNum(calcResult.rr)}`,
+      `TF: ${calcResult.diagnostics?.source_timeframe ?? 'NA'}`,
       `Setup: ${calcResult.setup ?? 'NA'}`,
       `Quality: ${fmtNum(calcResult.quality)}/100`,
     ],
