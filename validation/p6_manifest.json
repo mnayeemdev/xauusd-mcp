@@ -1,0 +1,50 @@
+{
+  "phase": "P6",
+  "generated_by": "P6 Master Validation execution",
+  "generated_at_utc_of_capture": "2026-09-17 (session date; exact per-timeframe capture timestamps recorded below)",
+  "symbol": "OANDA:XAUUSD",
+  "provider": "TradingView Desktop live chart (OANDA feed), CDP-based extraction, no substitute feed used",
+  "extraction_method": "1. chart_set_visible_range requested with a very wide from/to window to trigger TradingView's own lazy-load backfill; 2. bars.size()/bars.firstIndex()/bars.lastIndex()/bars.valueAt() read via a read-only CDP evaluate() call against the live chart's in-memory bar buffer; 3. indicator removed and freshly re-added (var state reset to zero) via the Pine editor's saved-script 'Add to chart' action, to guarantee statistics reflect ONE clean, deterministic pass over exactly the documented bar range, not an uncontrolled mix of prior development-session reloads; 4. xauusd_master_state and data_get_pine_tables (production MCP functions, unmodified) used to read the resulting contract table and P5 statistics table.",
+  "known_limitation": "There is no exposed mechanism (CDP/MCP or otherwise, without modifying the frozen Pine source) to make TradingView's Pine runtime compute over an arbitrary, precisely-bounded PREFIX of history (e.g. 'first 70% only'). request.security-style truncation and Strategy Tester date limits do not apply to the underlying indicator's own bar_index/var accumulation. Therefore a predeclared chronological 70/30 IS/OOS split at the individual-signal level (Step 4 of the P6 spec) could NOT be executed by making the live engine compute two separately-bounded windows. See docs/PINE_P6.md section 'Data availability and partition limitation' for the full account and the alternative honest measurements substituted in its place.",
+  "timeframes": {
+    "5m": {
+      "resolution": "5",
+      "total_bars_loaded": 5096,
+      "first_bar_time_unix": 1787522400,
+      "first_bar_time_utc": "2026-08-23T22:00:00.000Z",
+      "last_bar_time_unix": 1789643100,
+      "last_bar_time_utc": "2026-09-17T11:05:00.000Z",
+      "span_days": 24.54,
+      "backfill_ceiling_reached": true,
+      "note": "Repeated wider range requests (down to 2020-01-01) did not increase total_bars_loaded beyond this figure -- this is the empirically-confirmed maximum reproducible 5m history available through this environment at capture time."
+    },
+    "15m": {
+      "resolution": "15",
+      "total_bars_loaded": 5179,
+      "first_bar_time_unix": 1782856800,
+      "first_bar_time_utc": "2026-06-30T22:00:00.000Z",
+      "last_bar_time_unix": 1789642800,
+      "last_bar_time_utc": "2026-09-17T10:40:00.000Z",
+      "span_days": 78.53,
+      "backfill_ceiling_reached": true,
+      "note": "Confirmed reproducible across two independent maximization attempts (identical firstTime both times)."
+    },
+    "30m": {
+      "resolution": "30",
+      "total_bars_loaded": 8409,
+      "first_bar_time_unix": 1767308400,
+      "first_bar_time_utc": "2026-01-01T23:00:00.000Z",
+      "last_bar_time_unix": 1789642800,
+      "last_bar_time_utc": "2026-09-17T10:40:00.000Z",
+      "span_days": 258.48,
+      "backfill_ceiling_reached": true,
+      "note": "30m has the deepest available history of the three timeframes at capture time -- a real, unexplained platform/feed characteristic, not a project choice."
+    }
+  },
+  "extraction_limits": {
+    "data_get_ohlcv_max_bars_per_call": 500,
+    "total_bars_field": "Available via a direct read of the internal TradingView bar-buffer object (bars.size()); NOT exposed by data_get_ohlcv's public response shape, which only returns up to 500 of the most recent bars per call. Confirmed present in src/core/data.js's internal implementation (total_bars) but not surfaced in the MCP tool's returned JSON.",
+    "pine_table_row_pagination": "None. A single Pine table snapshot exposes at most a fixed, compile-time-declared row count. The P5 recent-signals table exposes at most p5RecentSignalsCount (input, max 30) individual signal records; the remainder of history beyond that is reflected only in lifetime aggregate statistics (P5_TOTAL_SIGNALS, P5_MODEL_*, P5_REGIME_*, etc.), not as individually exportable records."
+  },
+  "gaps_and_duplicates": "Not independently re-verified bar-by-bar in this pass (would require pulling the full up-to-500-bar OHLCV pages and diffing consecutive timestamps against the resolution's expected spacing across the entire 5096/5179/8409-bar range -- out of scope for the time available in this execution). OANDA forex feeds are known to have weekend/holiday session gaps by design (markets closed), which is expected and not a data-quality defect; no attempt was made to distinguish expected session gaps from genuine missing-bar defects in this pass. This is recorded as a limitation, not asserted as clean."
+}

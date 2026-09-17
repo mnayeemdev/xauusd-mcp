@@ -1,0 +1,128 @@
+{
+  "methodology_note": "All figures below are the REAL, live output of the frozen, unmodified pine/XAUUSD_Adaptive_Master.pine (indicator SHA-256 6c4dbba9105db1f75a07682408a8d91f34929d594cf8ddf7eaaea0defa57d3b6, byte-identical to the P5 freeze), read via the production, unmodified MCP functions (data_get_pine_tables, xauusd_master_state). Each FULL-window figure was captured immediately after removing and freshly re-adding the indicator (a full var-state reset), so it reflects exactly ONE clean deterministic pass over the documented bar range in validation/p6_manifest.json -- not an accumulation across multiple uncontrolled development-session reloads. No IS/OOS split was computed at the individual-signal level; see the manifest's 'known_limitation' field and docs/PINE_P6.md for why.",
+  "full_window": {
+    "5m": {
+      "bars": 5096, "date_range": "2026-08-23 to 2026-09-17", "span_days": 24.54,
+      "total_signals": 54, "buy": 24, "sell": 30,
+      "pass": 14, "fail": 40, "open": 0, "closed": 54,
+      "pass_rate_pct": 25.9, "wilson_95ci_pct": [16.1, 38.9],
+      "cumulative_R": 0.26, "mean_R_per_closed": 0.0, "avg_win_R": 2.88, "avg_loss_R": -1.0,
+      "best_R": 3.0, "worst_R": -1.0,
+      "max_pass_streak": 3, "max_fail_streak": 10,
+      "signal_first_time_utc": "2026-08-24T06:00:00.000Z", "signal_last_time_utc": "2026-09-17T07:05:00.000Z",
+      "signals_per_1000_bars": 10.6,
+      "model_breakdown": {
+        "TC": {"total": 0, "pass": 0, "fail": 0, "pass_rate_pct": null, "cumR": 0},
+        "PB": {"total": 0, "pass": 0, "fail": 0, "pass_rate_pct": null, "cumR": 0},
+        "BO": {"total": 7, "pass": 2, "fail": 5, "pass_rate_pct": 28.6, "cumR": 0},
+        "MR": {"total": 5, "pass": 1, "fail": 4, "pass_rate_pct": 20.0, "cumR": -1},
+        "SR": {"total": 42, "pass": 11, "fail": 31, "pass_rate_pct": 26.2, "cumR": 1.26}
+      },
+      "regime_breakdown": {
+        "BULL_TREND": {"total": 21, "pass": 8, "fail": 13, "pass_rate_pct": 38.1, "cumR": 10.26},
+        "BEAR_TREND": {"total": 21, "pass": 3, "fail": 18, "pass_rate_pct": 14.3, "cumR": -10},
+        "RANGE": {"total": 9, "pass": 2, "fail": 7, "pass_rate_pct": 22.2, "cumR": -1},
+        "COMPRESSION": {"total": 3, "pass": 1, "fail": 2, "pass_rate_pct": 33.3, "cumR": 1},
+        "TRANSITION": {"total": 0, "pass": 0, "fail": 0, "pass_rate_pct": null, "cumR": 0},
+        "CHOP_UNCERTAIN": {"total": 0, "pass": 0, "fail": 0, "pass_rate_pct": null, "cumR": 0},
+        "HIGH_VOLATILITY": {"total": 0, "pass": 0, "fail": 0, "pass_rate_pct": null, "cumR": 0}
+      },
+      "session_breakdown": {
+        "ASIA": {"total": 21, "pass": 4, "fail": 17, "pass_rate_pct": 19.0, "cumR": -5},
+        "LONDON": {"total": 12, "pass": 4, "fail": 8, "pass_rate_pct": 33.3, "cumR": 3.26},
+        "NEW_YORK": {"total": 19, "pass": 4, "fail": 15, "pass_rate_pct": 21.1, "cumR": -4},
+        "OTHER": {"total": 2, "pass": 2, "fail": 0, "pass_rate_pct": 100.0, "cumR": 6}
+      },
+      "buy_sell_breakdown": {
+        "BUY":  {"total": 24, "pass": 4,  "fail": 20, "pass_rate_pct": 16.7},
+        "SELL": {"total": 30, "pass": 10, "fail": 20, "pass_rate_pct": 33.3}
+      }
+    },
+    "15m": {
+      "bars": 5179, "date_range": "2026-06-30 to 2026-09-17", "span_days": 78.53,
+      "total_signals": 70, "buy": 30, "sell": 40,
+      "pass": 23, "fail": 47, "open": 0, "closed": 70,
+      "pass_rate_pct": 32.9, "wilson_95ci_pct": [23.0, 44.5],
+      "cumulative_R": 19.67, "mean_R_per_closed": 0.28, "avg_win_R": 2.9, "avg_loss_R": -1.0,
+      "best_R": 3.0, "worst_R": -1.0,
+      "max_pass_streak": 4, "max_fail_streak": 5,
+      "signal_first_time_utc": "2026-07-02T06:00:00.000Z", "signal_last_time_utc": "2026-09-16T15:45:00.000Z",
+      "signals_per_1000_bars": 13.5,
+      "model_breakdown": {
+        "TC": {"total": 1, "pass": 0, "fail": 1, "pass_rate_pct": 0.0, "cumR": -1},
+        "PB": {"total": 0, "pass": 0, "fail": 0, "pass_rate_pct": null, "cumR": 0},
+        "BO": {"total": 9, "pass": 2, "fail": 7, "pass_rate_pct": 22.2, "cumR": -1.96},
+        "MR": {"total": 8, "pass": 4, "fail": 4, "pass_rate_pct": 50.0, "cumR": 7.48},
+        "SR": {"total": 52, "pass": 17, "fail": 35, "pass_rate_pct": 32.7, "cumR": 15.15}
+      },
+      "regime_breakdown": {
+        "BULL_TREND": {"total": 24, "pass": 8, "fail": 16, "pass_rate_pct": 33.3, "cumR": 7.15},
+        "BEAR_TREND": {"total": 33, "pass": 11, "fail": 22, "pass_rate_pct": 33.3, "cumR": 10.04},
+        "RANGE": {"total": 8, "pass": 4, "fail": 4, "pass_rate_pct": 50.0, "cumR": 7.48},
+        "COMPRESSION": {"total": 5, "pass": 0, "fail": 5, "pass_rate_pct": 0.0, "cumR": -5},
+        "TRANSITION": {"total": 0, "pass": 0, "fail": 0, "pass_rate_pct": null, "cumR": 0},
+        "CHOP_UNCERTAIN": {"total": 0, "pass": 0, "fail": 0, "pass_rate_pct": null, "cumR": 0},
+        "HIGH_VOLATILITY": {"total": 0, "pass": 0, "fail": 0, "pass_rate_pct": null, "cumR": 0}
+      },
+      "session_breakdown": {
+        "ASIA": {"total": 31, "pass": 10, "fail": 21, "pass_rate_pct": 32.3, "cumR": 8.04},
+        "LONDON": {"total": 14, "pass": 6, "fail": 8, "pass_rate_pct": 42.9, "cumR": 8.63},
+        "NEW_YORK": {"total": 17, "pass": 6, "fail": 11, "pass_rate_pct": 35.3, "cumR": 7},
+        "OTHER": {"total": 8, "pass": 1, "fail": 7, "pass_rate_pct": 12.5, "cumR": -4}
+      },
+      "buy_sell_breakdown": {
+        "BUY":  {"total": 30, "pass": 9,  "fail": 21, "pass_rate_pct": 30.0},
+        "SELL": {"total": 40, "pass": 14, "fail": 26, "pass_rate_pct": 35.0}
+      }
+    },
+    "30m": {
+      "bars": 8409, "date_range": "2026-01-01 to 2026-09-17", "span_days": 258.48,
+      "total_signals": 121, "buy": 65, "sell": 56,
+      "pass": 30, "fail": 91, "open": 0, "closed": 121,
+      "pass_rate_pct": 24.8, "wilson_95ci_pct": [18.0, 33.2],
+      "cumulative_R": -9.3, "mean_R_per_closed": -0.08, "avg_win_R": 2.72, "avg_loss_R": -1.0,
+      "best_R": 3.0, "worst_R": -1.0,
+      "max_pass_streak": 3, "max_fail_streak": 15,
+      "signal_first_time_utc": "2026-01-05T14:30:00.000Z", "signal_last_time_utc": "2026-09-16T00:00:00.000Z",
+      "signals_per_1000_bars": 14.4,
+      "model_breakdown": {
+        "TC": {"total": 0, "pass": 0, "fail": 0, "pass_rate_pct": null, "cumR": 0},
+        "PB": {"total": 0, "pass": 0, "fail": 0, "pass_rate_pct": null, "cumR": 0},
+        "BO": {"total": 22, "pass": 7, "fail": 15, "pass_rate_pct": 31.8, "cumR": 1.24},
+        "MR": {"total": 8, "pass": 0, "fail": 8, "pass_rate_pct": 0.0, "cumR": -8},
+        "SR": {"total": 91, "pass": 23, "fail": 68, "pass_rate_pct": 25.3, "cumR": -2.54}
+      },
+      "regime_breakdown": {
+        "BULL_TREND": {"total": 49, "pass": 11, "fail": 38, "pass_rate_pct": 22.4, "cumR": -6.15},
+        "BEAR_TREND": {"total": 50, "pass": 13, "fail": 37, "pass_rate_pct": 26.0, "cumR": -1.39},
+        "RANGE": {"total": 9, "pass": 0, "fail": 9, "pass_rate_pct": 0.0, "cumR": -9},
+        "COMPRESSION": {"total": 13, "pass": 6, "fail": 7, "pass_rate_pct": 46.2, "cumR": 7.24},
+        "TRANSITION": {"total": 0, "pass": 0, "fail": 0, "pass_rate_pct": null, "cumR": 0},
+        "CHOP_UNCERTAIN": {"total": 0, "pass": 0, "fail": 0, "pass_rate_pct": null, "cumR": 0},
+        "HIGH_VOLATILITY": {"total": 0, "pass": 0, "fail": 0, "pass_rate_pct": null, "cumR": 0}
+      },
+      "session_breakdown": {
+        "ASIA": {"total": 34, "pass": 7, "fail": 27, "pass_rate_pct": 20.6, "cumR": -6.84},
+        "LONDON": {"total": 28, "pass": 12, "fail": 16, "pass_rate_pct": 42.9, "cumR": 16.3},
+        "NEW_YORK": {"total": 51, "pass": 10, "fail": 41, "pass_rate_pct": 19.6, "cumR": -13.76},
+        "OTHER": {"total": 8, "pass": 1, "fail": 7, "pass_rate_pct": 12.5, "cumR": -5}
+      },
+      "buy_sell_breakdown": {
+        "BUY":  {"total": 65, "pass": 13, "fail": 52, "pass_rate_pct": 20.0},
+        "SELL": {"total": 56, "pass": 17, "fail": 39, "pass_rate_pct": 30.4}
+      }
+    }
+  },
+  "recent_30_signal_illustration": {
+    "methodology_note": "The frozen contract exposes at most p5RecentSignalsCount (max 30) individual signal records via the P5 recent-signals table; the remainder of each timeframe's history is only reflected in the full_window aggregates above, not as individually exportable records. The figures below are a SMALL, MOST-RECENT-ONLY sample (n=30 per timeframe) used purely to illustrate a real chronological R-sequence/drawdown/streak calculation -- they are NOT a substitute for the full_window results above and must never be presented as 'the' result.",
+    "5m":  {"n": 30, "pass": 10, "fail": 20, "pass_rate_pct": 33.3, "mean_R": 0.275, "median_R": -1, "cumulative_R": 8.26, "profit_factor": 1.413, "max_drawdown_R": 5.0, "max_pass_streak": 3, "max_fail_streak": 4, "min_R": -1, "p25_R": -1, "p75_R": 2.26, "max_R": 3},
+    "15m": {"n": 30, "pass": 11, "fail": 19, "pass_rate_pct": 36.7, "mean_R": 0.421, "median_R": -1, "cumulative_R": 12.62, "profit_factor": 1.664, "max_drawdown_R": 7.0, "max_pass_streak": 4, "max_fail_streak": 5, "min_R": -1, "p25_R": -1, "p75_R": 3, "max_R": 3},
+    "30m": {"n": 30, "pass": 8,  "fail": 22, "pass_rate_pct": 26.7, "mean_R": 0.033, "median_R": -1, "cumulative_R": 1.0, "profit_factor": 1.045, "max_drawdown_R": 7.0, "max_pass_streak": 2, "max_fail_streak": 7, "min_R": -1, "p25_R": -1, "p75_R": -1, "max_R": 3}
+  },
+  "bootstrap": "NOT PERFORMED -- INSUFFICIENT SAMPLE. The only individually-exportable, chronologically-ordered R sequences available (the recent_30_signal_illustration above) are n=30 per timeframe. A resampling analysis on n=30 would produce a distribution dominated by sampling noise from a single realized path already itself a small, most-recent-only subset of the full closed-signal population (54/70/121). Fabricating apparent statistical precision from this sample size would violate the explicit 'do not fabricate precision' instruction. No bootstrap was run.",
+  "reload_prefix_stability": {
+    "method": "The indicator was removed (0 studies confirmed) and freshly re-added (a full var-state reset, new entity ID each time) independently for each of 5m, 15m, and 30m, against the SAME already-loaded bar buffer described in p6_manifest.json.",
+    "result": "Every fresh reload reproduced numerically IDENTICAL full-window results to the prior reading taken earlier in this same session (and, for 15m/5m, to readings taken in the separate prior P4B/P5 sessions): 5m=54/14/40, 15m=70/23/47, 30m=121/30/91, in all cases. No terminal PASS became FAIL or vice versa across any reload.",
+    "interpretation": "This is positive, real evidence of deterministic, non-repainting behavior: recomputing from a completely reset state over the same bar data always produces the same signals and the same terminal outcomes."
+  }
+}
