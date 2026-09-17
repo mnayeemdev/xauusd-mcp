@@ -3,6 +3,7 @@ import * as core from '../../core/xauusd.js';
 import { getLaunchReadiness } from '../../core/launch.js';
 import { formatDecision, formatEngineDecision } from '../../core/presentation.js';
 import { calculateEntry } from '../../core/xauusd_calculate.js';
+import { startWatcher, DEFAULT_POLL_INTERVAL_MS } from '../../engine/watcher.js';
 
 register('xauusd', {
   description: 'XAUUSD Adaptive Master research tools (snapshot, master state, health)',
@@ -42,6 +43,21 @@ register('xauusd', {
       handler: async () => {
         const result = await calculateEntry();
         return formatEngineDecision(result);
+      },
+    }],
+    ['watch', {
+      description: 'Local auto signal watcher: polls every 60s for a newly confirmed 5m candle, then calls the SAME calculateEntry() engine (never a second/duplicate engine) and alerts only on BUY/SELL. WAIT results are logged, never alerted. Runs until Ctrl+C (SIGINT/SIGTERM). Never places trades. This is the "npm run xauusd:watch" command.',
+      options: {
+        once: { type: 'boolean', description: 'Run a single immediate calculateEntry() call and exit (testing only) — does not start the continuous watcher and never back-alerts a historical signal' },
+        interval: { type: 'string', short: 'i', description: `Polling interval in seconds (default ${DEFAULT_POLL_INTERVAL_MS / 1000})` },
+      },
+      handler: async (opts) => {
+        if (opts.once) {
+          const result = await calculateEntry();
+          return formatEngineDecision(result);
+        }
+        const pollIntervalMs = opts.interval ? Math.max(1, Number(opts.interval)) * 1000 : undefined;
+        return startWatcher({ pollIntervalMs });
       },
     }],
   ]),

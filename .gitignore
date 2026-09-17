@@ -5,3 +5,7 @@ temp_*
 *.log
 discovery-log.json
 rules.json
+
+# XAUUSD auto signal watcher — local runtime bookkeeping (last processed
+# candle, last alerted signal, single-instance lock), not a trading ledger.
+state/
