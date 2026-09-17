@@ -1,0 +1,60 @@
+{
+  "phase": "P7",
+  "note": "All results are DEVELOPMENT/RESEARCH performance on the same non-OOS full-window history used in P6. No genuine untouched OOS baseline exists (P6 VALIDATION LIMITED). These figures are NOT OOS, NOT production-validated, and NOT a probability of future performance.",
+  "selected_research_candidate": {
+    "parameter_changes_from_p6_baseline": {
+      "minRR": { "baseline": 1.5, "candidate": 1.7 },
+      "corrResolveConfirmBars": { "baseline": 2, "candidate": 3 }
+    },
+    "unchanged_from_baseline": ["qualityThreshold=65", "overextendAtrMult=2.5", "boMaxEntryLateBars=10", "every other frozen parameter"],
+    "pine_source_modified": false,
+    "contract_version_changed": false,
+    "indicator_version_changed": false
+  },
+  "p6_vs_p7_comparison": {
+    "5m":  { "config": "P6", "signals": 54,  "pass": 14, "fail": 40, "open": 0, "pass_rate_pct": 25.9, "mean_R": 0.005,  "cumulative_R": 0.26,  "sample_retention_pct": 100 },
+    "5m_p7":  { "config": "P7", "signals": 50,  "pass": 13, "fail": 37, "open": 0, "pass_rate_pct": 26.0, "mean_R": 0.01,   "cumulative_R": 0.26,  "sample_retention_pct": 92.6 },
+    "15m": { "config": "P6", "signals": 70,  "pass": 23, "fail": 47, "open": 0, "pass_rate_pct": 32.9, "mean_R": 0.281,  "cumulative_R": 19.67, "sample_retention_pct": 100 },
+    "15m_p7": { "config": "P7", "signals": 60,  "pass": 22, "fail": 37, "open": 1, "pass_rate_pct": 37.3, "mean_R": 0.47,   "cumulative_R": 27.63, "sample_retention_pct": 84.3 },
+    "30m": { "config": "P6", "signals": 121, "pass": 30, "fail": 91, "open": 0, "pass_rate_pct": 24.8, "mean_R": -0.077, "cumulative_R": -9.30, "sample_retention_pct": 100 },
+    "30m_p7": { "config": "P7", "signals": 106, "pass": 26, "fail": 80, "open": 0, "pass_rate_pct": 24.5, "mean_R": -0.09,  "cumulative_R": -9.30, "sample_retention_pct": 87.6 }
+  },
+  "candidate_15m_full_breakdown": {
+    "model_breakdown": {
+      "TC": { "total": 1,  "pass": 0,  "fail": 1,  "pass_rate_pct": 0.0,  "cumR": -1 },
+      "PB": { "total": 0,  "pass": 0,  "fail": 0,  "pass_rate_pct": null, "cumR": 0 },
+      "BO": { "total": 8,  "pass": 1,  "fail": 6,  "open": 1, "pass_rate_pct": 14.3, "cumR": -3 },
+      "MR": { "total": 7,  "pass": 4,  "fail": 3,  "pass_rate_pct": 57.1, "cumR": 8.48 },
+      "SR": { "total": 44, "pass": 17, "fail": 27, "pass_rate_pct": 38.6, "cumR": 23.15 }
+    },
+    "regime_breakdown": {
+      "BULL_TREND": { "total": 20, "pass": 8,  "fail": 11, "open": 1, "pass_rate_pct": 42.1, "cumR": 12.15 },
+      "BEAR_TREND": { "total": 28, "pass": 10, "fail": 18, "pass_rate_pct": 35.7, "cumR": 12.0 },
+      "RANGE": { "total": 7, "pass": 4, "fail": 3, "pass_rate_pct": 57.1, "cumR": 8.48 },
+      "COMPRESSION": { "total": 5, "pass": 0, "fail": 5, "pass_rate_pct": 0.0, "cumR": -5, "note": "identical to P6 baseline exactly" },
+      "TRANSITION": { "total": 0 }, "CHOP_UNCERTAIN": { "total": 0 }, "HIGH_VOLATILITY": { "total": 0 }
+    },
+    "session_breakdown": {
+      "ASIA": { "total": 23, "pass": 9, "fail": 14, "pass_rate_pct": 39.1, "cumR": 13.0 },
+      "LONDON": { "total": 14, "pass": 6, "fail": 8, "pass_rate_pct": 42.9, "cumR": 8.63, "note": "cumR identical to P6 baseline" },
+      "NEW_YORK": { "total": 17, "pass": 6, "fail": 10, "open": 1, "pass_rate_pct": 37.5, "cumR": 8.0 },
+      "OTHER": { "total": 6, "pass": 1, "fail": 5, "pass_rate_pct": 16.7, "cumR": -2.0 }
+    },
+    "buy_sell_breakdown": {
+      "BUY": { "total": 25, "pass": 9, "fail": 15, "open": 1, "pass_rate_pct": 36.0 },
+      "SELL": { "total": 35, "pass": 13, "fail": 22, "pass_rate_pct": 37.1 }
+    }
+  },
+  "sample_floor_checks": {
+    "5m": { "closed": 50, "floor": 27, "status": "OK" },
+    "15m": { "closed": 59, "floor": 35, "status": "OK" },
+    "30m": { "closed": 106, "floor": 60, "status": "OK" }
+  },
+  "overfitting_indicators_checked": {
+    "improvement_concentrated_in_one_model": false,
+    "improvement_concentrated_in_one_regime": false,
+    "improvement_concentrated_in_one_session": false,
+    "neighboring_parameter_values_behave_similarly": true,
+    "note": "SR carries most of the 15m improvement in absolute R terms, but SR also carries most of the baseline's signal volume (44-52 of 60-70 total) -- this is proportional to sample share, not a concentration anomaly. BULL_TREND, BEAR_TREND, and RANGE regimes, and ASIA/NEW_YORK sessions, all improved individually; COMPRESSION and LONDON were unchanged; no slice got worse."
+  }
+}
