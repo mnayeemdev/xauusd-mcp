@@ -153,6 +153,16 @@ export async function analyzeMarket({ _deps } = {}) {
     ...decision,
     evidence_available: !!evidence,
     evidence_unavailable_reason: evidence ? null : (primarySplit?.error ?? 'insufficient confirmed bars on the primary (15m) timeframe'),
+    // Additive (Stage 5): the SAME evidence object already used to build
+    // confluence/anticipation above, exposed verbatim so a visualization
+    // mapper (src/engine/marketVisualization.js) can read real structure/
+    // breakout/liquidity/level/pattern geometry without a second, separate
+    // evidence computation. confluence.informational_context carries a
+    // lossy SUBSET of this (e.g. structure_state as a bare string, not the
+    // full structure object with lastEvent/lastSwingHigh/lastSwingLow) --
+    // this field is the authoritative, complete one. Never recomputed,
+    // never diverges from what confluence/anticipation themselves saw.
+    evidence,
     confluence,
     anticipation,
     fetch_errors: fetchErrors,

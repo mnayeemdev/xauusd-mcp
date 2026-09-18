@@ -21,7 +21,7 @@
  *   B. APPROVED_RESEARCH_TOOLS                (13 tools) — the Research
  *      profile's full allowlist (10 read-only upstream tools + this
  *      project's 3 new tools).
- *   C. APPROVED_DEVELOPMENT_EXTRA_TOOLS        (5 tools) — added on top of B
+ *   C. APPROVED_DEVELOPMENT_EXTRA_TOOLS        (6 tools) — added on top of B
  *      for the Development profile only.
  *   D. OTHER_UPSTREAM_TOOLS_NOT_EXPOSED_BY_SCOPE (23 tools) — read-only
  *      upstream tools that are simply not on the Phase 2A candidate list.
@@ -98,6 +98,19 @@ export const APPROVED_DEVELOPMENT_EXTRA_TOOLS = Object.freeze([
   // one additional read-only sweep for its own evidence layers) --
   // Development-only for the identical reason.
   'xauusd_analyze_market',
+  // Stage 5 visualization: the ONE high-level tool exposed for market
+  // visualization. It internally calls analyzeMarket() (same mutation
+  // profile as the two tools above) AND draws/removes TradingView shapes
+  // via src/core/drawing.js's drawShape/listDrawings/removeOne -- but it
+  // is the ONLY drawing-capable tool exposed anywhere: draw_shape,
+  // draw_list, draw_remove_one, draw_get_properties, and draw_clear
+  // remain entirely unexposed (see PROHIBITED_MUTATING_TOOLS /
+  // OTHER_UPSTREAM_TOOLS_NOT_EXPOSED_BY_SCOPE below, unchanged). This
+  // tool accepts no entity_id/shape parameter from the caller at all --
+  // it only reconciles MCP-owned roles through Stage 4's registry-based
+  // ownership (src/core/xauusd_visualize.js), so it cannot be used to
+  // remove or clear an arbitrary/unknown/user drawing.
+  'xauusd_visualize_market',
 ]);
 
 // ── A. Truly state-changing / code-execution / process-control tools —

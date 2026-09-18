@@ -80,12 +80,62 @@ export function scopedKeys(registry, { symbol, timeframe }) {
   return Object.keys(registry.entries ?? {}).filter((k) => k.startsWith(prefix));
 }
 
-/** Deterministic content signature for a drawing intent -- used to detect "unchanged" vs "changed" without storing/re-deriving the full intent. */
+/**
+ * Primitives whose CREATED anchor time is genuinely NOT part of their
+ * visible geometry in the real TradingView drawing implementation.
+ *
+ * `src/core/drawing.js`'s `drawShape()` passes the exact same
+ * `{time, price}` point structure to `createShape()`/`createMultipointShape()`
+ * regardless of `shape` type — TradingView's OWN renderer is what gives
+ * each shape type its specific geometric interpretation, and standard
+ * TradingView drawing semantics for these exact primitive names are
+ * unambiguous:
+ *
+ *   - `horizontal_line`: extends across the ENTIRE visible chart width at
+ *     the given PRICE, regardless of which bar anchored its creation --
+ *     empirically verified identical on-chart appearance across different
+ *     anchor times in both the Stage 4 and Stage 5 live CDP proofs. This
+ *     is the ONLY primitive where excluding time is safe.
+ *   - `vertical_line`: TIME IS the entire visible geometry (a vertical
+ *     line drawn at that time coordinate, extending across all prices) --
+ *     changing it visibly moves the line. Never excluded.
+ *   - `trend_line` / `rectangle`: two-point primitives (see
+ *     `src/engine/visualization.js`'s `TWO_POINT_PRIMITIVES`) whose BOTH
+ *     time coordinates are the actual line/box endpoints -- changing
+ *     either one visibly reshapes the drawing. Never excluded.
+ *   - `text`: a point-anchored label placed AT `(time, price)`. Unlike
+ *     `horizontal_line` it does NOT extend/repeat across the chart --
+ *     changing its time coordinate visibly moves the label to a different
+ *     horizontal position. Never excluded. (A market-derived text intent
+ *     re-anchored at a newer confirmed bar is therefore CORRECTLY treated
+ *     as changed — that is real, visible geometry moving, not spurious
+ *     "timestamp-only churn" the way an unused horizontal_line anchor is.)
+ *
+ * Required invariant (never violated): a timestamp is excluded from the
+ * signature ONLY when changing it provably does not change what the
+ * primitive looks like on the chart.
+ */
+const TIME_INVARIANT_PRIMITIVES = new Set(['horizontal_line']);
+
+function pointForSignature(point, timeInvariant) {
+  if (!point) return null;
+  return timeInvariant ? { price: point.price ?? null } : { time: point.time ?? null, price: point.price ?? null };
+}
+
+/**
+ * Deterministic content signature for a drawing intent -- used to detect
+ * "unchanged" vs "changed" without storing/re-deriving the full intent.
+ * See `TIME_INVARIANT_PRIMITIVES` above for exactly which primitive's
+ * time coordinate(s) are excluded, and why -- every other primitive's
+ * `point`/`point2` (including time) is included in full, since for those
+ * primitives a time change IS a real, visible geometry change.
+ */
 export function computeIntentSignature(intent) {
+  const timeInvariant = TIME_INVARIANT_PRIMITIVES.has(intent?.primitive);
   const canonical = JSON.stringify({
     primitive: intent?.primitive ?? null,
-    point: intent?.point ?? null,
-    point2: intent?.point2 ?? null,
+    point: pointForSignature(intent?.point, timeInvariant),
+    point2: pointForSignature(intent?.point2, timeInvariant),
     text: intent?.text ?? null,
     overrides: intent?.overrides ?? null,
   });

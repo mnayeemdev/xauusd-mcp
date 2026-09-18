@@ -72,3 +72,23 @@ describe('xauusd_analyze_market: anticipation is additive only', () => {
     assert.equal(result.anticipation.state, 'WAIT');
   });
 });
+
+describe('xauusd_analyze_market: Stage 5 -- evidence is exposed additively, verbatim', () => {
+  const bullBars = makeTrendBars(510, { drift: 0.5 });
+
+  it('exposes the SAME evidence object already used to build confluence/anticipation (never a second computation)', async () => {
+    const result = await analyzeMarket({ _deps: baseDeps({ bars: bullBars }) });
+    assert.ok('evidence' in result);
+    assert.ok(result.evidence);
+    assert.equal(result.evidence.regime, result.confluence.regime);
+    assert.equal(result.evidence.structure.state, result.confluence.structure_state);
+    assert.ok(result.evidence.structure); // full object (lastEvent/lastSwingHigh/lastSwingLow), not just the bare state string confluence exposes
+  });
+
+  it('evidence is null (never fabricated) when evidence_available is false', async () => {
+    const shortBars = makeTrendBars(5);
+    const result = await analyzeMarket({ _deps: baseDeps({ bars: shortBars }) });
+    assert.equal(result.evidence_available, false);
+    assert.equal(result.evidence, null);
+  });
+});

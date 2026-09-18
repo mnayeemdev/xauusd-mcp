@@ -3,6 +3,7 @@ import { jsonResult } from './_format.js';
 import * as core from '../core/xauusd.js';
 import { calculateEntry } from '../core/xauusd_calculate.js';
 import { analyzeMarket } from '../core/xauusd_analyze_market.js';
+import { visualizeXauusdMarket } from '../core/xauusd_visualize_market.js';
 
 /**
  * @param {object} gate - a ProfileGate (or the raw McpServer) with a .tool() method
@@ -29,6 +30,13 @@ export function registerXauusdTools(gate, { profile } = {}) {
 
   gate.tool('xauusd_analyze_market', 'MUTATING (same chart-timeframe-switching discipline as xauusd_calculate_entry, restores the original timeframe afterward): the Full Market Analysis Engine. Calls the SAME unmodified xauusd_calculate_entry() decision engine for the authoritative WAIT/BUY/SELL (never recomputed, never overridden here) and additionally computes structured, deterministic EVIDENCE on the primary 15m decision timeframe — classical chart patterns (double/triple top/bottom, head & shoulders, triangles, wedges, rectangles, channels, flags/pennants), candlestick patterns, a rich breakout/false-break/retest lifecycle state, liquidity (equal highs/lows, sweep+reclaim, prior day/week sweeps, fair value gaps, premium/discount), support/resistance + supply/demand levels, gold trading-session context (Asia/London/New York/overlap, DST-aware) plus previous day/week range, volatility state, and regime-gated strategy-family eligibility. Returned as a `confluence` object with `supporting_evidence`/`opposing_evidence`/`mandatory_gates`/`informational_context` — this is explicitly NOT majority voting: pattern/candlestick/breakout/liquidity evidence can never override or alter the decision`s action/entry/sl/tp1/tp2/rr/quality, only annotate it. Uses an ephemeral, never-persisted signal store internally so calling this tool can never suppress or duplicate an alert the 60-second auto watcher would otherwise independently raise. Never places broker orders.', {}, async () => {
     try { return jsonResult(await analyzeMarket()); }
+    catch (err) { return jsonResult({ success: false, error: err.message }, true); }
+  });
+
+  gate.tool('xauusd_visualize_market', 'MUTATING: Stage 5 high-level market visualization. Calls the SAME unmodified analyzeMarket() (one fresh 10-TF sweep, exactly like xauusd_analyze_market — never a second/duplicate sweep) for the authoritative decision + evidence + anticipation, deterministically maps the MOST relevant current market intelligence (structure, nearest support/resistance, active supply/demand zone, relevant liquidity, the strongest current classical pattern, breakout/retest state, the anticipation primary/alternate scenario with trigger/invalidation, and — ONLY when decision.action is BUY/SELL — the EXACT protected Entry/SL/TP1/TP2) into a clutter-budgeted set of at most 12 TradingView drawings, then reconciles them against the MCP-owned drawing registry (src/core/xauusd_visualize.js): unchanged roles are kept, changed roles have their exact old entity removed before a replacement is created, and roles no longer relevant are removed — ALWAYS by the exact registered entity_id, NEVER by shape/coordinate/text similarity, and NEVER via a global clear (draw_clear/removeAllShapes are not reachable through this tool or any other tool in this profile). Pass dry_run:true to preview the plan (KEEP/CREATE/REMOVE_REGISTERED/DROP_STALE_REGISTRY per role) without touching TradingView at all. A drawing failure is reported in the result and never alters the authoritative decision. Never places broker orders.', {
+    dry_run: z.boolean().optional().default(false).describe('Preview the reconciliation plan without mutating TradingView (no draw/remove/registry-write calls at all).'),
+  }, async ({ dry_run }) => {
+    try { return jsonResult(await visualizeXauusdMarket({ dryRun: dry_run })); }
     catch (err) { return jsonResult({ success: false, error: err.message }, true); }
   });
 

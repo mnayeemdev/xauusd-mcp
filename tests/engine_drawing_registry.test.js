@@ -114,15 +114,101 @@ describe('drawingRegistry: key building', () => {
   });
 });
 
-describe('drawingRegistry: intent signature', () => {
-  it('is stable for the identical intent content', () => {
+describe('drawingRegistry: intent signature (primitive-aware time semantics)', () => {
+  it('is stable for identical intent content', () => {
     const intent = { primitive: 'horizontal_line', point: { time: 1, price: 2000 }, point2: null, text: null, overrides: null };
     assert.equal(computeIntentSignature(intent), computeIntentSignature({ ...intent }));
   });
 
-  it('changes when the drawn content changes', () => {
-    const intent = { primitive: 'horizontal_line', point: { time: 1, price: 2000 }, point2: null, text: null, overrides: null };
-    const changed = { ...intent, point: { time: 1, price: 2010 } };
-    assert.notEqual(computeIntentSignature(intent), computeIntentSignature(changed));
+  describe('horizontal_line -- extends across the whole chart; anchor time is NOT visible geometry', () => {
+    it('[1] same price/text/style + a different latest-bar anchor time -> SAME signature', () => {
+      const intent = { primitive: 'horizontal_line', point: { time: 1700000000, price: 2000 }, point2: null, text: 'SUPPORT x3', overrides: { linecolor: '#2962FF' } };
+      const laterBar = { ...intent, point: { time: 1700000900, price: 2000 } };
+      assert.equal(computeIntentSignature(intent), computeIntentSignature(laterBar));
+    });
+
+    it('[2] a different price -> DIFFERENT signature', () => {
+      const intent = { primitive: 'horizontal_line', point: { time: 1, price: 2000 }, point2: null, text: null, overrides: null };
+      const changed = { ...intent, point: { time: 1, price: 2010 } };
+      assert.notEqual(computeIntentSignature(intent), computeIntentSignature(changed));
+    });
+  });
+
+  describe('vertical_line -- time IS the primary geometry', () => {
+    it('[3] a different meaningful time -> DIFFERENT signature', () => {
+      const intent = { primitive: 'vertical_line', point: { time: 1700000000, price: 2000 }, point2: null, text: null, overrides: null };
+      const movedInTime = { ...intent, point: { time: 1700000900, price: 2000 } };
+      assert.notEqual(computeIntentSignature(intent), computeIntentSignature(movedInTime));
+    });
+
+    it('is stable when NOTHING changes (including time)', () => {
+      const intent = { primitive: 'vertical_line', point: { time: 1700000000, price: 2000 }, point2: null, text: null, overrides: null };
+      assert.equal(computeIntentSignature(intent), computeIntentSignature({ ...intent, point: { ...intent.point } }));
+    });
+  });
+
+  describe('trend_line -- both endpoints are geometric coordinates', () => {
+    const base = { primitive: 'trend_line', point: { time: 1700000000, price: 2000 }, point2: { time: 1700003600, price: 2050 }, text: null, overrides: null };
+
+    it('[4] a different point.time -> DIFFERENT signature', () => {
+      const changed = { ...base, point: { ...base.point, time: 1700000900 } };
+      assert.notEqual(computeIntentSignature(base), computeIntentSignature(changed));
+    });
+
+    it('[5] a different point2.time -> DIFFERENT signature', () => {
+      const changed = { ...base, point2: { ...base.point2, time: 1700004500 } };
+      assert.notEqual(computeIntentSignature(base), computeIntentSignature(changed));
+    });
+
+    it('is stable for identical time+price on both endpoints', () => {
+      assert.equal(computeIntentSignature(base), computeIntentSignature({ ...base, point: { ...base.point }, point2: { ...base.point2 } }));
+    });
+  });
+
+  describe('rectangle -- time bounds are geometric coordinates', () => {
+    const base = { primitive: 'rectangle', point: { time: 1700000000, price: 1990 }, point2: { time: 1700003600, price: 2010 }, text: null, overrides: null };
+
+    it('[6] a different meaningful time bound -> DIFFERENT signature', () => {
+      const changed = { ...base, point2: { ...base.point2, time: 1700007200 } };
+      assert.notEqual(computeIntentSignature(base), computeIntentSignature(changed));
+    });
+
+    it('a different price bound also -> DIFFERENT signature', () => {
+      const changed = { ...base, point: { ...base.point, price: 1985 } };
+      assert.notEqual(computeIntentSignature(base), computeIntentSignature(changed));
+    });
+  });
+
+  describe('text -- a point-anchored label; time controls its visible horizontal placement', () => {
+    it('[7] a different time (re-anchored at a newer confirmed bar) -> DIFFERENT signature -- this is REAL, VISIBLE geometry moving, never excluded', () => {
+      const intent = { primitive: 'text', point: { time: 1700000000, price: 2020 }, point2: null, text: 'PRIMARY — BULLISH', overrides: null };
+      const rebasedToNewerBar = { ...intent, point: { time: 1700000900, price: 2020 } };
+      assert.notEqual(computeIntentSignature(intent), computeIntentSignature(rebasedToNewerBar));
+    });
+
+    it('is stable for identical time+price+text+overrides', () => {
+      const intent = { primitive: 'text', point: { time: 1700000000, price: 2020 }, point2: null, text: 'PRIMARY — BULLISH', overrides: null };
+      assert.equal(computeIntentSignature(intent), computeIntentSignature({ ...intent, point: { ...intent.point } }));
+    });
+  });
+
+  describe('[8] price/text/style remain signature-sensitive for every primitive', () => {
+    it('text content changes the signature for every primitive', () => {
+      for (const primitive of ['horizontal_line', 'vertical_line', 'trend_line', 'rectangle', 'text']) {
+        const point2 = primitive === 'trend_line' || primitive === 'rectangle' ? { time: 100, price: 2050 } : null;
+        const intent = { primitive, point: { time: 1, price: 2000 }, point2, text: 'A', overrides: null };
+        const changed = { ...intent, text: 'B' };
+        assert.notEqual(computeIntentSignature(intent), computeIntentSignature(changed), `${primitive} must be sensitive to text changes`);
+      }
+    });
+
+    it('style (overrides) changes the signature for every primitive', () => {
+      for (const primitive of ['horizontal_line', 'vertical_line', 'trend_line', 'rectangle', 'text']) {
+        const point2 = primitive === 'trend_line' || primitive === 'rectangle' ? { time: 100, price: 2050 } : null;
+        const intent = { primitive, point: { time: 1, price: 2000 }, point2, text: null, overrides: { linecolor: '#2962FF' } };
+        const changed = { ...intent, overrides: { linecolor: '#D50000' } };
+        assert.notEqual(computeIntentSignature(intent), computeIntentSignature(changed), `${primitive} must be sensitive to style changes`);
+      }
+    });
   });
 });
