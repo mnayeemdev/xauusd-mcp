@@ -188,20 +188,272 @@ fabricated. `INVALIDATED` is reported only when the **current** snapshot
 itself already contains an explicit invalidation signal (as defined above),
 never inferred from a remembered prior state.
 
-## Not part of this stage
+## Not part of Stage 1/2
 
-Explicitly deferred to a later, separately-approved stage:
+Explicitly deferred to later stages (Stage 3 below covers the first of these):
 
-- Persistence (`anticipationStore.js`), transition history, the
-  opportunity/WAIT observability log, and any metrics aggregation over it.
+- ~~Persistence, transition history, the opportunity/WAIT observability
+  log, and any metrics aggregation over it~~ — **implemented in Stage 3**,
+  see below.
 - Visualization (`drawingRegistry.js`, `visualization.js`,
   `xauusd_visualize.js`) — no `draw_shape`/`draw_list`/`draw_remove_one`
   tool is exposed, no drawing occurs, no `profiles.js` change was made.
 - Watcher changes (`watcher.js`, `watcherState.js`, `notifier.js`) — the
   watcher still only ever calls `calculateEntry()`, exactly as before.
+  Stage 3 provides a recording API a *future* watcher integration can call;
+  it does not wire it in.
 - Pine/P8 changes.
 - Product rename, threshold tuning, or any change to the protected decision
   pipeline (`models.js`, `pipeline.js`, `risk.js`, `quality.js`, `mtf.js`,
   `htf.js`) — `minRR = 1.7`, `qualityThreshold = 65`, and
   `corrResolveConfirmBars = 3` are unchanged and covered by a regression
-  test in `tests/engine_anticipation.test.js`.
+  test in `tests/engine_anticipation.test.js` and
+  `tests/engine_anticipation_store.test.js`.
+
+---
+
+## Stage 3 — Persistence + WAIT/Opportunity Observability
+
+Status: **implemented**. This is an **observability-only** layer: it can
+never alter `decision.action`/`decision.wait_reason`, and Stage 1/2's own
+pure `src/engine/anticipation.js` is untouched — `computeAnticipation()`
+still takes no persistence dependency of any kind.
+
+### Purpose
+
+Stage 1/2 answers "what is developing right now" statelessly, one call at
+a time. Stage 3 adds memory across confirmed bars so the SAME questions can
+be answered with history: did a setup progress or deteriorate? Did
+DEVELOPING become ARMED? Did ARMED become CONFIRMED or INVALIDATED? Which
+authoritative WAIT reasons actually occur most often? Is repeated WAIT
+caused by market-quality gates (RR/quality/HTF) or by a genuine gap in
+model coverage?
+
+### Where it lives
+
+- `src/engine/anticipationStore.js` — setup identity, atomic store
+  persistence, the append-only observation log, transition/historical-
+  invalidation/improving-deteriorating/model-coverage logic, and the
+  `recordAnticipationObservation()` recording API.
+- `validation/opportunity_metrics.js` — pure aggregation over an
+  already-loaded array of observation records (`computeOpportunityMetrics()`).
+
+### Purity / boundary contract
+
+`anticipationStore.js` performs **only local filesystem I/O**. It never
+imports `xauusd_calculate.js`, `core/chart.js`, or `core/data.js`, and
+therefore cannot call `calculateEntry()`, fetch OHLCV, or make any CDP/
+TradingView call — enforced structurally (no such import exists) and
+checked by a source-audit test, not merely by convention.
+`recordAnticipationObservation()` takes an **already-computed**
+`decision`/`evidence`/`anticipation` (+ optional `confluence`) as plain
+data; it is designed to be called once per newly confirmed candle by a
+*future* integration (Stage 6+), never to trigger a second analysis sweep
+itself.
+
+### Runtime persistence location
+
+Both persisted artifacts live under **`state/`**:
+
+- `state/xauusd_anticipation_store.json` — latest-observation-per-setup
+  (small, bounded; used for transition/historical-invalidation lookups).
+- `state/xauusd_wait_opportunity_log.jsonl` — append-only, one line per
+  genuinely new, non-duplicate observation (used by `opportunity_metrics.js`).
+
+**This deliberately differs from the mission's suggested default
+(`validation/xauusd_wait_opportunity_log.jsonl`).** Inspecting this
+repository's actual `.gitignore` and tracked files found that
+`validation/` is **not** a safe runtime-data location here: files like
+`validation/mcp_engine_signals.json` and the P6/P7/P8 ledgers are already
+committed to git as research evidence. `state/` is already blanket-ignored
+(`.gitignore`: `"XAUUSD auto signal watcher — local runtime bookkeeping ...
+not a trading ledger. state/"`) and is exactly what
+`src/engine/watcherState.js` already uses for this same kind of local,
+non-authoritative bookkeeping. No `.gitignore` change was needed — new
+files under `state/` are already excluded.
+
+**Runtime observation rows are never committed.** Only the code
+(`src/engine/anticipationStore.js`, `validation/opportunity_metrics.js`)
+and its tests are tracked in git. The store/log start empty; nothing is
+backfilled from memory, prior console output, or assumption — rows only
+ever come from a real, future call to `recordAnticipationObservation()`
+with genuinely computed engine data.
+
+### Setup identity
+
+Canonical fields, in this exact order — see `computeSetupId()`'s own doc
+comment for the full reasoning:
+
+1. `symbol`
+2. `timeframe` (the decision's own source timeframe, e.g. `"15m"`)
+3. `direction` (`'BULLISH'`/`'BEARISH'`/`'NONE'`)
+4. **structural anchor price** — the relevant swing price from
+   `evidence.structure` for the current structure direction, rounded to
+   2dp (`'NO_ANCHOR'` when structure is unresolved)
+5. `regime` — **only** when the anchor is absent (the degenerate
+   "nothing developing at all" bucket)
+
+**Deliberately excluded:** current wall-clock observation time, quality
+score, current RR, ATR, session label (all would mint a new ID almost
+every call). Bar/pivot **array indices** are also excluded — `structure.js`
+reports pivot/event positions as indices into a bars window that re-slices
+every call, not as stable timestamps; using one would silently reproduce
+the exact failure mode the mission warns against.
+
+**`developing_strategy_family`/`mapped_model_code` are also deliberately
+excluded from identity**, despite being listed as candidate fields in the
+mission. `developing_strategy_family` is typically `null` while a setup is
+merely `DEVELOPING` and only resolves to a real value the moment a
+protected-model candidate actually triggers — exactly the
+`DEVELOPING -> ARMED` transition this stage exists to track. Including it
+in the hash would mint a brand-new `setup_id` at that exact moment,
+fracturing continuity for the single most important transition. The
+structural anchor price is used instead as the stable, specific "same
+opportunity" signal; family/model are still recorded on every observation
+for classification, just never used to key identity.
+
+The anchor price itself is computed independently from `evidence.structure`
+(not from `anticipation.primary_scenario.invalidation`, which is `null`
+exactly when state is `CONFIRMED`) so the identity survives into
+`CONFIRMED` on the same basis it used throughout `DEVELOPING`/`ARMED`.
+
+### Observation record schema
+
+One JSON object per genuinely new, non-duplicate observation (see
+`recordAnticipationObservation()`): `schema_version`, `observed_at`,
+`symbol`, `confirmed_bar_time`, `setup_id`, `authoritative_action`,
+`authoritative_wait_reason`, `pre_entry_state`, `previous_pre_entry_state`,
+`transition`, `direction`, `developing_strategy_family`,
+`mapped_model_code`, `decision_timeframe`, `regime`, `structure_state`,
+`structure_event`, `session`, `volatility_state`, `htf_alignment`,
+`pattern_context`, `breakout_state`, `liquidity_state`, `location`,
+`distance_to_trigger`, `potential_rr_feasibility`, `late_overextension_risk`,
+`waiting_for`, `invalidated_if`, `primary_scenario_present`,
+`alternate_scenario_present`, `improving_or_deteriorating`,
+`model_coverage`, `invalidation_level`, `structural_anchor_price`. Every
+field is `null` explicitly when genuinely unavailable — never omitted to
+make the record "look full," and never fabricated.
+
+### Transition semantics
+
+`transition = "<previous_pre_entry_state> -> <pre_entry_state>"` for the
+SAME `setup_id`, looked up from the store's latest record for that ID. A
+brand-new `setup_id` (first observation, or a genuinely different setup)
+always has `previous_pre_entry_state: null` and `transition: null` — it
+never inherits another setup's state. The engine is not restricted to a
+fixed example list of transitions; any `from -> to` pair the closed
+10-state vocabulary allows can occur.
+
+### Historical invalidation (additive, around Stage 1/2, never inside it)
+
+Stage 1/2's `anticipation.state` can only ever report `INVALIDATED` from
+the **current** snapshot's own explicit evidence (a `FAILED_BREAKOUT`/
+`FALSE_BREAKOUT`, or a direction-matched invalidated classical pattern).
+Stage 3 adds one more, strictly objective possibility: if a **previous**,
+still-open observation exists for this exact `setup_id` with a stored
+`invalidation_level`/`direction`, and the **current** evidence's last
+confirmed close has crossed that stored level against the stored
+direction, the observation is recorded as `INVALIDATED` even though Stage
+1/2 alone would not have known that. This is evaluated by
+`checkHistoricalInvalidation()`, called from
+`recordAnticipationObservation()` — `anticipation.js` itself is never
+modified and never takes a persistence dependency. Terminal states
+(`CONFIRMED`, `MISSED`, `INVALIDATED` itself) are never re-checked. If the
+current confirmed close is unavailable, the check returns `false` — it
+never guesses.
+
+### Improving / deteriorating
+
+`classifyProgression()` implements an explicit, ordinal semantics table —
+**not** a probability, **not** a weighted score:
+
+| Rank | States |
+|---|---|
+| 5 | `CONFIRMED` |
+| 4 | `ARMED` |
+| 3 | `CONFIRMATION_PENDING` |
+| 2 | `APPROACHING_ZONE`, `RETEST_PENDING`, `RECLAIM_PENDING` (same tier) |
+| 1 | `DEVELOPING` |
+| 0 | `WAIT` |
+| -1 | `MISSED`, `INVALIDATED` (terminal-negative, same tier) |
+
+`current rank > previous rank` → `IMPROVING`; `<` → `DETERIORATING`; equal
+rank (including a same-tier lateral move, e.g.
+`RETEST_PENDING -> RECLAIM_PENDING`) → `UNCHANGED`; no previous observation
+for this `setup_id`, or a state outside the closed vocabulary → `UNKNOWN`.
+This is explicitly not "every enum change is improvement" — a lateral move
+within a tier demonstrates no objective progress toward confirmation.
+
+### WAIT-reason observability
+
+`authoritative_wait_reason` is copied **verbatim** from
+`anticipation.authoritative_wait_reason` (itself `decision.reason`,
+untouched) — never renamed, bucketed, or normalized. `opportunity_metrics.js`'s
+counters are generic (`countBy` over whatever string keys actually appear),
+so a wait reason the engine has never produced before is still counted
+correctly, with zero code changes required.
+
+### Model-coverage observability
+
+`classifyModelCoverage()` (mission Part 10) is **observability only** — it
+is never read by `anticipation.js` or `calculateEntry()`, and a source-audit
+test asserts `anticipation.js` never imports `anticipationStore.js` at all.
+
+| Class | Meaning |
+|---|---|
+| `NO_OBJECTIVE_SETUP` | Bare `WAIT`, nothing developing at all. |
+| `EVIDENCE_ONLY_FAMILY_DEVELOPING` | The developing family is one of the 4 evidence-only families (`momentum_continuation`, `range_trading`, `compression_expansion`, `structural_reversal`) — no code path could ever independently trigger BUY/SELL for it. |
+| `PROTECTED_MODEL_TRIGGER_NOT_COMPLETE` | A protected-model-mapped family (TC/PB/BO/MR/SR) is developing, but no candidate has triggered yet. |
+| `PROTECTED_MODEL_CANDIDATE_BLOCKED_BY_GATE` | A real protected-model candidate DID trigger (`mapped_model_code` is set) but `decision.action` is still not BUY/SELL — a downstream gate (RR/quality/HTF/overextension/etc.), not missing coverage, is what's blocking. |
+| `PROTECTED_MODEL_CONFIRMED` | `pre_entry_state === 'CONFIRMED'`. |
+| `UNKNOWN` | Defensive fallback. |
+
+This is the classification that will eventually let a later, separate
+analysis distinguish "WAIT is caused by gating" from "WAIT is caused by a
+genuine model-coverage gap" — Stage 3 only records the evidence; it draws
+no such conclusion itself.
+
+### Metrics (`validation/opportunity_metrics.js`)
+
+`computeOpportunityMetrics(records)` is pure (no I/O) and computes: total
+observations; action counts; authoritative WAIT-reason counts (generic,
+unbounded); pre-entry-state counts; transition counts; strategy-family
+counts; model-coverage counts; regime/session/volatility-state counts;
+per-HTF-tier alignment counts; unique/confirmed/invalidated/missed setup
+counts; and transition ratios for `DEVELOPING -> ARMED`,
+`ARMED -> CONFIRMED`, `ARMED -> INVALIDATED`, `ARMED -> MISSED` (each
+`{from, to, count, denominator, ratio}`, or `null` when the denominator is
+zero — never a fabricated percentage).
+
+### No win-rate/accuracy claims
+
+**This module never computes a win rate, accuracy, profit factor, or
+expectancy, and makes no profitability claim of any kind.** Opportunity
+*progression* is not trade *success*. An `ARMED -> CONFIRMED` ratio
+measures how often a fully gate-cleared candidate also cleared the one
+remaining confirmatory condition — it says nothing about whether the
+resulting trade would have won or lost. That question belongs to a genuine
+completed-trade outcome ledger (`src/engine/signalStore.js`'s own
+OPEN/PASS/FAIL resolution, or the P6/P7/P8 validation ledgers), which is
+explicitly outside this Stage 3 mission. A dedicated test asserts the
+serialized metrics output never contains `win rate`, `accuracy`, `profit
+factor`, or `expectancy`.
+
+### Integration boundary (what Stage 3 deliberately does NOT do)
+
+`watcher.js` is **unchanged** — it still only ever calls `calculateEntry()`
+on a new confirmed 5m candle, exactly as before Stage 3. Stage 3 provides
+`recordAnticipationObservation()` as the small, explicit recording API a
+*future* Stage 6 watcher/CLI integration can call, passing in the SAME
+already-computed `decision`/`evidence`/`anticipation` it already has — no
+new CLI command or MCP tool was added in this stage, and no new mutating
+surface was exposed, per the mission's own "do not expand MCP mutating
+surface unnecessarily." The function itself, directly callable and
+directly unit-tested, is the minimum safe integration point for now.
+
+### Live-data rule
+
+The store and log start genuinely empty. No historical row is fabricated,
+backfilled from memory, console output, or assumption — every row that
+will ever exist comes from a real, future call to
+`recordAnticipationObservation()` fed by a real engine evaluation.
