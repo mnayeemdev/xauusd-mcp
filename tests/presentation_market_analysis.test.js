@@ -48,3 +48,58 @@ describe('presentation: formatMarketAnalysis', () => {
     assert.deepEqual(formatMarketAnalysis(result), formatEngineDecision(result));
   });
 });
+
+describe('presentation: formatMarketAnalysis -- Stage 1+2 anticipation enrichment (additive)', () => {
+  it('adds Pre-entry/Developing/Waiting for lines for a WAIT with an anticipation object, preserving the authoritative "WAIT — NO TRADE"/"Reason:" lines byte-for-byte', () => {
+    const result = {
+      status: 'OK', action: 'WAIT', reason: 'CORRECTION_ACTIVE', timeframes: {},
+      confluence: null,
+      anticipation: {
+        state: 'CONFIRMATION_PENDING', developing_strategy_family: 'pullback_continuation',
+        waiting_for: ['protected correction resolution', '3-consecutive-confirmed-bar momentum requirement'],
+        invalidated_if: ['the pullback extends beyond the structural anchor without resuming momentum'],
+        primary_scenario: null, alternate_scenario: null,
+      },
+    };
+    const formatted = formatMarketAnalysis(result);
+    assert.equal(formatted.lines[0], 'WAIT — NO TRADE');
+    assert.equal(formatted.lines[1], 'Reason: CORRECTION_ACTIVE');
+    assert.ok(formatted.lines.includes('Pre-entry: CONFIRMATION_PENDING'));
+    assert.ok(formatted.lines.includes('Developing: pullback_continuation'));
+    assert.ok(formatted.lines.some((l) => l.startsWith('Waiting for:')));
+    assert.ok(formatted.lines.some((l) => l.startsWith('Invalidated if:')));
+    assert.equal(formatted.structured.anticipation, result.anticipation);
+  });
+
+  it('adds Primary/Alternate scenario lines only when objectively present, with no null noise', () => {
+    const result = {
+      status: 'OK', action: 'WAIT', reason: 'NO_ELIGIBLE_STRATEGY', timeframes: {},
+      confluence: null,
+      anticipation: {
+        state: 'DEVELOPING', developing_strategy_family: null, waiting_for: [], invalidated_if: [],
+        primary_scenario: { direction: 'BULLISH', strategy_family: 'trend_continuation', mapped_model_code: null, state: 'DEVELOPING', location: null },
+        alternate_scenario: null,
+      },
+    };
+    const formatted = formatMarketAnalysis(result);
+    assert.ok(formatted.lines.includes('Primary scenario:'));
+    assert.ok(formatted.lines.some((l) => l.includes('BULLISH') && l.includes('trend_continuation')));
+    assert.ok(!formatted.lines.includes('Alternate scenario:'));
+    assert.ok(!formatted.lines.some((l) => l === 'Developing: null'));
+    assert.ok(!formatted.lines.some((l) => l === 'Waiting for: '));
+  });
+
+  it('never adds anticipation lines for BUY/SELL and never touches Entry/SL/TP1/TP2/RR/Quality', () => {
+    const result = {
+      status: 'OK', action: 'BUY', entry: 2000, sl: 1995, tp1: 2005, tp2: 2010, rr: 2.0, setup: 'TC', quality: 78,
+      diagnostics: { source_timeframe: '15m' },
+      anticipation: { state: 'CONFIRMED', primary_scenario: null, alternate_scenario: null, waiting_for: [], invalidated_if: [] },
+    };
+    assert.deepEqual(formatMarketAnalysis(result), formatEngineDecision(result));
+  });
+
+  it('falls back to the unenriched output when anticipation is absent, even for WAIT', () => {
+    const result = { status: 'OK', action: 'WAIT', reason: 'CHOP', timeframes: {}, confluence: null };
+    assert.deepEqual(formatMarketAnalysis(result), formatEngineDecision(result));
+  });
+});

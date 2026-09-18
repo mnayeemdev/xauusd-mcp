@@ -31,6 +31,12 @@
  *   4. Passes decision + evidence into buildConfluenceReport()
  *      (src/engine/confluence.js), which republishes the decision
  *      verbatim and only annotates it with evidence -- never alters it.
+ *   5. Passes the SAME decision + evidence into computeAnticipation()
+ *      (src/engine/anticipation.js, Stage 1+2 of the anticipation
+ *      upgrade), which relabels already-computed fields into a pre-entry
+ *      state/scenario for explainability -- also never alters the
+ *      decision or the confluence report, and never adds a second
+ *      calculateEntry() call or OHLCV sweep.
  */
 import { calculateEntry, fetchMultiTimeframeBars, validateAndSplit, resolveDeps, ALL_TIMEFRAMES, TF_MINUTES } from './xauusd_calculate.js';
 import { classifyRegime, REGIME_PARAMS } from '../engine/regime.js';
@@ -46,6 +52,7 @@ import { computeVolatilityContext } from '../engine/volatility.js';
 import { computeSessionContext, computeDailyWeeklyContext } from '../engine/session.js';
 import { computeStrategyEligibility } from '../engine/strategies/eligibility.js';
 import { buildConfluenceReport } from '../engine/confluence.js';
+import { computeAnticipation } from '../engine/anticipation.js';
 
 const PRIMARY_TIMEFRAME = '15'; // matches combineTimeframes()'s own source_timeframe (15m is the decision timeframe)
 
@@ -134,11 +141,20 @@ export async function analyzeMarket({ _deps } = {}) {
 
   const confluence = evidence ? buildConfluenceReport({ decision, decisionTimeframes: decision.timeframes ?? null, ...evidence }) : null;
 
+  // Additive, informational only -- computeAnticipation() never recomputes
+  // or overrides `decision`/`confluence`; it only relabels fields both
+  // already expose. Runs after the authoritative decision and the
+  // confluence report are already finalized, and consumes the SAME
+  // `decision` + `evidence` -- no second calculateEntry() call, no
+  // additional OHLCV/timeframe sweep. See src/engine/anticipation.js.
+  const anticipation = computeAnticipation({ decision, evidence });
+
   return {
     ...decision,
     evidence_available: !!evidence,
     evidence_unavailable_reason: evidence ? null : (primarySplit?.error ?? 'insufficient confirmed bars on the primary (15m) timeframe'),
     confluence,
+    anticipation,
     fetch_errors: fetchErrors,
   };
 }

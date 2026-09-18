@@ -157,32 +157,69 @@ export function formatEngineDecision(calcResult) {
   };
 }
 
+/** One concise line describing a primary/alternate anticipation scenario. Never prints a null field as literal "null" noise. */
+function describeScenario(s) {
+  if (!s) return null;
+  const parts = [s.direction ?? 'DIRECTION UNKNOWN', s.strategy_family ?? s.mapped_model_code ?? 'setup', `(${s.state})`];
+  if (s.location?.price != null) parts.push(`near ${s.location.type ?? 'level'} ${s.location.price}`);
+  return parts.join(' ');
+}
+
 /**
  * Formats an already-computed analyzeMarket() result (src/core/xauusd_analyze_market.js,
  * the Full Market Analysis Engine) for direct display. Reuses
  * formatEngineDecision()'s exact BUY/SELL/DATA-UNAVAILABLE rendering
  * verbatim (the decision fields are identical -- analyzeMarket() never
- * changes them) and adds, ONLY for a WAIT result, one extra informational
- * "Context:" line drawn from the confluence evidence already computed --
- * never a new decision field, never a probability/accuracy claim.
+ * changes them, and this function never touches them) and adds, ONLY for
+ * a WAIT result, informational lines drawn from the confluence evidence
+ * and the anticipation object already computed -- never a new decision
+ * field, never a probability/accuracy claim, never an Entry/SL/TP1/TP2/RR
+ * for an unconfirmed scenario. The existing "WAIT — NO TRADE" / "Reason:
+ * ..." lines (the authoritative wait reason) are preserved byte-for-byte
+ * from formatEngineDecision() and never rewritten here.
  */
 export function formatMarketAnalysis(analysisResult) {
   const base = formatEngineDecision(analysisResult);
-  if (analysisResult?.action !== 'WAIT' || !analysisResult?.confluence) return base;
+  if (analysisResult?.action !== 'WAIT') return base;
+
+  const lines = [...base.lines];
+  const structuredExtra = {};
 
   const c = analysisResult.confluence;
-  const breakoutState = c.informational_context?.breakout_state?.state;
-  const contextParts = [];
-  if (breakoutState && breakoutState !== 'NO_BREAKOUT') contextParts.push(`Breakout: ${breakoutState}`);
-  if (c.strategy_eligibility?.eligible?.length === 0 && c.strategy_eligibility?.blocked_reason) {
-    contextParts.push(c.regime ?? 'restrictive regime');
+  if (c) {
+    const breakoutState = c.informational_context?.breakout_state?.state;
+    const contextParts = [];
+    if (breakoutState && breakoutState !== 'NO_BREAKOUT') contextParts.push(`Breakout: ${breakoutState}`);
+    if (c.strategy_eligibility?.eligible?.length === 0 && c.strategy_eligibility?.blocked_reason) {
+      contextParts.push(c.regime ?? 'restrictive regime');
+    }
+    if (contextParts.length > 0) {
+      lines.push(`Context: ${contextParts.join(', ')}`);
+      structuredExtra.context = contextParts;
+    }
   }
-  if (contextParts.length === 0) return base;
 
-  const contextLine = `Context: ${contextParts.join(', ')}`;
+  const a = analysisResult.anticipation;
+  if (a) {
+    lines.push(`Pre-entry: ${a.state}`);
+    if (a.developing_strategy_family) lines.push(`Developing: ${a.developing_strategy_family}`);
+    if (a.waiting_for?.length) lines.push(`Waiting for: ${a.waiting_for.join('; ')}`);
+    if (a.invalidated_if?.length) lines.push(`Invalidated if: ${a.invalidated_if.join('; ')}`);
+    if (a.primary_scenario) {
+      lines.push('Primary scenario:');
+      lines.push(describeScenario(a.primary_scenario));
+    }
+    if (a.alternate_scenario) {
+      lines.push('Alternate scenario:');
+      lines.push(describeScenario(a.alternate_scenario));
+    }
+  }
+
+  if (lines.length === base.lines.length) return base;
+
   return {
     ...base,
-    lines: [...base.lines, contextLine],
-    structured: { ...base.structured, context: contextParts },
+    lines,
+    structured: { ...base.structured, ...structuredExtra, anticipation: a ?? null },
   };
 }
