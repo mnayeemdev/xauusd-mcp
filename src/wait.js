@@ -1,9 +1,26 @@
-import { evaluate } from './connection.js';
+import { evaluate as _evaluate } from './connection.js';
 
 const DEFAULT_TIMEOUT = 10000;
 const POLL_INTERVAL = 200;
 
-export async function waitForChartReady(expectedSymbol = null, expectedTf = null, timeout = DEFAULT_TIMEOUT) {
+// expectedTf was accepted as a parameter here since this function's
+// introduction but never actually checked -- setTimeframe() in
+// src/core/chart.js calls chart.setResolution() (asynchronous: TradingView
+// unsubscribes/resubscribes and backfills history for the new resolution
+// internally) and then awaited this function believing it verified the
+// switch. In reality it only watched a loading spinner and a generic
+// document.querySelectorAll('[class*="bar"]') DOM count (toolbar/sidebar
+// elements, unrelated to candle data) -- both of which stabilize almost
+// immediately regardless of whether the resolution switch has actually
+// finished. That let getOhlcv() (src/core/data.js, reads
+// mainSeries().bars() fresh off the CURRENT chart) run before TradingView
+// had swapped in the new resolution's series, silently returning the
+// previous resolution's cached bars. The fix below is additive: it uses
+// the parameter that was already being passed in to check chart.resolution()
+// directly, the same signal chart.js/xauusd_calculate.js/watcher.js already
+// treat as authoritative for "what resolution is the chart on".
+export async function waitForChartReady(expectedSymbol = null, expectedTf = null, timeout = DEFAULT_TIMEOUT, { _deps } = {}) {
+  const evaluate = _deps?.evaluate ?? _evaluate;
   const start = Date.now();
   let lastBarCount = -1;
   let stableCount = 0;
@@ -29,7 +46,12 @@ export async function waitForChartReady(expectedSymbol = null, expectedTf = null
           || document.querySelector('[class*="title"] [class*="apply-common-tooltip"]');
         var currentSymbol = symbolEl ? symbolEl.textContent.trim() : '';
 
-        return { isLoading: !!isLoading, barCount: barCount, currentSymbol: currentSymbol };
+        // Get the chart's OWN current resolution (authoritative -- not a
+        // DOM heuristic) so a resolution switch can be confirmed complete.
+        var currentResolution = '';
+        try { currentResolution = String(window.TradingViewApi._activeChartWidgetWV.value().resolution()); } catch (e) {}
+
+        return { isLoading: !!isLoading, barCount: barCount, currentSymbol: currentSymbol, currentResolution: currentResolution };
       })()
     `);
 
@@ -47,6 +69,15 @@ export async function waitForChartReady(expectedSymbol = null, expectedTf = null
 
     // Check symbol match if expected
     if (expectedSymbol && state.currentSymbol && !state.currentSymbol.toUpperCase().includes(expectedSymbol.toUpperCase())) {
+      stableCount = 0;
+      await new Promise(r => setTimeout(r, POLL_INTERVAL));
+      continue;
+    }
+
+    // Check resolution match if expected -- the actual fix: previously
+    // expectedTf was silently ignored, so "ready" could fire before the
+    // chart had actually switched to the requested timeframe.
+    if (expectedTf != null && state.currentResolution && state.currentResolution !== String(expectedTf)) {
       stableCount = 0;
       await new Promise(r => setTimeout(r, POLL_INTERVAL));
       continue;
@@ -78,6 +109,7 @@ export async function waitForChartReady(expectedSymbol = null, expectedTf = null
  * the symbol/resolution/canvas signature to hold stable across 3 polls.
  */
 export async function waitForChartRender(timeout = 5000) {
+  const evaluate = _evaluate;
   const start = Date.now();
   let lastSignature = null;
   let stableCount = 0;

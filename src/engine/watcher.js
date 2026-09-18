@@ -21,12 +21,18 @@ import * as _dataCore from '../core/data.js';
 import { calculateEntry as _calculateEntry, CALCULATE_SCHEMA_VERSION } from '../core/xauusd_calculate.js';
 import { CDP_HOST, CDP_PORT } from '../connection.js';
 import { notify as _notify } from './notifier.js';
+import { isBarFresh } from './freshData.js';
 import {
   DEFAULT_STATE_PATH, DEFAULT_LOCK_PATH,
   loadWatcherState, saveWatcherState, acquireLock, releaseLock,
 } from './watcherState.js';
 
 export const DEFAULT_POLL_INTERVAL_MS = 60_000;
+
+// How many times peekLatest5mCandle will re-issue the resolution switch
+// before giving up and failing closed (see its doc comment below).
+const PEEK_MAX_ATTEMPTS = 3;
+const PEEK_RETRY_DELAY_MS = 500;
 
 function formatTimestamp(d) {
   const pad = (n) => String(n).padStart(2, '0');
@@ -62,19 +68,48 @@ export async function isCdpReachable({ timeoutMs = 2500, _deps } = {}) {
  * there, and always restores the original resolution afterward (mirrors
  * the same restore-on-completion discipline calculateEntry() itself uses)
  * -- this never leaves the user's chart on a different timeframe.
+ *
+ * A resolution switch is asynchronous inside TradingView, so the bars read
+ * right after one can race the resubscribe and come back as a stale/cached
+ * snapshot for the requested timeframe that never advances (see
+ * ./freshData.js). Before trusting a read, this verifies the FORMING bar's
+ * own timestamp is plausibly current; if not, it re-issues the exact same
+ * safe setTimeframe('5')/getOhlcv() call -- the existing resubscription
+ * mechanism, never a new/undocumented CDP API -- up to PEEK_MAX_ATTEMPTS
+ * times. If it still cannot obtain a fresh series, it throws: the caller
+ * (runWatcherCycle) already fails closed on a thrown peek (no engine call,
+ * no alert), so a genuinely stale feed can never trigger a signal.
  */
 export async function peekLatest5mCandle(deps) {
   const original = await deps.getState();
+  const sleep = deps.sleep ?? ((ms) => new Promise((r) => setTimeout(r, ms)));
   let switched = false;
   try {
     if (String(original.resolution) !== '5') {
       await deps.setTimeframe({ timeframe: '5' });
       switched = true;
     }
-    const raw = await deps.getOhlcv({ count: 2 });
-    const bars = raw?.bars ?? [];
-    if (bars.length < 2) throw new Error(`insufficient 5m bars: ${bars.length} available, 2 required`);
-    return { time: bars[bars.length - 2].time }; // last bar is forming, never treated as confirmed
+    let lastAgeSec = null;
+    for (let attempt = 1; attempt <= PEEK_MAX_ATTEMPTS; attempt++) {
+      const raw = await deps.getOhlcv({ count: 2 });
+      const bars = raw?.bars ?? [];
+      if (bars.length < 2) throw new Error(`insufficient 5m bars: ${bars.length} available, 2 required`);
+      const forming = bars[bars.length - 1];
+      const nowSec = (deps.now ? deps.now() : new Date()).getTime() / 1000;
+      if (isBarFresh({ barTime: forming.time, timeframe: '5', nowSec })) {
+        return { time: bars[bars.length - 2].time }; // last bar is forming, never treated as confirmed
+      }
+      lastAgeSec = nowSec - forming.time;
+      if (attempt < PEEK_MAX_ATTEMPTS) {
+        // Re-issue the same safe resubscription the initial switch used.
+        await deps.setTimeframe({ timeframe: '5' });
+        switched = true;
+        await sleep(PEEK_RETRY_DELAY_MS);
+      }
+    }
+    const err = new Error(`stale 5m data: forming bar age ~${Math.round(lastAgeSec)}s exceeds freshness tolerance after ${PEEK_MAX_ATTEMPTS} attempt(s) -- refusing to use it for new-candle detection`);
+    err.code = 'STALE_5M_DATA';
+    throw err;
   } finally {
     if (switched) {
       try { await deps.setTimeframe({ timeframe: original.resolution }); } catch { /* best-effort restore */ }

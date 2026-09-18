@@ -30,6 +30,7 @@ import {
 } from '../src/engine/watcherState.js';
 import { formatSignalAlert } from '../src/engine/notifier.js';
 import { CALCULATE_SCHEMA_VERSION } from '../src/core/xauusd_calculate.js';
+import { timeframeSeconds, isBarFresh } from '../src/engine/freshData.js';
 
 function freshState(overrides = {}) {
   return { ...DEFAULT_WATCHER_STATE, ...overrides };
@@ -299,12 +300,19 @@ describe('watcher: connection failure handling', () => {
 });
 
 describe('watcher: chart restoration', () => {
+  // Bars in this suite use tiny epoch timestamps (100/400) purely to test
+  // switch/restore plumbing, so every test pins `now` just past the
+  // forming bar's own time -- otherwise the freshness check added for the
+  // live-data staleness fix below would (correctly) reject them as stale.
+  const freshNow = (formingTime) => () => new Date((formingTime + 1) * 1000);
+
   it('peekLatest5mCandle switches to 5m only when needed and always restores the original resolution', async () => {
     const setTimeframeCalls = [];
     const deps = {
       getState: async () => ({ success: true, symbol: 'OANDA:XAUUSD', resolution: '15' }),
       setTimeframe: async ({ timeframe }) => { setTimeframeCalls.push(timeframe); return { success: true }; },
       getOhlcv: async () => ({ bars: [{ time: 100, open: 1, high: 2, low: 0, close: 1 }, { time: 400, open: 1, high: 2, low: 0, close: 1 }] }),
+      now: freshNow(400),
     };
     const candle = await peekLatest5mCandle(deps);
     assert.equal(candle.time, 100); // confirmed = second-to-last bar; last bar is forming
@@ -328,9 +336,122 @@ describe('watcher: chart restoration', () => {
       getState: async () => ({ success: true, resolution: '5' }),
       setTimeframe: async ({ timeframe }) => { setTimeframeCalls.push(timeframe); return { success: true }; },
       getOhlcv: async () => ({ bars: [{ time: 100 }, { time: 400 }] }),
+      now: freshNow(400),
     };
     await peekLatest5mCandle(deps);
     assert.deepEqual(setTimeframeCalls, []);
+  });
+});
+
+describe('watcher: live-data staleness fail-closed (5m freshness verification)', () => {
+  // Real-world reproduction: visible chart on 15m, quote feed live, but the
+  // requested 5m series comes back frozen on the same forming-bar
+  // timestamp every poll -- exactly what an incomplete resolution-switch
+  // race looks like from the caller's side.
+  const REAL_NOW_SEC = 1789661774; // matches the live incident this fix addresses
+  const STALE_FORMING_TIME = 1789661100; // ~11 minutes old -- stale for a 5m bar
+  const staleBars = () => ({ bars: [{ time: STALE_FORMING_TIME - 300, open: 1, high: 2, low: 0, close: 1 }, { time: STALE_FORMING_TIME, open: 1, high: 2, low: 0, close: 1 }] });
+  const freshBars = (nowSec) => ({ bars: [{ time: nowSec - 300, open: 1, high: 2, low: 0, close: 1 }, { time: nowSec, open: 1, high: 2, low: 0, close: 1 }] });
+
+  it('reproduces the bug: a stale cached 5m series (frozen timestamp, chart on 15m) is detected, not silently trusted', async () => {
+    const deps = {
+      getState: async () => ({ success: true, resolution: '15' }),
+      setTimeframe: async () => ({ success: true }),
+      getOhlcv: async () => staleBars(),
+      now: () => new Date(REAL_NOW_SEC * 1000),
+      sleep: async () => {},
+    };
+    await assert.rejects(() => peekLatest5mCandle(deps), /stale 5m data/);
+  });
+
+  it('refresh/resubscription: re-issues setTimeframe(\'5\') on a stale read and succeeds once the series actually advances', async () => {
+    const setTimeframeCalls = [];
+    let call = 0;
+    const deps = {
+      getState: async () => ({ success: true, resolution: '15' }),
+      setTimeframe: async ({ timeframe }) => { setTimeframeCalls.push(timeframe); return { success: true }; },
+      getOhlcv: async () => { call++; return call === 1 ? staleBars() : freshBars(REAL_NOW_SEC); },
+      now: () => new Date(REAL_NOW_SEC * 1000),
+      sleep: async () => {},
+    };
+    const candle = await peekLatest5mCandle(deps);
+    assert.equal(candle.time, REAL_NOW_SEC - 300);
+    // '5' switched at least twice: the initial switch plus the retry resubscription.
+    assert.ok(setTimeframeCalls.filter((tf) => tf === '5').length >= 2, 'must re-issue the resolution switch on a stale read');
+    assert.equal(setTimeframeCalls.at(-1), '15', 'must still restore the original 15m chart on eventual success');
+  });
+
+  it('fail-closed: persistent staleness across all retry attempts throws and never returns a candle', async () => {
+    const setTimeframeCalls = [];
+    const deps = {
+      getState: async () => ({ success: true, resolution: '15' }),
+      setTimeframe: async ({ timeframe }) => { setTimeframeCalls.push(timeframe); return { success: true }; },
+      getOhlcv: async () => staleBars(),
+      now: () => new Date(REAL_NOW_SEC * 1000),
+      sleep: async () => {},
+    };
+    await assert.rejects(() => peekLatest5mCandle(deps));
+    assert.equal(setTimeframeCalls.at(-1), '15', 'must still restore the original chart resolution even on total failure');
+  });
+
+  it('visible 15m chart does not prevent obtaining a fresh 5m series once the resubscription lands', async () => {
+    let call = 0;
+    const deps = {
+      getState: async () => ({ success: true, resolution: '15' }),
+      setTimeframe: async () => ({ success: true }),
+      getOhlcv: async () => { call++; return call < 2 ? staleBars() : freshBars(REAL_NOW_SEC); },
+      now: () => new Date(REAL_NOW_SEC * 1000),
+      sleep: async () => {},
+    };
+    const candle = await peekLatest5mCandle(deps);
+    assert.equal(candle.time, REAL_NOW_SEC - 300);
+  });
+
+  it('watcher never acts on stale 5m data: runWatcherCycle fails closed (no engine call, no alert) when the peek throws', async () => {
+    let calcCalls = 0;
+    let notifyCalls = 0;
+    const log = makeLog();
+    const deps = {
+      isCdpReachable: async () => true,
+      peekLatest5mCandle: async () => { const e = new Error('stale 5m data: forming bar age ~674s'); e.code = 'STALE_5M_DATA'; throw e; },
+      calculateEntry: async () => { calcCalls++; return buyResult(); },
+      notify: () => { notifyCalls++; },
+    };
+    const state = freshState({ baseline_established: true, last_processed_5m_time: 1000 });
+    const result = await runWatcherCycle({ state, deps, log });
+    assert.equal(result.action, 'CANDLE_READ_FAILED');
+    assert.equal(result.alerted, false);
+    assert.equal(calcCalls, 0, 'must never call the calculation engine from a failed/stale peek');
+    assert.equal(notifyCalls, 0, 'must never alert BUY/SELL from a failed/stale peek');
+    assert.ok(log.lines.some((l) => l.includes('Could not read latest confirmed 5m candle')));
+  });
+});
+
+describe('engine/freshData: timeframe duration and bar-freshness validation', () => {
+  it('timeframeSeconds maps minute codes and named D/W/M resolutions correctly', () => {
+    assert.equal(timeframeSeconds('5'), 300);
+    assert.equal(timeframeSeconds('15'), 900);
+    assert.equal(timeframeSeconds('60'), 3600);
+    assert.equal(timeframeSeconds('D'), 86400);
+    assert.equal(timeframeSeconds('W'), 604800);
+    assert.equal(timeframeSeconds('M'), 2592000);
+  });
+
+  it('timeframeSeconds returns null for an unrecognized code rather than guessing', () => {
+    assert.equal(timeframeSeconds('bogus'), null);
+  });
+
+  it('isBarFresh accepts a bar within one bar-duration of "now"', () => {
+    assert.equal(isBarFresh({ barTime: 1000, timeframe: '5', nowSec: 1000 + 300 }), true);
+  });
+
+  it('isBarFresh rejects a bar far older than its own timeframe duration', () => {
+    assert.equal(isBarFresh({ barTime: 1000, timeframe: '5', nowSec: 1000 + 3000 }), false);
+  });
+
+  it('isBarFresh fails closed on missing/invalid inputs rather than defaulting to fresh', () => {
+    assert.equal(isBarFresh({ barTime: NaN, timeframe: '5', nowSec: 1000 }), false);
+    assert.equal(isBarFresh({ barTime: 1000, timeframe: 'bogus', nowSec: 1000 }), false);
   });
 });
 
