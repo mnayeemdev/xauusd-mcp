@@ -60,7 +60,13 @@ beyond the Pine Editor's own study):
 - pine_set_source → inject Pine source into the editor
 - pine_smart_compile → compile + check errors (adds/updates the Pine-Editor study on the chart)
 - pine_get_errors → read compiler errors
-- pine_get_console → read log.info()/console output`;
+- pine_get_console → read log.info()/console output
+
+This profile ALSO exposes the independent MCP calculation engine (MUTATING:
+switches chart timeframe internally across every required timeframe, always
+restores it afterward):
+- xauusd_calculate_entry → the core WAIT/BUY/SELL decision (regime/structure/correction/setup/risk/quality), independent of Pine
+- xauusd_analyze_market → the Full Market Analysis Engine: the SAME xauusd_calculate_entry() decision, PLUS a \`confluence\` evidence report (classical chart patterns, candlestick patterns, breakout/retest lifecycle, liquidity/sweeps, S/R + supply-demand levels, gold session context, volatility, strategy-family eligibility). Evidence is supporting/opposing/informational context only — it never overrides the decision. Prefer this over xauusd_calculate_entry when you need the full "why" behind a WAIT or the surrounding context for a BUY/SELL, not just the bare decision.`;
 
 const server = new McpServer(
   {

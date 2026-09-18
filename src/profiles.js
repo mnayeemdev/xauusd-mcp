@@ -93,6 +93,11 @@ export const APPROVED_DEVELOPMENT_EXTRA_TOOLS = Object.freeze([
   'pine_get_errors',
   'pine_get_console',
   'xauusd_calculate_entry',
+  // Full Market Analysis Engine (Parts B-N upgrade): same mutation profile
+  // as xauusd_calculate_entry above (it reuses that exact function, plus
+  // one additional read-only sweep for its own evidence layers) --
+  // Development-only for the identical reason.
+  'xauusd_analyze_market',
 ]);
 
 // ── A. Truly state-changing / code-execution / process-control tools —

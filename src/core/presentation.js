@@ -156,3 +156,33 @@ export function formatEngineDecision(calcResult) {
     },
   };
 }
+
+/**
+ * Formats an already-computed analyzeMarket() result (src/core/xauusd_analyze_market.js,
+ * the Full Market Analysis Engine) for direct display. Reuses
+ * formatEngineDecision()'s exact BUY/SELL/DATA-UNAVAILABLE rendering
+ * verbatim (the decision fields are identical -- analyzeMarket() never
+ * changes them) and adds, ONLY for a WAIT result, one extra informational
+ * "Context:" line drawn from the confluence evidence already computed --
+ * never a new decision field, never a probability/accuracy claim.
+ */
+export function formatMarketAnalysis(analysisResult) {
+  const base = formatEngineDecision(analysisResult);
+  if (analysisResult?.action !== 'WAIT' || !analysisResult?.confluence) return base;
+
+  const c = analysisResult.confluence;
+  const breakoutState = c.informational_context?.breakout_state?.state;
+  const contextParts = [];
+  if (breakoutState && breakoutState !== 'NO_BREAKOUT') contextParts.push(`Breakout: ${breakoutState}`);
+  if (c.strategy_eligibility?.eligible?.length === 0 && c.strategy_eligibility?.blocked_reason) {
+    contextParts.push(c.regime ?? 'restrictive regime');
+  }
+  if (contextParts.length === 0) return base;
+
+  const contextLine = `Context: ${contextParts.join(', ')}`;
+  return {
+    ...base,
+    lines: [...base.lines, contextLine],
+    structured: { ...base.structured, context: contextParts },
+  };
+}

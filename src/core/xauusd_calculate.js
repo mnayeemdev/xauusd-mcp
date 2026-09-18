@@ -53,6 +53,12 @@ const CONTEXT_TIMEFRAMES = ['60', '120', '240', '480', 'D', 'W', 'M'];
 
 const ALL_TIMEFRAMES = [...ENTRY_TIMEFRAMES, ...CONTEXT_TIMEFRAMES];
 
+// Re-exported (additive only -- no behavior change) so the analysis-engine
+// orchestrator (src/core/xauusd_analyze_market.js) can reuse the EXACT
+// same fetch/validate/timeframe plumbing calculateEntry() already uses,
+// instead of duplicating it. calculateEntry() itself is untouched.
+export { ENTRY_TIMEFRAMES, CONTEXT_TIMEFRAMES, ALL_TIMEFRAMES };
+
 // TradingView resolution identifiers, discovered from the existing
 // codebase, never guessed: minutes are plain numeric-string minutes (the
 // same convention already used for 5/15/30, and for the documented Pine
@@ -60,13 +66,13 @@ const ALL_TIMEFRAMES = [...ENTRY_TIMEFRAMES, ...CONTEXT_TIMEFRAMES];
 // PINE_P7_PARAMETER_AUDIT.md); 'D'/'W'/'M' are TradingView's own daily/
 // weekly/monthly resolution strings, already referenced in
 // src/core/chart.js's own resolution handling.
-const TF_LABEL = { 5: '5m', 15: '15m', 30: '30m', 60: '1H', 120: '2H', 240: '4H', 480: '8H', D: '1D', W: '1W', M: '1M' };
+export const TF_LABEL = { 5: '5m', 15: '15m', 30: '30m', 60: '1H', 120: '2H', 240: '4H', 480: '8H', D: '1D', W: '1W', M: '1M' };
 
 // Minutes-per-bar for the staleness heuristic below. 'D'/'W'/'M' values
 // mirror the exact same seconds-per-bar constants src/core/chart.js
 // already uses for its own resolution-aware date math (86400/604800/
 // 2592000 seconds), expressed in minutes here for validateAndSplit().
-const TF_MINUTES = { 5: 5, 15: 15, 30: 30, 60: 60, 120: 120, 240: 240, 480: 480, D: 1440, W: 10080, M: 43200 };
+export const TF_MINUTES = { 5: 5, 15: 15, 30: 30, 60: 60, 120: 120, 240: 240, 480: 480, D: 1440, W: 10080, M: 43200 };
 
 // Intermediate tier (2H/1H) additionally reports correction/pullback
 // state per the documented hierarchy; daily/higher-intraday and macro
@@ -84,7 +90,7 @@ const STALE_BAR_MULTIPLE = 3; // last confirmed bar older than 3x its own timefr
 
 const SIGNAL_STORE_PATH = fileURLToPath(new URL('../../validation/mcp_engine_signals.json', import.meta.url));
 
-function resolveDeps(_deps) {
+export function resolveDeps(_deps) {
   return {
     getState: _deps?.getState ?? _chartCore.getState,
     setTimeframe: _deps?.setTimeframe ?? _chartCore.setTimeframe,
@@ -97,7 +103,7 @@ function resolveDeps(_deps) {
 }
 
 /** Splits raw OHLCV bars into { confirmed, forming } and validates basic data safety. */
-function validateAndSplit(bars, timeframeMinutes) {
+export function validateAndSplit(bars, timeframeMinutes) {
   if (!bars || bars.length < MIN_BARS_REQUIRED + 1) {
     return { error: `insufficient bars: ${bars?.length ?? 0} available, ${MIN_BARS_REQUIRED + 1} required (including the forming bar)` };
   }
@@ -127,7 +133,7 @@ function validateAndSplit(bars, timeframeMinutes) {
  * failure never prevents the others from being gathered, and the restore
  * always runs afterward regardless of how many timeframes failed.
  */
-async function fetchMultiTimeframeBars(deps) {
+export async function fetchMultiTimeframeBars(deps) {
   const original = await deps.getState();
   const byTf = {};
   const fetchErrors = [];
