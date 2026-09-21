@@ -29,6 +29,7 @@ import { CALCULATE_SCHEMA_VERSION } from '../core/xauusd_calculate.js';
 import { analyzeMarket as _analyzeMarket } from '../core/xauusd_analyze_market.js';
 import { recordAnticipationObservation as _recordAnticipationObservation } from './anticipationStore.js';
 import { recordOpportunityObservation as _recordOpportunityObservation } from './opportunityLedger.js';
+import { resolveAllPendingOpportunityOutcomes as _resolveAllPendingOpportunityOutcomes } from './opportunityOutcomeResolver.js';
 import { visualizeMarketAnalysis as _visualizeMarketAnalysis } from '../core/xauusd_visualize_market.js';
 import { visualizeActiveChartContext as _visualizeActiveChartContext } from '../core/xauusd_visualize_chart_context.js';
 import { CDP_HOST, CDP_PORT } from '../connection.js';
@@ -158,6 +159,17 @@ export function createCycleDeps(_deps = {}) {
     // which depends only on `result` itself.
     recordAnticipationObservation: _deps.recordAnticipationObservation ?? _recordAnticipationObservation,
     recordOpportunityObservation: _deps.recordOpportunityObservation ?? _recordOpportunityObservation,
+    // Stage 7 Step 2, additive, OPTIONAL, purely observational: forward-only
+    // outcome measurement for ALREADY-RECORDED Opportunity Ledger rows (see
+    // src/engine/opportunityOutcomeResolver.js). Reuses the SAME 15m
+    // confirmed bars this cycle's analyzeMarket() call already fetched
+    // (result.primary_confirmed_bars) -- never a second sweep, never a new
+    // fetch. Read-only against the Ledger (never writes to it); writes only
+    // to its own separate outcome store/log. Cannot alter `result`, cannot
+    // alter the alert decision below, cannot alter the Ledger/planner/
+    // Stage 3/calculateEntry() in any way -- failure-isolated exactly like
+    // every other optional dep here.
+    resolveOpportunityOutcomes: _deps.resolveOpportunityOutcomes ?? _resolveAllPendingOpportunityOutcomes,
     visualizeMarketAnalysis: _deps.visualizeMarketAnalysis ?? _visualizeMarketAnalysis,
     notify: _deps.notify ?? _notify,
     // Additive, OPTIONAL: the low-noise pre-entry "watch" notification
@@ -326,6 +338,21 @@ export async function runWatcherCycle({ state, deps, log = () => {} }) {
       await deps.visualizeMarketAnalysis({ analysis: result, dryRun: false });
     } catch (err) {
       log(`[${stamp()}] Visualization refresh failed (non-fatal, decision unaffected): ${err.message}`);
+    }
+  }
+
+  // Stage 7 Step 2, additive, OPTIONAL, purely observational (see
+  // src/engine/opportunityOutcomeResolver.js): attempts to resolve/advance
+  // outcome measurement for ALREADY-RECORDED Opportunity Ledger rows using
+  // the SAME confirmed 15m bars `result` already carries
+  // (result.primary_confirmed_bars) -- never a second sweep. Runs strictly
+  // after every decision-relevant step above; failure here can never alter
+  // `result`, the alert decision below, or any Ledger/Stage 3 state.
+  if (typeof deps.resolveOpportunityOutcomes === 'function') {
+    try {
+      await deps.resolveOpportunityOutcomes({ confirmedBars: result.primary_confirmed_bars ?? null });
+    } catch (err) {
+      log(`[${stamp()}] Opportunity outcome resolution failed (non-fatal, decision unaffected): ${err.message}`);
     }
   }
 

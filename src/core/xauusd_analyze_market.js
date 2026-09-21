@@ -257,6 +257,13 @@ export async function analyzeMarket({ _deps, persistSignals = false } = {}) {
     // Pre-Entry Opportunity Planner: candidate/provisional geometry only
     // -- see opportunityPlanner.js's own doc comment. Never authoritative.
     pre_entry_plan,
+    // Stage 7 Step 2, additive: the SAME confirmed 15m bars computeEvidence()/
+    // computeOpportunityPlan() already consumed above, exposed verbatim so
+    // src/engine/opportunityOutcomeResolver.js can measure what happened
+    // AFTER an already-recorded Opportunity Ledger observation without a
+    // second OHLCV fetch or timeframe sweep. Read-only passthrough -- never
+    // itself computed from or fed back into any decision.
+    primary_confirmed_bars: primarySplit?.confirmed ?? null,
     fetch_errors: fetchErrors,
   };
 }
