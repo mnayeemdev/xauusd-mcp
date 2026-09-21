@@ -279,13 +279,14 @@ function resolveDeps(_deps) {
 
 /**
  * Records one Stage 3 observation for an ALREADY-COMPUTED decision +
- * evidence + anticipation (+ optional confluence, for htf_alignment).
- * This function performs ONLY local filesystem I/O -- no calculateEntry()
- * call, no OHLCV fetch, no CDP/TradingView interaction of any kind.
- * A future watcher/CLI integration (explicitly out of scope for Stage 3)
- * is expected to call this ONCE per newly confirmed 5m candle, passing in
- * the SAME decision/evidence/anticipation it already computed for that
- * candle -- never a second, independent analysis sweep.
+ * evidence + anticipation (+ optional confluence, for htf_alignment, and
+ * optional Stage 6 `candidates` -- see below). This function performs
+ * ONLY local filesystem I/O -- no calculateEntry() call, no OHLCV fetch,
+ * no CDP/TradingView interaction of any kind. The watcher
+ * (src/engine/watcher.js, Stage 6) calls this ONCE per newly confirmed
+ * 5m candle, passing in the SAME decision/evidence/anticipation/candidates
+ * it already computed for that candle -- never a second, independent
+ * analysis sweep.
  *
  * Deduplicates deterministically: a call whose (setup_id,
  * confirmed_bar_time, authoritative_action, pre_entry_state) exactly
@@ -293,9 +294,19 @@ function resolveDeps(_deps) {
  * (`recorded: false, reason: 'DUPLICATE_OBSERVATION'`) -- nothing is
  * re-appended to the log or re-saved to the store.
  *
+ * `candidates` (Stage 6, Part 4-6, additive, optional): the SAME
+ * per-entry-timeframe object `src/core/xauusd_analyze_market.js`'s
+ * `analyzeMarket()` already computed
+ * (status/regime/candidate_action/candidate_model/candidate_quality/
+ * candidate_rr/blocked_by per timeframe -- see that file's
+ * `extractCandidateObservability()`). Recorded VERBATIM, never recomputed
+ * here. Omitted/`null` when the caller has no candidate data (e.g. a
+ * caller still using bare `calculateEntry()`), which keeps every
+ * pre-Stage-6 call site's behavior byte-identical.
+ *
  * @returns {{recorded: boolean, reason?: string, setup_id?: string, record?: object}}
  */
-export function recordAnticipationObservation({ symbol, decision, evidence, anticipation, confluence = null, confirmedBarTime, observedAt, _deps } = {}) {
+export function recordAnticipationObservation({ symbol, decision, evidence, anticipation, confluence = null, candidates = null, confirmedBarTime, observedAt, _deps } = {}) {
   const deps = resolveDeps(_deps);
 
   if (!decision || !anticipation) return { recorded: false, reason: 'MISSING_INPUT' };
@@ -393,6 +404,12 @@ export function recordAnticipationObservation({ symbol, decision, evidence, anti
 
     invalidation_level: invalidationLevel,
     structural_anchor_price: structuralAnchorPrice,
+
+    // Stage 6, Part 4-6: per-entry-timeframe CANDIDATE observability
+    // (never authoritative -- see analyzeMarket()'s own doc comment).
+    // `null` when the caller didn't pass candidates (pre-Stage-6 call
+    // sites, or a caller using bare calculateEntry()).
+    candidates: candidates ?? null,
   };
 
   store.setups[setupId] = {

@@ -79,6 +79,30 @@ function computeSetupCounts(records) {
 }
 
 /**
+ * Stage 6, Part 4-6: per-entry-timeframe candidate-blocked-by counts,
+ * from each record's OPTIONAL, additive `candidates` object (see
+ * src/engine/anticipationStore.js's recordAnticipationObservation()).
+ * Records with no `candidates` (pre-Stage-6 rows, or a caller that never
+ * passed candidate data) are simply excluded -- never bucketed as a fake
+ * "unknown" timeframe. Generic/unbounded over whatever timeframe keys and
+ * `blocked_by` reason strings actually appear, exactly like every other
+ * counter in this module -- never a hard-coded reason list.
+ */
+function computeCandidateBlockedByCounts(records) {
+  const counts = {};
+  for (const r of records) {
+    if (!r.candidates || typeof r.candidates !== 'object') continue;
+    for (const [tf, c] of Object.entries(r.candidates)) {
+      const reason = c?.blocked_by;
+      if (reason == null) continue;
+      counts[tf] = counts[tf] ?? {};
+      counts[tf][reason] = (counts[tf][reason] ?? 0) + 1;
+    }
+  }
+  return counts;
+}
+
+/**
  * Computes the full Stage 3 observability summary from an already-loaded
  * array of observation records. Purely factual counts -- see the module
  * header for what this deliberately never claims.
@@ -105,6 +129,9 @@ export function computeOpportunityMetrics(records) {
     volatility_state_counts: countBy(records, (r) => r.volatility_state),
     htf_alignment_counts: computeHtfAlignmentCounts(records),
     setup_counts: computeSetupCounts(records),
+    // Stage 6, Part 4-6: per-timeframe candidate-blocked-by counts --
+    // absent/empty for records with no `candidates` data (see doc above).
+    candidate_blocked_by_counts: computeCandidateBlockedByCounts(records),
     // Progression ratios ONLY -- see the module header. Any denominator
     // of zero returns null, never a fabricated percentage.
     transition_ratios: {

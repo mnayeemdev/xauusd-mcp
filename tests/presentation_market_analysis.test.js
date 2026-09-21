@@ -103,3 +103,62 @@ describe('presentation: formatMarketAnalysis -- Stage 1+2 anticipation enrichmen
     assert.deepEqual(formatMarketAnalysis(result), formatEngineDecision(result));
   });
 });
+
+describe('presentation: formatMarketAnalysis -- Pre-Entry Opportunity Planner enrichment (additive)', () => {
+  function waitResult(overrides = {}) {
+    return { status: 'OK', action: 'WAIT', reason: 'RR_NOT_ACCEPTABLE', timeframes: {}, confluence: null, anticipation: null, ...overrides };
+  }
+
+  it('adds Opportunity/Candidate/Waiting-for lines for a WAIT with an objective plan, preserving the authoritative WAIT/Reason lines byte-for-byte', () => {
+    const plan = {
+      status: 'PLAN', direction: 'BEARISH', opportunity_state: 'APPROACHING_ZONE',
+      candidate_entry_zone: { lower: 4378, upper: 4386 },
+      provisional_invalidation: { level: 4386 },
+      candidate_tp1: 4340, candidate_tp2: 4300, candidate_rr: 4.75,
+      confirmation_required: ['a confirmed reclaim beyond the breakout level'],
+      alternate_scenario: null,
+    };
+    const result = waitResult({ pre_entry_plan: plan });
+    const formatted = formatMarketAnalysis(result);
+    assert.equal(formatted.lines[0], 'WAIT — NO TRADE');
+    assert.equal(formatted.lines[1], 'Reason: RR_NOT_ACCEPTABLE');
+    assert.ok(formatted.lines.includes('Opportunity: SELL APPROACHING_ZONE'));
+    assert.ok(formatted.lines.includes('Candidate Entry Zone: 4378 - 4386'));
+    assert.ok(formatted.lines.includes('Provisional Invalidation: 4386'));
+    assert.ok(formatted.lines.includes('Candidate TP1: 4340'));
+    assert.ok(formatted.lines.includes('Candidate TP2: 4300'));
+    assert.ok(formatted.lines.includes('Candidate RR: 4.75'));
+    assert.ok(formatted.lines.some((l) => l.startsWith('Waiting for (opportunity plan):')));
+    assert.equal(formatted.structured.pre_entry_plan, plan);
+  });
+
+  it('a zero-width (point-precision) zone is shown as a single price, never a fabricated range', () => {
+    const plan = { status: 'PLAN', direction: 'BULLISH', opportunity_state: 'DEVELOPING', candidate_entry_zone: { lower: 4370, upper: 4370 }, confirmation_required: [] };
+    const formatted = formatMarketAnalysis(waitResult({ pre_entry_plan: plan }));
+    assert.ok(formatted.lines.includes('Candidate Entry Zone: 4370'));
+    assert.ok(!formatted.lines.includes('Candidate Entry Zone: 4370 - 4370'));
+  });
+
+  it('shows Alternative only when the plan objectively found one', () => {
+    const withAlt = formatMarketAnalysis(waitResult({ pre_entry_plan: { status: 'PLAN', direction: 'BEARISH', opportunity_state: 'DEVELOPING', confirmation_required: [], alternate_scenario: { direction: 'BULLISH', zone: { type: 'demand_zone' } } } }));
+    assert.ok(withAlt.lines.some((l) => l === 'Alternative: BUY — demand_zone'));
+
+    const withoutAlt = formatMarketAnalysis(waitResult({ pre_entry_plan: { status: 'PLAN', direction: 'BEARISH', opportunity_state: 'DEVELOPING', confirmation_required: [], alternate_scenario: null } }));
+    assert.ok(!withoutAlt.lines.some((l) => l.startsWith('Alternative:')));
+  });
+
+  it('a NO_PLAN status shows "Primary Opportunity: NONE" with the real reason, never a fabricated plan', () => {
+    const formatted = formatMarketAnalysis(waitResult({ pre_entry_plan: { status: 'NO_PLAN', reason: 'NO_OBJECTIVE_ZONE_AVAILABLE' } }));
+    assert.ok(formatted.lines.includes('Primary Opportunity: NONE (NO_OBJECTIVE_ZONE_AVAILABLE)'));
+    assert.ok(!formatted.lines.some((l) => l.startsWith('Candidate Entry Zone')));
+  });
+
+  it('never adds any plan line for BUY/SELL, and never touches Entry/SL/TP1/TP2/RR/Quality', () => {
+    const buyResult = { status: 'OK', action: 'BUY', entry: 2000, sl: 1995, tp1: 2005, tp2: 2010, rr: 2.0, setup: 'TC', quality: 78, diagnostics: { source_timeframe: '15m' }, pre_entry_plan: { status: 'SUPERSEDED_BY_CONFIRMED_TRADE', direction: 'BULLISH', opportunity_state: 'CONFIRMED' } };
+    assert.deepEqual(formatMarketAnalysis(buyResult), formatEngineDecision(buyResult));
+  });
+
+  it('falls back to the unenriched output when pre_entry_plan is absent entirely', () => {
+    assert.deepEqual(formatMarketAnalysis(waitResult()), formatEngineDecision(waitResult()));
+  });
+});

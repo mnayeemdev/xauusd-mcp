@@ -29,6 +29,24 @@
  * risk an inconsistent ownership record (see the CREATE branch below for
  * the one unavoidable orphan-drawing risk this can still leave, which is
  * surfaced in `warnings`, never hidden).
+ *
+ * OWNERSHIP-DOMAIN SCOPING (`ownsRole`, additive): two INDEPENDENT
+ * callers can share the identical (symbol, timeframe) registry scope --
+ * this happens for real whenever the user's active chart timeframe
+ * equals the decision timeframe, since decision-TF visualization
+ * (src/core/xauusd_visualize_market.js) and active-chart-TF-local
+ * visualization (src/core/xauusd_visualize_chart_context.js) both then
+ * reconcile against `OANDA:XAUUSD|15m|...` keys. Without a way to say
+ * "which registered roles are even mine to judge," each caller's own
+ * stale-cleanup pass would see the OTHER caller's still-valid, still-
+ * desired roles as "not in my desired set" and remove them -- a real
+ * defect found via live proof (see docs/XAUUSD_LIVE_RUNTIME.md §14). The
+ * optional `ownsRole(role) => boolean` predicate bounds the stale-
+ * cleanup pass to ONLY the caller's own declared domain; a registered
+ * role outside that domain is never inspected, staged, or reported --
+ * see `buildReconciliationPlan()`'s own doc comment for the exact
+ * mechanics. Defaults to "owns everything," so every pre-existing call
+ * site's behavior is byte-identical unless it explicitly opts in.
  */
 import * as _drawingCore from './drawing.js';
 import { loadRegistry, saveRegistry, buildRegistryKey, scopedKeys, computeIntentSignature, DEFAULT_REGISTRY_PATH } from '../engine/drawingRegistry.js';
@@ -54,8 +72,25 @@ function resolveDeps(_deps) {
  * is what makes DROP_STALE_REGISTRY detection honest instead of guessed.
  * Never mutates `registry` -- callers that execute the plan operate on
  * their own loaded copy.
+ *
+ * `ownsRole` (optional, defaults to "owns everything" -- byte-identical
+ * to every pre-existing caller's behavior): a predicate the CALLER uses
+ * to declare which registered *roles* belong to its own ownership
+ * domain. Only used to bound the trailing stale-cleanup pass below (for
+ * a role the caller's own `desiredIntents` explicitly names, ownership
+ * is already implicit -- this predicate is never consulted for those).
+ * A registered entry whose role fails this predicate is a DIFFERENT
+ * caller's drawing -- it is never inspected further, never staged for
+ * removal, and never reported as stale; the plan simply does not
+ * mention it at all. This is what makes it safe for two independent
+ * reconciliation calls (e.g. decision-TF visualization and active-chart-
+ * TF-local visualization, src/core/xauusd_visualize_market.js and
+ * src/core/xauusd_visualize_chart_context.js) to share the exact same
+ * (symbol, timeframe) registry scope -- which happens whenever the
+ * user's active chart timeframe equals the decision timeframe -- without
+ * one caller's cleanup pass deleting the other's still-valid drawings.
  */
-export function buildReconciliationPlan({ desiredIntents = [], registry, symbol, timeframe, currentChartIds }) {
+export function buildReconciliationPlan({ desiredIntents = [], registry, symbol, timeframe, currentChartIds, ownsRole = () => true }) {
   const steps = [];
   const desiredKeys = new Set();
 
@@ -91,10 +126,14 @@ export function buildReconciliationPlan({ desiredIntents = [], registry, symbol,
 
   // Registered entries for THIS (symbol, timeframe) scope that are no
   // longer desired at all -- scopedKeys() guarantees this never touches a
-  // different symbol/timeframe's entries.
+  // different symbol/timeframe's entries. ownsRole() additionally
+  // guarantees this never touches a DIFFERENT CALLER's roles within the
+  // SAME (symbol, timeframe) scope -- see this function's own doc
+  // comment above for why that matters.
   for (const key of scopedKeys(registry, { symbol, timeframe })) {
     if (desiredKeys.has(key)) continue;
     const registered = registry.entries[key];
+    if (!ownsRole(registered.role)) continue;
     if (currentChartIds.has(registered.entity_id)) {
       steps.push({ action: 'REMOVE_REGISTERED', key, role: registered.role ?? null, entity_id: registered.entity_id });
     } else {
@@ -112,7 +151,7 @@ export function buildReconciliationPlan({ desiredIntents = [], registry, symbol,
  * accurate, but drawShape/removeOne/saveRegistry are NEVER called in that
  * branch, structurally (the execution loop below is simply never reached).
  */
-export async function reconcileVisualization({ intents = [], symbol, timeframe, dryRun = false, _deps } = {}) {
+export async function reconcileVisualization({ intents = [], symbol, timeframe, dryRun = false, ownsRole = () => true, _deps } = {}) {
   const deps = resolveDeps(_deps);
   const warnings = [];
 
@@ -131,7 +170,7 @@ export async function reconcileVisualization({ intents = [], symbol, timeframe, 
     return { dry_run: !!dryRun, plan: [], executed: [], warnings, symbol, timeframe };
   }
 
-  const plan = buildReconciliationPlan({ desiredIntents: intents, registry, symbol, timeframe, currentChartIds });
+  const plan = buildReconciliationPlan({ desiredIntents: intents, registry, symbol, timeframe, currentChartIds, ownsRole });
 
   if (dryRun) {
     return { dry_run: true, plan, executed: [], warnings, symbol, timeframe };

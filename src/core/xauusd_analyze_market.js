@@ -1,9 +1,11 @@
 /**
  * Full Market Analysis Engine orchestrator (Parts B-M of the XAUUSD MCP
- * analysis-engine upgrade). This is a NEW, separate, on-demand entry
- * point -- it is NOT called by the 60-second watcher loop
- * (src/engine/watcher.js is completely untouched by this file and keeps
- * calling calculateEntry() directly, exactly as before).
+ * analysis-engine upgrade), plus Stage 6 additive candidate observability.
+ * This module is called BOTH on-demand (the `xauusd_analyze_market`/
+ * `xauusd_visualize_market` MCP tools, always with `persistSignals: false`)
+ * AND by the watcher's own cadence (src/engine/watcher.js, Stage 6, always
+ * with `persistSignals: true`) -- see the `persistSignals` doc below for
+ * why the two callers deliberately use different signal-store modes.
  *
  * DESIGN: the authoritative trading decision comes from ONE call to the
  * existing, unmodified calculateEntry() (src/core/xauusd_calculate.js).
@@ -38,10 +40,11 @@
  *      decision or the confluence report, and never adds a second
  *      calculateEntry() call or OHLCV sweep.
  */
-import { calculateEntry, fetchMultiTimeframeBars, validateAndSplit, resolveDeps, ALL_TIMEFRAMES, TF_MINUTES } from './xauusd_calculate.js';
+import { calculateEntry, fetchMultiTimeframeBars, validateAndSplit, resolveDeps, ALL_TIMEFRAMES, ENTRY_TIMEFRAMES, TF_LABEL, TF_MINUTES } from './xauusd_calculate.js';
 import { classifyRegime, REGIME_PARAMS } from '../engine/regime.js';
 import { computeStructure, STRUCTURE_PARAMS } from '../engine/structure.js';
 import { computeCorrection, CORRECTION_PARAMS } from '../engine/correction.js';
+import { runPipeline } from '../engine/pipeline.js';
 import { atr } from '../engine/math.js';
 import { detectCandlestickPatterns } from '../engine/candlesticks.js';
 import { detectClassicalPatterns } from '../engine/patterns.js';
@@ -53,6 +56,7 @@ import { computeSessionContext, computeDailyWeeklyContext } from '../engine/sess
 import { computeStrategyEligibility } from '../engine/strategies/eligibility.js';
 import { buildConfluenceReport } from '../engine/confluence.js';
 import { computeAnticipation } from '../engine/anticipation.js';
+import { computeOpportunityPlan } from '../engine/opportunityPlanner.js';
 
 const PRIMARY_TIMEFRAME = '15'; // matches combineTimeframes()'s own source_timeframe (15m is the decision timeframe)
 
@@ -66,7 +70,11 @@ function buildPrefetchedDeps(byTf, originalSymbol, originalResolution) {
   };
 }
 
-function computeEvidence(primaryBars, split, selectedModel) {
+// Exported additively (Stage 6) so src/core/xauusd_chart_context.js can
+// reuse the EXACT SAME evidence computation for the active chart
+// timeframe's own local intelligence, which may differ from the primary
+// (15m) decision timeframe -- never a second, divergent implementation.
+export function computeEvidence(primaryBars, split, selectedModel) {
   const { regime } = classifyRegime(primaryBars, REGIME_PARAMS);
   const structure = computeStructure(primaryBars, STRUCTURE_PARAMS);
   const correction = regime && structure.state ? computeCorrection(primaryBars, structure.state, CORRECTION_PARAMS) : { state: 'NONE' };
@@ -101,13 +109,77 @@ function computeEvidence(primaryBars, split, selectedModel) {
 }
 
 /**
+ * Stage 6 — CANDIDATE (not authoritative) observability per entry
+ * timeframe. Consumes a single already-computed runPipeline() result
+ * (src/engine/pipeline.js, UNCHANGED, PROTECTED) -- pure, deterministic,
+ * zero-I/O, so this can NEVER diverge from what the protected pipeline
+ * already computed (identical inputs -> identical outputs, by
+ * construction). This exists ONLY to surface intermediate values
+ * calculateEntry()'s own public return shape does not expose (a
+ * candidate's `side`/RR even when the final action is WAIT) -- it is
+ * never fed back into any decision, never used to gate/alter
+ * `decision.action`, and never itself produces BUY/SELL. Exported
+ * additively so tests can verify this directly against synthetic
+ * pipeline results (e.g. a confirmed 15m BUY candidate coexisting with
+ * an overall WAIT forced by mtf.js's own HTF-conflict gate) without
+ * needing a full, realistic 500-bar fixture. See
+ * docs/XAUUSD_LIVE_RUNTIME.md's "Candidate vs Authoritative" section.
+ */
+export function extractCandidateObservability(pipelineResult) {
+  if (!pipelineResult) return { status: 'UNAVAILABLE', regime: null, candidate_action: null, candidate_model: null, candidate_quality: null, candidate_rr: null, blocked_by: null };
+  const candidate = pipelineResult.evidence?.candidate ?? null;
+  const risk = pipelineResult.evidence?.risk ?? null;
+  const isConfirmed = pipelineResult.decision?.action === 'BUY' || pipelineResult.decision?.action === 'SELL';
+  return {
+    status: pipelineResult.status,
+    regime: pipelineResult.regime ?? null,
+    candidate_action: candidate?.side ?? null, // 'BUY' | 'SELL' | null -- the CANDIDATE's own side, never the final authoritative action
+    candidate_model: pipelineResult.model ?? null,
+    candidate_quality: pipelineResult.quality?.score ?? null,
+    candidate_rr: risk?.rr ?? null,
+    // The exact protected gate/reason this timeframe's OWN candidate is
+    // currently blocked by, or null when it is itself a confirmed
+    // BUY/SELL at this timeframe (still subject to the mtf/htf gates in
+    // combineTimeframes()/detectHtfConflict() before becoming authoritative).
+    blocked_by: isConfirmed ? null : (pipelineResult.decision?.wait_reason ?? null),
+  };
+}
+
+/** Runs runPipeline() for every ENTRY_TIMEFRAMES member on already-fetched confirmed bars, mirroring calculateEntry()'s OWN internal sequencing exactly (30m first -- its regime feeds 15m/5m's htfRegime, since 30m is the designated HTF-context source for the entry timeframes). Candidate observability only -- see extractCandidateObservability(). */
+function computeCandidateObservability(split) {
+  const pipelineByTf = {};
+  const m30 = split[30]?.error ? null : runPipeline({ confirmedBars: split[30].confirmed });
+  pipelineByTf[30] = m30;
+  for (const tf of ENTRY_TIMEFRAMES) {
+    if (tf === '30' || Number(tf) === 30) continue;
+    pipelineByTf[tf] = split[tf]?.error ? null : runPipeline({ confirmedBars: split[tf].confirmed, htfRegime: m30?.regime ?? null });
+  }
+  const result = {};
+  for (const tf of ENTRY_TIMEFRAMES) result[TF_LABEL[tf]] = extractCandidateObservability(pipelineByTf[tf]);
+  return result;
+}
+
+/**
  * Runs the full market analysis: authoritative decision (unchanged
  * calculateEntry()) + new evidence layers + confluence fusion. Never
- * places trades, never mutates the persistent signal store, always
- * restores the chart's original timeframe (inherited from
- * fetchMultiTimeframeBars()'s own restore-on-completion discipline).
+ * places trades, always restores the chart's original timeframe
+ * (inherited from fetchMultiTimeframeBars()'s own restore-on-completion
+ * discipline).
+ *
+ * `persistSignals` (Stage 6, default `false` -- UNCHANGED behavior for
+ * every existing caller): when `false` (the default), uses an EPHEMERAL,
+ * in-memory signal store exactly as before, so an on-demand call (the
+ * `xauusd_analyze_market`/`xauusd_visualize_market` MCP tools) can never
+ * mark a signal "already seen" and suppress a real alert the watcher
+ * would otherwise independently raise. When `true`, uses the SAME real,
+ * persisted store `calculateEntry()` itself defaults to
+ * (`deps.loadStore`/`deps.saveStore`/`deps.storePath` from
+ * `resolveDeps()`) -- this is an explicit opt-in ONLY for
+ * src/engine/watcher.js's own cycle, which is itself the single
+ * authoritative consumer of that persisted dedup state and therefore
+ * must use the real store, not a throwaway one.
  */
-export async function analyzeMarket({ _deps } = {}) {
+export async function analyzeMarket({ _deps, persistSignals = false } = {}) {
   const deps = resolveDeps(_deps);
   const { byTf, fetchErrors } = await fetchMultiTimeframeBars(deps);
 
@@ -116,7 +188,7 @@ export async function analyzeMarket({ _deps } = {}) {
 
   const original = await deps.getState();
   const prefetched = buildPrefetchedDeps(byTf, original.symbol, original.resolution);
-  let ephemeralStore = { signals: [] }; // never persisted -- see module doc
+  let ephemeralStore = { signals: [] }; // used unless persistSignals:true -- see doc above
 
   const decision = await calculateEntry({
     _deps: {
@@ -129,8 +201,9 @@ export async function analyzeMarket({ _deps } = {}) {
       // which would attempt a live CDP connection this orchestrator has
       // no reason to make twice.
       getMasterState: deps.getMasterState,
-      loadStore: () => ephemeralStore,
-      saveStore: (_path, s) => { ephemeralStore = s; },
+      loadStore: persistSignals ? deps.loadStore : () => ephemeralStore,
+      saveStore: persistSignals ? deps.saveStore : (_path, s) => { ephemeralStore = s; },
+      storePath: deps.storePath,
     },
   });
 
@@ -149,6 +222,19 @@ export async function analyzeMarket({ _deps } = {}) {
   // additional OHLCV/timeframe sweep. See src/engine/anticipation.js.
   const anticipation = computeAnticipation({ decision, evidence });
 
+  // Stage 6, additive, observability only -- see extractCandidateObservability().
+  const candidates = computeCandidateObservability(split);
+
+  // Pre-Entry Opportunity Planner (additive upgrade on Stage 6): consumes
+  // the SAME already-computed decision/evidence/anticipation, plus the
+  // SAME primarySplit.confirmed bars computeEvidence() itself already
+  // used (never a second sweep, never a fetch) -- see
+  // src/engine/opportunityPlanner.js. Never a second decision engine;
+  // returns { status: 'NO_PLAN', ... } whenever nothing objective is
+  // developing (never fabricates one), and never converts its own
+  // candidate geometry into `decision`'s authoritative fields above.
+  const pre_entry_plan = computeOpportunityPlan({ decision, evidence, anticipation, primaryBars: primarySplit?.confirmed ?? null });
+
   return {
     ...decision,
     evidence_available: !!evidence,
@@ -165,6 +251,12 @@ export async function analyzeMarket({ _deps } = {}) {
     evidence,
     confluence,
     anticipation,
+    // Stage 6: per-entry-timeframe CANDIDATE observability -- see
+    // extractCandidateObservability()'s own doc comment. Never authoritative.
+    candidates,
+    // Pre-Entry Opportunity Planner: candidate/provisional geometry only
+    // -- see opportunityPlanner.js's own doc comment. Never authoritative.
+    pre_entry_plan,
     fetch_errors: fetchErrors,
   };
 }

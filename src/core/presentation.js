@@ -215,6 +215,32 @@ export function formatMarketAnalysis(analysisResult) {
     }
   }
 
+  // Pre-Entry Opportunity Planner (additive) -- src/engine/opportunityPlanner.js's
+  // already-computed `pre_entry_plan`, never recomputed here. Every
+  // "Candidate"/"Provisional" value is printed verbatim; this never adds
+  // an Entry/SL/TP1/TP2 line (those only ever appear above, in the
+  // BUY/SELL branch of formatEngineDecision(), and only for a
+  // genuinely confirmed action).
+  const plan = analysisResult.pre_entry_plan;
+  if (plan?.status === 'PLAN') {
+    const action = plan.direction === 'BULLISH' ? 'BUY' : plan.direction === 'BEARISH' ? 'SELL' : 'UNKNOWN';
+    lines.push(`Opportunity: ${action} ${plan.opportunity_state}`);
+    if (plan.candidate_entry_zone) {
+      const z = plan.candidate_entry_zone;
+      lines.push(`Candidate Entry Zone: ${z.lower === z.upper ? fmtNum(z.lower) : `${fmtNum(z.lower)} - ${fmtNum(z.upper)}`}`);
+    }
+    if (plan.provisional_invalidation) lines.push(`Provisional Invalidation: ${fmtNum(plan.provisional_invalidation.level)}`);
+    if (plan.candidate_tp1 != null) lines.push(`Candidate TP1: ${fmtNum(plan.candidate_tp1)}`);
+    if (plan.candidate_tp2 != null) lines.push(`Candidate TP2: ${fmtNum(plan.candidate_tp2)}`);
+    if (plan.candidate_rr != null) lines.push(`Candidate RR: ${fmtNum(plan.candidate_rr)}`);
+    if (plan.confirmation_required?.length) lines.push(`Waiting for (opportunity plan): ${plan.confirmation_required.join('; ')}`);
+    if (plan.alternate_scenario) lines.push(`Alternative: ${plan.alternate_scenario.direction === 'BULLISH' ? 'BUY' : 'SELL'} — ${plan.alternate_scenario.zone?.type ?? 'N/A'}`);
+    structuredExtra.pre_entry_plan = plan;
+  } else if (plan?.status === 'NO_PLAN') {
+    lines.push(`Primary Opportunity: NONE (${plan.reason ?? 'no objective plan currently available'})`);
+    structuredExtra.pre_entry_plan = plan;
+  }
+
   if (lines.length === base.lines.length) return base;
 
   return {

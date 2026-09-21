@@ -32,8 +32,17 @@
  * that a broken drawing path leaves the authoritative decision untouched.
  */
 import { analyzeMarket } from './xauusd_analyze_market.js';
-import { buildMarketVisualizationIntents } from '../engine/marketVisualization.js';
+import { buildMarketVisualizationIntents, CHART_LOCAL_ROLE_PREFIX } from '../engine/marketVisualization.js';
 import { reconcileVisualization } from './xauusd_visualize.js';
+
+// This orchestrator's own ownership domain (see xauusd_visualize.js's
+// `ownsRole` doc comment): every role this module ever generates is a
+// decision-TF role, NEVER chart_-prefixed -- so its stale-cleanup pass
+// must never even consider a chart_*-prefixed registry entry, which
+// belongs to xauusd_visualize_chart_context.js's own separate domain and
+// may legitimately share the identical (symbol, timeframe) scope when
+// the active chart TF equals the decision TF.
+const ownsDecisionRole = (role) => typeof role === 'string' && !role.startsWith(CHART_LOCAL_ROLE_PREFIX);
 
 const PLAN_ACTION_KEYS = ['KEEP', 'CREATE', 'REMOVE_REGISTERED', 'DROP_STALE_REGISTRY', 'SKIP_INVALID'];
 
@@ -99,12 +108,13 @@ export async function visualizeMarketAnalysis({ analysis, dryRun = false, _deps 
 
   const { intents, candidates, summary } = buildMarketVisualizationIntents({
     decision: analysis, evidence: analysis.evidence ?? null, anticipation: analysis.anticipation ?? null, confluence: analysis.confluence ?? null,
+    plan: analysis.pre_entry_plan ?? null,
   });
 
   // A visualization failure (below, inside reconcileVisualization) is
   // reported in `reconciliation` only -- `analysis` itself, already fully
   // computed before this line, is never touched or re-derived here.
-  const reconciliation = await reconcileVisualization({ intents, symbol: summary.symbol, timeframe: summary.timeframe, dryRun, _deps });
+  const reconciliation = await reconcileVisualization({ intents, symbol: summary.symbol, timeframe: summary.timeframe, dryRun, ownsRole: ownsDecisionRole, _deps });
 
   return {
     visualization: summarizeReconciliation(reconciliation, summary.total_included),

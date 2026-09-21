@@ -2,25 +2,37 @@
  * XAUUSD local auto signal watcher — orchestration/notification ONLY.
  *
  * This module never computes regime/structure/correction/setup/quality/
- * entry/SL/TP/RR itself. Every trading decision comes from a single call
- * to the existing, unmodified calculateEntry() (src/core/xauusd_calculate.js,
- * schema 1.1.0, 5m/15m/30m entry tiers + 1H/2H/4H/8H/1D/1W/1M context
- * tiers). This file's only job is: decide WHEN to call that engine (once
- * per newly confirmed 5m candle, never blindly every poll), and decide
- * whether an already-computed, already-validated result should raise a
- * user-facing alert (BUY/SELL only, deduplicated, fail-closed on malformed
- * geometry).
+ * entry/SL/TP/RR itself. Every trading decision comes from
+ * analyzeMarket() (src/core/xauusd_analyze_market.js, Stage 6), which is
+ * itself a single call to the existing, unmodified calculateEntry()
+ * (src/core/xauusd_calculate.js, schema 1.1.0, 5m/15m/30m entry tiers +
+ * 1H/2H/4H/8H/1D/1W/1M context tiers) plus additive evidence/anticipation/
+ * candidate observability -- never a second, divergent decision. This
+ * file's only job is: decide WHEN to call that engine (once per newly
+ * confirmed 5m candle, never blindly every poll), decide whether an
+ * already-computed, already-validated result should raise a user-facing
+ * alert (BUY/SELL only, deduplicated, fail-closed on malformed geometry),
+ * and (Stage 6, additive) record Stage 3 observability + refresh Stage 5
+ * visualization from that SAME result.
  *
- * Poll cadence: every 60s (DEFAULT_POLL_INTERVAL_MS), the watcher does a
- * LIGHTWEIGHT peek at the latest confirmed 5m candle's timestamp only
- * (peekLatest5mCandle) -- it does not run the 10-timeframe engine unless
- * that timestamp has advanced past the last one this watcher processed.
+ * Two cadences on ONE 60s timer (DEFAULT_POLL_INTERVAL_MS, Stage 6 Part
+ * 16): (A) trade-analysis -- a LIGHTWEIGHT peek at the latest confirmed
+ * 5m candle's timestamp only (peekLatest5mCandle) gates the full
+ * analyzeMarket() call, which only runs once that timestamp has advanced
+ * past the last one this watcher processed; (B) chart-visualization --
+ * see startWatcher()'s tick(), a single active-chart-timeframe read every
+ * tick, independent of (A).
  */
 import * as _chartCore from '../core/chart.js';
 import * as _dataCore from '../core/data.js';
-import { calculateEntry as _calculateEntry, CALCULATE_SCHEMA_VERSION } from '../core/xauusd_calculate.js';
+import { CALCULATE_SCHEMA_VERSION } from '../core/xauusd_calculate.js';
+import { analyzeMarket as _analyzeMarket } from '../core/xauusd_analyze_market.js';
+import { recordAnticipationObservation as _recordAnticipationObservation } from './anticipationStore.js';
+import { recordOpportunityObservation as _recordOpportunityObservation } from './opportunityLedger.js';
+import { visualizeMarketAnalysis as _visualizeMarketAnalysis } from '../core/xauusd_visualize_market.js';
+import { visualizeActiveChartContext as _visualizeActiveChartContext } from '../core/xauusd_visualize_chart_context.js';
 import { CDP_HOST, CDP_PORT } from '../connection.js';
-import { notify as _notify } from './notifier.js';
+import { notify as _notify, notifyPreEntryWatch as _notifyPreEntryWatch } from './notifier.js';
 import { isBarFresh } from './freshData.js';
 import {
   DEFAULT_STATE_PATH, DEFAULT_LOCK_PATH,
@@ -126,8 +138,33 @@ export function createCycleDeps(_deps = {}) {
   return {
     isCdpReachable: _deps.isCdpReachable ?? (() => isCdpReachable()),
     peekLatest5mCandle: _deps.peekLatest5mCandle ?? (() => peekLatest5mCandle(chartDeps)),
-    calculateEntry: _deps.calculateEntry ?? _calculateEntry,
+    // Stage 6, Part 16-19: the trade-analysis cadence now calls
+    // analyzeMarket({persistSignals:true}) (the SAME engine, PLUS
+    // evidence/anticipation/candidates -- see xauusd_analyze_market.js)
+    // instead of bare calculateEntry(). `persistSignals:true` is the
+    // explicit opt-in that routes to the REAL, persisted signal store
+    // (validation/mcp_engine_signals.json) -- this watcher is the single
+    // authoritative consumer of that store's dedup state, unlike an
+    // on-demand MCP tool call, which must stay on the ephemeral default.
+    analyzeMarket: _deps.analyzeMarket ?? _analyzeMarket,
+    // Additive, OPTIONAL (Stage 6 / Pre-Entry Opportunity upgrade): Stage
+    // 3 observation recording, Opportunity Ledger recording, and Stage 5
+    // visualization refresh, all run on the SAME already-computed
+    // analyzeMarket() result (which now additively includes
+    // `pre_entry_plan`) -- never a second sweep. Each is called
+    // defensively (only if provided) and failure-isolated (mission Part
+    // 31 / opportunity-upgrade Section 47): a thrown/missing
+    // implementation here can never alter the alert decision below,
+    // which depends only on `result` itself.
+    recordAnticipationObservation: _deps.recordAnticipationObservation ?? _recordAnticipationObservation,
+    recordOpportunityObservation: _deps.recordOpportunityObservation ?? _recordOpportunityObservation,
+    visualizeMarketAnalysis: _deps.visualizeMarketAnalysis ?? _visualizeMarketAnalysis,
     notify: _deps.notify ?? _notify,
+    // Additive, OPTIONAL: the low-noise pre-entry "watch" notification
+    // (mission Section 32) -- see the gated call site below for exactly
+    // when this fires (a genuine transition into ARMED, never every
+    // DEVELOPING candle, never every poll).
+    notifyPreEntryWatch: _deps.notifyPreEntryWatch ?? _notifyPreEntryWatch,
     now: _deps.now,
   };
 }
@@ -140,9 +177,10 @@ function requireFiniteFields(result, fields) {
 }
 
 /**
- * Evaluates an already-computed calculateEntry() result. Pure
- * decision/validation logic — never recomputes or repairs a value. Any
- * malformed or incomplete actionable result fails closed to no-alert.
+ * Evaluates an already-computed analyzeMarket()/calculateEntry() result
+ * (same top-level decision shape). Pure decision/validation logic — never
+ * recomputes or repairs a value. Any malformed or incomplete actionable
+ * result fails closed to no-alert.
  */
 function evaluateEngineResult({ result, state, deps, log, stamp }) {
   if (!result || result.status !== 'OK') {
@@ -232,8 +270,65 @@ export async function runWatcherCycle({ state, deps, log = () => {} }) {
     return { state: connectedState, action: 'NO_NEW_CANDLE', alerted: false };
   }
 
-  const result = await deps.calculateEntry();
+  const result = await deps.analyzeMarket({ persistSignals: true });
   const advancedState = { ...connectedState, last_processed_5m_time: candle.time };
+
+  // Additive post-analysis steps, in mission order (analysis -> candidate
+  // observability/anticipation/pre_entry_plan [already computed inside
+  // `result`] -> Stage 3 observation -> Opportunity Ledger observation ->
+  // visualization refresh -> notification below). OPTIONAL deps (never
+  // required -- a caller/test that omits any of them keeps exactly the
+  // behavior as if that step didn't exist) and individually
+  // failure-isolated: no step's success/failure/absence can alter
+  // `result` or the alert decision evaluateEngineResult() makes from it.
+  if (typeof deps.recordAnticipationObservation === 'function') {
+    try {
+      deps.recordAnticipationObservation({
+        symbol: result.symbol ?? null,
+        decision: result,
+        evidence: result.evidence ?? null,
+        anticipation: result.anticipation ?? null,
+        confluence: result.confluence ?? null,
+        candidates: result.candidates ?? null,
+        confirmedBarTime: candle.time,
+      });
+    } catch (err) {
+      log(`[${stamp()}] Stage 3 observation recording failed (non-fatal, decision unaffected): ${err.message}`);
+    }
+  }
+
+  if (typeof deps.recordOpportunityObservation === 'function') {
+    try {
+      const ledgerResult = deps.recordOpportunityObservation({ decision: result, plan: result.pre_entry_plan ?? null, confirmedBarTime: candle.time });
+      // Low-noise pre-entry "watch" notification (mission Section 32):
+      // fires ONLY on a genuine transition INTO ARMED (never every
+      // DEVELOPING candle, never every poll, never repeated while an
+      // opportunity simply remains ARMED across later confirmed bars --
+      // the ledger's own dedup already means a NEW record here always
+      // reflects a real change, and this additionally requires the
+      // PREVIOUS state to not already have been ARMED).
+      if (ledgerResult?.recorded && ledgerResult.record?.opportunity_state === 'ARMED' && ledgerResult.record?.previous_opportunity_state !== 'ARMED') {
+        if (typeof deps.notifyPreEntryWatch === 'function') {
+          try {
+            deps.notifyPreEntryWatch(result.pre_entry_plan);
+          } catch (err) {
+            log(`[${stamp()}] Pre-entry watch notification failed (non-fatal, decision unaffected): ${err.message}`);
+          }
+        }
+      }
+    } catch (err) {
+      log(`[${stamp()}] Opportunity Ledger recording failed (non-fatal, decision unaffected): ${err.message}`);
+    }
+  }
+
+  if (typeof deps.visualizeMarketAnalysis === 'function') {
+    try {
+      await deps.visualizeMarketAnalysis({ analysis: result, dryRun: false });
+    } catch (err) {
+      log(`[${stamp()}] Visualization refresh failed (non-fatal, decision unaffected): ${err.message}`);
+    }
+  }
+
   return evaluateEngineResult({ result, state: advancedState, deps, log, stamp });
 }
 
@@ -271,6 +366,15 @@ export function startWatcher({ pollIntervalMs = DEFAULT_POLL_INTERVAL_MS, _deps 
     log: _deps?.log ?? ((msg) => console.log(msg)),
     runCycle: _deps?.runCycle ?? runWatcherCycle,
     cycleDeps: _deps?.cycleDeps ?? createCycleDeps(_deps?.cycle),
+    // Stage 6, Part 16: the SEPARATE, lightweight chart-visualization
+    // cadence -- runs on the SAME existing 60s tick as the trade-analysis
+    // cadence above, never a second timer/interval and never a watcher
+    // restart to pick up a manual chart TF/symbol change. Deliberately
+    // NOT gated on a new confirmed 5m candle (a chart TF switch can
+    // happen at any time) and deliberately NOT a full 10-TF sweep --
+    // visualizeActiveChartContext() reads only the single currently
+    // active timeframe (zero chart mutation, see xauusd_chart_context.js).
+    visualizeActiveChartContext: _deps?.visualizeActiveChartContext ?? _visualizeActiveChartContext,
   };
 
   const lock = deps.acquireLock(deps.lockPath, _deps?.lockOpts);
@@ -316,6 +420,25 @@ export function startWatcher({ pollIntervalMs = DEFAULT_POLL_INTERVAL_MS, _deps 
         deps.saveState(deps.statePath, state);
       } catch (err) {
         deps.log(`Unexpected watcher error: ${err.message}`);
+      }
+
+      // Stage 6, Part 16: chart-visualization cadence, same tick, fully
+      // failure-isolated from the trade-analysis cadence above -- see
+      // deps.visualizeActiveChartContext's own doc comment. Gated behind
+      // the SAME fast (single-attempt, ~2.5s timeout) reachability probe
+      // the trade-analysis cadence already uses (deps.cycleDeps.isCdpReachable)
+      // -- without this, an unreachable CDP would fall through to
+      // getActiveChartContext()'s real getState() call, which goes
+      // through connection.js's full 5-attempt exponential-backoff
+      // connect() retry loop (tens of seconds) instead of failing fast,
+      // exactly the kind of unbounded stall mission Part 31 ("CDP
+      // unavailable -> fail closed") means to prevent.
+      if (stopped) return;
+      try {
+        const reachable = await deps.cycleDeps.isCdpReachable();
+        if (reachable) await deps.visualizeActiveChartContext({ dryRun: false });
+      } catch (err) {
+        deps.log(`Chart-context visualization tick failed (non-fatal): ${err.message}`);
       }
     };
 

@@ -78,7 +78,7 @@ describe('watcher: startup baseline', () => {
     const deps = {
       isCdpReachable: async () => true,
       peekLatest5mCandle: async () => ({ time: 1000 }),
-      calculateEntry: async () => { calcCalls++; return buyResult(); },
+      analyzeMarket: async () => { calcCalls++; return buyResult(); },
       notify: () => { throw new Error('must not be called on baseline'); },
     };
     const { state, action, alerted } = await runWatcherCycle({ state: freshState(), deps, log: log });
@@ -96,7 +96,7 @@ describe('watcher: candle-gated calculation', () => {
     const deps = {
       isCdpReachable: async () => true,
       peekLatest5mCandle: async () => ({ time: 1000 }),
-      calculateEntry: async () => { calcCalls++; return buyResult(); },
+      analyzeMarket: async () => { calcCalls++; return buyResult(); },
       notify: () => {},
     };
     const state = freshState({ baseline_established: true, last_processed_5m_time: 1000 });
@@ -110,7 +110,7 @@ describe('watcher: candle-gated calculation', () => {
     const deps = {
       isCdpReachable: async () => true,
       peekLatest5mCandle: async () => ({ time: 1300 }),
-      calculateEntry: async () => { calcCalls++; return baseCalcResult(); },
+      analyzeMarket: async () => { calcCalls++; return baseCalcResult(); },
       notify: () => {},
     };
     const state = freshState({ baseline_established: true, last_processed_5m_time: 1000 });
@@ -127,7 +127,7 @@ describe('watcher: WAIT never alerts', () => {
     const deps = {
       isCdpReachable: async () => true,
       peekLatest5mCandle: async () => ({ time: 1300 }),
-      calculateEntry: async () => baseCalcResult({ action: 'WAIT', reason: 'RR_NOT_ACCEPTABLE' }),
+      analyzeMarket: async () => baseCalcResult({ action: 'WAIT', reason: 'RR_NOT_ACCEPTABLE' }),
       notify: () => { notifyCalls++; },
     };
     const state = freshState({ baseline_established: true, last_processed_5m_time: 1000 });
@@ -145,7 +145,7 @@ describe('watcher: BUY/SELL alerting', () => {
     const deps = {
       isCdpReachable: async () => true,
       peekLatest5mCandle: async () => ({ time: 1300 }),
-      calculateEntry: async () => buyResult({ signalId: 'buy-1' }),
+      analyzeMarket: async () => buyResult({ signalId: 'buy-1' }),
       notify: (alert) => { notified = alert; },
     };
     const state = freshState({ baseline_established: true, last_processed_5m_time: 1000 });
@@ -168,7 +168,7 @@ describe('watcher: BUY/SELL alerting', () => {
     const deps = {
       isCdpReachable: async () => true,
       peekLatest5mCandle: async () => ({ time: 1300 }),
-      calculateEntry: async () => sellResult,
+      analyzeMarket: async () => sellResult,
       notify: () => { notifyCalls++; },
     };
     const state = freshState({ baseline_established: true, last_processed_5m_time: 1000 });
@@ -183,7 +183,7 @@ describe('watcher: BUY/SELL alerting', () => {
     const deps = {
       isCdpReachable: async () => true,
       peekLatest5mCandle: async () => ({ time: 1300 }),
-      calculateEntry: async () => buyResult({ overrides: { entry: null } }),
+      analyzeMarket: async () => buyResult({ overrides: { entry: null } }),
       notify: () => { notifyCalls++; },
     };
     const state = freshState({ baseline_established: true, last_processed_5m_time: 1000 });
@@ -197,7 +197,7 @@ describe('watcher: BUY/SELL alerting', () => {
     const deps = {
       isCdpReachable: async () => true,
       peekLatest5mCandle: async () => ({ time: 1300 }),
-      calculateEntry: async () => baseCalcResult({
+      analyzeMarket: async () => baseCalcResult({
         action: 'SELL', entry: 2000, sl: 2010, tp1: 1990, tp2: 1980, rr: NaN, quality: 70, setup: 'BO',
         signal: { signal_id: 'sell-bad', is_new_event: true },
       }),
@@ -214,7 +214,7 @@ describe('watcher: BUY/SELL alerting', () => {
     const deps = {
       isCdpReachable: async () => true,
       peekLatest5mCandle: async () => ({ time: 1300 }),
-      calculateEntry: async () => buyResult({ overrides: { signal: null } }),
+      analyzeMarket: async () => buyResult({ overrides: { signal: null } }),
       notify: () => { notifyCalls++; },
     };
     const state = freshState({ baseline_established: true, last_processed_5m_time: 1000 });
@@ -230,7 +230,7 @@ describe('watcher: duplicate protection', () => {
     const deps = {
       isCdpReachable: async () => true,
       peekLatest5mCandle: async () => ({ time: 1300 }),
-      calculateEntry: async () => buyResult({ signalId: 'dup-1', isNew: false }),
+      analyzeMarket: async () => buyResult({ signalId: 'dup-1', isNew: false }),
       notify: () => { notifyCalls++; },
     };
     const state = freshState({ baseline_established: true, last_processed_5m_time: 1000 });
@@ -244,7 +244,7 @@ describe('watcher: duplicate protection', () => {
     const deps = {
       isCdpReachable: async () => true,
       peekLatest5mCandle: async () => ({ time: 1300 }),
-      calculateEntry: async () => buyResult({ signalId: 'restart-1', isNew: true }),
+      analyzeMarket: async () => buyResult({ signalId: 'restart-1', isNew: true }),
       notify: () => { notifyCalls++; },
     };
     // Simulates a fresh process that reloaded persisted state from a prior run.
@@ -261,7 +261,7 @@ describe('watcher: connection failure handling', () => {
     const deps = {
       isCdpReachable: async () => false,
       peekLatest5mCandle: async () => { throw new Error('must not be called while disconnected'); },
-      calculateEntry: async () => { throw new Error('must not be called while disconnected'); },
+      analyzeMarket: async () => { throw new Error('must not be called while disconnected'); },
       notify: () => {},
     };
     let state = freshState();
@@ -281,7 +281,7 @@ describe('watcher: connection failure handling', () => {
     const deps = {
       isCdpReachable: async () => true,
       peekLatest5mCandle: async () => ({ time: 5000 }),
-      calculateEntry: async () => { calcCalls++; return buyResult(); },
+      analyzeMarket: async () => { calcCalls++; return buyResult(); },
       notify: () => { throw new Error('must not alert on a reconnect rebaseline'); },
     };
     const disconnectedState = freshState({ baseline_established: true, last_processed_5m_time: 1000, last_connection_ok: false });
@@ -414,7 +414,7 @@ describe('watcher: live-data staleness fail-closed (5m freshness verification)',
     const deps = {
       isCdpReachable: async () => true,
       peekLatest5mCandle: async () => { const e = new Error('stale 5m data: forming bar age ~674s'); e.code = 'STALE_5M_DATA'; throw e; },
-      calculateEntry: async () => { calcCalls++; return buyResult(); },
+      analyzeMarket: async () => { calcCalls++; return buyResult(); },
       notify: () => { notifyCalls++; },
     };
     const state = freshState({ baseline_established: true, last_processed_5m_time: 1000 });
@@ -548,6 +548,11 @@ describe('watcher: graceful shutdown', () => {
       offSignal: () => {},
       log: () => {},
       runCycle: async ({ state }) => ({ state }),
+      // Stage 6 Part 16's chart-visualization tick also defaults to a REAL
+      // implementation when not injected -- this test asserts "never
+      // touches TradingView" for the WHOLE tick, so it must be mocked
+      // here too, exactly like runCycle is.
+      visualizeActiveChartContext: async () => ({}),
       cycle: {},
     };
     const promise = startWatcher({ _deps: deps });

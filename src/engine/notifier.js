@@ -42,12 +42,12 @@ function consoleNotify(alert, { log = (msg) => console.log(msg) } = {}) {
 
 // Best-effort Windows toast via powershell.exe + the built-in WinRT toast
 // APIs (no BurntToast/npm dependency). Never throws, never blocks the
-// watcher loop, and is a no-op on non-Windows platforms.
-function windowsDesktopNotify(alert, { spawnImpl = spawn } = {}) {
+// watcher loop, and is a no-op on non-Windows platforms. Shared by both
+// the confirmed-signal and pre-entry-watch desktop notifiers below --
+// only `title`/`body` ever differ between them.
+function spawnWindowsToast(title, body, { spawnImpl = spawn } = {}) {
   if (process.platform !== 'win32') return;
   try {
-    const title = `XAUUSD ${fmtNum(alert.action)} SIGNAL`;
-    const body = `Entry ${fmtNum(alert.entry)} | SL ${fmtNum(alert.sl)} | TP1 ${fmtNum(alert.tp1)} | RR ${fmtNum(alert.rr)}`;
     const escape = (s) => String(s).replace(/'/g, "''");
     const script = [
       "[Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] > $null",
@@ -65,6 +65,12 @@ function windowsDesktopNotify(alert, { spawnImpl = spawn } = {}) {
   } catch { /* best-effort -- desktop notification is never load-bearing */ }
 }
 
+function windowsDesktopNotify(alert, { spawnImpl } = {}) {
+  const title = `XAUUSD ${fmtNum(alert.action)} SIGNAL`;
+  const body = `Entry ${fmtNum(alert.entry)} | SL ${fmtNum(alert.sl)} | TP1 ${fmtNum(alert.tp1)} | RR ${fmtNum(alert.rr)}`;
+  spawnWindowsToast(title, body, { spawnImpl });
+}
+
 /**
  * channels: subset of ['console', 'desktop']. console is required by the
  * spec and should not normally be omitted; desktop is best-effort and
@@ -73,4 +79,47 @@ function windowsDesktopNotify(alert, { spawnImpl = spawn } = {}) {
 export function notify(alert, { channels = ['console', 'desktop'], _deps } = {}) {
   if (channels.includes('console')) consoleNotify(alert, _deps);
   if (channels.includes('desktop')) windowsDesktopNotify(alert, _deps);
+}
+
+// ── Pre-Entry Opportunity "watch" notification (additive, low-noise) ────
+// Mission Section 32: a clearly NON-TRADE notification only on meaningful
+// high-value transitions (the watcher gates this to "just transitioned
+// into ARMED" -- see watcher.js -- never every DEVELOPING candle, never
+// every poll). Deliberately a SEPARATE format/function from
+// formatSignalAlert()/notify() above -- structurally impossible to
+// confuse with a confirmed BUY/SELL alert, since it always carries its
+// own distinct header and an explicit "NOT A CONFIRMED TRADE" footer.
+function directionToAction(direction) {
+  if (direction === 'BULLISH') return 'BUY';
+  if (direction === 'BEARISH') return 'SELL';
+  return 'UNKNOWN';
+}
+
+function humanize(s) {
+  return String(s ?? '').toLowerCase().replace(/_/g, ' ');
+}
+
+/** Exact-conceptual format from the mission (Section 32): "PRE-ENTRY WATCH — SELL / 15m supply reaction / Confirmation pending / NOT A CONFIRMED TRADE". */
+export function formatPreEntryWatchAlert(plan) {
+  const action = directionToAction(plan?.direction);
+  const zoneLine = plan?.zone ? `${fmtNum(plan.source_timeframe)} ${humanize(plan.zone.type)}${plan.interaction_state ? ` ${humanize(plan.interaction_state)}` : ''}`.trim() : null;
+  const stateLine = plan?.opportunity_state ? humanize(plan.opportunity_state) : null;
+  return [`PRE-ENTRY WATCH — ${action}`, zoneLine, stateLine, 'NOT A CONFIRMED TRADE'].filter(Boolean).join('\n');
+}
+
+function consolePreEntryNotify(plan, { log = (msg) => console.log(msg) } = {}) {
+  log(formatPreEntryWatchAlert(plan));
+}
+
+function windowsDesktopPreEntryNotify(plan, { spawnImpl } = {}) {
+  const action = directionToAction(plan?.direction);
+  const title = `XAUUSD PRE-ENTRY WATCH — ${action}`;
+  const body = `${humanize(plan?.opportunity_state)} | NOT A CONFIRMED TRADE`;
+  spawnWindowsToast(title, body, { spawnImpl });
+}
+
+/** Same channel semantics as notify() above, for the SEPARATE pre-entry-watch format. The CALLER (watcher.js) is solely responsible for deciding WHEN this fires (gated to a genuine transition into ARMED) -- this function itself fires unconditionally whenever called, exactly like notify() does. */
+export function notifyPreEntryWatch(plan, { channels = ['console', 'desktop'], _deps } = {}) {
+  if (channels.includes('console')) consolePreEntryNotify(plan, _deps);
+  if (channels.includes('desktop')) windowsDesktopPreEntryNotify(plan, _deps);
 }

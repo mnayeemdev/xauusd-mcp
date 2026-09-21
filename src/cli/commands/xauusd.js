@@ -1,8 +1,9 @@
 import { register } from '../router.js';
 import * as core from '../../core/xauusd.js';
 import { getLaunchReadiness } from '../../core/launch.js';
-import { formatDecision, formatEngineDecision } from '../../core/presentation.js';
+import { formatDecision, formatEngineDecision, formatMarketAnalysis } from '../../core/presentation.js';
 import { calculateEntry } from '../../core/xauusd_calculate.js';
+import { analyzeMarket } from '../../core/xauusd_analyze_market.js';
 import { startWatcher, DEFAULT_POLL_INTERVAL_MS } from '../../engine/watcher.js';
 
 register('xauusd', {
@@ -39,10 +40,10 @@ register('xauusd', {
       handler: () => calculateEntry(),
     }],
     ['check', {
-      description: 'Run the MCP calculation engine and print only the final Claude-readable decision (WAIT or BUY/SELL). This is the "npm run xauusd:check" launch command.',
+      description: 'Run the Full Market Analysis Engine (the SAME protected calculateEntry() decision, plus the Pre-Entry Opportunity Planner) and print the final Claude-readable decision (WAIT or BUY/SELL) -- for WAIT, also the current objective pre-entry opportunity plan when one exists (candidate/provisional geometry only, never confirmed trade geometry). This is the "npm run xauusd:check" launch command -- a manual current-snapshot read only; the watcher discovers/records opportunities on its own and never requires this command to be run.',
       handler: async () => {
-        const result = await calculateEntry();
-        return formatEngineDecision(result);
+        const result = await analyzeMarket({ persistSignals: false });
+        return formatMarketAnalysis(result);
       },
     }],
     ['watch', {

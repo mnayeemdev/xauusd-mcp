@@ -426,17 +426,128 @@ function applyClutterBudget(candidates) {
   return { kept, suppressedByBudget };
 }
 
+// ── Stage 6, Part 7-15: ACTIVE CHART TIMEFRAME (never the decision
+// timeframe) local visualization. Reuses the SAME per-category builders
+// above verbatim (they already take generic {symbol, timeframe, time},
+// never hardcoded to the 15m decision timeframe) -- never a second,
+// divergent implementation of structure/SR/supply-demand/liquidity/
+// pattern/breakout mapping.
+//
+// Deliberately OMITS buildTradeCandidates/buildPrimaryCandidates/
+// buildAlternateCandidates: confirmed trade geometry and anticipation
+// scenarios are inherently DECISION-TIMEFRAME concepts (the protected
+// engine only ever runs on 5m/15m/30m entry timeframes) -- drawing them
+// at an arbitrary active chart timeframe (e.g. the user viewing a 1D
+// chart) would misrepresent geometry that was never computed for that
+// timeframe. This function draws only what genuinely IS computed
+// per-timeframe: TF-local structure/levels/patterns/liquidity/breakout,
+// from `src/core/xauusd_analyze_market.js`'s exported `computeEvidence()`
+// re-run on the active chart TF's OWN bars.
+//
+// ROLE NAMESPACE: every role is prefixed with CHART_LOCAL_ROLE_PREFIX.
+// Required because the drawing registry (src/engine/drawingRegistry.js)
+// keys ownership as (symbol, timeframe, role) -- when the active chart
+// TF happens to equal the decision TF (e.g. user is looking at the same
+// 15m chart the decision itself uses), an UNPREFIXED 'structure_primary'
+// role here would collide with the decision-TF's OWN 'structure_primary'
+// entry in the SAME registry scope, silently overwriting one owner's
+// drawing with the other's. The prefix makes every chart-local role
+// distinct from every decision-TF role, in EVERY case, not just the
+// common (different-timeframe) one.
+export const CHART_LOCAL_ROLE_PREFIX = 'chart_';
+
+function namespaceCandidates(candidates, prefix) {
+  return candidates.map((c) => ({
+    ...c,
+    role: `${prefix}${c.role}`,
+    intent: c.intent ? { ...c.intent, role: `${prefix}${c.role}` } : c.intent,
+  }));
+}
+
 /**
- * Maps already-computed decision/evidence/anticipation (+ optional
- * confluence, accepted for interface stability -- not currently read, see
- * module header) into a validated, budget-limited array of Stage 4
- * drawing intents, ready for src/core/xauusd_visualize.js.
+ * Maps an ALREADY-COMPUTED TF-local evidence object (the active chart
+ * timeframe's own computeEvidence() output -- see
+ * src/core/xauusd_chart_context.js) into the SAME validated,
+ * budget-limited Stage 4 drawing-intent array shape as
+ * buildMarketVisualizationIntents() above. No decision, no anticipation,
+ * no trade geometry -- purely descriptive TF-local market structure for
+ * whatever timeframe the user's chart is actually showing.
+ */
+export function buildChartLocalVisualizationIntents({ evidence = null, symbol, timeframe, time } = {}) {
+  if (!symbol || !timeframe || !Number.isFinite(time)) {
+    return { intents: [], candidates: [], summary: { total_candidates: 0, total_included: 0, total_suppressed: 0, symbol: symbol ?? null, timeframe: timeframe ?? null, reason: 'NO_OBJECTIVE_ANCHOR_TIME_AVAILABLE' } };
+  }
+
+  const rawCandidates = [
+    ...buildStructureCandidates({ evidence, symbol, timeframe, time }),
+    ...buildSRCandidates({ evidence, symbol, timeframe, time }),
+    ...buildSupplyDemandCandidates({ evidence, symbol, timeframe, time }),
+    ...buildBreakoutCandidates({ anticipation: null, evidence, symbol, timeframe, time }),
+    ...buildPatternCandidates({ evidence, symbol, timeframe }),
+    ...buildLiquidityCandidates({ evidence, symbol, timeframe, time }),
+  ];
+
+  const candidates = namespaceCandidates(rawCandidates, CHART_LOCAL_ROLE_PREFIX);
+  const merged = mergeCoincidentLevels(candidates);
+  const { kept, suppressedByBudget } = applyClutterBudget(merged);
+  for (const c of suppressedByBudget) c.reason_excluded_by_budget = true;
+
+  return {
+    intents: kept.map((c) => c.intent),
+    candidates: merged,
+    summary: { total_candidates: merged.length, total_included: kept.length, total_suppressed: merged.length - kept.length, symbol, timeframe },
+  };
+}
+
+// ── Pre-Entry Opportunity Planner (Section 33-34): candidate/provisional
+// geometry ONLY, at tier 1 alongside the primary scenario above (this IS
+// that same scenario's own enrichment -- see src/engine/opportunityPlanner.js).
+// Deliberately only 2 roles (never candidate_tp1/tp2, which usually
+// coincide with the SAME nearest-S/R/structural-objective levels
+// buildSRCandidates()/buildStructureCandidates() already draw -- letting
+// mergeCoincidentLevels() combine them, rather than a third/fourth
+// separate line, keeps this from turning the chart into a diagnostic
+// dashboard). The candidate zone is rendered as a SINGLE horizontal_line
+// at its near edge (the side price reaches first) with BOTH bounds in
+// the label text -- the exact same "no fabricated time span for an
+// area" precedent buildSupplyDemandCandidates() above already
+// established. Every label is explicitly prefixed CANDIDATE/PROVISIONAL
+// -- structurally distinct from `trade_entry`/`trade_sl`'s bare
+// "ENTRY"/"SL" text, never confusable with confirmed trade geometry.
+function buildPlanCandidates({ plan, symbol, timeframe, time }) {
+  const out = [];
+  if (!plan || plan.status !== 'PLAN') {
+    const reason = plan?.status === 'SUPERSEDED_BY_CONFIRMED_TRADE' ? 'DECISION_CONFIRMED_NO_PRE_ENTRY_SCENARIO' : 'NO_OBJECTIVE_PLAN';
+    skip(out, { role: 'plan_candidate_zone', category: 'primary', tier: 1, reason });
+    skip(out, { role: 'plan_provisional_invalidation', category: 'primary', tier: 1, reason });
+    return out;
+  }
+
+  const zone = plan.candidate_entry_zone;
+  if (zone && Number.isFinite(zone.lower) && Number.isFinite(zone.upper)) {
+    const nearEdge = plan.direction === 'BEARISH' ? zone.lower : zone.upper;
+    const label = zone.lower === zone.upper ? `CANDIDATE ENTRY ZONE ${round2(nearEdge)}` : `CANDIDATE ENTRY ZONE ${round2(zone.lower)} - ${round2(zone.upper)}`;
+    addCandidate(out, { role: 'plan_candidate_zone', category: 'primary', tier: 1, intent: buildHLine({ role: 'plan_candidate_zone', symbol, timeframe, time, price: nearEdge, text: label, overrides: styleFor('primary', plan.direction), source: 'opportunityPlanner.js candidate_entry_zone' }) });
+  } else skip(out, { role: 'plan_candidate_zone', category: 'primary', tier: 1, reason: 'NO_OBJECTIVE_ZONE' });
+
+  if (plan.provisional_invalidation && Number.isFinite(plan.provisional_invalidation.level)) {
+    addCandidate(out, { role: 'plan_provisional_invalidation', category: 'primary', tier: 1, intent: buildHLine({ role: 'plan_provisional_invalidation', symbol, timeframe, time, price: plan.provisional_invalidation.level, text: 'PROVISIONAL INVALIDATION (not SL)', overrides: styleFor('primary_invalidation'), source: 'opportunityPlanner.js provisional_invalidation' }) });
+  } else skip(out, { role: 'plan_provisional_invalidation', category: 'primary', tier: 1, reason: 'NO_OBJECTIVE_INVALIDATION' });
+
+  return out;
+}
+
+/**
+ * Maps already-computed decision/evidence/anticipation/pre_entry_plan
+ * (+ optional confluence, accepted for interface stability -- not
+ * currently read, see module header) into a validated, budget-limited
+ * array of Stage 4 drawing intents, ready for src/core/xauusd_visualize.js.
  *
  * Returns { intents, candidates, summary } -- `candidates` is the full
  * audit trail (every role considered, included or not, and why), useful
  * for a dry-run report; `intents` is the pure Stage 4 schema array.
  */
-export function buildMarketVisualizationIntents({ decision, evidence = null, anticipation = null, confluence = null } = {}) {
+export function buildMarketVisualizationIntents({ decision, evidence = null, anticipation = null, confluence = null, plan = null } = {}) {
   void confluence; // accepted for interface stability -- see module header
   if (!decision) return { intents: [], candidates: [], summary: { total_candidates: 0, total_included: 0, total_suppressed: 0, reason: 'NO_DECISION' } };
 
@@ -451,6 +562,7 @@ export function buildMarketVisualizationIntents({ decision, evidence = null, ant
   const candidates = [
     ...buildTradeCandidates({ decision, symbol, timeframe, time }),
     ...buildPrimaryCandidates({ decision, anticipation, evidence, symbol, timeframe, time }),
+    ...buildPlanCandidates({ plan, symbol, timeframe, time }),
     ...buildStructureCandidates({ evidence, symbol, timeframe, time }),
     ...buildSRCandidates({ evidence, symbol, timeframe, time }),
     ...buildSupplyDemandCandidates({ evidence, symbol, timeframe, time }),
@@ -474,6 +586,7 @@ export function buildMarketVisualizationIntents({ decision, evidence = null, ant
       symbol, timeframe,
       decision_action: decision.action,
       anticipation_state: anticipation?.state ?? null,
+      opportunity_state: plan?.opportunity_state ?? null,
     },
   };
 }
