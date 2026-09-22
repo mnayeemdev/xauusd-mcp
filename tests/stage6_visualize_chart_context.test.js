@@ -106,7 +106,7 @@ describe('xauusd_visualize_chart_context: non-OK context -> zero drawing calls',
 });
 
 describe('xauusd_visualize_chart_context: a valid context reconciles chart_-prefixed intents', () => {
-  it('draws only chart_-prefixed roles, scoped to the active chart timeframe label', async () => {
+  it('draws only chart_-prefixed roles, scoped to the active chart timeframe label (clean chart presentation: chart-local analytics are actually drawn)', async () => {
     const deps = memoryDeps({ resolution: '240', bars: SWING_BARS });
     const result = await visualizeActiveChartContext({ _deps: deps._deps });
     assert.equal(result.context.status, 'OK');
@@ -116,6 +116,8 @@ describe('xauusd_visualize_chart_context: a valid context reconciles chart_-pref
       assert.equal(i.timeframe, '4H');
     }
     assert.equal(result.reconciliation.dry_run, false);
+    // mapping.intents now actually reaches TradingView -- the earlier
+    // hardcoded intents:[] override has been removed.
     assert.ok(deps.drawCalls.length > 0);
   });
 

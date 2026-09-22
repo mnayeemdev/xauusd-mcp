@@ -14,7 +14,7 @@
  */
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildChartLocalVisualizationIntents, CHART_LOCAL_ROLE_PREFIX } from '../src/engine/marketVisualization.js';
+import { buildChartLocalVisualizationIntents, CHART_LOCAL_ROLE_PREFIX, CLUTTER_BUDGET } from '../src/engine/marketVisualization.js';
 import { validateDrawingIntent } from '../src/engine/visualization.js';
 
 const TF = '1H';
@@ -108,6 +108,10 @@ describe('marketVisualization: buildChartLocalVisualizationIntents() -- Stage 6 
       classicalPatterns: [{ pattern_id: 'p1', pattern_type: 'DOUBLE_TOP', completion_state: 'CONFIRMED', end_time: NOW, breakout_level: 2040, pivot_points: [] }],
     });
     const { intents } = buildChartLocalVisualizationIntents({ evidence: richEvidence, symbol: 'OANDA:XAUUSD', timeframe: TF, time: NOW });
-    assert.ok(intents.length <= 12);
+    // CLUTTER_BUDGET.MAX_TOTAL bounds distinct PIECES OF INFORMATION (a
+    // line/rectangle + its own decoupled __label companion count as ONE),
+    // not the raw intent count -- see applyClutterBudget()'s own doc comment.
+    const groupKeys = new Set(intents.map((i) => i.role.replace(/__label$/, '')));
+    assert.ok(groupKeys.size <= CLUTTER_BUDGET.MAX_TOTAL);
   });
 });

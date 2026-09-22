@@ -37,7 +37,7 @@ function baseAnalyzeMarketDeps({ bars, getOhlcvCalls = null } = {}) {
   };
 }
 
-function memoryDrawingDeps() {
+function memoryDrawingDeps({ signals = [] } = {}) {
   let registry = { schema_version: 1, entries: {} };
   const drawCalls = [];
   const removeCalls = [];
@@ -50,6 +50,9 @@ function memoryDrawingDeps() {
       drawShape: async () => { const id = `e_${nextId++}`; drawCalls.push(id); return { success: true, entity_id: id }; },
       removeOne: async ({ entity_id }) => { removeCalls.push(entity_id); return { success: true, entity_id, removed: true }; },
       now: () => new Date('2025-01-01T00:00:00.000Z'),
+      // Hermetic by default -- never touches the REAL validation/mcp_engine_signals.json.
+      loadSignalStore: () => ({ signals }),
+      signalStorePath: 'unused-in-test',
     },
     getRegistry: () => registry, drawCalls, removeCalls,
   };
@@ -93,7 +96,12 @@ describe('xauusd_visualize_market: visualization failure never alters the author
   it('a drawShape failure changes nothing about analysis.action/entry/sl/tp1/tp2', async () => {
     const decision = { status: 'OK', action: 'BUY', reason: null, symbol: 'OANDA:XAUUSD', setup: 'TC', entry: 2010, sl: 2005, tp1: 2015, tp2: 2020, rr: 2.0, quality: 78, timeframes: { '15m': { last_confirmed_bar_time: 1700000000 } }, market_data_times: { '15m': 1700000000 }, diagnostics: { source_timeframe: '15m' }, evidence: null, confluence: null, anticipation: { state: 'CONFIRMED', direction: 'BULLISH', developing_strategy_family: 'trend_continuation', timeframe: '15m', authoritative_wait_reason: null, waiting_for: [], invalidated_if: [], improving_or_deteriorating: 'UNKNOWN_WITHOUT_HISTORY', primary_scenario: null, alternate_scenario: null, no_trade_neutral: null } };
     const before = JSON.stringify(decision);
-    const drawingDeps = memoryDrawingDeps();
+    // Confirmed trade display is driven by the OPEN signal-store record --
+    // see marketVisualization.js's buildSignalOnlyIntents() -- so this
+    // fixture supplies one matching the decision's own geometry, exactly as
+    // calculateEntry() would have already persisted synchronously.
+    const openSignal = { signal_id: 'sig1', symbol: 'OANDA:XAUUSD', timeframe: '15m', model: 'TC', side: 'BUY', origin_bar: 1700000000, signal_bar_time: 1700000000, entry: 2010, stop_loss: 2005, tp1: 2015, tp2: 2020, rr: 2.0, quality: 78, status: 'OPEN', created_at: '2025-01-01T00:00:00.000Z', resolution_bar_time: null, realized_r: null };
+    const drawingDeps = memoryDrawingDeps({ signals: [openSignal] });
     drawingDeps._deps.drawShape = async () => { throw new Error('CDP timeout'); };
     const result = await visualizeMarketAnalysis({ analysis: decision, dryRun: false, _deps: drawingDeps._deps });
     assert.equal(JSON.stringify(decision), before); // decision object itself untouched
@@ -106,16 +114,21 @@ describe('xauusd_visualize_market: visualization failure never alters the author
 
 describe('xauusd_visualize_market: repeated identical visualization produces zero churn', () => {
   it('the second run of the SAME analysis is entirely KEEP -- no delete/recreate', async () => {
-    const bars = makeTrendBars(510, { drift: 0.5 });
-    const analysis = await analyzeMarket({ _deps: baseAnalyzeMarketDeps({ bars }) });
-    const drawingDeps = memoryDrawingDeps();
+    // Signals-only chart mode (presentation): a confirmed BUY deterministically
+    // produces trade_entry/trade_sl/trade_tp1/trade_tp2/trade_status -- exactly
+    // 5 signal-only intents -- regardless of the underlying bars fixture, so
+    // this uses an explicit synthetic decision rather than relying on an
+    // organic trend fixture to happen to produce a non-empty signal set.
+    const decision = { status: 'OK', action: 'BUY', reason: null, symbol: 'OANDA:XAUUSD', setup: 'TC', entry: 2010, sl: 2005, tp1: 2015, tp2: 2020, rr: 2.0, quality: 78, timeframes: { '15m': { last_confirmed_bar_time: 1700000000 } }, market_data_times: { '15m': 1700000000 }, diagnostics: { source_timeframe: '15m' }, evidence: null, confluence: null, anticipation: null };
+    const openSignal = { signal_id: 'sig1', symbol: 'OANDA:XAUUSD', timeframe: '15m', model: 'TC', side: 'BUY', origin_bar: 1700000000, signal_bar_time: 1700000000, entry: 2010, stop_loss: 2005, tp1: 2015, tp2: 2020, rr: 2.0, quality: 78, status: 'OPEN', created_at: '2025-01-01T00:00:00.000Z', resolution_bar_time: null, realized_r: null };
+    const drawingDeps = memoryDrawingDeps({ signals: [openSignal] });
 
-    const first = await visualizeMarketAnalysis({ analysis, dryRun: false, _deps: drawingDeps._deps });
+    const first = await visualizeMarketAnalysis({ analysis: decision, dryRun: false, _deps: drawingDeps._deps });
     assert.equal(first.visualization.failed, 0);
     const createdCount = first.visualization.created;
-    assert.ok(createdCount > 0);
+    assert.equal(createdCount, 5); // trade_entry, trade_sl, trade_tp1, trade_tp2, trade_card
 
-    const second = await visualizeMarketAnalysis({ analysis, dryRun: false, _deps: drawingDeps._deps });
+    const second = await visualizeMarketAnalysis({ analysis: decision, dryRun: false, _deps: drawingDeps._deps });
     assert.equal(second.visualization.created, 0);
     assert.equal(second.visualization.removed_registered, 0);
     assert.equal(second.visualization.kept, createdCount);
@@ -123,12 +136,34 @@ describe('xauusd_visualize_market: repeated identical visualization produces zer
 });
 
 describe('xauusd_visualize_market: active_roles and market_visual_summary are correct', () => {
-  it('active_roles lists exactly the roles that ended up KEPT or CREATED', async () => {
+  it('a WAIT with a genuine primary opportunity shows the concise status_box marker ALONGSIDE useful analytics (clean chart presentation)', async () => {
+    const decision = { status: 'OK', action: 'WAIT', reason: 'NO_ELIGIBLE_STRATEGY', symbol: 'OANDA:XAUUSD', setup: null, entry: null, sl: null, tp1: null, tp2: null, rr: null, quality: null, timeframes: { '15m': { last_confirmed_bar_time: 1700000000 } }, market_data_times: { '15m': 1700000000 }, diagnostics: { source_timeframe: '15m' }, evidence: { regime: 'BULL_TREND', structure: { state: 'BULLISH', lastEvent: null, lastSwingHigh: { price: 2050, label: 'HH' }, lastSwingLow: { price: 2000, label: 'HL' }, rangeHigh: 2060, rangeLow: 1980 }, correction: { state: 'NONE' }, eligibility: { eligible: ['trend_continuation'], blocked_reason: null }, candlestickPatterns: [], classicalPatterns: [], breakoutState: { state: 'NO_BREAKOUT', evidence: {} }, liquidityContext: { equalHighs: [], equalLows: [], sweepReclaim: { swept: false } }, levelsContext: { levels: [], nearestResistance: null, nearestSupport: null, supplyDemandZones: [] }, volatilityContext: { atrValue: 5, state: 'NORMAL' }, sessionContext: { current: { session: 'LONDON', last_close: 2020 } }, dailyWeeklyContext: {} }, confluence: null, anticipation: { state: 'CONFIRMATION_PENDING', direction: 'BULLISH', developing_strategy_family: 'trend_continuation', timeframe: '15m', authoritative_wait_reason: 'NO_ELIGIBLE_STRATEGY', waiting_for: [], invalidated_if: [], improving_or_deteriorating: 'UNKNOWN_WITHOUT_HISTORY', primary_scenario: { direction: 'BULLISH', strategy_family: 'trend_continuation', state: 'CONFIRMATION_PENDING', timeframe: '15m', location: { type: 'breakout_level', price: 2025 }, trigger_requirements: [], confirmation_requirements: [], invalidation: { level: 1995, condition: 'x' }, supporting_evidence: [], opposing_evidence: [], distance_to_trigger: null, target_room: null, potential_rr_feasibility: 'UNKNOWN', late_overextension_risk: 'NONE' }, alternate_scenario: null, no_trade_neutral: null } };
+    const drawingDeps = memoryDrawingDeps();
+    const result = await visualizeMarketAnalysis({ analysis: decision, dryRun: false, _deps: drawingDeps._deps });
+    // The chart shows the one concise marker PLUS the kept useful analytics
+    // (never analytical/diagnostic clutter beyond what's already concise).
+    assert.ok(result.visualization.active_roles.includes('status_box'));
+    assert.ok(result.visualization.active_roles.includes('structure_primary__label'));
+    assert.ok(!result.visualization.active_roles.includes('primary_trigger')); // pre-entry lines are collapsed into the marker
+    assert.ok(!result.visualization.active_roles.includes('plan_candidate_zone'));
+    // The full analysis is still fully computed/available internally (audit trail unaffected).
+    assert.equal(result.market_visual_summary.anticipation_state, 'CONFIRMATION_PENDING');
+    assert.equal(result.market_visual_summary.confirmed_trade, null);
+    const structureCandidate = result.mapping.candidates.find((c) => c.role === 'structure_primary');
+    assert.equal(structureCandidate.included, true);
+    const structureLabelCandidate = result.mapping.candidates.find((c) => c.role === 'structure_primary__label');
+    assert.equal(structureLabelCandidate.intent.text, 'STRUCTURE HL');
+  });
+
+  it('an ordinary WAIT with no primary opportunity shows useful analytics but no fake signal', async () => {
     const decision = { status: 'OK', action: 'WAIT', reason: 'NO_ELIGIBLE_STRATEGY', symbol: 'OANDA:XAUUSD', setup: null, entry: null, sl: null, tp1: null, tp2: null, rr: null, quality: null, timeframes: { '15m': { last_confirmed_bar_time: 1700000000 } }, market_data_times: { '15m': 1700000000 }, diagnostics: { source_timeframe: '15m' }, evidence: { regime: 'BULL_TREND', structure: { state: 'BULLISH', lastEvent: null, lastSwingHigh: { price: 2050, label: 'HH' }, lastSwingLow: { price: 2000, label: 'HL' }, rangeHigh: 2060, rangeLow: 1980 }, correction: { state: 'NONE' }, eligibility: { eligible: ['trend_continuation'], blocked_reason: null }, candlestickPatterns: [], classicalPatterns: [], breakoutState: { state: 'NO_BREAKOUT', evidence: {} }, liquidityContext: { equalHighs: [], equalLows: [], sweepReclaim: { swept: false } }, levelsContext: { levels: [], nearestResistance: null, nearestSupport: null, supplyDemandZones: [] }, volatilityContext: { atrValue: 5, state: 'NORMAL' }, sessionContext: { current: { session: 'LONDON', last_close: 2020 } }, dailyWeeklyContext: {} }, confluence: null, anticipation: { state: 'DEVELOPING', direction: 'BULLISH', developing_strategy_family: null, timeframe: '15m', authoritative_wait_reason: 'NO_ELIGIBLE_STRATEGY', waiting_for: [], invalidated_if: [], improving_or_deteriorating: 'UNKNOWN_WITHOUT_HISTORY', primary_scenario: null, alternate_scenario: null, no_trade_neutral: { mandatory_gates: {}, regime: 'BULL_TREND', why: 'x' } } };
     const drawingDeps = memoryDrawingDeps();
     const result = await visualizeMarketAnalysis({ analysis: decision, dryRun: false, _deps: drawingDeps._deps });
-    assert.ok(result.visualization.active_roles.includes('structure_primary'));
-    assert.equal(result.market_visual_summary.anticipation_state, 'DEVELOPING');
-    assert.equal(result.market_visual_summary.confirmed_trade, null);
+    // Useful analytics (structure, in this fixture) remain -- and the status
+    // box shows "WAIT / No Opportunity" rather than being silently absent.
+    assert.ok(result.visualization.active_roles.includes('structure_primary__label'));
+    assert.ok(result.visualization.active_roles.includes('status_box'));
+    assert.ok(!result.visualization.active_roles.includes('trade_entry'));
+    assert.ok(!result.visualization.active_roles.includes('trade_card'));
   });
 });

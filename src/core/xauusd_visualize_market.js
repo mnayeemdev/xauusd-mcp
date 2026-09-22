@@ -32,8 +32,9 @@
  * that a broken drawing path leaves the authoritative decision untouched.
  */
 import { analyzeMarket } from './xauusd_analyze_market.js';
-import { buildMarketVisualizationIntents, CHART_LOCAL_ROLE_PREFIX } from '../engine/marketVisualization.js';
+import { buildMarketVisualizationIntents, buildPresentationIntents, CHART_LOCAL_ROLE_PREFIX } from '../engine/marketVisualization.js';
 import { reconcileVisualization } from './xauusd_visualize.js';
+import { loadStore as loadSignalStore, DEFAULT_STORE_PATH as DEFAULT_SIGNAL_STORE_PATH } from '../engine/signalStore.js';
 
 // This orchestrator's own ownership domain (see xauusd_visualize.js's
 // `ownsRole` doc comment): every role this module ever generates is a
@@ -45,6 +46,28 @@ import { reconcileVisualization } from './xauusd_visualize.js';
 const ownsDecisionRole = (role) => typeof role === 'string' && !role.startsWith(CHART_LOCAL_ROLE_PREFIX);
 
 const PLAN_ACTION_KEYS = ['KEEP', 'CREATE', 'REMOVE_REGISTERED', 'DROP_STALE_REGISTRY', 'SKIP_INVALID'];
+
+/**
+ * Read-only signal-store access (OPEN-trade persistence + historical
+ * markers, mission items 4/5). This module NEVER writes to the store --
+ * registration (registerOrGetSignal) and resolution (resolveOpenSignals)
+ * remain exclusively calculateEntry()'s own job (src/core/xauusd_calculate.js);
+ * visualization only ever reads the SAME already-persisted, already-
+ * protected-decision-derived records it produces.
+ */
+function resolveSignalStoreDeps(_deps) {
+  return {
+    signalStorePath: _deps?.signalStorePath ?? DEFAULT_SIGNAL_STORE_PATH,
+    loadSignalStore: _deps?.loadSignalStore ?? loadSignalStore,
+  };
+}
+
+/** The single most-recently-confirmed OPEN record for this exact (symbol, timeframe), or null. Picking the most recent is a deliberate, documented simplification for the rare case of more than one simultaneously-open record -- never an attempt to display more than one confirmed-trade card at once. */
+function findMostRecentOpenSignal(signals, { symbol, timeframe }) {
+  const open = signals.filter((r) => r.symbol === symbol && r.timeframe === timeframe && r.status === 'OPEN');
+  if (!open.length) return null;
+  return open.reduce((best, r) => (!best || r.signal_bar_time > best.signal_bar_time ? r : best), null);
+}
 
 function summarizeReconciliation(reconciliation, desiredCount) {
   const counts = Object.fromEntries(PLAN_ACTION_KEYS.map((k) => [k, 0]));
@@ -106,18 +129,50 @@ function buildMarketVisualSummary({ analysis, candidates }) {
 export async function visualizeMarketAnalysis({ analysis, dryRun = false, _deps } = {}) {
   if (!analysis) throw new Error('visualizeMarketAnalysis requires an already-computed `analysis` (an analyzeMarket() result)');
 
-  const { intents, candidates, summary } = buildMarketVisualizationIntents({
+  const { candidates, summary } = buildMarketVisualizationIntents({
     decision: analysis, evidence: analysis.evidence ?? null, anticipation: analysis.anticipation ?? null, confluence: analysis.confluence ?? null,
     plan: analysis.pre_entry_plan ?? null,
+    // Zone-Based Market Map upgrade: the SAME confirmed 15m bars Stage 7's
+    // opportunityOutcomeResolver.js already reuses (analyzeMarket()'s own
+    // additive `primary_confirmed_bars` field) -- never a second fetch --
+    // lets Supply/Demand zones resolve a REAL bar-time span for a
+    // translucent rectangle instead of a single-edge line. Presentation
+    // only; never read by any decision/measurement code.
+    primaryBars: analysis.primary_confirmed_bars ?? null,
+  });
+
+  // CLEAN CHART PRESENTATION (presentation-only): the full analytical
+  // intent set above is still computed in full -- unchanged -- and its
+  // audit trail is still returned below via `mapping`. What actually
+  // reaches TradingView is this separately-assembled set: useful market
+  // context (structure/S-R/supply-demand/liquidity/breakout/patterns/
+  // range, each own merge+budget pool) plus the current signal/status box
+  // or confirmed trade card, plus concise historical markers -- see
+  // buildPresentationIntents()'s own doc comment. This is what keeps the
+  // live chart useful AND clean without touching a single analytical
+  // computation.
+  //
+  // Read-only signal-store access (never writes -- see resolveSignalStoreDeps()'s
+  // own doc comment): finds the current OPEN record (persistence fix, mission
+  // item 5) and the full signal list for historical markers (mission item 4).
+  const storeDeps = resolveSignalStoreDeps(_deps);
+  const signalStore = storeDeps.loadSignalStore(storeDeps.signalStorePath);
+  const openSignal = findMostRecentOpenSignal(signalStore.signals ?? [], { symbol: summary.symbol, timeframe: summary.timeframe });
+
+  const presentationIntents = buildPresentationIntents({
+    decision: analysis, evidence: analysis.evidence ?? null, anticipation: analysis.anticipation ?? null,
+    candidates, primaryBars: analysis.primary_confirmed_bars ?? null,
+    openSignal, historicalSignals: signalStore.signals ?? [],
+    symbol: summary.symbol, timeframe: summary.timeframe,
   });
 
   // A visualization failure (below, inside reconcileVisualization) is
   // reported in `reconciliation` only -- `analysis` itself, already fully
   // computed before this line, is never touched or re-derived here.
-  const reconciliation = await reconcileVisualization({ intents, symbol: summary.symbol, timeframe: summary.timeframe, dryRun, ownsRole: ownsDecisionRole, _deps });
+  const reconciliation = await reconcileVisualization({ intents: presentationIntents, symbol: summary.symbol, timeframe: summary.timeframe, dryRun, ownsRole: ownsDecisionRole, _deps });
 
   return {
-    visualization: summarizeReconciliation(reconciliation, summary.total_included),
+    visualization: summarizeReconciliation(reconciliation, presentationIntents.length),
     market_visual_summary: buildMarketVisualSummary({ analysis, candidates }),
     mapping: { candidates, summary },
   };

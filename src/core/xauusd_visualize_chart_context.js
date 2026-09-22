@@ -129,6 +129,17 @@ export async function visualizeActiveChartContext({ dryRun = false, _deps } = {}
     evidence: context.evidence, symbol: context.symbol, timeframe: context.timeframe_label, time: context.last_confirmed_bar_time,
   });
 
+  // CLEAN CHART PRESENTATION (parity with the decision-TF path): `mapping`
+  // above computes the active-chart-TF-local analytical set -- structure/
+  // S-R/supply-demand/liquidity/breakout/patterns/range -- through the SAME
+  // concise-label pipeline (mergeCoincidentLevels/splitLineLabels/
+  // applyClutterBudget/applyLabelLanes, reusing the identical short-label
+  // category builders buildDecisionAnalyticsIntents() uses for the decision
+  // TF) as its own independent merge/budget pool, namespaced under
+  // CHART_LOCAL_ROLE_PREFIX so it can never collide with a decision-TF role.
+  // mapping.intents IS what reaches TradingView -- this was previously
+  // hardcoded to [] during an earlier presentation-cleanup pass and never
+  // restored; that override is now removed.
   const reconciliation = await reconcileVisualization({
     // ownsRole (see xauusd_visualize.js's own doc comment): this
     // orchestrator's stale-cleanup pass must ONLY ever consider

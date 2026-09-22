@@ -39,18 +39,29 @@ function planFixture(overrides = {}) {
 }
 
 function findIntent(intents, role) { return intents.find((i) => i.role === role); }
+/** plan_candidate_zone/plan_provisional_invalidation are `horizontal_line`s in the no-primaryBars (fallback) path used throughout this file, so their label is decoupled into a separate `<role>__label` text companion -- see marketVisualization.js's splitLineLabels(). */
+function findLabelText(intents, role) { return findIntent(intents, `${role}__label`)?.text ?? null; }
 
 describe('marketVisualization: Pre-Entry Opportunity Planner candidates', () => {
-  it('draws CANDIDATE ENTRY ZONE and PROVISIONAL INVALIDATION for an objective plan', () => {
-    const { intents } = buildMarketVisualizationIntents({ decision: baseDecision(), plan: planFixture() });
+  it('draws a short SELL WATCH candidate zone and INVALIDATION label for an objective plan, with full detail preserved as diagnostic', () => {
+    const { intents, candidates } = buildMarketVisualizationIntents({ decision: baseDecision(), plan: planFixture() });
     const zoneIntent = findIntent(intents, 'plan_candidate_zone');
+    const zoneLabel = findLabelText(intents, 'plan_candidate_zone');
     const invIntent = findIntent(intents, 'plan_provisional_invalidation');
+    const invLabel = findLabelText(intents, 'plan_provisional_invalidation');
     assert.ok(zoneIntent);
-    assert.ok(zoneIntent.text.includes('CANDIDATE ENTRY ZONE'));
-    assert.ok(zoneIntent.text.includes('4378'));
-    assert.ok(zoneIntent.text.includes('4386'));
+    // Short chart label: direction + lifecycle word only -- numeric zone
+    // bounds are deliberately omitted (the line's own price already shows
+    // them) and DEVELOPING is the "nothing more specific yet" bare state.
+    assert.equal(zoneLabel, 'SELL WATCH');
+    const zoneCandidate = candidates.find((c) => c.role === 'plan_candidate_zone');
+    assert.ok(zoneCandidate.diagnostic.includes('CANDIDATE ENTRY'));
+    assert.ok(zoneCandidate.diagnostic.includes('4378'));
+    assert.ok(zoneCandidate.diagnostic.includes('4386'));
     assert.ok(invIntent);
-    assert.equal(invIntent.text, 'PROVISIONAL INVALIDATION (not SL)');
+    assert.equal(invLabel, 'INVALIDATION');
+    const invCandidate = candidates.find((c) => c.role === 'plan_provisional_invalidation');
+    assert.equal(invCandidate.diagnostic, 'PROVISIONAL INVALIDATION (not SL)');
     assert.equal(invIntent.point.price, 4386);
   });
 
@@ -84,10 +95,11 @@ describe('marketVisualization: Pre-Entry Opportunity Planner candidates', () => 
     assert.equal(findIntent(intents, 'plan_candidate_zone'), undefined);
   });
 
-  it('a zero-width (point-precision) zone never fabricates a range in the label', () => {
-    const { intents } = buildMarketVisualizationIntents({ decision: baseDecision(), plan: planFixture({ candidate_entry_zone: { lower: 4370, upper: 4370 } }) });
-    const zoneIntent = findIntent(intents, 'plan_candidate_zone');
-    assert.equal(zoneIntent.text, 'CANDIDATE ENTRY ZONE 4370');
+  it('a zero-width (point-precision) zone never fabricates a range, on-chart or in the diagnostic', () => {
+    const { intents, candidates } = buildMarketVisualizationIntents({ decision: baseDecision(), plan: planFixture({ candidate_entry_zone: { lower: 4370, upper: 4370 } }) });
+    assert.equal(findLabelText(intents, 'plan_candidate_zone'), 'SELL WATCH');
+    const diagnostic = candidates.find((c) => c.role === 'plan_candidate_zone').diagnostic;
+    assert.equal(diagnostic, 'CANDIDATE ENTRY — DEVELOPING 4370');
   });
 
   it('BULLISH direction anchors the zone line at the near (upper) edge', () => {
@@ -97,8 +109,11 @@ describe('marketVisualization: Pre-Entry Opportunity Planner candidates', () => 
   });
 
   it('the total kept intent count never exceeds the clutter budget', () => {
-    const { intents } = buildMarketVisualizationIntents({ decision: baseDecision(), plan: planFixture() });
-    assert.ok(intents.length <= CLUTTER_BUDGET.MAX_TOTAL);
+    const { intents, summary } = buildMarketVisualizationIntents({ decision: baseDecision(), plan: planFixture() });
+    // MAX_TOTAL bounds distinct information groups (a line + its own
+    // decoupled label counts as one) -- see engine_market_visualization.test.js.
+    assert.ok(summary.total_included <= CLUTTER_BUDGET.MAX_TOTAL);
+    assert.ok(intents.length <= CLUTTER_BUDGET.MAX_TOTAL * 2);
   });
 
   it('every emitted intent (including the new plan roles) is schema-valid', () => {

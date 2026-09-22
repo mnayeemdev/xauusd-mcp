@@ -11,6 +11,14 @@
  */
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
+
+// Same path xauusd_calculate.js's own SIGNAL_STORE_PATH points at (that
+// file keeps its own local constant unchanged -- this is purely an
+// additive export for OTHER, read-only consumers, e.g. a historical/open-
+// trade visualization reader, so they never have to guess or duplicate
+// this literal path independently).
+export const DEFAULT_STORE_PATH = fileURLToPath(new URL('../../validation/mcp_engine_signals.json', import.meta.url));
 
 export function computeSignalId({ symbol, timeframe, model, side, originBar, signalBarTime }) {
   const canonical = `${symbol}|${timeframe}|${model}|${side}|${originBar}|${signalBarTime}`;
@@ -55,6 +63,12 @@ export function registerOrGetSignal(store, candidate) {
     created_at: new Date().toISOString(),
     resolution_bar_time: null,
     realized_r: null,
+    // TP1 lifecycle tracking (additive, non-terminal -- see resolveOpenSignals()
+    // below). tp1_hit is one-way (false -> true, never reset) and never
+    // affects PASS/FAIL; it exists purely so the trader-facing card can show
+    // "TP1 HIT -- TP2 Pending" instead of implying nothing has happened yet.
+    tp1_hit: false,
+    tp1_hit_bar_time: null,
   };
   store.signals.push(record);
   return { record, isNew: true };
@@ -67,11 +81,44 @@ const IMMUTABLE_FIELDS = ['signal_id', 'symbol', 'timeframe', 'model', 'side', '
  * each record's signal_bar_time. Same-future-candle SL+TP2 touch is
  * conservative FAIL. TP1 alone is never terminal (TP2 governs). Terminal
  * records (PASS/FAIL) are never revisited or rewritten.
+ *
+ * TP1 lifecycle tracking (additive): on each future bar, also checks
+ * whether TP1 has been objectively reached and -- the FIRST time this is
+ * true -- sets tp1_hit/tp1_hit_bar_time once, permanently (never reset,
+ * never re-evaluated once true; guarded by `!record.tp1_hit`). This never
+ * changes what makes a record terminal (still SL -> FAIL / TP2 -> PASS
+ * only) and never alters realized_r.
+ *
+ * Same-bar TP1 handling, deterministic, no invented intrabar ordering:
+ *   - TP1 and TP2 both crossed on the same bar: safe to record tp1_hit,
+ *     because every persisted signal has |tp2-entry| > |tp1-entry| by
+ *     construction (tp2's reward/risk must clear minRR=1.7 to ever reach
+ *     this store at all, which is already > tp1RMultiple=1.0 -- see
+ *     risk.js) -- reaching TP2's price extreme geometrically REQUIRES
+ *     having already passed TP1's nearer level in the same direction, a
+ *     pure distance fact that needs no knowledge of WHEN within the bar
+ *     either happened.
+ *   - TP1 and SL both crossed on the same bar (TP2 NOT also crossed):
+ *     genuinely ambiguous (TP1 and SL are on OPPOSITE sides of entry, so
+ *     which one price reached first cannot be determined from OHLC alone)
+ *     -- tp1_hit is deliberately NOT recorded for that bar. The existing
+ *     conservative FAIL still applies exactly as before, unchanged.
+ *
+ * Backward compatible: a pre-existing record missing tp1_hit/
+ * tp1_hit_bar_time (persisted before this field existed) is normalized to
+ * the safe default (false/null) in place, exactly once, before any check
+ * -- never inferred/backfilled from anything but this SAME forward-only,
+ * already-confirmed-bars scan every other field in this store already
+ * relies on (no hindsight, no future leakage: identical evidence standard
+ * as the existing PASS/FAIL resolution).
  */
 export function resolveOpenSignals(store, { timeframe, confirmedBars }) {
   const updated = [];
   for (const record of store.signals) {
     if (record.timeframe !== timeframe || record.status !== 'OPEN') continue;
+    if (record.tp1_hit === undefined) record.tp1_hit = false;
+    if (record.tp1_hit_bar_time === undefined) record.tp1_hit_bar_time = null;
+
     const futureBars = confirmedBars.filter((b) => b.time > record.signal_bar_time);
     if (futureBars.length === 0) continue;
     const isLong = record.side === 'BUY';
@@ -79,7 +126,14 @@ export function resolveOpenSignals(store, { timeframe, confirmedBars }) {
     let resolutionBarTime = null;
     for (const b of futureBars) {
       const hitSl = isLong ? b.low <= record.stop_loss : b.high >= record.stop_loss;
+      const hitTp1 = isLong ? b.high >= record.tp1 : b.low <= record.tp1;
       const hitTarget = isLong ? b.high >= record.tp2 : b.low <= record.tp2;
+
+      if (!record.tp1_hit && hitTp1 && !hitSl) {
+        record.tp1_hit = true;
+        record.tp1_hit_bar_time = b.time;
+      }
+
       if (hitSl && hitTarget) { result = 'FAIL'; resolutionBarTime = b.time; break; } // same-bar ambiguity -> conservative FAIL
       if (hitSl) { result = 'FAIL'; resolutionBarTime = b.time; break; }
       if (hitTarget) { result = 'PASS'; resolutionBarTime = b.time; break; }

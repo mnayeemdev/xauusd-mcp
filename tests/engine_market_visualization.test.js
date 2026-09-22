@@ -53,6 +53,8 @@ function findIntent(intents, role) { return intents.find((i) => i.role === role)
 function findCandidate(candidates, role) { return candidates.find((c) => c.role === role); }
 /** Content is drawn SOMEWHERE on the chart -- robust to the coincident-level merge legitimately relabeling it under a higher-priority role. */
 function findIntentByText(intents, substring) { return intents.find((i) => i.text?.includes(substring)); }
+/** A horizontal_line's own label is decoupled into a separate, independently lane-adjustable `<role>__label` text companion (label-readability upgrade) -- the line itself keeps its exact price/time but its `text` is null. */
+function findLabelText(intents, role) { return findIntent(intents, `${role}__label`)?.text ?? null; }
 
 describe('marketVisualization: source audit -- pure, no decision/CDP/registry dependency', () => {
   it('never imports xauusd_calculate.js, connection.js, core/chart|data.js, or drawingRegistry.js', () => {
@@ -199,16 +201,19 @@ describe('marketVisualization: liquidity selection is deterministic, FVGs never 
       liquidityContext: { equalHighs: [{ price: 2040, touch_count: 2, indices: [1, 2] }], equalLows: [], sweepReclaim: { swept: true, sweepType: 'SWEEP_LOW', level: 1985, reclaimed: false }, fairValueGaps: [{ index: 5, direction: 'BULLISH', gapLow: 2001, gapHigh: 2004, filled: false }] },
     });
     const anticipation = computeAnticipation({ decision, evidence });
-    const { intents } = buildMarketVisualizationIntents({ decision, evidence, anticipation });
+    const { intents, candidates } = buildMarketVisualizationIntents({ decision, evidence, anticipation });
     // anticipation.primary_scenario's own trigger location also resolves to
     // this SAME sweep level (a real, not incidental, coincidence -- both
     // ultimately derive from the same liquidityContext.sweepReclaim), so the
     // coincident-level merge may legitimately relabel this under
     // primary_trigger instead of liquidity_primary -- assert on CONTENT
-    // actually reaching the chart, not on which role won the merge.
-    const liq = findIntentByText(intents, 'SWEEP_LOW');
+    // actually reaching the chart, not on which role won the merge. The
+    // chart-facing label is now short ("LIQUIDITY SWEEP • PENDING"); the
+    // specific sweepType ("SWEEP_LOW") lives in the audit-trail diagnostic.
+    const liq = findIntentByText(intents, 'LIQUIDITY SWEEP');
     assert.ok(liq, 'expected the sweep level to be drawn somewhere on the chart');
     assert.equal(liq.point.price, 1985);
+    assert.ok(candidates.some((c) => c.diagnostic?.includes('SWEEP_LOW')), 'the specific sweepType must survive in the diagnostic audit trail');
   });
 
   it('falls back to the nearest EQH/EQL pool when no sweep is active', () => {
@@ -243,9 +248,14 @@ describe('marketVisualization: classical pattern selection is deterministic, nev
       ],
     });
     const anticipation = computeAnticipation({ decision, evidence });
-    const { intents } = buildMarketVisualizationIntents({ decision, evidence, anticipation });
+    const { intents, candidates } = buildMarketVisualizationIntents({ decision, evidence, anticipation });
     const p = findIntent(intents, 'pattern_primary');
-    assert.ok(p.text.includes('DOUBLE_BOTTOM'));
+    // Short chart label: underscores become spaces ("DOUBLE BOTTOM"), never
+    // the raw enum ("DOUBLE_BOTTOM") or the completion_state -- both remain
+    // available via the diagnostic audit trail.
+    assert.ok(findLabelText(intents, 'pattern_primary').includes('DOUBLE BOTTOM'));
+    assert.ok(!findLabelText(intents, 'pattern_primary').includes('_'));
+    assert.ok(findCandidate(candidates, 'pattern_primary').diagnostic.includes('DOUBLE_BOTTOM'));
     assert.equal(p.point.price, 2018.5);
     assert.equal(p.point.time, NOW - 300); // the pattern's OWN real end_time, never the current bar time
   });
@@ -279,25 +289,32 @@ describe('marketVisualization: breakout lifecycle mapping', () => {
     // realistic fixture includes both, matching classifyBreakoutState()'s own contract.
     const evidence = baseEvidence({ breakoutState: { state: 'BREAKOUT_RETEST_PENDING', evidence: { direction: 'BULLISH' } }, structure: { ...baseEvidence().structure, lastEvent: { type: 'BOS', direction: 'BULLISH', bar: 10, level: 2030 } } });
     const anticipation = computeAnticipation({ decision, evidence });
-    const { intents } = buildMarketVisualizationIntents({ decision, evidence, anticipation });
+    const { intents, candidates } = buildMarketVisualizationIntents({ decision, evidence, anticipation });
     // anticipation.primary_scenario's own trigger location resolves to this
     // SAME breakout level (both genuinely derive from structure.lastEvent.level),
     // so the coincident-level merge may legitimately relabel this under
     // primary_trigger -- assert on CONTENT reaching the chart, not the role.
-    assert.ok(findIntentByText(intents, 'RETEST PENDING'));
+    // The chart-facing label is now short ("BREAKOUT • RETEST"); the full
+    // "RETEST PENDING" lifecycle wording lives in the diagnostic.
+    assert.ok(findIntentByText(intents, 'RETEST'));
+    assert.ok(candidates.some((c) => c.diagnostic?.includes('RETEST PENDING')));
   });
 
   it('OVEREXTENDED_BREAKOUT is shown but never implies a new entry opportunity', () => {
     const decision = baseDecision();
     const evidence = baseEvidence({ breakoutState: { state: 'OVEREXTENDED_BREAKOUT', evidence: { direction: 'BULLISH' } }, structure: { ...baseEvidence().structure, lastEvent: { type: 'BOS', direction: 'BULLISH', bar: 10, level: 2030 } } });
     const anticipation = computeAnticipation({ decision, evidence });
-    const { intents } = buildMarketVisualizationIntents({ decision, evidence, anticipation });
-    const b = findIntentByText(intents, 'OVEREXTENDED');
+    const { intents, candidates } = buildMarketVisualizationIntents({ decision, evidence, anticipation });
+    // Chart-facing label is now short ("BREAKOUT (LATE)") -- it never claims
+    // a new entry either way, so the negation-wording check moves to the
+    // diagnostic audit trail, which still carries the full explicit sentence.
+    const b = findIntentByText(intents, 'BREAKOUT (LATE)');
     assert.ok(b);
-    // The only allowed occurrence of "entry" is inside the explicit NEGATION
-    // "not a new entry" -- any OTHER entry-implying phrasing must be absent.
-    assert.ok(b.text.includes('not a new entry'));
-    assert.ok(!/buy here|sell here|new entry opportunity(?!.{0,3}$)/i.test(b.text.replace('not a new entry', '')));
+    assert.ok(!/buy here|sell here|new entry opportunity/i.test(b.text));
+    const diag = candidates.find((c) => c.diagnostic?.includes('OVEREXTENDED'))?.diagnostic;
+    assert.ok(diag);
+    assert.ok(diag.includes('not a new entry'));
+    assert.ok(!/buy here|sell here|new entry opportunity(?!.{0,3}$)/i.test(diag.replace('not a new entry', '')));
     // MISSED anticipation state also never gets trade geometry
     assert.equal(anticipation.state, 'MISSED');
     assert.equal(findIntent(intents, 'trade_entry'), undefined);
@@ -322,11 +339,16 @@ describe('marketVisualization: anticipation primary scenario', () => {
     const evidence = baseEvidence({ correction: { state: 'ACTIVE' } });
     const anticipation = computeAnticipation({ decision, evidence });
     assert.equal(anticipation.state, 'CONFIRMATION_PENDING');
-    const { intents } = buildMarketVisualizationIntents({ decision, evidence, anticipation });
-    const scenario = findIntent(intents, 'primary_scenario');
+    const { intents, candidates } = buildMarketVisualizationIntents({ decision, evidence, anticipation });
+    // primary_scenario is a 'text' role and may now legitimately merge into a
+    // coincident-price horizontal_line (e.g. primary_trigger) -- see the
+    // Zone-Based Market Map upgrade's label-collision merge. The chart-facing
+    // label is now short ("<BUY|SELL> WATCH • CONFIRMATION"); the raw
+    // "CONFIRMATION_PENDING" state name lives in the diagnostic audit trail.
+    const scenario = findIntentByText(intents, 'CONFIRMATION');
     assert.ok(scenario);
-    assert.ok(scenario.text.includes('CONFIRMATION_PENDING'));
     assert.ok(!/will rise|will fall|guaranteed|certain|price will/i.test(scenario.text));
+    assert.ok(candidates.some((c) => c.diagnostic?.includes('CONFIRMATION_PENDING')));
   });
 
   it('primary_trigger is only emitted when objective trigger geometry exists', () => {
@@ -349,8 +371,10 @@ describe('marketVisualization: anticipation primary scenario', () => {
     const { intents } = buildMarketVisualizationIntents({ decision, evidence, anticipation });
     const inv = findIntent(intents, 'primary_invalidation');
     assert.ok(inv);
-    assert.ok(!/\bSL\b/.test(inv.text.replace('not SL', ''))); // "not SL" is the ONLY allowed occurrence of "SL"
-    assert.ok(inv.text.toLowerCase().includes('invalidation'));
+    assert.equal(inv.text, null); // always decoupled into its own __label companion
+    const invLabel = findLabelText(intents, 'primary_invalidation');
+    assert.ok(!/\bSL\b/.test(invLabel.replace('not SL', ''))); // "not SL" is the ONLY allowed occurrence of "SL"
+    assert.ok(invLabel.toLowerCase().includes('invalidation'));
   });
 });
 
@@ -371,10 +395,17 @@ describe('marketVisualization: alternate scenario is never fabricated', () => {
     const evidence = baseEvidence();
     const anticipation = computeAnticipation({ decision, evidence });
     assert.ok(anticipation.alternate_scenario);
-    const { intents } = buildMarketVisualizationIntents({ decision, evidence, anticipation });
-    const alt = findIntent(intents, 'alternate_scenario');
-    assert.ok(alt.text.includes('ALTERNATE'));
-    assert.equal(alt.text.includes(anticipation.alternate_scenario.direction), true);
+    const { candidates } = buildMarketVisualizationIntents({ decision, evidence, anticipation });
+    // alternate_scenario is a 'text' role and may now legitimately merge into
+    // a coincident-price horizontal_line (e.g. alternate_invalidation) -- see
+    // the Zone-Based Market Map upgrade's label-collision merge -- and its
+    // short chart label can even be dropped by the display-length budget in
+    // a sufficiently dense coincidence. Its full, real, engine-produced
+    // content is never lost either way: it always survives in the
+    // diagnostic audit trail, which is what this test verifies.
+    const altCandidate = findCandidate(candidates, 'alternate_scenario');
+    assert.ok(altCandidate.diagnostic.includes(anticipation.alternate_scenario.direction));
+    assert.ok(altCandidate.diagnostic.includes(anticipation.alternate_scenario.strategy_family.toUpperCase()));
   });
 });
 
@@ -393,8 +424,14 @@ describe('marketVisualization: clutter budget and priority suppression', () => {
     });
     const anticipation = computeAnticipation({ decision, evidence });
     const { intents, summary } = buildMarketVisualizationIntents({ decision, evidence, anticipation });
-    assert.ok(intents.length <= CLUTTER_BUDGET.MAX_TOTAL, `expected <= ${CLUTTER_BUDGET.MAX_TOTAL}, got ${intents.length}`);
-    assert.equal(summary.total_included, intents.length);
+    // CLUTTER_BUDGET.MAX_TOTAL bounds distinct PIECES OF INFORMATION, not
+    // raw draw calls -- a line/rectangle plus its own decoupled label
+    // companion (see splitLineLabels()) count as ONE such piece even
+    // though each renders via its own draw call (label-readability fix:
+    // a line's own inline label can never be moved without moving the
+    // line, so the label needs an independent, lane-adjustable object).
+    assert.ok(summary.total_included <= CLUTTER_BUDGET.MAX_TOTAL, `expected <= ${CLUTTER_BUDGET.MAX_TOTAL} groups, got ${summary.total_included}`);
+    assert.ok(intents.length <= CLUTTER_BUDGET.MAX_TOTAL * 2, `expected <= ${CLUTTER_BUDGET.MAX_TOTAL * 2} raw draw calls, got ${intents.length}`);
   });
 
   it('P1 (trade geometry) is never suppressed by lower-priority P2/P3 candidates', () => {
@@ -442,10 +479,14 @@ describe('marketVisualization: coincident-level merge -- never multiple overlapp
     const lineIntents = intents.filter((i) => i.primitive === 'horizontal_line');
     const prices = lineIntents.map((i) => `${i.symbol}|${i.timeframe}|${i.point.price}`);
     assert.equal(prices.length, new Set(prices).size, 'no two horizontal_line intents should share the exact same (symbol, timeframe, price)');
-    // The 2030 level is real, covered exactly once, with a combined label.
+    // The 2030 level is real, covered exactly once. The merged line's own
+    // text is always decoupled into an independently-positionable `__label`
+    // companion (see splitLineLabels()), so the combined label lives there.
     const at2030 = lineIntents.filter((i) => i.point.price === 2030);
     assert.equal(at2030.length, 1);
-    assert.ok(at2030[0].text.includes('|'), 'a genuinely merged level should combine multiple labels');
+    assert.equal(at2030[0].text, null);
+    const label2030 = intents.find((i) => i.point.price === 2030 && i.text?.includes('•'));
+    assert.ok(label2030, 'a genuinely merged level should combine multiple labels');
   });
 
   it('confirmed trade geometry (ENTRY/SL/TP1/TP2) is NEVER merged, even if it coincides with another level', () => {
@@ -466,8 +507,10 @@ describe('marketVisualization: coincident-level merge -- never multiple overlapp
     const anticipation = computeAnticipation({ decision, evidence });
     const { intents } = buildMarketVisualizationIntents({ decision, evidence, anticipation });
     const support = findIntent(intents, 'nearest_support');
-    assert.equal(support.text, 'SUPPORT (fresh) x1');
-    assert.ok(!support.text.includes('|'));
+    assert.equal(support.point.price, 1995); // the line's own exact analytical price is untouched
+    const labelText = findLabelText(intents, 'nearest_support');
+    assert.equal(labelText, 'SUPPORT x1');
+    assert.ok(!labelText.includes('|'));
   });
 });
 
