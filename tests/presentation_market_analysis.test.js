@@ -114,7 +114,7 @@ describe('presentation: formatMarketAnalysis -- Pre-Entry Opportunity Planner en
       status: 'PLAN', direction: 'BEARISH', opportunity_state: 'APPROACHING_ZONE',
       candidate_entry_zone: { lower: 4378, upper: 4386 },
       provisional_invalidation: { level: 4386 },
-      candidate_tp1: 4340, candidate_tp2: 4300, candidate_rr: 4.75,
+      candidate_tp1: 4340, candidate_tp2: 4300, planning_rr_illustrative: 4.75,
       confirmation_required: ['a confirmed reclaim beyond the breakout level'],
       alternate_scenario: null,
     };

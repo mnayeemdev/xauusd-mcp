@@ -41,7 +41,17 @@ import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 
 export const LEDGER_STORE_SCHEMA_VERSION = 1;
-export const LEDGER_LOG_SCHEMA_VERSION = 1;
+// v1 records (schema_version: 1, persisted before this change) carry a
+// field named `candidate_rr` -- opportunityPlanner.js's own non-
+// authoritative, zone-edge-based planning RR (see computeCandidateRr()'s
+// doc comment). v2 records (this change) rename that SAME concept to
+// `planning_rr_illustrative` and, when the caller supplies `candidates`,
+// additionally carry `authoritative_candidates` -- the per-entry-timeframe
+// REAL risk.js-derived RR/entry/SL/TP1/TP2 (xauusd_analyze_market.js's
+// extractCandidateObservability()). Historical v1 lines are NEVER
+// rewritten; readers must accept either field name (see
+// src/engine/opportunityOutcomeResolver.js's own backward-compatible read).
+export const LEDGER_LOG_SCHEMA_VERSION = 2;
 
 export const DEFAULT_LEDGER_STORE_PATH = fileURLToPath(new URL('../../state/xauusd_opportunity_ledger_store.json', import.meta.url));
 export const DEFAULT_LEDGER_LOG_PATH = fileURLToPath(new URL('../../state/xauusd_opportunity_ledger_log.jsonl', import.meta.url));
@@ -153,9 +163,22 @@ function resolveDeps(_deps) {
  * NEVER recorded at all (nothing objective exists to log) -- this
  * mirrors "do not fabricate a plan merely to produce a ledger row."
  *
+ * `candidates` (optional, additive): the SAME per-entry-timeframe
+ * observability object `src/core/xauusd_analyze_market.js`'s
+ * `extractCandidateObservability()` already computed (status/regime/
+ * candidate_action/candidate_model/candidate_quality/
+ * authoritative_candidate_rr/authoritative_candidate_entry/
+ * authoritative_candidate_sl/authoritative_candidate_tp1/
+ * authoritative_candidate_tp2/authoritative_rr_gate/blocked_by, per
+ * timeframe) -- the SAME object already passed to
+ * anticipationStore.recordAnticipationObservation()'s own `candidates`
+ * parameter. Recorded VERBATIM as `authoritative_candidates`, never
+ * recomputed here. Omitted/`null` when the caller has no candidate data,
+ * which keeps every pre-existing call site's behavior byte-identical.
+ *
  * @returns {{recorded: boolean, reason?: string, opportunity_id?: string, record?: object}}
  */
-export function recordOpportunityObservation({ decision, plan, confirmedBarTime, observedAt, _deps } = {}) {
+export function recordOpportunityObservation({ decision, plan, confirmedBarTime, observedAt, candidates = null, _deps } = {}) {
   const deps = resolveDeps(_deps);
 
   if (!decision || !plan) return { recorded: false, reason: 'MISSING_INPUT' };
@@ -202,7 +225,7 @@ export function recordOpportunityObservation({ decision, plan, confirmedBarTime,
     provisional_invalidation: plan.provisional_invalidation,
     candidate_tp1: plan.candidate_tp1,
     candidate_tp2: plan.candidate_tp2,
-    candidate_rr: plan.candidate_rr,
+    planning_rr_illustrative: plan.planning_rr_illustrative,
 
     confirmation_required: plan.confirmation_required,
     confirmation_observed: plan.confirmation_observed,
@@ -210,6 +233,11 @@ export function recordOpportunityObservation({ decision, plan, confirmedBarTime,
 
     authoritative_action: decision.action ?? null,
     authoritative_reason: decision.reason ?? null,
+    // Per-entry-timeframe REAL risk.js-derived RR/entry/SL/TP1/TP2
+    // observability, verbatim, when the caller supplied it -- see the
+    // function's own doc comment above. `null` when omitted (no behavior
+    // change for callers that don't pass `candidates`).
+    authoritative_candidates: candidates ?? null,
   };
 
   store.opportunities[opportunityId] = {

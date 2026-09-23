@@ -298,10 +298,15 @@ function resolveDeps(_deps) {
  * per-entry-timeframe object `src/core/xauusd_analyze_market.js`'s
  * `analyzeMarket()` already computed
  * (status/regime/candidate_action/candidate_model/candidate_quality/
- * candidate_rr/blocked_by per timeframe -- see that file's
- * `extractCandidateObservability()`). Recorded VERBATIM, never recomputed
- * here. Omitted/`null` when the caller has no candidate data (e.g. a
- * caller still using bare `calculateEntry()`), which keeps every
+ * authoritative_candidate_rr/authoritative_candidate_entry/
+ * authoritative_candidate_sl/authoritative_candidate_tp1/
+ * authoritative_candidate_tp2/authoritative_rr_gate/blocked_by per
+ * timeframe -- see that file's `extractCandidateObservability()`; the
+ * `authoritative_` prefix distinguishes these real risk.js-derived values
+ * from src/engine/opportunityPlanner.js's separate, explicitly non-
+ * authoritative `planning_rr_illustrative`). Recorded VERBATIM, never
+ * recomputed here. Omitted/`null` when the caller has no candidate data
+ * (e.g. a caller still using bare `calculateEntry()`), which keeps every
  * pre-Stage-6 call site's behavior byte-identical.
  *
  * @returns {{recorded: boolean, reason?: string, setup_id?: string, record?: object}}

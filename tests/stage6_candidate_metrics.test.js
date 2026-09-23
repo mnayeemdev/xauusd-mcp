@@ -74,9 +74,9 @@ function memoryDeps(nowIso = '2025-01-01T00:00:00.000Z') {
 }
 
 const SAMPLE_CANDIDATES = {
-  '5m': { status: 'OK', regime: 'BULL_TREND', candidate_action: null, candidate_model: null, candidate_quality: null, candidate_rr: null, blocked_by: 'NO_ELIGIBLE_STRATEGY' },
-  '15m': { status: 'OK', regime: 'BULL_TREND', candidate_action: 'BUY', candidate_model: 'TC', candidate_quality: 58, candidate_rr: 1.4, blocked_by: 'RR_NOT_ACCEPTABLE' },
-  '30m': { status: 'OK', regime: 'BULL_TREND', candidate_action: null, candidate_model: null, candidate_quality: null, candidate_rr: null, blocked_by: 'NO_ELIGIBLE_STRATEGY' },
+  '5m': { status: 'OK', regime: 'BULL_TREND', candidate_action: null, candidate_model: null, candidate_quality: null, authoritative_candidate_rr: null, authoritative_rr_gate: null, blocked_by: 'NO_ELIGIBLE_STRATEGY' },
+  '15m': { status: 'OK', regime: 'BULL_TREND', candidate_action: 'BUY', candidate_model: 'TC', candidate_quality: 58, authoritative_candidate_rr: 1.4, authoritative_rr_gate: 'RR_NOT_ACCEPTABLE', blocked_by: 'RR_NOT_ACCEPTABLE' },
+  '30m': { status: 'OK', regime: 'BULL_TREND', candidate_action: null, candidate_model: null, candidate_quality: null, authoritative_candidate_rr: null, authoritative_rr_gate: null, blocked_by: 'NO_ELIGIBLE_STRATEGY' },
 };
 
 describe('Stage 6 Part 4-6: recordAnticipationObservation() candidates passthrough', () => {

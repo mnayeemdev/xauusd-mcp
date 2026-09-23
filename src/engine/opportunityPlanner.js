@@ -42,7 +42,10 @@ import { RISK_PARAMS } from './risk.js';
 import { BREAKOUT_PARAMS } from './breakout.js';
 import { distanceInAtr } from './volatility.js';
 
-export const OPPORTUNITY_PLAN_SCHEMA_VERSION = '1.0.0';
+// 1.1.0: renamed the non-authoritative planning RR field from
+// `candidate_rr` to `planning_rr_illustrative` (RR naming-ambiguity fix,
+// see docs/XAUUSD_LIVE_RUNTIME.md) -- no other field, no calculation.
+export const OPPORTUNITY_PLAN_SCHEMA_VERSION = '1.1.0';
 
 // Planner-owned lifecycle vocabulary (additive -- Stage 1+2's own
 // ANTICIPATION_STATES in anticipation.js is NEVER modified or reused as
@@ -86,7 +89,7 @@ function emptyGeometry() {
     setup_family: null, setup_model: null, opportunity_state: null,
     zone: null, distance_to_zone: null, interaction_state: null,
     candidate_entry_zone: null, provisional_invalidation: null,
-    candidate_tp1: null, candidate_tp2: null, candidate_rr: null,
+    candidate_tp1: null, candidate_tp2: null, planning_rr_illustrative: null,
     confirmation_required: [], confirmation_observed: [], blocking_conditions: [],
     supporting_evidence: [], alternate_scenario: null,
   };
@@ -218,7 +221,19 @@ function computeCandidateTargets({ direction, evidence, anticipation }) {
   return { candidate_tp1, candidate_tp2 };
 }
 
-/** Planning-only RR (mission Section 19): reward/risk using the zone's NEAR edge as the reference entry, candidate_tp1 as reward, provisional_invalidation as risk. Never authoritative; never used to gate/alter the protected decision. */
+/**
+ * Planning-only RR (mission Section 19): reward/risk using the zone's NEAR
+ * edge as the reference entry, candidate_tp1 as reward, provisional_
+ * invalidation as risk. Never authoritative; never used to gate/alter the
+ * protected decision.
+ *
+ * NAMING (RR forensic audit, see docs/XAUUSD_LIVE_RUNTIME.md): this value
+ * is persisted as `planning_rr_illustrative`, deliberately distinct from
+ * `xauusd_analyze_market.js`'s `authoritative_candidate_rr` (risk.js's own
+ * real RR). Both were previously named `candidate_rr`, which made them
+ * indistinguishable in the persisted logs -- do not reintroduce that name
+ * for either value.
+ */
 function computeCandidateRr({ zone, direction, candidateTp1, provisionalInvalidation }) {
   if (!zone || !Number.isFinite(candidateTp1) || !provisionalInvalidation || !Number.isFinite(provisionalInvalidation.level)) return null;
   const nearEdge = direction === 'BEARISH' ? zone.lower : zone.upper;
@@ -297,11 +312,11 @@ export function computeOpportunityPlan({ decision, evidence, anticipation, prima
 
   const provisional_invalidation = computeProvisionalInvalidation({ zone, direction });
   const { candidate_tp1, candidate_tp2 } = computeCandidateTargets({ direction, evidence, anticipation });
-  const candidate_rr = computeCandidateRr({ zone, direction, candidateTp1: candidate_tp1, provisionalInvalidation: provisional_invalidation });
+  const planning_rr_illustrative = computeCandidateRr({ zone, direction, candidateTp1: candidate_tp1, provisionalInvalidation: provisional_invalidation });
 
   const blocking_conditions = [];
   if (anticipation.authoritative_wait_reason) blocking_conditions.push(anticipation.authoritative_wait_reason);
-  if (Number.isFinite(candidate_rr) && candidate_rr < RISK_PARAMS.minRR) blocking_conditions.push(`candidate RR (${candidate_rr}) below the protected minimum (${RISK_PARAMS.minRR})`);
+  if (Number.isFinite(planning_rr_illustrative) && planning_rr_illustrative < RISK_PARAMS.minRR) blocking_conditions.push(`planning-only RR (${planning_rr_illustrative}) below the protected minimum (${RISK_PARAMS.minRR}) -- illustrative, not the authoritative RR gate`);
 
   const confirmation_observed = [];
   if (interaction_state === 'BODY_TOUCH' || interaction_state === 'REJECTION') confirmation_observed.push(`price has interacted with the ${zone.type} zone (${interaction_state})`);
@@ -321,7 +336,7 @@ export function computeOpportunityPlan({ decision, evidence, anticipation, prima
     zone, distance_to_zone, interaction_state,
     candidate_entry_zone: { lower: zone.lower, upper: zone.upper },
     provisional_invalidation,
-    candidate_tp1, candidate_tp2, candidate_rr,
+    candidate_tp1, candidate_tp2, planning_rr_illustrative,
     confirmation_required, confirmation_observed, blocking_conditions,
     supporting_evidence: scenario.supporting_evidence ?? [],
     alternate_scenario,

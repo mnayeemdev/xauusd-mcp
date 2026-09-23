@@ -19,9 +19,11 @@
  *   - reads or writes Stage 3's anticipation store
  *   - calls calculateEntry()/analyzeMarket()/runPipeline() or fetches OHLCV
  *   - recomputes or alters candidate_entry_zone / provisional_invalidation
- *     / candidate_tp1 / candidate_tp2 / candidate_rr / blocking_conditions
- *     -- those are read-only inputs, copied VERBATIM into the (separate)
- *     outcome record for convenience, never recomputed
+ *     / candidate_tp1 / candidate_tp2 / planning_rr_illustrative (read from
+ *     the observation's `planning_rr_illustrative` field, falling back to
+ *     the legacy `candidate_rr` field name for pre-rename Ledger rows) /
+ *     blocking_conditions -- those are read-only inputs, copied VERBATIM
+ *     into the (separate) outcome record for convenience, never recomputed
  *   - produces a BUY/SELL signal, or feeds any result back into the
  *     pipeline, planner, quality/RR/confirmation gates, model eligibility,
  *     the watcher's alert decision, or calculateEntry()
@@ -102,7 +104,13 @@ import { atr } from './math.js';
 import { loadLedgerLog, DEFAULT_LEDGER_LOG_PATH } from './opportunityLedger.js';
 
 export const OUTCOME_STORE_SCHEMA_VERSION = 1;
-export const OUTCOME_LOG_SCHEMA_VERSION = 1;
+// v1 records carry `candidate_rr` (opportunityLedger.js's own historical
+// field name, copied verbatim). v2 records carry `planning_rr_illustrative`
+// instead (same non-authoritative planning value, renamed for clarity --
+// see opportunityLedger.js's own LEDGER_LOG_SCHEMA_VERSION comment).
+// Historical v1 lines are NEVER rewritten; resolveOpportunityOutcome()
+// reads either source field name (see below).
+export const OUTCOME_LOG_SCHEMA_VERSION = 2;
 
 export const DEFAULT_OUTCOME_STORE_PATH = fileURLToPath(new URL('../../state/xauusd_opportunity_outcome_store.json', import.meta.url));
 export const DEFAULT_OUTCOME_LOG_PATH = fileURLToPath(new URL('../../state/xauusd_opportunity_outcome_log.jsonl', import.meta.url));
@@ -228,11 +236,16 @@ function computeZoneWidth(observation) {
  * Pure, resumable forward-only resolution. `observation` is a plain
  * Ledger-log-row-shaped object (symbol/direction/confirmed_bar_time/
  * opportunity_state/candidate_entry_zone/provisional_invalidation/
- * candidate_tp1/candidate_tp2/candidate_rr). `confirmedBars` is whatever
+ * candidate_tp1/candidate_tp2/planning_rr_illustrative or legacy
+ * candidate_rr). `confirmedBars` is whatever
  * confirmed bars the caller CURRENTLY has for that observation's own
  * timeframe -- a rolling window, not necessarily anchored back to
- * confirmed_bar_time on every call. `priorProgress` is the previously
- * persisted STORE record for this exact outcome_source_id (or omitted/null
+ * confirmed_bar_time on every call. (`observation.planning_rr_illustrative`,
+ * falling back to the legacy `observation.candidate_rr` for pre-rename
+ * Ledger rows, is read only at record-build time below -- never by this
+ * resolution function itself, which never touches RR at all.)
+ * `priorProgress` is the previously persisted STORE record for this exact
+ * outcome_source_id (or omitted/null
  * on the very first call) -- see the module header
  * ("Incremental/resumable scanning") for why this is required for correct
  * horizon semantics. Returns null when the observation cannot be resolved
@@ -484,7 +497,11 @@ export function recordOpportunityOutcome({ observation, confirmedBars, _deps } =
     provisional_invalidation: observation.provisional_invalidation ?? null,
     candidate_tp1: observation.candidate_tp1 ?? null,
     candidate_tp2: observation.candidate_tp2 ?? null,
-    candidate_rr: observation.candidate_rr ?? null,
+    // Reads the renamed field first, falling back to the legacy
+    // `candidate_rr` name for Ledger rows persisted before this change
+    // (LEDGER_LOG_SCHEMA_VERSION 1) -- both name the SAME non-authoritative
+    // planning value; never recomputed either way.
+    planning_rr_illustrative: observation.planning_rr_illustrative ?? observation.candidate_rr ?? null,
     blocking_conditions: observation.blocking_conditions ?? [],
 
     // Derived, read-only measurement -- never fed back anywhere.

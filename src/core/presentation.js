@@ -232,7 +232,7 @@ export function formatMarketAnalysis(analysisResult) {
     if (plan.provisional_invalidation) lines.push(`Provisional Invalidation: ${fmtNum(plan.provisional_invalidation.level)}`);
     if (plan.candidate_tp1 != null) lines.push(`Candidate TP1: ${fmtNum(plan.candidate_tp1)}`);
     if (plan.candidate_tp2 != null) lines.push(`Candidate TP2: ${fmtNum(plan.candidate_tp2)}`);
-    if (plan.candidate_rr != null) lines.push(`Candidate RR: ${fmtNum(plan.candidate_rr)}`);
+    if (plan.planning_rr_illustrative != null) lines.push(`Candidate RR: ${fmtNum(plan.planning_rr_illustrative)}`);
     if (plan.confirmation_required?.length) lines.push(`Waiting for (opportunity plan): ${plan.confirmation_required.join('; ')}`);
     if (plan.alternate_scenario) lines.push(`Alternative: ${plan.alternate_scenario.direction === 'BULLISH' ? 'BUY' : 'SELL'} — ${plan.alternate_scenario.zone?.type ?? 'N/A'}`);
     structuredExtra.pre_entry_plan = plan;

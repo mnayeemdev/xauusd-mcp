@@ -98,6 +98,20 @@ function bucketZoneWidthAtr(multiple) {
 }
 
 /**
+ * The non-authoritative planning RR (opportunityPlanner.js's
+ * computeCandidateRr()) is read under its renamed field
+ * (`planning_rr_illustrative`, OUTCOME_LOG_SCHEMA_VERSION 2+), falling
+ * back to the legacy `candidate_rr` name for outcome records persisted
+ * before the rename -- so this module reads OLD and NEW records
+ * identically without rewriting anything on disk. The metric field names
+ * below (`candidate_rr_distribution` etc.) are UNCHANGED to avoid
+ * breaking existing consumers of this module's own output shape.
+ */
+function readPlanningRr(record) {
+  return Number.isFinite(record.planning_rr_illustrative) ? record.planning_rr_illustrative : record.candidate_rr;
+}
+
+/**
  * Computes the full Stage 7 Step 2 outcome observability summary from an
  * already-loaded array of outcome log records. Purely factual counts and
  * distributions -- see the module header for what this deliberately never
@@ -149,7 +163,7 @@ export function computeOpportunityOutcomeMetrics(records) {
     // performance) -- the caller decides how to summarize/plot these.
     bars_to_tp1_distribution: tp1Reached.map((r) => r.tp1.bars_elapsed),
     bars_to_invalidation_distribution: invalidationReached.map((r) => r.invalidation.bars_elapsed),
-    candidate_rr_distribution: records.map((r) => r.candidate_rr).filter((v) => Number.isFinite(v)),
+    candidate_rr_distribution: records.map(readPlanningRr).filter((v) => Number.isFinite(v)),
     zone_width_atr_distribution: records.map((r) => r.zone_width_atr_multiple).filter((v) => Number.isFinite(v)),
 
     // Candidate RR validation support (mission Stage 7 Step 2): buckets
@@ -164,8 +178,9 @@ export function computeOpportunityOutcomeMetrics(records) {
       const buckets = {};
       for (const r of records) {
         const bucket = bucketZoneWidthAtr(r.zone_width_atr_multiple);
-        if (bucket == null || !Number.isFinite(r.candidate_rr)) continue;
-        (buckets[bucket] ??= []).push(r.candidate_rr);
+        const planningRr = readPlanningRr(r);
+        if (bucket == null || !Number.isFinite(planningRr)) continue;
+        (buckets[bucket] ??= []).push(planningRr);
       }
       return buckets;
     })(),

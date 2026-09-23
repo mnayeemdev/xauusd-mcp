@@ -125,8 +125,23 @@ export function computeEvidence(primaryBars, split, selectedModel) {
  * needing a full, realistic 500-bar fixture. See
  * docs/XAUUSD_LIVE_RUNTIME.md's "Candidate vs Authoritative" section.
  */
+// NAMING (RR forensic audit, see docs/XAUUSD_LIVE_RUNTIME.md): every RR-ish
+// value returned here is prefixed `authoritative_` because it is read
+// straight from `risk.js`'s own computeRisk() return value (via
+// pipelineResult.evidence.risk) -- byte-identical to what the protected
+// RR gate itself evaluated. This is deliberately distinct from
+// src/engine/opportunityPlanner.js's `planning_rr_illustrative` (a
+// separate, explicitly non-authoritative zone-edge approximation) -- the
+// two must never be confused, which is exactly what happened before this
+// rename (both were previously named `candidate_rr`).
 export function extractCandidateObservability(pipelineResult) {
-  if (!pipelineResult) return { status: 'UNAVAILABLE', regime: null, candidate_action: null, candidate_model: null, candidate_quality: null, candidate_rr: null, blocked_by: null };
+  if (!pipelineResult) {
+    return {
+      status: 'UNAVAILABLE', regime: null, candidate_action: null, candidate_model: null, candidate_quality: null,
+      authoritative_candidate_rr: null, authoritative_candidate_entry: null, authoritative_candidate_sl: null,
+      authoritative_candidate_tp1: null, authoritative_candidate_tp2: null, authoritative_rr_gate: null, blocked_by: null,
+    };
+  }
   const candidate = pipelineResult.evidence?.candidate ?? null;
   const risk = pipelineResult.evidence?.risk ?? null;
   const isConfirmed = pipelineResult.decision?.action === 'BUY' || pipelineResult.decision?.action === 'SELL';
@@ -136,7 +151,23 @@ export function extractCandidateObservability(pipelineResult) {
     candidate_action: candidate?.side ?? null, // 'BUY' | 'SELL' | null -- the CANDIDATE's own side, never the final authoritative action
     candidate_model: pipelineResult.model ?? null,
     candidate_quality: pipelineResult.quality?.score ?? null,
-    candidate_rr: risk?.rr ?? null,
+    // Authoritative: risk.js's own computed RR/entry/SL/TP1/TP2 for this
+    // timeframe's candidate, exposed for observability only -- never fed
+    // back into any decision, gate, or score. entry/sl/tp1/tp2 are only
+    // present when risk.js's computeRisk() itself returned them (the OK
+    // and RR_NOT_ACCEPTABLE branches); other rejection branches
+    // (OVEREXTENDED/INVALID_GEOMETRY/no candidate at all) correctly
+    // surface as null rather than a fabricated value.
+    authoritative_candidate_rr: risk?.rr ?? null,
+    authoritative_candidate_entry: risk?.entry ?? null,
+    authoritative_candidate_sl: risk?.stop_loss ?? null,
+    authoritative_candidate_tp1: risk?.tp1 ?? null,
+    authoritative_candidate_tp2: risk?.tp2 ?? null,
+    // The exact risk.js gate this candidate hit ('OK' | 'RR_NOT_ACCEPTABLE'
+    // | 'OVEREXTENDED' | 'INVALID_GEOMETRY' | null when risk.js was never
+    // reached, e.g. NO_ELIGIBLE_STRATEGY). Distinct from `blocked_by`
+    // below, which mirrors the pipeline's own overall wait_reason.
+    authoritative_rr_gate: risk?.gate ?? null,
     // The exact protected gate/reason this timeframe's OWN candidate is
     // currently blocked by, or null when it is itself a confirmed
     // BUY/SELL at this timeframe (still subject to the mtf/htf gates in

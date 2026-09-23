@@ -66,7 +66,7 @@ describe('Stage 6 Part 3: analyzeMarket().candidates -- candidate vs authoritati
     assert.deepEqual(Object.keys(result.candidates).sort(), ['15m', '30m', '5m']);
   });
 
-  it('each candidate entry reports status/regime/candidate_action/candidate_model/candidate_quality/candidate_rr/blocked_by', async () => {
+  it('each candidate entry reports status/regime/candidate_action/candidate_model/candidate_quality/authoritative_candidate_rr/authoritative_candidate_entry/authoritative_candidate_sl/authoritative_candidate_tp1/authoritative_candidate_tp2/authoritative_rr_gate/blocked_by', async () => {
     const result = await analyzeMarket({ _deps: baseDeps({ bars: bullBars }) });
     for (const tf of ['5m', '15m', '30m']) {
       const c = result.candidates[tf];
@@ -75,8 +75,14 @@ describe('Stage 6 Part 3: analyzeMarket().candidates -- candidate vs authoritati
       assert.ok('candidate_action' in c);
       assert.ok('candidate_model' in c);
       assert.ok('candidate_quality' in c);
-      assert.ok('candidate_rr' in c);
+      assert.ok('authoritative_candidate_rr' in c);
+      assert.ok('authoritative_candidate_entry' in c);
+      assert.ok('authoritative_candidate_sl' in c);
+      assert.ok('authoritative_candidate_tp1' in c);
+      assert.ok('authoritative_candidate_tp2' in c);
+      assert.ok('authoritative_rr_gate' in c);
       assert.ok('blocked_by' in c);
+      assert.ok(!('candidate_rr' in c), 'the ambiguous, unprefixed candidate_rr name must not reappear');
     }
   });
 

@@ -97,7 +97,7 @@ describe('opportunityPlanner: BUY/SELL planning symmetry', () => {
     assert.equal(plan.zone.upper, 4386);
     assert.equal(plan.candidate_tp1, 4340); // nearest support
     assert.equal(plan.candidate_tp2, 4300); // reused target_room.structural_objective verbatim
-    assert.ok(Number.isFinite(plan.candidate_rr));
+    assert.ok(Number.isFinite(plan.planning_rr_illustrative));
   });
 
   it('BUY planning: selects the below-price demand zone, symmetric geometry', () => {
@@ -279,22 +279,22 @@ describe('opportunityPlanner: candidate geometry is clearly provisional (mission
     assert.ok('provisional_invalidation' in plan);
     assert.ok('candidate_tp1' in plan);
     assert.ok('candidate_tp2' in plan);
-    assert.ok('candidate_rr' in plan);
+    assert.ok('planning_rr_illustrative' in plan);
     assert.ok(plan.provisional_invalidation.condition.includes('confirmed close'));
   });
 
   it('candidate RR reflects the real Section-19 example: an unacceptable current RR does not prevent identifying a MORE favorable overhead zone', () => {
     // Mirrors the live-observed case: 15m BEAR_TREND SELL PB, current RR 0.65 (unacceptable) -- the planner still finds an objective overhead zone with better RR.
     const plan = computeOpportunityPlan({ decision: baseDecision({ reason: 'RR_NOT_ACCEPTABLE' }), evidence: bearishEvidence(), anticipation: bearishAnticipation(), primaryBars: farBar() });
-    assert.ok(Number.isFinite(plan.candidate_rr));
-    assert.ok(plan.candidate_rr >= RISK_PARAMS.minRR, 'this fixture is deliberately constructed so the overhead zone IS more favorable');
+    assert.ok(Number.isFinite(plan.planning_rr_illustrative));
+    assert.ok(plan.planning_rr_illustrative >= RISK_PARAMS.minRR, 'this fixture is deliberately constructed so the overhead zone IS more favorable');
   });
 
-  it('candidate_rr is null (never fabricated) when no target or invalidation is available', () => {
+  it('planning_rr_illustrative is null (never fabricated) when no target or invalidation is available', () => {
     const evidence = bearishEvidence({ levelsContext: { nearestSupport: null, nearestResistance: null, supplyDemandZones: [{ direction: 'supply', zone_low: 4378, zone_high: 4386, state: 'FRESH' }] } });
     const plan = computeOpportunityPlan({ decision: baseDecision(), evidence, anticipation: bearishAnticipation(), primaryBars: farBar() });
     assert.equal(plan.candidate_tp1, null);
-    assert.equal(plan.candidate_rr, null);
+    assert.equal(plan.planning_rr_illustrative, null);
   });
 
   it('blocking_conditions includes the authoritative wait reason and an under-minimum candidate RR when applicable', () => {

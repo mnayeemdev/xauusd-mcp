@@ -311,7 +311,7 @@ export async function runWatcherCycle({ state, deps, log = () => {} }) {
 
   if (typeof deps.recordOpportunityObservation === 'function') {
     try {
-      const ledgerResult = deps.recordOpportunityObservation({ decision: result, plan: result.pre_entry_plan ?? null, confirmedBarTime: candle.time });
+      const ledgerResult = deps.recordOpportunityObservation({ decision: result, plan: result.pre_entry_plan ?? null, confirmedBarTime: candle.time, candidates: result.candidates ?? null });
       // Low-noise pre-entry "watch" notification (mission Section 32):
       // fires ONLY on a genuine transition INTO ARMED (never every
       // DEVELOPING candle, never every poll, never repeated while an

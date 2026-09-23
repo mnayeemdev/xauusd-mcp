@@ -49,7 +49,9 @@ describe('xauusd_analyze_market: pre_entry_plan wiring (additive)', () => {
     const result = await analyzeMarket({ _deps: baseDeps({ bars: SWING_BARS }) });
     assert.ok(result.pre_entry_plan);
     assert.ok(['PLAN', 'NO_PLAN', 'SUPERSEDED_BY_CONFIRMED_TRADE'].includes(result.pre_entry_plan.status));
-    assert.equal(result.pre_entry_plan.schema_version, '1.0.0');
+    // 1.1.0: opportunityPlanner.js's non-authoritative RR field was renamed
+    // candidate_rr -> planning_rr_illustrative (RR naming-ambiguity fix).
+    assert.equal(result.pre_entry_plan.schema_version, '1.1.0');
   });
 
   it('never causes a second OHLCV sweep -- exactly one real getOhlcv call per timeframe', async () => {

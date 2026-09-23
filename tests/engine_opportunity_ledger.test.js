@@ -28,7 +28,7 @@ function basePlan(overrides = {}) {
     interaction_state: 'APPROACHING',
     candidate_entry_zone: { lower: 4378, upper: 4386 },
     provisional_invalidation: { level: 4386, condition: 'confirmed close above 4386' },
-    candidate_tp1: 4340, candidate_tp2: 4300, candidate_rr: 2.5,
+    candidate_tp1: 4340, candidate_tp2: 4300, planning_rr_illustrative: 2.5,
     confirmation_required: ['a confirmed reclaim'], confirmation_observed: [], blocking_conditions: ['RR_NOT_ACCEPTABLE'],
     generated_from_bar_time: 1700000000,
     ...overrides,
@@ -239,7 +239,18 @@ describe('opportunityLedger: recordOpportunityObservation -- recording, dedup, t
     assert.equal(record.authoritative_action, 'WAIT');
     assert.equal(record.authoritative_reason, 'RR_NOT_ACCEPTABLE');
     assert.equal(record.candidate_tp1, 4340);
-    assert.equal(record.candidate_rr, 2.5);
+    assert.equal(record.planning_rr_illustrative, 2.5);
     assert.deepEqual(record.zone, basePlan().zone);
+  });
+
+  it('persists the caller-supplied authoritative `candidates` observability object verbatim as authoritative_candidates, defaulting to null when omitted', () => {
+    const { _deps, getLog } = memoryDeps();
+    const candidates = { '15m': { status: 'OK', regime: 'BEAR_TREND', authoritative_candidate_rr: 0.79, authoritative_rr_gate: 'RR_NOT_ACCEPTABLE', blocked_by: 'RR_NOT_ACCEPTABLE' } };
+    recordOpportunityObservation({ decision: baseDecision(), plan: basePlan(), confirmedBarTime: 1700000000, candidates, _deps });
+    assert.deepEqual(getLog()[0].authoritative_candidates, candidates);
+
+    const { _deps: deps2, getLog: getLog2 } = memoryDeps();
+    recordOpportunityObservation({ decision: baseDecision(), plan: basePlan(), confirmedBarTime: 1700000000, _deps: deps2 });
+    assert.equal(getLog2()[0].authoritative_candidates, null);
   });
 });

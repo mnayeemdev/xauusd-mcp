@@ -16,7 +16,7 @@ function record(overrides = {}) {
     opportunity_id: 'opp-1',
     status: 'TP1_THEN_TP2', terminal: true, direction: 'BULLISH', source_timeframe: '15m',
     observation_opportunity_state: 'CONFIRMATION_PENDING', blocking_conditions: ['RR_NOT_ACCEPTABLE'],
-    candidate_rr: 3, zone_width_atr_multiple: 0.4,
+    planning_rr_illustrative: 3, zone_width_atr_multiple: 0.4,
     tp1: { touched: true, bar_time: 100, bars_elapsed: 2 },
     tp2: { touched: true, bar_time: 200, bars_elapsed: 5 },
     invalidation: null, ambiguous_event: null,
@@ -128,14 +128,20 @@ describe('computeOpportunityOutcomeMetrics: counting and bucketing correctness',
   });
 
   it('candidate_rr and zone_width_atr distributions include only finite recorded values, never fabricated', () => {
-    const m = computeOpportunityOutcomeMetrics([record(), record({ candidate_rr: null, zone_width_atr_multiple: null })]);
+    const m = computeOpportunityOutcomeMetrics([record(), record({ planning_rr_illustrative: null, zone_width_atr_multiple: null })]);
     assert.deepEqual(m.candidate_rr_distribution, [3]);
     assert.deepEqual(m.zone_width_atr_distribution, [0.4]);
   });
 
   it('candidate_rr_by_zone_width_atr_bucket groups an extreme narrow-zone RR under a low bucket without altering the value', () => {
-    const m = computeOpportunityOutcomeMetrics([record({ candidate_rr: 188.87, zone_width_atr_multiple: 0.02 })]);
+    const m = computeOpportunityOutcomeMetrics([record({ planning_rr_illustrative: 188.87, zone_width_atr_multiple: 0.02 })]);
     assert.deepEqual(m.candidate_rr_by_zone_width_atr_bucket['<0.1'], [188.87]);
+  });
+
+  it('backward compatibility: a legacy outcome record (schema_version 1, field name candidate_rr, no planning_rr_illustrative key) is still read correctly', () => {
+    const legacyRecord = record({ planning_rr_illustrative: undefined, candidate_rr: 188.87 });
+    const m = computeOpportunityOutcomeMetrics([legacyRecord]);
+    assert.deepEqual(m.candidate_rr_distribution, [188.87]);
   });
 
   it('bars_to_tp1_distribution and bars_to_invalidation_distribution reflect only touched cases', () => {

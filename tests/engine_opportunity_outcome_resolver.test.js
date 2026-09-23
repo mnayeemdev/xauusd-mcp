@@ -34,7 +34,7 @@ function bullishObservation(overrides = {}) {
     provisional_invalidation: { level: 95, condition: 'confirmed close below 95' },
     candidate_tp1: 110,
     candidate_tp2: 120,
-    candidate_rr: 3,
+    planning_rr_illustrative: 3,
     blocking_conditions: ['RR_NOT_ACCEPTABLE'],
     ...overrides,
   };
@@ -52,7 +52,7 @@ function bearishObservation(overrides = {}) {
     provisional_invalidation: { level: 105, condition: 'confirmed close above 105' },
     candidate_tp1: 90,
     candidate_tp2: 80,
-    candidate_rr: 3,
+    planning_rr_illustrative: 3,
     blocking_conditions: [],
     ...overrides,
   };
@@ -253,14 +253,14 @@ describe('opportunityOutcomeResolver: BUY/SELL (BULLISH/BEARISH) symmetry -- BEA
   });
 });
 
-describe('opportunityOutcomeResolver: candidate_rr is measured verbatim, never recomputed or filtered', () => {
-  it('an extreme narrow-zone candidate_rr (e.g. 188.87) passes through unchanged, with a correctly small zone_width_atr_multiple', () => {
+describe('opportunityOutcomeResolver: planning_rr_illustrative is measured verbatim, never recomputed or filtered', () => {
+  it('an extreme narrow-zone planning_rr_illustrative (e.g. 188.87) passes through unchanged, with a correctly small zone_width_atr_multiple', () => {
     const observation = bullishObservation({
       candidate_entry_zone: { lower: 4340.81, upper: 4341.12 },
       candidate_tp1: 4399.67,
       candidate_tp2: 4399.67,
       provisional_invalidation: { level: 4340.81, condition: 'confirmed close below 4340.81' },
-      candidate_rr: 188.87,
+      planning_rr_illustrative: 188.87,
     });
     // 15 bars of ATR context (true range ~2 each) ending at the observation bar, then one quiet forward bar.
     const context = [];
@@ -273,17 +273,27 @@ describe('opportunityOutcomeResolver: candidate_rr is measured verbatim, never r
     assert.ok(Number.isFinite(resolved.zone_width_atr_multiple));
     assert.ok(resolved.zone_width_atr_multiple < 1, 'a few-cent-wide zone should be a small fraction of ATR');
 
-    // The recorded outcome carries candidate_rr verbatim -- the resolver never recomputes it.
+    // The recorded outcome carries planning_rr_illustrative verbatim -- the resolver never recomputes it.
     const { _deps, getLog } = memoryDeps();
     recordOpportunityOutcome({ observation, confirmedBars, _deps });
-    assert.equal(getLog()[0].candidate_rr, 188.87);
+    assert.equal(getLog()[0].planning_rr_illustrative, 188.87);
   });
 
-  it('source audit: the resolver never assigns a computed value to candidate_rr -- only ever copies observation.candidate_rr', () => {
+  it('source audit: the resolver never assigns a computed value to planning_rr_illustrative -- only ever copies observation.planning_rr_illustrative (or the legacy observation.candidate_rr)', () => {
     const src = readFileSync(new URL('../src/engine/opportunityOutcomeResolver.js', import.meta.url), 'utf8');
-    const assignments = src.match(/candidate_rr\s*:/g) ?? [];
+    const assignments = src.match(/planning_rr_illustrative\s*:/g) ?? [];
     assert.ok(assignments.length > 0);
-    assert.ok(!/candidate_rr\s*[:=]\s*(round2|reward|risk)/i.test(src));
+    assert.ok(!/planning_rr_illustrative\s*[:=]\s*(round2|reward|risk)/i.test(src));
+  });
+
+  it('backward compatibility: a legacy Ledger row (schema_version 1, field name candidate_rr) is still read correctly and surfaced under the new field name', () => {
+    // planning_rr_illustrative: undefined simulates a v1 Ledger row that
+    // never had this field at all (JSON.parse of a real legacy line would
+    // simply omit the key) -- `??` treats it the same as a missing key.
+    const observation = bullishObservation({ candidate_rr: 188.87, planning_rr_illustrative: undefined });
+    const { _deps, getLog } = memoryDeps();
+    recordOpportunityOutcome({ observation, confirmedBars: [bar(T0 + STEP)], _deps });
+    assert.equal(getLog()[0].planning_rr_illustrative, 188.87);
   });
 });
 

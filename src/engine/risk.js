@@ -66,7 +66,17 @@ export function computeRisk({ candidate, bars, atrVal, structure }, params = RIS
   const rr = +(reward / risk).toFixed(2);
 
   if (rr < p.minRR) {
-    return { gate: 'RR_NOT_ACCEPTABLE', reason: `calculated RR ${rr} is below the minimum ${p.minRR}`, rr };
+    // Observability-only addition: entry/stop_loss/tp1/tp2 here are the
+    // SAME already-computed local values the OK branch below formats --
+    // no new computation, no change to `gate`/`reason`/`rr`/minRR. Exposed
+    // so downstream observability layers (xauusd_analyze_market.js's
+    // extractCandidateObservability()) can surface the exact protected
+    // geometry that produced this rejection instead of a separate,
+    // non-authoritative approximation. Never re-read by any gate/decision.
+    return {
+      gate: 'RR_NOT_ACCEPTABLE', reason: `calculated RR ${rr} is below the minimum ${p.minRR}`, rr,
+      entry: round2(entry), stop_loss: round2(sl), tp1: round2(tp1), tp2: round2(tp2),
+    };
   }
 
   return {
