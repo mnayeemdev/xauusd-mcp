@@ -45,15 +45,8 @@ import { classifyRegime, REGIME_PARAMS } from '../engine/regime.js';
 import { computeStructure, STRUCTURE_PARAMS } from '../engine/structure.js';
 import { computeCorrection, CORRECTION_PARAMS } from '../engine/correction.js';
 import { runPipeline } from '../engine/pipeline.js';
-import { atr } from '../engine/math.js';
-import { detectCandlestickPatterns } from '../engine/candlesticks.js';
-import { detectClassicalPatterns } from '../engine/patterns.js';
-import { classifyBreakoutState } from '../engine/breakout.js';
-import { computeLiquidityContext } from '../engine/liquidity.js';
-import { buildLevels } from '../engine/levels.js';
-import { computeVolatilityContext } from '../engine/volatility.js';
-import { computeSessionContext, computeDailyWeeklyContext } from '../engine/session.js';
-import { computeStrategyEligibility } from '../engine/strategies/eligibility.js';
+import { computeMarketEvidence } from '../engine/marketEvidence.js';
+import { computeDailyWeeklyContext } from '../engine/session.js';
 import { buildConfluenceReport } from '../engine/confluence.js';
 import { computeAnticipation } from '../engine/anticipation.js';
 import { computeOpportunityPlan } from '../engine/opportunityPlanner.js';
@@ -74,12 +67,27 @@ function buildPrefetchedDeps(byTf, originalSymbol, originalResolution) {
 // reuse the EXACT SAME evidence computation for the active chart
 // timeframe's own local intelligence, which may differ from the primary
 // (15m) decision timeframe -- never a second, divergent implementation.
-export function computeEvidence(primaryBars, split, selectedModel) {
-  const { regime } = classifyRegime(primaryBars, REGIME_PARAMS);
-  const structure = computeStructure(primaryBars, STRUCTURE_PARAMS);
-  const correction = regime && structure.state ? computeCorrection(primaryBars, structure.state, CORRECTION_PARAMS) : { state: 'NONE' };
-  const atrSeries = atr(primaryBars, 14);
-  const atrVal = atrSeries.at(-1);
+// `primaryPipeline` (EI-1, additive, optional): the ALREADY-COMPUTED
+// runPipeline() result (src/engine/pipeline.js, UNCHANGED, PROTECTED) for
+// this EXACT confirmed-bar set, when the caller has one -- analyzeMarket()
+// below always supplies it (from the SAME pipelineByTf every Stage 6
+// candidate-observability call already computes, never a second/third
+// independent run). When supplied, its `regime`/`structure` are reused
+// VERBATIM -- this function no longer recomputes them itself, closing the
+// architectural duplication the EI-1 design audit identified. `correction`
+// is likewise reused verbatim when present.
+//
+// Falls back to an independent computation -- BYTE-IDENTICAL to this
+// function's pre-EI-1 behavior -- only when no pipeline result is
+// available at all: a timeframe whose own data failed validation (no
+// pipeline result exists to reuse), or a caller analyzing a timeframe
+// outside the 3 protected entry timeframes (src/core/xauusd_chart_context.js,
+// which has no calculateEntry()-driven pipeline for its own, possibly
+// non-entry timeframe -- see that file's own call site).
+export function computeEvidence(primaryBars, split, selectedModel, primaryPipeline = null) {
+  const regime = primaryPipeline?.regime ?? classifyRegime(primaryBars, REGIME_PARAMS).regime;
+  const structure = primaryPipeline?.structure ?? computeStructure(primaryBars, STRUCTURE_PARAMS);
+  const correction = primaryPipeline?.correction ?? (regime && structure.state ? computeCorrection(primaryBars, structure.state, CORRECTION_PARAMS) : { state: 'NONE' });
   const lastIndex = primaryBars.length - 1;
 
   const dailyWeeklyContext = computeDailyWeeklyContext({
@@ -90,22 +98,13 @@ export function computeEvidence(primaryBars, split, selectedModel) {
     currentPrice: primaryBars[lastIndex].close,
   });
 
-  return {
-    regime, structure, correction,
-    eligibility: computeStrategyEligibility({ regime, structure, selectedModel }),
-    candlestickPatterns: detectCandlestickPatterns(primaryBars, lastIndex),
-    classicalPatterns: detectClassicalPatterns(primaryBars, structure, atrVal),
-    breakoutState: classifyBreakoutState({ bars: primaryBars, structure, atrVal }),
-    volatilityContext: computeVolatilityContext(primaryBars),
-    levelsContext: buildLevels(primaryBars, structure),
-    sessionContext: computeSessionContext(primaryBars),
-    dailyWeeklyContext,
-    liquidityContext: computeLiquidityContext({
-      bars: primaryBars, structure, atrSeries,
-      priorDayHigh: dailyWeeklyContext.previousDayHigh, priorDayLow: dailyWeeklyContext.previousDayLow,
-      priorWeekHigh: dailyWeeklyContext.previousWeekHigh, priorWeekLow: dailyWeeklyContext.previousWeekLow,
-    }),
-  };
+  const marketEvidence = computeMarketEvidence({
+    confirmedBars: primaryBars, regime, structure, selectedModel,
+    priorDayHigh: dailyWeeklyContext.previousDayHigh, priorDayLow: dailyWeeklyContext.previousDayLow,
+    priorWeekHigh: dailyWeeklyContext.previousWeekHigh, priorWeekLow: dailyWeeklyContext.previousWeekLow,
+  });
+
+  return { regime, structure, correction, dailyWeeklyContext, ...marketEvidence };
 }
 
 /**
@@ -176,8 +175,22 @@ export function extractCandidateObservability(pipelineResult) {
   };
 }
 
-/** Runs runPipeline() for every ENTRY_TIMEFRAMES member on already-fetched confirmed bars, mirroring calculateEntry()'s OWN internal sequencing exactly (30m first -- its regime feeds 15m/5m's htfRegime, since 30m is the designated HTF-context source for the entry timeframes). Candidate observability only -- see extractCandidateObservability(). */
-function computeCandidateObservability(split) {
+/**
+ * Runs runPipeline() for every ENTRY_TIMEFRAMES member on already-fetched
+ * confirmed bars, mirroring calculateEntry()'s OWN internal sequencing
+ * exactly (30m first -- its regime feeds 15m/5m's htfRegime, since 30m is
+ * the designated HTF-context source for the entry timeframes). Returns
+ * the RAW per-timeframe runPipeline() results.
+ *
+ * EI-1: this is the SINGLE place analyzeMarket() re-runs the entry-tier
+ * pipeline (Stage 6 candidate observability already required exactly this
+ * one additional run, deterministically identical to calculateEntry()'s
+ * own internal one -- see extractCandidateObservability()'s own doc
+ * comment). computeEvidence() now REUSES this SAME result for its
+ * regime/structure/correction instead of independently recomputing them a
+ * third time -- see computeEvidence()'s own doc comment above.
+ */
+function computeEntryPipelineByTf(split) {
   const pipelineByTf = {};
   const m30 = split[30]?.error ? null : runPipeline({ confirmedBars: split[30].confirmed });
   pipelineByTf[30] = m30;
@@ -185,6 +198,11 @@ function computeCandidateObservability(split) {
     if (tf === '30' || Number(tf) === 30) continue;
     pipelineByTf[tf] = split[tf]?.error ? null : runPipeline({ confirmedBars: split[tf].confirmed, htfRegime: m30?.regime ?? null });
   }
+  return pipelineByTf;
+}
+
+/** Candidate observability only -- see extractCandidateObservability(). Maps the ALREADY-COMPUTED pipelineByTf (computeEntryPipelineByTf()); never runs a pipeline itself. */
+function computeCandidateObservability(pipelineByTf) {
   const result = {};
   for (const tf of ENTRY_TIMEFRAMES) result[TF_LABEL[tf]] = extractCandidateObservability(pipelineByTf[tf]);
   return result;
@@ -238,9 +256,15 @@ export async function analyzeMarket({ _deps, persistSignals = false } = {}) {
     },
   });
 
+  // EI-1: computed ONCE, before evidence, so computeEvidence() below can
+  // reuse this SAME regime/structure/correction for the primary (15m)
+  // timeframe instead of independently recomputing them -- see
+  // computeEntryPipelineByTf()'s own doc comment.
+  const pipelineByTf = computeEntryPipelineByTf(split);
+
   const primarySplit = split[PRIMARY_TIMEFRAME];
   const evidence = !primarySplit?.error && primarySplit?.confirmed?.length > 0
-    ? computeEvidence(primarySplit.confirmed, split, decision.setup ?? null)
+    ? computeEvidence(primarySplit.confirmed, split, decision.setup ?? null, pipelineByTf[PRIMARY_TIMEFRAME])
     : null;
 
   const confluence = evidence ? buildConfluenceReport({ decision, decisionTimeframes: decision.timeframes ?? null, ...evidence }) : null;
@@ -254,7 +278,7 @@ export async function analyzeMarket({ _deps, persistSignals = false } = {}) {
   const anticipation = computeAnticipation({ decision, evidence });
 
   // Stage 6, additive, observability only -- see extractCandidateObservability().
-  const candidates = computeCandidateObservability(split);
+  const candidates = computeCandidateObservability(pipelineByTf);
 
   // Pre-Entry Opportunity Planner (additive upgrade on Stage 6): consumes
   // the SAME already-computed decision/evidence/anticipation, plus the
