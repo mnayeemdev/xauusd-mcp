@@ -35,6 +35,7 @@ import { combineTimeframes } from '../engine/mtf.js';
 import { computeHtfContext, detectHtfConflict } from '../engine/htf.js';
 import { loadStore, saveStore, registerOrGetSignal, resolveOpenSignals } from '../engine/signalStore.js';
 import { computeSetupId, resolveStructuralAnchorPrice } from '../engine/anticipationStore.js';
+import { withCdpLock as _withCdpLock, DEFAULT_CDP_LOCK_PATH } from '../engine/cdpLock.js';
 import { fileURLToPath } from 'node:url';
 
 export const CALCULATE_SCHEMA_VERSION = '1.1.0';
@@ -100,6 +101,13 @@ export function resolveDeps(_deps) {
     loadStore: _deps?.loadStore ?? ((p) => loadStore(p)),
     saveStore: _deps?.saveStore ?? ((p, s) => saveStore(p, s)),
     storePath: _deps?.storePath ?? SIGNAL_STORE_PATH,
+    // Runtime Live Sync, Part B: serializes fetchMultiTimeframeBars()'s own
+    // chart-mutating sweep below against any OTHER process doing the same
+    // (a manual xauusd:check while the watcher is mid-cycle, etc.) --
+    // real, cross-process file lock by default (src/engine/cdpLock.js);
+    // injectable so tests never touch the real filesystem lock.
+    cdpLockPath: _deps?.cdpLockPath ?? DEFAULT_CDP_LOCK_PATH,
+    withCdpLock: _deps?.withCdpLock ?? _withCdpLock,
   };
 }
 
@@ -133,23 +141,35 @@ export function validateAndSplit(bars, timeframeMinutes) {
  * timeframe. Each fetch is independently try/caught so one timeframe's
  * failure never prevents the others from being gathered, and the restore
  * always runs afterward regardless of how many timeframes failed.
+ *
+ * Runtime Live Sync, Part B: the ENTIRE sweep (every setTimeframe()/
+ * getOhlcv() call, including the final restore) runs inside
+ * deps.withCdpLock() -- the single shared cross-process serialization
+ * point for every caller (bare calculateEntry(), analyzeMarket(), the
+ * watcher's own cycle) so two processes can never interleave their own
+ * timeframe switches against the SAME live chart. The lock is always
+ * released (success, error, or a partially-failed sweep) since
+ * withCdpLock() itself guarantees that via try/finally -- see
+ * src/engine/cdpLock.js.
  */
 export async function fetchMultiTimeframeBars(deps) {
-  const original = await deps.getState();
-  const byTf = {};
-  const fetchErrors = [];
-  for (const tf of ALL_TIMEFRAMES) {
-    try {
-      await deps.setTimeframe({ timeframe: tf });
-      const raw = await deps.getOhlcv({ count: OHLCV_REQUEST_COUNT });
-      byTf[tf] = raw.bars;
-    } catch (err) {
-      fetchErrors.push(`${TF_LABEL[tf]}: ${err.message}`);
-      byTf[tf] = null;
+  return deps.withCdpLock(deps.cdpLockPath, async () => {
+    const original = await deps.getState();
+    const byTf = {};
+    const fetchErrors = [];
+    for (const tf of ALL_TIMEFRAMES) {
+      try {
+        await deps.setTimeframe({ timeframe: tf });
+        const raw = await deps.getOhlcv({ count: OHLCV_REQUEST_COUNT });
+        byTf[tf] = raw.bars;
+      } catch (err) {
+        fetchErrors.push(`${TF_LABEL[tf]}: ${err.message}`);
+        byTf[tf] = null;
+      }
     }
-  }
-  try { await deps.setTimeframe({ timeframe: original.resolution }); } catch { /* best-effort restore */ }
-  return { symbol: original.symbol, byTf, fetchErrors };
+    try { await deps.setTimeframe({ timeframe: original.resolution }); } catch { /* best-effort restore */ }
+    return { symbol: original.symbol, byTf, fetchErrors };
+  });
 }
 
 /**

@@ -249,15 +249,28 @@ describe('marketVisualization: classical pattern selection is deterministic, nev
     });
     const anticipation = computeAnticipation({ decision, evidence });
     const { intents, candidates } = buildMarketVisualizationIntents({ decision, evidence, anticipation });
-    const p = findIntent(intents, 'pattern_primary');
+    // Pattern Visual Proof (Part E): DOUBLE_BOTTOM now draws truthful
+    // two-part geometry -- a trend_line through the actual peak/valley
+    // touches (pattern_primary_touches, carrying the pattern-type label)
+    // PLUS the objective neckline as its own horizontal_line
+    // (pattern_primary, labeled NECKLINE) -- never a single fabricated
+    // reference line standing in for both.
+    const touches = findIntent(intents, 'pattern_primary_touches');
+    const neckline = findIntent(intents, 'pattern_primary');
+    assert.ok(touches, 'expected a touches trend_line through the real pivot_points');
+    assert.equal(touches.primitive, 'trend_line');
     // Short chart label: underscores become spaces ("DOUBLE BOTTOM"), never
     // the raw enum ("DOUBLE_BOTTOM") or the completion_state -- both remain
-    // available via the diagnostic audit trail.
-    assert.ok(findLabelText(intents, 'pattern_primary').includes('DOUBLE BOTTOM'));
-    assert.ok(!findLabelText(intents, 'pattern_primary').includes('_'));
-    assert.ok(findCandidate(candidates, 'pattern_primary').diagnostic.includes('DOUBLE_BOTTOM'));
-    assert.equal(p.point.price, 2018.5);
-    assert.equal(p.point.time, NOW - 300); // the pattern's OWN real end_time, never the current bar time
+    // available via the diagnostic audit trail. A trend_line's own text
+    // (unlike a horizontal_line's) is not decoupled into a separate
+    // `__label` companion, so it is asserted directly on the intent.
+    assert.ok(touches.text.includes('DOUBLE BOTTOM'));
+    assert.ok(!touches.text.includes('_'));
+    assert.ok(findCandidate(candidates, 'pattern_primary_touches').diagnostic.includes('DOUBLE_BOTTOM'));
+    assert.ok(neckline, 'expected the objective neckline as its own horizontal_line');
+    assert.equal(neckline.point.price, 2018.5);
+    assert.equal(neckline.point.time, NOW - 300); // the pattern's OWN real end_time, never the current bar time
+    assert.equal(findLabelText(intents, 'pattern_primary'), 'NECKLINE');
   });
 
   it('falls back to a text-only annotation at the last pivot when no neckline/breakout_level exists', () => {

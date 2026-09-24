@@ -81,7 +81,17 @@ export function normalizeChartResolution(rawResolution) {
  */
 export async function getActiveChartContext({ _deps } = {}) {
   const deps = resolveDeps(_deps);
+  // Runtime Live Sync, Part B: this reads whatever timeframe is currently
+  // active on the SAME shared CDP chart fetchMultiTimeframeBars() sweeps
+  // across timeframes on -- without the lock, a watcher sweep mid-switch
+  // could be read here as if it were the "active" state. Serialized behind
+  // the SAME cross-process mutex, so this either runs before/after a
+  // decision sweep, never during one. Zero chart mutation still holds
+  // (see module header) -- this only ever waits its turn to READ.
+  return deps.withCdpLock(deps.cdpLockPath, async () => getActiveChartContextLocked(deps, _deps));
+}
 
+async function getActiveChartContextLocked(deps, _deps) {
   let state;
   try {
     state = await deps.getState();

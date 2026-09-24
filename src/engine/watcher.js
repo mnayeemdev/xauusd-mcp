@@ -439,7 +439,36 @@ export function startWatcher({ pollIntervalMs = DEFAULT_POLL_INTERVAL_MS, _deps 
     deps.onSignal('SIGTERM', onSigterm);
     if (deps.abortSignal?.addEventListener) deps.abortSignal.addEventListener('abort', onAbort);
 
+    // Runtime Live Sync, Part A/B: setInterval() fires on a fixed wall-clock
+    // cadence regardless of how long the PREVIOUS tick's own work (a full
+    // 10-TF analysis cycle, itself now serialized behind the CDP lock, plus
+    // a chart-context visualization pass) took. Without a guard, a slow
+    // tick and the next scheduled tick could run concurrently IN THIS SAME
+    // PROCESS -- two overlapping calls into deps.runCycle()/
+    // visualizeActiveChartContext() at once. The CDP lock itself prevents
+    // any resulting chart-read/-write corruption (they'd simply serialize,
+    // one waiting behind the other), but an overlapping second runCycle()
+    // could still race the FIRST cycle's own `state` variable (read-modify-
+    // write on `state`/deps.saveState -- a plain JS variable, no lock
+    // protects it). Simplest safe fix: skip a tick outright if the previous
+    // one hasn't finished yet (never queue/stack ticks, never block the
+    // timer) -- the next scheduled tick will simply try again.
+    let tickInFlight = false;
     const tick = async () => {
+      if (stopped) return;
+      if (tickInFlight) {
+        deps.log('Watcher tick skipped: previous tick still in progress (avoids overlapping analysis cycles).');
+        return;
+      }
+      tickInFlight = true;
+      try {
+        await runTickBody();
+      } finally {
+        tickInFlight = false;
+      }
+    };
+
+    const runTickBody = async () => {
       if (stopped) return;
       try {
         const { state: nextState } = await deps.runCycle({ state, deps: deps.cycleDeps, log: deps.log });

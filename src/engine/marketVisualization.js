@@ -247,6 +247,21 @@ function buildText({ role, symbol, timeframe, time, price, text, overrides, sour
   return makeDrawingIntent({ role, primitive: 'text', point: { time, price: round2(price) }, text, overrides, source, symbol, timeframe });
 }
 
+// Pattern Visual Proof (Runtime Live Sync upgrade, Part E): two-point
+// primitives for truthful classical-pattern geometry. Both require two
+// REAL, already-computed anchor points -- never a single point extended
+// or a fabricated second endpoint. See buildPatternCandidates() below for
+// which detector fields feed these per pattern family.
+function buildTrendLine({ role, symbol, timeframe, time1, price1, time2, price2, text, overrides, source }) {
+  if (!Number.isFinite(time1) || !Number.isFinite(price1) || !Number.isFinite(time2) || !Number.isFinite(price2)) return null;
+  return makeDrawingIntent({ role, primitive: 'trend_line', point: { time: time1, price: round2(price1) }, point2: { time: time2, price: round2(price2) }, text: text ?? null, overrides, source, symbol, timeframe });
+}
+
+function buildRectangleFromPoints({ role, symbol, timeframe, time1, price1, time2, price2, text, overrides, source }) {
+  if (!Number.isFinite(time1) || !Number.isFinite(price1) || !Number.isFinite(time2) || !Number.isFinite(price2)) return null;
+  return makeDrawingIntent({ role, primitive: 'rectangle', point: { time: time1, price: round2(price1) }, point2: { time: time2, price: round2(price2) }, text: text ?? null, overrides, source, symbol, timeframe });
+}
+
 /**
  * `diagnostic`, when passed, is the FULL, verbose, human-readable sentence
  * describing this candidate (state/reason/model/blocking-conditions/etc.)
@@ -424,6 +439,139 @@ function selectPrimaryPattern(classicalPatterns) {
   return eligible[0];
 }
 
+// Pattern Visual Proof (Runtime Live Sync upgrade, Part E): "IF MCP SAYS
+// IT DETECTED SOMETHING, THE CHART SHOULD VISUALLY SHOW WHAT IT DETECTED
+// WHEN OBJECTIVE GEOMETRY IS AVAILABLE." Every point drawn below is one
+// of patterns.js's OWN already-computed fields (pivot_points/boundary/
+// neckline/breakout_level) -- this module never fits a line, never picks
+// a pivot, never invents a second endpoint. structure.js's pivot label
+// vocabulary (H/HH/LH = high-type, L/HL/LL = low-type -- NOTE "HL" is a
+// LOW despite starting with "H", so this MUST be exact-match, never a
+// prefix check) is reused, never re-derived.
+const PATTERN_HIGH_LABELS = new Set(['H', 'HH', 'LH']);
+const PATTERN_LOW_LABELS = new Set(['L', 'HL', 'LL']);
+
+// detectTrendlinePatterns() only ever fires with >=2 highs AND >=2 lows
+// (patterns.js's own precondition) -- both boundary trend lines are
+// therefore always drawable for every pattern in this family.
+const TRENDLINE_PATTERN_FAMILY = new Set(['ASCENDING_TRIANGLE', 'DESCENDING_TRIANGLE', 'SYMMETRICAL_TRIANGLE', 'RISING_WEDGE', 'FALLING_WEDGE', 'RECTANGLE', 'ASCENDING_CHANNEL', 'DESCENDING_CHANNEL']);
+const FLAG_PATTERN_FAMILY = new Set(['BULL_FLAG', 'BEAR_FLAG', 'PENNANT']);
+const HS_PATTERN_FAMILY = new Set(['HEAD_AND_SHOULDERS', 'INVERSE_HEAD_AND_SHOULDERS']);
+const TOPBOTTOM_PATTERN_FAMILY = new Set(['DOUBLE_TOP', 'DOUBLE_BOTTOM', 'TRIPLE_TOP', 'TRIPLE_BOTTOM']);
+
+function buildTrendlineFamilyGeometry(out, { pattern, symbol, timeframe, label, diagnostic, overrides, source }) {
+  const points = pattern.pivot_points ?? [];
+  const highs = points.filter((p) => PATTERN_HIGH_LABELS.has(p.label));
+  const lows = points.filter((p) => PATTERN_LOW_LABELS.has(p.label));
+  let drew = false;
+  if (highs.length >= 2) {
+    const first = highs[0]; const last = highs.at(-1);
+    addCandidate(out, {
+      role: 'pattern_primary_upper', category: 'pattern_breakout', tier: TIER.PATTERN_BREAKOUT,
+      intent: buildTrendLine({ role: 'pattern_primary_upper', symbol, timeframe, time1: first.time, price1: first.price, time2: last.time, price2: last.price, text: label, overrides, source: `${source}.pivot_points (high-type pivots)` }),
+      diagnostic,
+    });
+    drew = true;
+  }
+  if (lows.length >= 2) {
+    const first = lows[0]; const last = lows.at(-1);
+    addCandidate(out, {
+      role: 'pattern_primary_lower', category: 'pattern_breakout', tier: TIER.PATTERN_BREAKOUT,
+      intent: buildTrendLine({ role: 'pattern_primary_lower', symbol, timeframe, time1: first.time, price1: first.price, time2: last.time, price2: last.price, text: null, overrides, source: `${source}.pivot_points (low-type pivots)` }),
+      diagnostic,
+    });
+    drew = true;
+  }
+  return drew;
+}
+
+function buildFlagFamilyGeometry(out, { pattern, symbol, timeframe, label, diagnostic, overrides, source }) {
+  const points = pattern.pivot_points ?? [];
+  const poleStart = points.find((p) => p.label === 'POLE_START');
+  const poleEnd = points.find((p) => p.label === 'POLE_END');
+  const consolidationEnd = points.find((p) => p.label === 'CONSOLIDATION_END');
+  let drew = false;
+  if (poleStart && poleEnd) {
+    addCandidate(out, {
+      role: 'pattern_primary_pole', category: 'pattern_breakout', tier: TIER.PATTERN_BREAKOUT,
+      intent: buildTrendLine({ role: 'pattern_primary_pole', symbol, timeframe, time1: poleStart.time, price1: poleStart.price, time2: poleEnd.time, price2: poleEnd.price, text: label, overrides, source: `${source}.pivot_points (POLE_START/POLE_END)` }),
+      diagnostic,
+    });
+    drew = true;
+  }
+  if (poleEnd && consolidationEnd && Number.isFinite(pattern.boundary?.high) && Number.isFinite(pattern.boundary?.low)) {
+    addCandidate(out, {
+      role: 'pattern_primary_box', category: 'pattern_breakout', tier: TIER.PATTERN_BREAKOUT,
+      intent: buildRectangleFromPoints({ role: 'pattern_primary_box', symbol, timeframe, time1: poleEnd.time, price1: pattern.boundary.low, time2: consolidationEnd.time, price2: pattern.boundary.high, text: null, overrides, source: `${source}.boundary (consolidation range)` }),
+      diagnostic,
+    });
+    drew = true;
+  }
+  return drew;
+}
+
+// H&S: pivot_points is exactly [leftShoulder, head, rightShoulder] --
+// individually meaningful anchors (unlike the trendline family, drawing a
+// single line through them would misrepresent what they mean), so each is
+// marked with its own concise text label. patterns.js does NOT return the
+// two valley/peak points the neckline was actually fit through (only its
+// CURRENT value at the last bar) -- so the neckline remains a single
+// horizontal_line, exactly as before; this is a real, documented geometry
+// limitation, not an invented line.
+function buildHsFamilyGeometry(out, { pattern, symbol, timeframe, diagnostic, overrides, source, anchorTime }) {
+  const points = pattern.pivot_points ?? [];
+  const [leftShoulder, head, rightShoulder] = points;
+  let drew = false;
+  for (const [markerRole, markerText, pt] of [['pattern_primary_left_shoulder', 'L SHOULDER', leftShoulder], ['pattern_primary_head', 'HEAD', head], ['pattern_primary_right_shoulder', 'R SHOULDER', rightShoulder]]) {
+    if (pt && Number.isFinite(pt.time) && Number.isFinite(pt.price)) {
+      addCandidate(out, {
+        role: markerRole, category: 'pattern_breakout', tier: TIER.PATTERN_BREAKOUT,
+        intent: buildText({ role: markerRole, symbol, timeframe, time: pt.time, price: pt.price, text: markerText, overrides, source: `${source}.pivot_points` }),
+        diagnostic,
+      });
+      drew = true;
+    }
+  }
+  if (Number.isFinite(pattern.neckline) && Number.isFinite(anchorTime)) {
+    addCandidate(out, {
+      role: 'pattern_primary', category: 'pattern_breakout', tier: TIER.PATTERN_BREAKOUT,
+      intent: buildHLine({ role: 'pattern_primary', symbol, timeframe, time: anchorTime, price: pattern.neckline, text: 'NECKLINE', overrides, source: `${source}.neckline (current fitted value only -- detector does not expose the neckline's own two fit points)` }),
+      diagnostic,
+    });
+    drew = true;
+  }
+  return drew;
+}
+
+// Double/Triple Top/Bottom: pivot_points is the 2-3 actual peak/valley
+// touches (already required by patterns.js to be within
+// topBottomTolerancePct of each other) -- connecting the first and last is
+// a truthful "repeated touch" line, not a fabricated one. neckline is kept
+// as its own separate horizontal_line (the objective breakout trigger),
+// exactly as before.
+function buildTopBottomFamilyGeometry(out, { pattern, symbol, timeframe, label, diagnostic, overrides, source, anchorTime }) {
+  const points = pattern.pivot_points ?? [];
+  let drew = false;
+  if (points.length >= 2) {
+    const first = points[0]; const last = points.at(-1);
+    addCandidate(out, {
+      role: 'pattern_primary_touches', category: 'pattern_breakout', tier: TIER.PATTERN_BREAKOUT,
+      intent: buildTrendLine({ role: 'pattern_primary_touches', symbol, timeframe, time1: first.time, price1: first.price, time2: last.time, price2: last.price, text: label, overrides, source: `${source}.pivot_points (peak/valley touches)` }),
+      diagnostic,
+    });
+    drew = true;
+  }
+  if (Number.isFinite(pattern.neckline) && Number.isFinite(anchorTime)) {
+    addCandidate(out, {
+      role: 'pattern_primary', category: 'pattern_breakout', tier: TIER.PATTERN_BREAKOUT,
+      intent: buildHLine({ role: 'pattern_primary', symbol, timeframe, time: anchorTime, price: pattern.neckline, text: 'NECKLINE', overrides, source: `${source}.neckline` }),
+      diagnostic,
+    });
+    drew = true;
+  }
+  return drew;
+}
+
 function buildPatternCandidates({ evidence, symbol, timeframe }) {
   const out = [];
   const pattern = selectPrimaryPattern(evidence?.classicalPatterns);
@@ -433,17 +581,34 @@ function buildPatternCandidates({ evidence, symbol, timeframe }) {
   // looked up from the actual bars it was given) -- unlike structure/
   // breakout/liquidity evidence, no "current bar" substitution is needed.
   const anchorTime = pattern.end_time;
-  const levelPrice = Number.isFinite(pattern.breakout_level) ? pattern.breakout_level : Number.isFinite(pattern.neckline) ? pattern.neckline : null;
   const label = shortPatternLabel(pattern.pattern_type);
   const diagnostic = `${pattern.pattern_type} — ${pattern.completion_state}`;
+  const overrides = styleFor('pattern');
+  const source = `evidence.classicalPatterns[${pattern.pattern_id}]`;
+  const geometryArgs = { pattern, symbol, timeframe, label, diagnostic, overrides, source, anchorTime };
 
+  let drew = false;
+  if (TRENDLINE_PATTERN_FAMILY.has(pattern.pattern_type)) drew = buildTrendlineFamilyGeometry(out, geometryArgs);
+  else if (FLAG_PATTERN_FAMILY.has(pattern.pattern_type)) drew = buildFlagFamilyGeometry(out, geometryArgs);
+  else if (HS_PATTERN_FAMILY.has(pattern.pattern_type)) drew = buildHsFamilyGeometry(out, geometryArgs);
+  else if (TOPBOTTOM_PATTERN_FAMILY.has(pattern.pattern_type)) drew = buildTopBottomFamilyGeometry(out, geometryArgs);
+  if (drew) return out;
+
+  // Fallback (unchanged pre-existing behavior, preserved verbatim): a
+  // single reference line at breakout_level/neckline, or a text marker at
+  // the last pivot, or an honest skip. Reached only for a pattern_type not
+  // covered by any family above (none currently exist -- defense in
+  // depth) or the edge case where a covered family's own fields were
+  // unexpectedly insufficient -- per Part E: "if detector output does not
+  // currently expose enough geometry... do not invent geometry."
+  const levelPrice = Number.isFinite(pattern.breakout_level) ? pattern.breakout_level : Number.isFinite(pattern.neckline) ? pattern.neckline : null;
   if (Number.isFinite(levelPrice) && Number.isFinite(anchorTime)) {
-    addCandidate(out, { role: 'pattern_primary', category: 'pattern_breakout', tier: TIER.PATTERN_BREAKOUT, intent: buildHLine({ role: 'pattern_primary', symbol, timeframe, time: anchorTime, price: levelPrice, text: label, overrides: styleFor('pattern'), source: `evidence.classicalPatterns[${pattern.pattern_id}].neckline/breakout_level` }), diagnostic });
+    addCandidate(out, { role: 'pattern_primary', category: 'pattern_breakout', tier: TIER.PATTERN_BREAKOUT, intent: buildHLine({ role: 'pattern_primary', symbol, timeframe, time: anchorTime, price: levelPrice, text: label, overrides, source: `${source}.neckline/breakout_level` }), diagnostic });
     return out;
   }
   const lastPivotPrice = pattern.pivot_points?.at(-1)?.price;
   if (Number.isFinite(lastPivotPrice) && Number.isFinite(anchorTime)) {
-    addCandidate(out, { role: 'pattern_primary', category: 'pattern_breakout', tier: TIER.PATTERN_BREAKOUT, intent: buildText({ role: 'pattern_primary', symbol, timeframe, time: anchorTime, price: lastPivotPrice, text: label, overrides: styleFor('pattern'), source: `evidence.classicalPatterns[${pattern.pattern_id}].pivot_points` }), diagnostic });
+    addCandidate(out, { role: 'pattern_primary', category: 'pattern_breakout', tier: TIER.PATTERN_BREAKOUT, intent: buildText({ role: 'pattern_primary', symbol, timeframe, time: anchorTime, price: lastPivotPrice, text: label, overrides, source: `${source}.pivot_points` }), diagnostic });
     return out;
   }
   skip(out, { role: 'pattern_primary', category: 'pattern_breakout', tier: TIER.PATTERN_BREAKOUT, reason: 'NO_OBJECTIVE_PATTERN_GEOMETRY' });
