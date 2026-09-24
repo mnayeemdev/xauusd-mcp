@@ -119,6 +119,30 @@ export function registerOrGetSignal(store, candidate) {
   return { record, isNew: true, blockedByOpenThesis: false, thesisId: candidate.thesisId ?? null, existingSignalId: null };
 }
 
+/**
+ * EI-2 (additive, narrow): attaches a caller-built evidence_snapshot
+ * (src/engine/evidenceSnapshot.js) to an already-registered signal, ONCE,
+ * immutably. This function never builds/computes a snapshot itself and
+ * never touches signal_id/thesis_id/status/entry/SL/TP/RR/quality or any
+ * other existing field -- purely an additive, optional field.
+ *
+ * Idempotent/safe no-op (never throws) when: the signal_id isn't found,
+ * or the record already carries a non-null evidence_snapshot (immutability
+ * -- a later call, e.g. from a subsequent blocked-duplicate same-thesis
+ * event, must never overwrite the ORIGINAL contemporaneous snapshot with
+ * later evidence). The caller is responsible for only ever calling this
+ * for a GENUINELY NEW registration (`isNew: true` from registerOrGetSignal()),
+ * never for a blocked/duplicate event -- this function enforces the
+ * immutability half of that guarantee, not the "when to call" half.
+ */
+export function attachEvidenceSnapshot(store, signalId, snapshot) {
+  const record = store.signals.find((s) => s.signal_id === signalId);
+  if (!record) return { attached: false, reason: 'SIGNAL_NOT_FOUND' };
+  if (record.evidence_snapshot != null) return { attached: false, reason: 'ALREADY_PRESENT' };
+  record.evidence_snapshot = snapshot;
+  return { attached: true };
+}
+
 const IMMUTABLE_FIELDS = ['signal_id', 'symbol', 'timeframe', 'model', 'side', 'origin_bar', 'signal_bar_time', 'entry', 'stop_loss', 'tp1', 'tp2', 'rr'];
 
 /**

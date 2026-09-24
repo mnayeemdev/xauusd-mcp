@@ -46,6 +46,8 @@ import { computeStructure, STRUCTURE_PARAMS } from '../engine/structure.js';
 import { computeCorrection, CORRECTION_PARAMS } from '../engine/correction.js';
 import { runPipeline } from '../engine/pipeline.js';
 import { computeMarketEvidence } from '../engine/marketEvidence.js';
+import { buildEvidenceSnapshot } from '../engine/evidenceSnapshot.js';
+import { attachEvidenceSnapshot } from '../engine/signalStore.js';
 import { computeDailyWeeklyContext } from '../engine/session.js';
 import { buildConfluenceReport } from '../engine/confluence.js';
 import { computeAnticipation } from '../engine/anticipation.js';
@@ -209,6 +211,51 @@ function computeCandidateObservability(pipelineByTf) {
 }
 
 /**
+ * EI-2 -- persists a compact, immutable src/engine/evidenceSnapshot.js
+ * record onto the just-registered signal, when ALL of:
+ *   - `persistSignals` is true (the SAME real-vs-ephemeral store
+ *     discipline calculateEntry() itself already used for this call --
+ *     an on-demand read, persistSignals:false, must NEVER touch the real
+ *     store, exactly as before EI-2 existed);
+ *   - `evidence` is available (MarketEvidence, EI-1, was actually computed
+ *     for this cycle);
+ *   - `decision.signal?.is_new_event === true` -- a blocked same-thesis
+ *     duplicate or an exact signal_id repeat must NEVER attach evidence
+ *     here, since that would silently overwrite the ORIGINAL signal's own
+ *     contemporaneous snapshot with a LATER attempt's evidence.
+ * This performs a second, small, additive load+save of the SAME store
+ * calculateEntry() already wrote to -- no new storage system, no change
+ * to signal_id/thesis_id/status/entry/SL/TP/RR/quality/concurrency
+ * semantics. Exported additively so tests can verify this directly
+ * against a hand-built decision/evidence pair (mirroring
+ * extractCandidateObservability()'s own precedent) without needing a
+ * full organic 500-bar fixture to coax a real BUY/SELL out of the
+ * protected pipeline. Never throws -- a snapshot failure must never
+ * affect the authoritative decision already returned by analyzeMarket().
+ */
+export function maybePersistEvidenceSnapshot({ decision, evidence, primarySplit, deps, persistSignals }) {
+  if (!persistSignals || !evidence || decision.signal?.is_new_event !== true) return { attached: false, reason: 'NOT_APPLICABLE' };
+  try {
+    const snapshot = buildEvidenceSnapshot({
+      symbol: decision.signal.symbol, timeframe: decision.signal.timeframe,
+      capturedBarTime: primarySplit?.confirmed?.at(-1)?.time ?? null,
+      signalBarTime: decision.signal.signal_bar_time, originBar: decision.signal.origin_bar,
+      thesisId: decision.signal.thesis_id ?? null,
+      regime: evidence.regime, structure: evidence.structure, correction: evidence.correction,
+      currentPrice: primarySplit?.confirmed?.at(-1)?.close ?? null,
+      qualityComponents: decision.diagnostics?.quality_breakdown ?? null,
+      marketEvidence: evidence,
+    });
+    const snapshotStore = deps.loadStore(deps.storePath);
+    const attachResult = attachEvidenceSnapshot(snapshotStore, decision.signal.signal_id, snapshot);
+    if (attachResult.attached) deps.saveStore(deps.storePath, snapshotStore);
+    return attachResult;
+  } catch (err) {
+    return { attached: false, reason: 'ERROR', error: err.message };
+  }
+}
+
+/**
  * Runs the full market analysis: authoritative decision (unchanged
  * calculateEntry()) + new evidence layers + confluence fusion. Never
  * places trades, always restores the chart's original timeframe
@@ -266,6 +313,11 @@ export async function analyzeMarket({ _deps, persistSignals = false } = {}) {
   const evidence = !primarySplit?.error && primarySplit?.confirmed?.length > 0
     ? computeEvidence(primarySplit.confirmed, split, decision.setup ?? null, pipelineByTf[PRIMARY_TIMEFRAME])
     : null;
+
+  // EI-2, additive, narrow, observability only -- see
+  // maybePersistEvidenceSnapshot()'s own doc comment for the full gating
+  // rationale (persistSignals / is_new_event / immutability).
+  maybePersistEvidenceSnapshot({ decision, evidence, primarySplit, deps, persistSignals });
 
   const confluence = evidence ? buildConfluenceReport({ decision, decisionTimeframes: decision.timeframes ?? null, ...evidence }) : null;
 
