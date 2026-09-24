@@ -40,11 +40,52 @@ export function saveStore(path, store) {
  * terminal), returns the EXISTING immutable record instead of creating a
  * duplicate -- this is the "same opportunity = same signal ID, no
  * duplicate new-entry event" rule.
+ *
+ * SAME-STRUCTURAL-THESIS CONCURRENCY GUARD (additive, narrow -- see
+ * docs/XAUUSD_LIVE_RUNTIME.md): `candidate.thesisId`, when supplied, is an
+ * opaque, caller-computed identity string (src/core/xauusd_calculate.js
+ * computes it via anticipationStore.js's already-existing, already-
+ * production-proven computeSetupId()/resolveStructuralAnchorPrice() --
+ * this module never computes or interprets it, purely an equality key).
+ * This function NEVER re-evaluates RR/model/quality/confirmation -- by
+ * the time it runs, `candidate` has ALREADY passed protected
+ * qualification (calculateEntry()'s own gates). It only decides whether
+ * THIS candidate gets its OWN new OPEN record, or is folded into an
+ * already-OPEN signal that shares the same (symbol, timeframe, side,
+ * thesisId):
+ *   - `candidate.thesisId == null` (legacy caller, or no structural
+ *     anchor could be resolved): the guard is skipped entirely --
+ *     identical to pre-existing behavior, byte-for-byte.
+ *   - An existing record's own `thesis_id` is `undefined`/absent (every
+ *     historical record persisted before this change): it can never
+ *     equal a real, non-null `thesisId` string, so legacy OPEN records
+ *     never participate in this guard -- they remain unlinked until they
+ *     resolve to PASS/FAIL on their own, exactly as before.
+ *   - `status === 'OPEN'` is the only gate checked (not `tp1_hit`): a
+ *     signal that has already hit TP1 but is not yet terminal still
+ *     blocks a second same-thesis, same-side registration, matching
+ *     tp1_hit's own documented "never terminal" semantics above.
+ *   - Opposite-direction signals are never compared (side is part of the
+ *     match) -- deliberately out of scope for this change.
  */
 export function registerOrGetSignal(store, candidate) {
   const id = computeSignalId(candidate);
   const existing = store.signals.find((s) => s.signal_id === id);
-  if (existing) return { record: existing, isNew: false };
+  if (existing) return { record: existing, isNew: false, blockedByOpenThesis: false, thesisId: candidate.thesisId ?? null, existingSignalId: null };
+
+  if (candidate.thesisId != null) {
+    const openSameThesis = store.signals.find((s) =>
+      s.status === 'OPEN' && s.symbol === candidate.symbol && s.timeframe === candidate.timeframe
+      && s.side === candidate.side && s.thesis_id === candidate.thesisId);
+    if (openSameThesis) {
+      // The candidate passed protected qualification -- this only
+      // withholds ITS OWN registration as a second, independently-risked
+      // OPEN record. The existing record is returned verbatim, never
+      // altered, never re-scored, never moved off OPEN.
+      return { record: openSameThesis, isNew: false, blockedByOpenThesis: true, thesisId: candidate.thesisId, existingSignalId: openSameThesis.signal_id };
+    }
+  }
+
   const record = {
     signal_id: id,
     symbol: candidate.symbol,
@@ -59,6 +100,10 @@ export function registerOrGetSignal(store, candidate) {
     tp2: candidate.tp2,
     rr: candidate.rr,
     quality: candidate.quality,
+    // Additive, optional structural-thesis identity (see the guard doc
+    // above). `null` for any caller that doesn't supply one -- preserves
+    // exact pre-existing record shape/behavior for those callers.
+    thesis_id: candidate.thesisId ?? null,
     status: 'OPEN',
     created_at: new Date().toISOString(),
     resolution_bar_time: null,
@@ -71,7 +116,7 @@ export function registerOrGetSignal(store, candidate) {
     tp1_hit_bar_time: null,
   };
   store.signals.push(record);
-  return { record, isNew: true };
+  return { record, isNew: true, blockedByOpenThesis: false, thesisId: candidate.thesisId ?? null, existingSignalId: null };
 }
 
 const IMMUTABLE_FIELDS = ['signal_id', 'symbol', 'timeframe', 'model', 'side', 'origin_bar', 'signal_bar_time', 'entry', 'stop_loss', 'tp1', 'tp2', 'rr'];

@@ -17,6 +17,7 @@ import { scoreQuality, classifySession } from '../src/engine/quality.js';
 import { runPipeline, MIN_BARS_REQUIRED } from '../src/engine/pipeline.js';
 import { combineTimeframes } from '../src/engine/mtf.js';
 import { computeSignalId, registerOrGetSignal, resolveOpenSignals } from '../src/engine/signalStore.js';
+import { computeSetupId, resolveStructuralAnchorPrice } from '../src/engine/anticipationStore.js';
 import { calculateEntry, detectMaterialDisagreement } from '../src/core/xauusd_calculate.js';
 import { formatEngineDecision } from '../src/core/presentation.js';
 import { seededRng } from '../validation/metrics.js';
@@ -286,6 +287,214 @@ describe('engine/signalStore: identity, dedup, entry freeze, and outcome resolut
     const updates = resolveOpenSignals(store, { timeframe: '15m', confirmedBars: future });
     assert.equal(updates.length, 0);
     assert.equal(store.signals[0].status, 'PASS');
+  });
+});
+
+describe('engine/signalStore: same-structural-thesis open-signal concurrency guard (additive, narrow)', () => {
+  // Distinct originBar/signalBarTime per call so each candidate below gets
+  // its OWN signal_id (mirroring different confirmed 15m bars/models
+  // re-triggering the same thesis), unless a test explicitly wants an
+  // EXACT repeat.
+  function buyCandidate(overrides = {}) {
+    return { symbol: 'OANDA:XAUUSD', timeframe: '15m', model: 'PB', side: 'BUY', originBar: 100, signalBarTime: 100, entry: 10, stop_loss: 9, tp1: 11, tp2: 12, rr: 2, quality: 70, thesisId: 'thesisA', ...overrides };
+  }
+  function sellCandidate(overrides = {}) {
+    return { symbol: 'OANDA:XAUUSD', timeframe: '15m', model: 'PB', side: 'SELL', originBar: 100, signalBarTime: 100, entry: 10, stop_loss: 11, tp1: 9, tp2: 8, rr: 2, quality: 70, thesisId: 'thesisA', ...overrides };
+  }
+
+  it('1. first qualified BUY with thesis A registers OPEN normally', () => {
+    const store = { signals: [] };
+    const result = registerOrGetSignal(store, buyCandidate());
+    assert.equal(result.isNew, true);
+    assert.equal(result.blockedByOpenThesis, false);
+    assert.equal(result.record.status, 'OPEN');
+    assert.equal(result.record.thesis_id, 'thesisA');
+    assert.equal(store.signals.length, 1);
+  });
+
+  it('2. second qualified BUY with same thesis A while first is OPEN is blocked, not a new record', () => {
+    const store = { signals: [] };
+    const first = registerOrGetSignal(store, buyCandidate());
+    const second = registerOrGetSignal(store, buyCandidate({ originBar: 200, signalBarTime: 200, model: 'MR' }));
+    assert.equal(store.signals.length, 1, 'no second record created');
+    assert.equal(second.isNew, false);
+    assert.equal(second.blockedByOpenThesis, true);
+    assert.equal(second.existingSignalId, first.record.signal_id);
+    assert.equal(second.record.signal_id, first.record.signal_id);
+  });
+
+  it('3. same for SELL', () => {
+    const store = { signals: [] };
+    const first = registerOrGetSignal(store, sellCandidate());
+    const second = registerOrGetSignal(store, sellCandidate({ originBar: 200, signalBarTime: 200 }));
+    assert.equal(store.signals.length, 1);
+    assert.equal(second.blockedByOpenThesis, true);
+    assert.equal(second.existingSignalId, first.record.signal_id);
+  });
+
+  it('4. same thesis, different model PB -> MR -> BO: while same-side OPEN, no second signal', () => {
+    const store = { signals: [] };
+    registerOrGetSignal(store, buyCandidate({ model: 'PB', originBar: 100, signalBarTime: 100 }));
+    const mr = registerOrGetSignal(store, buyCandidate({ model: 'MR', originBar: 200, signalBarTime: 200 }));
+    const bo = registerOrGetSignal(store, buyCandidate({ model: 'BO', originBar: 300, signalBarTime: 300 }));
+    assert.equal(store.signals.length, 1);
+    assert.equal(mr.blockedByOpenThesis, true);
+    assert.equal(bo.blockedByOpenThesis, true);
+  });
+
+  it('5. TP1-hit but status OPEN still blocks a second same-thesis signal', () => {
+    const store = { signals: [] };
+    const first = registerOrGetSignal(store, buyCandidate());
+    first.record.tp1_hit = true; // TP1 lifecycle tracking never affects status/terminality
+    first.record.tp1_hit_bar_time = 150;
+    const second = registerOrGetSignal(store, buyCandidate({ originBar: 200, signalBarTime: 200 }));
+    assert.equal(second.blockedByOpenThesis, true);
+    assert.equal(store.signals.length, 1);
+  });
+
+  it('6. PASS releases the slot: same thesis can register again afterward', () => {
+    const store = { signals: [] };
+    const first = registerOrGetSignal(store, buyCandidate());
+    store.signals.find((s) => s.signal_id === first.record.signal_id).status = 'PASS';
+    const second = registerOrGetSignal(store, buyCandidate({ originBar: 200, signalBarTime: 200 }));
+    assert.equal(second.isNew, true);
+    assert.equal(second.blockedByOpenThesis, false);
+    assert.equal(store.signals.length, 2);
+  });
+
+  it('7. FAIL releases the slot: same thesis can register again afterward', () => {
+    const store = { signals: [] };
+    const first = registerOrGetSignal(store, buyCandidate());
+    store.signals.find((s) => s.signal_id === first.record.signal_id).status = 'FAIL';
+    const second = registerOrGetSignal(store, buyCandidate({ originBar: 200, signalBarTime: 200 }));
+    assert.equal(second.isNew, true);
+    assert.equal(second.blockedByOpenThesis, false);
+    assert.equal(store.signals.length, 2);
+  });
+
+  it('8. different thesis ID + same direction registers normally', () => {
+    const store = { signals: [] };
+    registerOrGetSignal(store, buyCandidate({ thesisId: 'thesisA' }));
+    const other = registerOrGetSignal(store, buyCandidate({ originBar: 200, signalBarTime: 200, thesisId: 'thesisB' }));
+    assert.equal(other.isNew, true);
+    assert.equal(other.blockedByOpenThesis, false);
+    assert.equal(store.signals.length, 2);
+  });
+
+  it('9. same thesis ID + opposite direction registers normally (opposite-direction protection is out of scope)', () => {
+    const store = { signals: [] };
+    registerOrGetSignal(store, buyCandidate({ thesisId: 'thesisA' }));
+    const opposite = registerOrGetSignal(store, sellCandidate({ originBar: 200, signalBarTime: 200, thesisId: 'thesisA' }));
+    assert.equal(opposite.isNew, true);
+    assert.equal(opposite.blockedByOpenThesis, false);
+    assert.equal(store.signals.length, 2);
+  });
+
+  it('10. a legacy OPEN record without thesis_id never crashes and never participates (no fabricated identity)', () => {
+    const store = { signals: [{ signal_id: 'legacy-1', symbol: 'OANDA:XAUUSD', timeframe: '15m', side: 'BUY', status: 'OPEN', entry: 10, stop_loss: 9, tp1: 11, tp2: 12, signal_bar_time: 1 }] };
+    const legacyBefore = JSON.stringify(store.signals[0]);
+    const result = registerOrGetSignal(store, buyCandidate({ originBar: 500, signalBarTime: 500, thesisId: 'thesisA' }));
+    assert.equal(result.isNew, true, 'a thesis_id-less legacy OPEN record must not block a new thesis-tagged candidate');
+    assert.equal(result.blockedByOpenThesis, false);
+    assert.equal(store.signals.length, 2);
+    assert.equal(JSON.stringify(store.signals.find((s) => s.signal_id === 'legacy-1')), legacyBefore, 'legacy record untouched, never rewritten');
+  });
+
+  it('11. existing exact-repeat dedup behavior remains unchanged (still hits the signal_id match, not the thesis guard)', () => {
+    const store = { signals: [] };
+    const candidate = buyCandidate();
+    const first = registerOrGetSignal(store, candidate);
+    const second = registerOrGetSignal(store, candidate);
+    assert.equal(first.isNew, true);
+    assert.equal(second.isNew, false);
+    assert.equal(second.blockedByOpenThesis, false, 'an exact repeat is the pre-existing id-match path, not the new thesis-block path');
+    assert.equal(store.signals.length, 1);
+    assert.equal(first.record.signal_id, second.record.signal_id);
+  });
+
+  it('12. existing signal_id hashing remains unchanged -- thesisId never participates in computeSignalId()', () => {
+    const c = { symbol: 'OANDA:XAUUSD', timeframe: '15m', model: 'TC', side: 'BUY', originBar: 100, signalBarTime: 12345 };
+    assert.equal(computeSignalId({ ...c, thesisId: 'thesisA' }), computeSignalId({ ...c, thesisId: 'thesisB' }));
+    assert.equal(computeSignalId({ ...c, thesisId: 'thesisA' }), computeSignalId(c));
+  });
+
+  it('11b. a candidate with no thesisId (null/undefined) never wildcard-matches an existing OPEN thesis-tagged signal -- registers normally', () => {
+    const store = { signals: [] };
+    registerOrGetSignal(store, buyCandidate({ thesisId: 'thesisA' }));
+    const noThesisUndefined = registerOrGetSignal(store, buyCandidate({ originBar: 200, signalBarTime: 200, thesisId: undefined }));
+    assert.equal(noThesisUndefined.isNew, true);
+    assert.equal(noThesisUndefined.blockedByOpenThesis, false);
+    const noThesisNull = registerOrGetSignal(store, buyCandidate({ originBar: 300, signalBarTime: 300, thesisId: null }));
+    assert.equal(noThesisNull.isNew, true);
+    assert.equal(noThesisNull.blockedByOpenThesis, false);
+    assert.equal(store.signals.length, 3, 'all three are distinct OPEN records -- no wildcard blocking occurred');
+  });
+
+  it('13b. thesisId is deterministic for identical structural inputs and is NEVER a function of model -- computeSetupId()/resolveStructuralAnchorPrice() are reused verbatim, never reimplemented', () => {
+    const structure = { state: 'BEARISH', lastSwingHigh: { price: 4347.39, label: 'LH' }, lastSwingLow: { price: 4291.5, label: 'LL' } };
+    const anchor = resolveStructuralAnchorPrice({ structure });
+    // Same symbol/timeframe/direction/anchor/regime, computed twice, as if produced by two DIFFERENT models (PB the first time, BO the second) -- computeSetupId() takes no model parameter at all, so identical structural inputs must yield an identical id regardless of which model produced the candidate.
+    const idFromPbContext = computeSetupId({ symbol: 'OANDA:XAUUSD', timeframe: '15m', direction: 'BEARISH', structuralAnchorPrice: anchor, regime: 'BEAR_TREND' });
+    const idFromBoContext = computeSetupId({ symbol: 'OANDA:XAUUSD', timeframe: '15m', direction: 'BEARISH', structuralAnchorPrice: anchor, regime: 'BEAR_TREND' });
+    assert.equal(idFromPbContext, idFromBoContext, 'identical structural inputs must be deterministic regardless of which model context produced them');
+
+    // A genuinely different structural anchor (a new/updated swing) must produce a different thesis id.
+    const movedStructure = { state: 'BEARISH', lastSwingHigh: { price: 4360.0, label: 'LH' }, lastSwingLow: { price: 4291.5, label: 'LL' } };
+    const movedAnchor = resolveStructuralAnchorPrice({ structure: movedStructure });
+    const idAfterAnchorMove = computeSetupId({ symbol: 'OANDA:XAUUSD', timeframe: '15m', direction: 'BEARISH', structuralAnchorPrice: movedAnchor, regime: 'BEAR_TREND' });
+    assert.notEqual(idFromPbContext, idAfterAnchorMove, 'a genuinely changed structural anchor must produce a different thesis id');
+  });
+
+  it('13. BUY/SELL symmetry: the guard applies identically to both sides', () => {
+    const buyStore = { signals: [] };
+    const b1 = registerOrGetSignal(buyStore, buyCandidate());
+    const b2 = registerOrGetSignal(buyStore, buyCandidate({ originBar: 200, signalBarTime: 200 }));
+    const sellStore = { signals: [] };
+    const s1 = registerOrGetSignal(sellStore, sellCandidate());
+    const s2 = registerOrGetSignal(sellStore, sellCandidate({ originBar: 200, signalBarTime: 200 }));
+    assert.equal(b2.blockedByOpenThesis, s2.blockedByOpenThesis);
+    assert.equal(b1.isNew, s1.isNew);
+  });
+
+  it('14. regression: the real historical BO SELL cluster (thesis d1345dc04b4a5d84) -- only the first would have persisted', () => {
+    const store = { signals: [] };
+    const bo1 = registerOrGetSignal(store, { symbol: 'OANDA:XAUUSD', timeframe: '15m', model: 'BO', side: 'SELL', originBar: 1790143200, signalBarTime: 1790143200, entry: 4330.75, stop_loss: 4348.84, tp1: 4312.65, tp2: 4291.5, rr: 2.17, quality: 70, thesisId: 'd1345dc04b4a5d84' });
+    const bo2 = registerOrGetSignal(store, { symbol: 'OANDA:XAUUSD', timeframe: '15m', model: 'BO', side: 'SELL', originBar: 1790144100, signalBarTime: 1790144100, entry: 4328.85, stop_loss: 4348.83, tp1: 4308.86, tp2: 4291.5, rr: 1.87, quality: 67, thesisId: 'd1345dc04b4a5d84' });
+    const bo3 = registerOrGetSignal(store, { symbol: 'OANDA:XAUUSD', timeframe: '15m', model: 'BO', side: 'SELL', originBar: 1790145900, signalBarTime: 1790145900, entry: 4331.32, stop_loss: 4348.86, tp1: 4313.78, tp2: 4291.5, rr: 2.27, quality: 72, thesisId: 'd1345dc04b4a5d84' });
+    assert.equal(store.signals.length, 1, 'only ONE OPEN record would exist under the new guard, not three');
+    assert.equal(bo1.isNew, true);
+    assert.equal(bo2.blockedByOpenThesis, true);
+    assert.equal(bo3.blockedByOpenThesis, true);
+    assert.equal(bo2.existingSignalId, bo1.record.signal_id);
+    assert.equal(bo3.existingSignalId, bo1.record.signal_id);
+  });
+
+  it('15. regression: the real historical MR SELL cluster (thesis 971a1c47baf630cf) -- cross-model same-thesis suppression', () => {
+    const store = { signals: [] };
+    const mr1 = registerOrGetSignal(store, { symbol: 'OANDA:XAUUSD', timeframe: '15m', model: 'MR', side: 'SELL', originBar: 1790089200, signalBarTime: 1790089200, entry: 4336.23, stop_loss: 4347.23, tp1: 4325.23, tp2: 4303.24, rr: 3, quality: 83, thesisId: '971a1c47baf630cf' });
+    const mr2 = registerOrGetSignal(store, { symbol: 'OANDA:XAUUSD', timeframe: '15m', model: 'MR', side: 'SELL', originBar: 1790090100, signalBarTime: 1790090100, entry: 4332.21, stop_loss: 4347.17, tp1: 4317.25, tp2: 4291.5, rr: 2.72, quality: 82, thesisId: '971a1c47baf630cf' });
+    assert.equal(store.signals.length, 1, 'only ONE OPEN record would exist under the new guard, not two');
+    assert.equal(mr1.isNew, true);
+    assert.equal(mr2.blockedByOpenThesis, true);
+    assert.equal(mr2.existingSignalId, mr1.record.signal_id);
+  });
+
+  it('16a. blocking a candidate never mutates the candidate object itself (its own qualified geometry is preserved, untouched)', () => {
+    const store = { signals: [] };
+    registerOrGetSignal(store, buyCandidate());
+    const secondCandidate = buyCandidate({ originBar: 200, signalBarTime: 200, entry: 4331.32, stop_loss: 4348.86, tp1: 4313.78, tp2: 4291.5, rr: 2.27, quality: 72 });
+    const before = JSON.stringify(secondCandidate);
+    registerOrGetSignal(store, secondCandidate);
+    assert.equal(JSON.stringify(secondCandidate), before, 'registerOrGetSignal must never mutate the candidate it was given');
+  });
+
+  it('16b. source audit: xauusd_calculate.js\'s returned action/entry/sl/tp1/tp2/rr/quality are read from combined.decision/combined.quality, never from registeredSignal', () => {
+    const src = readFileSync(new URL('../src/core/xauusd_calculate.js', import.meta.url), 'utf8');
+    const returnBlockMatch = src.match(/entry: finalAction[\s\S]*?quality: finalAction[\s\S]*?combined\.quality\?\.score : null,/);
+    assert.ok(returnBlockMatch, 'expected entry/sl/tp1/tp2/quality construction block to exist');
+    const block = returnBlockMatch[0];
+    assert.ok(!/registeredSignal/.test(block), 'the protected decision/geometry fields must never read from registeredSignal');
+    assert.ok(/combined\.decision\.entry/.test(block) && /combined\.decision\.stop_loss/.test(block) && /combined\.decision\.tp1/.test(block) && /combined\.decision\.tp2/.test(block) && /combined\.decision\.rr/.test(block), 'must read entry/sl/tp1/tp2/rr from combined.decision');
   });
 });
 

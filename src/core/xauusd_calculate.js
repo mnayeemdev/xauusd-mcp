@@ -34,6 +34,7 @@ import { runPipeline, MIN_BARS_REQUIRED } from '../engine/pipeline.js';
 import { combineTimeframes } from '../engine/mtf.js';
 import { computeHtfContext, detectHtfConflict } from '../engine/htf.js';
 import { loadStore, saveStore, registerOrGetSignal, resolveOpenSignals } from '../engine/signalStore.js';
+import { computeSetupId, resolveStructuralAnchorPrice } from '../engine/anticipationStore.js';
 import { fileURLToPath } from 'node:url';
 
 export const CALCULATE_SCHEMA_VERSION = '1.1.0';
@@ -218,11 +219,24 @@ export async function calculateEntry({ enablePineComparison = true, _deps } = {}
   let registeredSignal = null;
   if (combined.action === 'BUY' || combined.action === 'SELL') {
     const lastBar = split[15].confirmed.at(-1);
-    const { record, isNew } = registerOrGetSignal(store, {
+    // Same-structural-thesis identity (additive, narrow -- see
+    // src/engine/signalStore.js's own doc comment on the guard this
+    // feeds). Computed ONLY from data already produced above in this same
+    // function: pipelineByTf[15]'s own structure/regime output and the
+    // already-final combined.action -- no additional fetch, no
+    // computeEvidence(), no opportunityPlanner/opportunityLedger call.
+    // Reuses anticipationStore.js's own, already-production-proven
+    // computeSetupId()/resolveStructuralAnchorPrice() verbatim -- never a
+    // second, divergent hashing formula.
+    const thesisDirection = combined.action === 'BUY' ? 'BULLISH' : 'BEARISH';
+    const thesisAnchorPrice = resolveStructuralAnchorPrice({ structure: pipelineByTf[15].structure });
+    const thesisId = computeSetupId({ symbol, timeframe: '15m', direction: thesisDirection, structuralAnchorPrice: thesisAnchorPrice, regime: combined.regime });
+    const { record, isNew, blockedByOpenThesis, existingSignalId } = registerOrGetSignal(store, {
       symbol, timeframe: '15m', model: combined.model, side: combined.action, originBar: combined.decision.originBar ?? lastBar.time,
       signalBarTime: lastBar.time, entry: combined.decision.entry, stop_loss: combined.decision.stop_loss, tp1: combined.decision.tp1, tp2: combined.decision.tp2, rr: combined.decision.rr, quality: combined.quality?.score ?? null,
+      thesisId,
     });
-    registeredSignal = { ...record, is_new_event: isNew };
+    registeredSignal = { ...record, is_new_event: isNew, blocked_by_open_thesis: blockedByOpenThesis, existing_signal_id: existingSignalId };
   }
   deps.saveStore(deps.storePath, store);
 
