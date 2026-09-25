@@ -169,7 +169,12 @@ export async function visualizeMarketAnalysis({ analysis, dryRun = false, _deps 
   // A visualization failure (below, inside reconcileVisualization) is
   // reported in `reconciliation` only -- `analysis` itself, already fully
   // computed before this line, is never touched or re-derived here.
-  const reconciliation = await reconcileVisualization({ intents: presentationIntents, symbol: summary.symbol, timeframe: summary.timeframe, dryRun, ownsRole: ownsDecisionRole, _deps });
+  // cleanupScope 'symbol': the decision-timeframe plan owns its roles for
+  // this symbol under ANY timeframe key, so drawings registered by a
+  // previous decision timeframe (e.g. 15m before the intraday_5m switch)
+  // are removed once the current plan no longer wants them. Chart-local
+  // `chart_*` roles remain excluded via ownsDecisionRole.
+  const reconciliation = await reconcileVisualization({ intents: presentationIntents, symbol: summary.symbol, timeframe: summary.timeframe, dryRun, ownsRole: ownsDecisionRole, cleanupScope: 'symbol', _deps });
 
   return {
     visualization: summarizeReconciliation(reconciliation, presentationIntents.length),

@@ -49,6 +49,8 @@ const MODEL_TO_FAMILIES = {
   BO: ['breakout', 'breakout_retest'],
   MR: ['mean_reversion', 'liquidity_sweep_reversal'],
   SR: ['sr_reaction', 'rejection_reclaim'],
+  // intraday_5m profile only (src/engine/intraday/models5m.js) -- additive label, never a trigger here.
+  MC: ['momentum_continuation'],
 };
 
 export function getEligibleStrategies(regime) {

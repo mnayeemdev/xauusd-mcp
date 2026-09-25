@@ -3,8 +3,10 @@
  *
  * V1 channels: console (always on) and an optional best-effort Windows
  * toast notification via a short spawned PowerShell script -- no new npm
- * dependency. Telegram/WhatsApp/email/SMS/broker execution are explicitly
- * out of scope for this task and are not implemented here.
+ * dependency. Telegram/WhatsApp/email/SMS are explicitly out of scope and
+ * are not implemented here. Broker execution is NOT done by this module
+ * either: the optional MT5 DEMO executor (src/engine/mt5Executor.js) is a
+ * separate, off-by-default watcher dep that runs strictly after notify().
  *
  * This module renders and delivers an already-validated alert payload. It
  * never computes, repairs, or infers trade geometry -- every field it

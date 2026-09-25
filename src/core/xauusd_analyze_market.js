@@ -52,8 +52,51 @@ import { computeDailyWeeklyContext } from '../engine/session.js';
 import { buildConfluenceReport } from '../engine/confluence.js';
 import { computeAnticipation } from '../engine/anticipation.js';
 import { computeOpportunityPlan } from '../engine/opportunityPlanner.js';
+import { ENGINE_PROFILES } from '../engine/engineProfile.js';
+import { INTRADAY_PARAMS } from '../engine/intraday/params.js';
 
-const PRIMARY_TIMEFRAME = '15'; // matches combineTimeframes()'s own source_timeframe (15m is the decision timeframe)
+const PRIMARY_TIMEFRAME = '15'; // reference_15m: matches combineTimeframes()'s own source_timeframe (15m is the decision timeframe)
+const INTRADAY_PRIMARY_TIMEFRAME = '5'; // intraday_5m: evidence/planning follow the 5m entry authority
+
+/**
+ * intraday_5m profile only: attaches the engine's OWN 5m candidate (model,
+ * side, provisional entry/SL/TP1/TP2/RR, quality vs its bar, the exact
+ * blocking gate, and the condition still required) to `pre_entry_plan`
+ * as `engine_candidate`. Planning-only by construction: it is copied from
+ * `decision.diagnostics.candidate_geometry`, never from the top-level
+ * entry/sl/tp fields (which stay null on WAIT and are the only fields the
+ * executor reads). Absent on BUY/SELL and when no candidate formed.
+ */
+export function attachIntradayEngineCandidate(plan, decision) {
+  if (!plan || decision?.engine_profile !== ENGINE_PROFILES.INTRADAY_5M) return plan;
+  if (decision.action === 'BUY' || decision.action === 'SELL') return { ...plan, engine_candidate: null };
+  const cand = decision.diagnostics?.candidate ?? null;
+  if (!cand) return { ...plan, engine_candidate: null };
+  const g = decision.diagnostics?.candidate_geometry ?? {};
+  const reason = decision.reason ?? null;
+  const p = INTRADAY_PARAMS;
+  const condition = reason === 'OVEREXTENDED' ? `a fresh confirmed 5m setup with entry within ${p.overextendAtrMult} ATR of its anchor (this one has run too far to chase)`
+    : reason === 'RR_NOT_ACCEPTABLE' ? `risk/reward of at least ${p.minRR} to the ${g.objective?.source ?? 'nearest structural'} objective (currently ${g.rr ?? 'n/a'})`
+    : reason === 'NO_GOOD_ENTRY' ? `quality of at least ${g.quality_threshold ?? p.qualityThreshold} (currently ${g.quality ?? 'n/a'}, bar basis: ${g.quality_threshold_basis ?? 'n/a'})`
+    : reason === 'VOLATILITY_INSUFFICIENT' ? `5m ATR of at least ${p.minAtrUsd} USD`
+    : reason === 'ENTRY_CONFLICT' || reason === 'HTF_CONFLICT' ? (decision.diagnostics?.conflict ?? 'the higher-timeframe conflict to clear')
+    : reason === 'ENGINE_DISAGREEMENT' ? 'the Pine reference to stop opposing this direction'
+    : null;
+  return {
+    ...plan,
+    engine_candidate: {
+      planning_only: true,
+      source: 'intraday_5m engine candidate (decision.diagnostics.candidate_geometry)',
+      timeframe: '5m',
+      model: cand.model, side: cand.side, anchor: cand.anchor ?? null, reason: cand.reason ?? null,
+      entry: g.entry ?? null, sl: g.sl ?? null, tp1: g.tp1 ?? null, tp2: g.tp2 ?? null, rr: g.rr ?? null,
+      objective: decision.diagnostics?.objective ?? null,
+      quality: g.quality ?? null, quality_threshold: g.quality_threshold ?? null, quality_threshold_basis: g.quality_threshold_basis ?? null,
+      blocked_by: reason,
+      condition_required: condition,
+    },
+  };
+}
 
 /** In-memory shim so calculateEntry() reuses the SAME already-fetched bars instead of re-sweeping the chart. */
 function buildPrefetchedDeps(byTf, originalSymbol, originalResolution) {
@@ -275,7 +318,7 @@ export function maybePersistEvidenceSnapshot({ decision, evidence, primarySplit,
  * authoritative consumer of that persisted dedup state and therefore
  * must use the real store, not a throwaway one.
  */
-export async function analyzeMarket({ _deps, persistSignals = false } = {}) {
+export async function analyzeMarket({ _deps, persistSignals = false, engineProfile = null } = {}) {
   const deps = resolveDeps(_deps);
   const { byTf, fetchErrors } = await fetchMultiTimeframeBars(deps);
 
@@ -287,6 +330,10 @@ export async function analyzeMarket({ _deps, persistSignals = false } = {}) {
   let ephemeralStore = { signals: [] }; // used unless persistSignals:true -- see doc above
 
   const decision = await calculateEntry({
+    // Engine profile (src/engine/engineProfile.js): forwarded verbatim;
+    // null resolves to XAUUSD_ENGINE_PROFILE / the reference default inside
+    // calculateEntry() exactly as a bare call would.
+    engineProfile,
     _deps: {
       getState: prefetched.getState,
       setTimeframe: prefetched.setTimeframe,
@@ -300,6 +347,7 @@ export async function analyzeMarket({ _deps, persistSignals = false } = {}) {
       loadStore: persistSignals ? deps.loadStore : () => ephemeralStore,
       saveStore: persistSignals ? deps.saveStore : (_path, s) => { ephemeralStore = s; },
       storePath: deps.storePath,
+      env: deps.env,
     },
   });
 
@@ -309,9 +357,17 @@ export async function analyzeMarket({ _deps, persistSignals = false } = {}) {
   // computeEntryPipelineByTf()'s own doc comment.
   const pipelineByTf = computeEntryPipelineByTf(split);
 
-  const primarySplit = split[PRIMARY_TIMEFRAME];
+  // Evidence/planning timeframe follows the profile's entry authority:
+  // 15m for reference_15m (unchanged), 5m for intraday_5m so the planner
+  // never presents stale 15m geometry as intraday geometry. For 5m the
+  // reference pipeline's own 5m regime/structure are reused when present
+  // (same functions/params the intraday pipeline used); computeEvidence()
+  // falls back to computing them itself when that pipeline skipped them.
+  const isIntraday = decision.engine_profile === ENGINE_PROFILES.INTRADAY_5M;
+  const primaryTf = isIntraday ? INTRADAY_PRIMARY_TIMEFRAME : PRIMARY_TIMEFRAME;
+  const primarySplit = split[primaryTf];
   const evidence = !primarySplit?.error && primarySplit?.confirmed?.length > 0
-    ? computeEvidence(primarySplit.confirmed, split, decision.setup ?? null, pipelineByTf[PRIMARY_TIMEFRAME])
+    ? computeEvidence(primarySplit.confirmed, split, decision.setup ?? null, pipelineByTf[primaryTf])
     : null;
 
   // EI-2, additive, narrow, observability only -- see
@@ -340,12 +396,13 @@ export async function analyzeMarket({ _deps, persistSignals = false } = {}) {
   // returns { status: 'NO_PLAN', ... } whenever nothing objective is
   // developing (never fabricates one), and never converts its own
   // candidate geometry into `decision`'s authoritative fields above.
-  const pre_entry_plan = computeOpportunityPlan({ decision, evidence, anticipation, primaryBars: primarySplit?.confirmed ?? null });
+  const pre_entry_plan = attachIntradayEngineCandidate(computeOpportunityPlan({ decision, evidence, anticipation, primaryBars: primarySplit?.confirmed ?? null }), decision);
 
   return {
     ...decision,
     evidence_available: !!evidence,
-    evidence_unavailable_reason: evidence ? null : (primarySplit?.error ?? 'insufficient confirmed bars on the primary (15m) timeframe'),
+    evidence_timeframe: TF_LABEL[primaryTf],
+    evidence_unavailable_reason: evidence ? null : (primarySplit?.error ?? `insufficient confirmed bars on the primary (${TF_LABEL[primaryTf]}) timeframe`),
     // Additive (Stage 5): the SAME evidence object already used to build
     // confluence/anticipation above, exposed verbatim so a visualization
     // mapper (src/engine/marketVisualization.js) can read real structure/

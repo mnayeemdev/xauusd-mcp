@@ -90,7 +90,20 @@ function resolveDeps(_deps) {
  * user's active chart timeframe equals the decision timeframe -- without
  * one caller's cleanup pass deleting the other's still-valid drawings.
  */
-export function buildReconciliationPlan({ desiredIntents = [], registry, symbol, timeframe, currentChartIds, ownsRole = () => true }) {
+/**
+ * `cleanupScope` (optional, default 'timeframe' -- byte-identical to every
+ * pre-existing caller): bounds ONLY the trailing stale-cleanup pass.
+ *   'timeframe' -> registered entries of this exact (symbol, timeframe).
+ *   'symbol'    -> registered entries of this symbol under ANY timeframe
+ *                  key. Used by the decision-timeframe visualizer so that,
+ *                  after an engine-profile switch (reference_15m ->
+ *                  intraday_5m), obsolete planner drawings registered under
+ *                  the previous decision timeframe are removed by the
+ *                  current plan instead of lingering on the chart forever.
+ * ownsRole() still applies in both scopes, so another caller's roles
+ * (e.g. chart-local `chart_*` roles) are never touched.
+ */
+export function buildReconciliationPlan({ desiredIntents = [], registry, symbol, timeframe, currentChartIds, ownsRole = () => true, cleanupScope = 'timeframe' }) {
   const steps = [];
   const desiredKeys = new Set();
 
@@ -130,7 +143,10 @@ export function buildReconciliationPlan({ desiredIntents = [], registry, symbol,
   // guarantees this never touches a DIFFERENT CALLER's roles within the
   // SAME (symbol, timeframe) scope -- see this function's own doc
   // comment above for why that matters.
-  for (const key of scopedKeys(registry, { symbol, timeframe })) {
+  const cleanupKeys = cleanupScope === 'symbol'
+    ? Object.keys(registry.entries ?? {}).filter((k) => k.startsWith(`${symbol ?? 'UNKNOWN_SYMBOL'}|`))
+    : scopedKeys(registry, { symbol, timeframe });
+  for (const key of cleanupKeys) {
     if (desiredKeys.has(key)) continue;
     const registered = registry.entries[key];
     if (!ownsRole(registered.role)) continue;
@@ -151,7 +167,7 @@ export function buildReconciliationPlan({ desiredIntents = [], registry, symbol,
  * accurate, but drawShape/removeOne/saveRegistry are NEVER called in that
  * branch, structurally (the execution loop below is simply never reached).
  */
-export async function reconcileVisualization({ intents = [], symbol, timeframe, dryRun = false, ownsRole = () => true, _deps } = {}) {
+export async function reconcileVisualization({ intents = [], symbol, timeframe, dryRun = false, ownsRole = () => true, cleanupScope = 'timeframe', _deps } = {}) {
   const deps = resolveDeps(_deps);
   const warnings = [];
 
@@ -170,7 +186,7 @@ export async function reconcileVisualization({ intents = [], symbol, timeframe, 
     return { dry_run: !!dryRun, plan: [], executed: [], warnings, symbol, timeframe };
   }
 
-  const plan = buildReconciliationPlan({ desiredIntents: intents, registry, symbol, timeframe, currentChartIds, ownsRole });
+  const plan = buildReconciliationPlan({ desiredIntents: intents, registry, symbol, timeframe, currentChartIds, ownsRole, cleanupScope });
 
   if (dryRun) {
     return { dry_run: true, plan, executed: [], warnings, symbol, timeframe };

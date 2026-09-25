@@ -25,7 +25,8 @@
  */
 import * as _chartCore from '../core/chart.js';
 import * as _dataCore from '../core/data.js';
-import { CALCULATE_SCHEMA_VERSION } from '../core/xauusd_calculate.js';
+import { CALCULATE_SCHEMA_VERSION, INTRADAY_SCHEMA_VERSION } from '../core/xauusd_calculate.js';
+import { resolveEngineProfile, isIntradayProfile } from '../engine/engineProfile.js';
 import { analyzeMarket as _analyzeMarket } from '../core/xauusd_analyze_market.js';
 import { recordAnticipationObservation as _recordAnticipationObservation } from './anticipationStore.js';
 import { recordOpportunityObservation as _recordOpportunityObservation } from './opportunityLedger.js';
@@ -34,7 +35,8 @@ import { visualizeMarketAnalysis as _visualizeMarketAnalysis } from '../core/xau
 import { visualizeActiveChartContext as _visualizeActiveChartContext } from '../core/xauusd_visualize_chart_context.js';
 import { CDP_HOST, CDP_PORT } from '../connection.js';
 import { notify as _notify, notifyPreEntryWatch as _notifyPreEntryWatch } from './notifier.js';
-import { isBarFresh } from './freshData.js';
+import { isBarFresh, timeframeSeconds } from './freshData.js';
+import { withCdpLock as _withCdpLock, DEFAULT_CDP_LOCK_PATH } from './cdpLock.js';
 import {
   DEFAULT_STATE_PATH, DEFAULT_LOCK_PATH,
   loadWatcherState, saveWatcherState, acquireLock, releaseLock,
@@ -42,10 +44,22 @@ import {
 
 export const DEFAULT_POLL_INTERVAL_MS = 60_000;
 
-// How many times peekLatest5mCandle will re-issue the resolution switch
-// before giving up and failing closed (see its doc comment below).
-const PEEK_MAX_ATTEMPTS = 3;
+// How many times peekLatest5mCandle will retry (re-issuing the resolution
+// switch, or simply re-reading) before giving up and failing closed (see
+// its doc comment below). Widened from the original 3 when the retry loop
+// was extended to also cover a THROWING getOhlcv() (previously that
+// propagated immediately, with zero retries at all) -- a live incident
+// showed the post-switch "chart may still be loading" extraction race can
+// persist across several hundred ms, so more, still-bounded, attempts are
+// needed for the SAME race the staleness retry already handled.
+const PEEK_MAX_ATTEMPTS = 8;
 const PEEK_RETRY_DELAY_MS = 500;
+// Secondary, wall-clock bound alongside PEEK_MAX_ATTEMPTS (belt-and-braces
+// -- attempt count is the primary budget; this just guarantees the peek
+// can never run away past a few seconds even if something unexpected
+// slows individual attempts down). Comfortably bounded well under the 60s
+// poll cadence.
+const PEEK_TIMEOUT_MS = 8_000;
 
 function formatTimestamp(d) {
   const pad = (n) => String(n).padStart(2, '0');
@@ -80,47 +94,99 @@ export async function isCdpReachable({ timeoutMs = 2500, _deps } = {}) {
  * only. Switches to the 5m resolution ONLY if the chart isn't already
  * there, and always restores the original resolution afterward (mirrors
  * the same restore-on-completion discipline calculateEntry() itself uses)
- * -- this never leaves the user's chart on a different timeframe.
+ * -- this never leaves the user's chart on a different timeframe. Runs
+ * inside the SAME shared CDP chart lock (src/engine/cdpLock.js) every
+ * other chart-mutating/-reading sequence uses, so it can never interleave
+ * its own switch against a concurrent full 10-TF sweep or another peek --
+ * acquired and released around this ENTIRE function, then released again
+ * before runWatcherCycle() goes on to call analyzeMarket() (itself
+ * separately lock-protected via fetchMultiTimeframeBars()) -- sequential,
+ * never nested.
  *
- * A resolution switch is asynchronous inside TradingView, so the bars read
- * right after one can race the resubscribe and come back as a stale/cached
- * snapshot for the requested timeframe that never advances (see
- * ./freshData.js). Before trusting a read, this verifies the FORMING bar's
- * own timestamp is plausibly current; if not, it re-issues the exact same
- * safe setTimeframe('5')/getOhlcv() call -- the existing resubscription
- * mechanism, never a new/undocumented CDP API -- up to PEEK_MAX_ATTEMPTS
- * times. If it still cannot obtain a fresh series, it throws: the caller
+ * A resolution switch is asynchronous inside TradingView: chart.resolution()
+ * itself (and setTimeframe()'s own internal waitForChartReady() wait, see
+ * src/wait.js) can already correctly report the NEW resolution before the
+ * underlying bar series has actually finished being torn down and rebuilt
+ * for it -- reading OHLCV in that exact window either (a) throws
+ * "Could not extract OHLCV data" (src/core/data.js, confirmed live) or (b)
+ * returns a stale/cached snapshot for the requested timeframe that never
+ * advances (see ./freshData.js). Both are treated identically here as
+ * "not ready yet" and retried -- never propagated immediately, never
+ * silently trusted -- up to PEEK_MAX_ATTEMPTS times (bounded also by
+ * PEEK_TIMEOUT_MS). A successful read is additionally verified to actually
+ * BE a 5-minute series (exact 300s spacing between its last two bars, not
+ * merely "recent-looking") before being trusted, guarding against a
+ * stale/wrong-timeframe snapshot that happens to look fresh. If it still
+ * cannot obtain a fresh, verified series, it throws: the caller
  * (runWatcherCycle) already fails closed on a thrown peek (no engine call,
- * no alert), so a genuinely stale feed can never trigger a signal.
+ * no alert), so a genuinely stale/unreadable feed can never trigger a
+ * signal or a fabricated candle time.
  */
 export async function peekLatest5mCandle(deps) {
+  const withLock = deps.withCdpLock ?? _withCdpLock;
+  const lockPath = deps.cdpLockPath ?? DEFAULT_CDP_LOCK_PATH;
+  return withLock(lockPath, () => peekLatest5mCandleLocked(deps));
+}
+
+async function peekLatest5mCandleLocked(deps) {
   const original = await deps.getState();
   const sleep = deps.sleep ?? ((ms) => new Promise((r) => setTimeout(r, ms)));
+  const nowMs = () => (deps.now ? deps.now() : new Date()).getTime();
+  const deadline = nowMs() + PEEK_TIMEOUT_MS;
+  const expectedSpacingSec = timeframeSeconds('5'); // 300
   let switched = false;
   try {
     if (String(original.resolution) !== '5') {
       await deps.setTimeframe({ timeframe: '5' });
       switched = true;
     }
-    let lastAgeSec = null;
+    let lastFailure = null; // { kind: 'stale', ageSec } | { kind: 'other', detail }
     for (let attempt = 1; attempt <= PEEK_MAX_ATTEMPTS; attempt++) {
-      const raw = await deps.getOhlcv({ count: 2 });
-      const bars = raw?.bars ?? [];
-      if (bars.length < 2) throw new Error(`insufficient 5m bars: ${bars.length} available, 2 required`);
-      const forming = bars[bars.length - 1];
-      const nowSec = (deps.now ? deps.now() : new Date()).getTime() / 1000;
-      if (isBarFresh({ barTime: forming.time, timeframe: '5', nowSec })) {
-        return { time: bars[bars.length - 2].time }; // last bar is forming, never treated as confirmed
+      let bars = null;
+      try {
+        const raw = await deps.getOhlcv({ count: 2 });
+        bars = raw?.bars ?? [];
+      } catch (err) {
+        // The exact race this fix targets (see doc comment above): treated
+        // as "not ready yet", not a hard failure -- retried within the
+        // SAME bounded budget a stale-but-successful read already used.
+        lastFailure = { kind: 'other', detail: err.message };
       }
-      lastAgeSec = nowSec - forming.time;
-      if (attempt < PEEK_MAX_ATTEMPTS) {
-        // Re-issue the same safe resubscription the initial switch used.
+      if (bars) {
+        if (bars.length < 2) {
+          lastFailure = { kind: 'other', detail: `insufficient 5m bars: ${bars.length} available, 2 required` };
+        } else {
+          const forming = bars[bars.length - 1];
+          const confirmed = bars[bars.length - 2];
+          const spacingSec = forming.time - confirmed.time;
+          const spacingOk = Number.isFinite(spacingSec) && spacingSec === expectedSpacingSec;
+          if (!spacingOk) {
+            // Verifies the returned series really IS 5-minute bars, not a
+            // stale/cached snapshot left over from the PREVIOUS resolution
+            // that merely happens to carry a recent-looking timestamp.
+            lastFailure = { kind: 'other', detail: `bar spacing ${spacingSec}s does not match a 5m series (expected ${expectedSpacingSec}s) -- stale or wrong-timeframe data` };
+          } else {
+            const nowSec = nowMs() / 1000;
+            if (isBarFresh({ barTime: forming.time, timeframe: '5', nowSec })) {
+              return { time: confirmed.time }; // last bar is forming, never treated as confirmed
+            }
+            lastFailure = { kind: 'stale', ageSec: nowSec - forming.time };
+          }
+        }
+      }
+      if (attempt < PEEK_MAX_ATTEMPTS && nowMs() < deadline) {
+        // Re-issue the same safe resubscription the initial switch used --
+        // harmless if the chart was already correctly on 5m, and covers
+        // the case where the switch itself genuinely hasn't landed yet.
         await deps.setTimeframe({ timeframe: '5' });
         switched = true;
         await sleep(PEEK_RETRY_DELAY_MS);
-      }
+      } else break;
     }
-    const err = new Error(`stale 5m data: forming bar age ~${Math.round(lastAgeSec)}s exceeds freshness tolerance after ${PEEK_MAX_ATTEMPTS} attempt(s) -- refusing to use it for new-candle detection`);
+    const message = lastFailure?.kind === 'stale'
+      ? `stale 5m data: forming bar age ~${Math.round(lastFailure.ageSec)}s exceeds freshness tolerance after ${PEEK_MAX_ATTEMPTS} attempt(s) -- refusing to use it for new-candle detection`
+      : `could not obtain a fresh, verified 5m candle after ${PEEK_MAX_ATTEMPTS} attempt(s): ${lastFailure?.detail ?? 'unknown reason'} -- refusing to use it for new-candle detection`;
+    const err = new Error(message);
     err.code = 'STALE_5M_DATA';
     throw err;
   } finally {
@@ -135,6 +201,13 @@ export function createCycleDeps(_deps = {}) {
     getState: _deps.getState ?? _chartCore.getState,
     setTimeframe: _deps.setTimeframe ?? _chartCore.setTimeframe,
     getOhlcv: _deps.getOhlcv ?? _dataCore.getOhlcv,
+    // Runtime Live Sync, Part B (5m-peek hardening): the SAME shared
+    // cross-process CDP chart lock every other chart-mutating/-reading
+    // sequence uses -- see peekLatest5mCandle()'s own doc comment.
+    cdpLockPath: _deps.cdpLockPath ?? DEFAULT_CDP_LOCK_PATH,
+    withCdpLock: _deps.withCdpLock ?? _withCdpLock,
+    sleep: _deps.sleep,
+    now: _deps.now,
   };
   return {
     isCdpReachable: _deps.isCdpReachable ?? (() => isCdpReachable()),
@@ -147,7 +220,12 @@ export function createCycleDeps(_deps = {}) {
     // (validation/mcp_engine_signals.json) -- this watcher is the single
     // authoritative consumer of that store's dedup state, unlike an
     // on-demand MCP tool call, which must stay on the ephemeral default.
-    analyzeMarket: _deps.analyzeMarket ?? _analyzeMarket,
+    // Engine profile (src/engine/engineProfile.js): resolved ONCE at
+    // startup from the CLI `--engine` option / XAUUSD_ENGINE_PROFILE /
+    // the reference default, and forwarded verbatim on every cycle. An
+    // injected analyzeMarket (tests) is used exactly as before.
+    engineProfile: resolveEngineProfile(_deps.engineProfile),
+    analyzeMarket: _deps.analyzeMarket ?? ((opts) => _analyzeMarket({ ...opts, engineProfile: resolveEngineProfile(_deps.engineProfile) })),
     // Additive, OPTIONAL (Stage 6 / Pre-Entry Opportunity upgrade): Stage
     // 3 observation recording, Opportunity Ledger recording, and Stage 5
     // visualization refresh, all run on the SAME already-computed
@@ -177,6 +255,18 @@ export function createCycleDeps(_deps = {}) {
     // when this fires (a genuine transition into ARMED, never every
     // DEVELOPING candle, never every poll).
     notifyPreEntryWatch: _deps.notifyPreEntryWatch ?? _notifyPreEntryWatch,
+    // Additive, OPTIONAL, OFF by default (no default implementation): the
+    // MT5 DEMO execution hook (src/engine/mt5Executor.js). Wired ONLY by
+    // `tv xauusd watch --mt5-demo`. Called strictly AFTER the existing
+    // alert gate has already validated/deduplicated a NEW BUY/SELL and
+    // sent the alert -- it receives that SAME result, never a second
+    // decision. Failure-isolated exactly like every other optional dep:
+    // a throw here can never alter the alert decision or watcher state.
+    executeSignal: _deps.executeSignal,
+    // Additive, OPTIONAL: post-entry thesis review for the REAL executor
+    // (src/engine/mt5Executor.js reviewThesis). Receives THIS cycle's
+    // confirmed-candle analysis BEFORE the alert/execute path.
+    reviewOpenPosition: _deps.reviewOpenPosition,
     now: _deps.now,
   };
 }
@@ -194,7 +284,7 @@ function requireFiniteFields(result, fields) {
  * recomputes or repairs a value. Any malformed or incomplete actionable
  * result fails closed to no-alert.
  */
-function evaluateEngineResult({ result, state, deps, log, stamp }) {
+async function evaluateEngineResult({ result, state, deps, log, stamp }) {
   if (!result || result.status !== 'OK') {
     log(`[${stamp()}] New confirmed 5m candle processed — status ${result?.status ?? 'UNKNOWN'} (no actionable result)`);
     return { state, action: 'ENGINE_STATUS_NOT_OK', alerted: false };
@@ -238,7 +328,23 @@ function evaluateEngineResult({ result, state, deps, log, stamp }) {
   };
   deps.notify(alert);
   log(`[${stamp()}] ${result.action} signal ${signalId} — alert sent`);
-  return { state: { ...state, last_alerted_signal_id: signalId }, action: 'ALERTED', alerted: true, alert };
+  const alerted = { state: { ...state, last_alerted_signal_id: signalId }, action: 'ALERTED', alerted: true, alert };
+
+  // MT5 DEMO execution hook (optional, additive -- see createCycleDeps).
+  // Runs only for a signal that already passed every gate above and was
+  // already alerted; the executor applies its own safety gates and may
+  // skip. Its outcome is attached for observability only and never feeds
+  // back into `state` or the alert decision.
+  if (typeof deps.executeSignal === 'function') {
+    try {
+      alerted.execution = await deps.executeSignal({ alert, signalId, result });
+      log(`[${stamp()}] MT5 demo execution for ${signalId}: ${alerted.execution?.executed ? 'OPENED' : `not executed (${alerted.execution?.reason ?? 'unknown'})`}`);
+    } catch (err) {
+      alerted.execution = { executed: false, reason: 'EXECUTOR_THREW', detail: err.message };
+      log(`[${stamp()}] MT5 demo execution failed (non-fatal, alert/decision unaffected): ${err.message}`);
+    }
+  }
+  return alerted;
 }
 
 /**
@@ -262,8 +368,17 @@ export async function runWatcherCycle({ state, deps, log = () => {} }) {
   try {
     candle = await deps.peekLatest5mCandle();
   } catch (err) {
-    log(`[${stamp()}] Could not read latest confirmed 5m candle: ${err.message}`);
-    return { state: { ...state, last_connection_ok: true }, action: 'CANDLE_READ_FAILED', alerted: false };
+    // A reachable CDP endpoint alone never completes a reconnection: the
+    // chart can still be loading (observed live: `_activeChartWidgetWV`
+    // undefined right after TradingView launch). Reconnection/startup
+    // recovery is complete ONLY once a valid latest confirmed 5m candle
+    // has actually been read, so `last_connection_ok` is left exactly as
+    // it was. If a re-baseline is pending (was disconnected), it stays
+    // pending and fires on the first successful read below -- the next
+    // successful read is then a silent baseline, never a "new candle".
+    const pending = wasDisconnected ? ' — reconnection still pending, re-baseline deferred to the first successful read' : '';
+    log(`[${stamp()}] Could not read latest confirmed 5m candle: ${err.message}${pending}`);
+    return { state: { ...state }, action: 'CANDLE_READ_FAILED', alerted: false };
   }
 
   const connectedState = { ...state, last_connection_ok: true };
@@ -356,16 +471,32 @@ export async function runWatcherCycle({ state, deps, log = () => {} }) {
     }
   }
 
+  // Post-entry thesis review (PART 3): the executor evaluates the ORIGINAL
+  // thesis of any open MCP position against this cycle's confirmed evidence
+  // BEFORE any new alert is considered, so a dead thesis is closed first and
+  // the fresh-signal rule then blocks re-entry on the same cycle. Optional,
+  // failure-isolated, never alters `result` or the decision below.
+  if (typeof deps.reviewOpenPosition === 'function') {
+    try {
+      const rv = await deps.reviewOpenPosition({ result, candle });
+      if (rv?.action && rv.action !== 'NO_POSITION' && rv.action !== 'THESIS_HOLD' && rv.action !== 'THESIS_REVIEW_DISABLED') log(`[${stamp()}] MT5 thesis review: ${rv.action}${rv.reason ? ` (${rv.reason})` : ''}`);
+    } catch (err) {
+      log(`[${stamp()}] MT5 thesis review failed (non-fatal, decision unaffected): ${err.message}`);
+    }
+  }
+
   return evaluateEngineResult({ result, state: advancedState, deps, log, stamp });
 }
 
-function printBanner(log, pollIntervalMs) {
+function printBanner(log, pollIntervalMs, engineProfile = null) {
+  const intraday = isIntradayProfile(engineProfile);
   log([
     'XAUUSD MCP AUTO WATCHER',
     'Status: WATCHING',
     `Poll interval: ${Math.round(pollIntervalMs / 1000)} seconds`,
     'Trigger: New confirmed 5m candle',
-    `Engine: MCP 10-TF schema ${CALCULATE_SCHEMA_VERSION}`,
+    `Engine: MCP 10-TF schema ${intraday ? INTRADAY_SCHEMA_VERSION : CALCULATE_SCHEMA_VERSION}`,
+    `Engine profile: ${engineProfile ?? 'reference_15m'}${intraday ? ' (5m entry authority, 15m bias, 30m/1H strong-conflict filters)' : ' (15m decision authority)'}`,
     'Alerts: BUY/SELL only',
     'WAIT alerts: OFF',
   ].join('\n'));
@@ -410,7 +541,7 @@ export function startWatcher({ pollIntervalMs = DEFAULT_POLL_INTERVAL_MS, _deps 
     return Promise.resolve({ success: false, reason: 'ALREADY_RUNNING', holder_pid: lock.holderPid });
   }
 
-  printBanner(deps.log, pollIntervalMs);
+  printBanner(deps.log, pollIntervalMs, deps.cycleDeps?.engineProfile ?? null);
 
   let state = deps.loadState(deps.statePath);
 

@@ -36,9 +36,16 @@ import { computeHtfContext, detectHtfConflict } from '../engine/htf.js';
 import { loadStore, saveStore, registerOrGetSignal, resolveOpenSignals } from '../engine/signalStore.js';
 import { computeSetupId, resolveStructuralAnchorPrice } from '../engine/anticipationStore.js';
 import { withCdpLock as _withCdpLock, DEFAULT_CDP_LOCK_PATH } from '../engine/cdpLock.js';
+import { resolveEngineProfile, isIntradayProfile, ENGINE_PROFILES } from '../engine/engineProfile.js';
+import { computeBias } from '../engine/intraday/bias.js';
+import { runIntradayPipeline, combineIntraday } from '../engine/intraday/pipeline5m.js';
+import { INTRADAY_PARAMS } from '../engine/intraday/params.js';
 import { fileURLToPath } from 'node:url';
 
 export const CALCULATE_SCHEMA_VERSION = '1.1.0';
+// intraday_5m profile result schema (src/engine/intraday/). The reference
+// profile keeps CALCULATE_SCHEMA_VERSION unchanged.
+export const INTRADAY_SCHEMA_VERSION = '1.2.0';
 
 // Entry timeframes: UNCHANGED from the original engine -- these are the
 // only timeframes that run the full regime/structure/correction/model/
@@ -108,6 +115,9 @@ export function resolveDeps(_deps) {
     // injectable so tests never touch the real filesystem lock.
     cdpLockPath: _deps?.cdpLockPath ?? DEFAULT_CDP_LOCK_PATH,
     withCdpLock: _deps?.withCdpLock ?? _withCdpLock,
+    // Engine profile resolution (src/engine/engineProfile.js): injectable
+    // env so tests never depend on the real process environment.
+    env: _deps?.env ?? process.env,
   };
 }
 
@@ -186,9 +196,13 @@ export function detectMaterialDisagreement(mcpAction, pineAction) {
   return mcpAction !== pineAction;
 }
 
-export async function calculateEntry({ enablePineComparison = true, _deps } = {}) {
+export async function calculateEntry({ enablePineComparison = true, engineProfile = null, _deps } = {}) {
   const deps = resolveDeps(_deps);
   const calculated_at = new Date().toISOString();
+  // Resolved up front so an unknown profile throws before any chart sweep.
+  // Default (nothing selected anywhere) = reference_15m: the code path
+  // below is then byte-for-byte the original engine.
+  const profile = resolveEngineProfile(engineProfile, deps.env);
 
   const { symbol, byTf, fetchErrors } = await fetchMultiTimeframeBars(deps);
 
@@ -208,7 +222,11 @@ export async function calculateEntry({ enablePineComparison = true, _deps } = {}
   // tier's own data failure degrades just that tier's context to
   // DATA_UNAVAILABLE (handled below), it never fails the whole call.
   if (ENTRY_TIMEFRAMES.some((tf) => split[tf].error)) {
-    return { schema_version: CALCULATE_SCHEMA_VERSION, status: 'DATA_UNAVAILABLE', action: 'WAIT', reason: 'insufficient/invalid market data', errors: dataErrors, symbol, calculated_at };
+    return { schema_version: CALCULATE_SCHEMA_VERSION, status: 'DATA_UNAVAILABLE', action: 'WAIT', reason: 'insufficient/invalid market data', errors: dataErrors, symbol, calculated_at, ...(isIntradayProfile(profile) ? { engine_profile: profile } : {}) };
+  }
+
+  if (isIntradayProfile(profile)) {
+    return calculateIntradayEntry({ deps, symbol, split, calculated_at, enablePineComparison, profile });
   }
 
   const pipelineByTf = {};
@@ -342,6 +360,178 @@ export async function calculateEntry({ enablePineComparison = true, _deps } = {}
       conflict: combined.conflict ?? null,
       quality_breakdown: combined.quality?.breakdown ?? null,
       htf_conflict: htfConflict ? { gate_timeframe: TF_LABEL[HTF_GATE_TIMEFRAME], gate_regime: contextByTf[HTF_GATE_TIMEFRAME].regime, blocked_action: combined.action } : null,
+    },
+  };
+}
+
+/**
+ * Reads the Pine reference (informational only) and classifies any
+ * disagreement. Used by the intraday profile; the reference profile keeps
+ * its own inline copy of exactly this logic above (left untouched).
+ */
+async function readPineReference(deps, engineAction, enablePineComparison) {
+  let pine_reference = null;
+  let engine_disagreement = null;
+  if (!enablePineComparison) return { pine_reference, engine_disagreement };
+  try {
+    const pine = await deps.getMasterState();
+    pine_reference = { status: pine.status, action: pine.decision?.action ?? null, regime: pine.market?.regime ?? null };
+    if (pine.status === 'OK') {
+      const pineActionable = pine.decision.action === 'BUY' || pine.decision.action === 'SELL';
+      const engineActionable = engineAction === 'BUY' || engineAction === 'SELL';
+      if (pineActionable && engineActionable && pine.decision.action !== engineAction) {
+        engine_disagreement = { type: 'ENGINE_DISAGREEMENT', pine_action: pine.decision.action, mcp_action: engineAction, note: 'Both engines produced an actionable but OPPOSING direction -- failing closed to WAIT for launch safety.' };
+      } else if (pineActionable !== engineActionable) {
+        engine_disagreement = { type: 'ENGINE_DISAGREEMENT', pine_action: pine.decision.action, mcp_action: engineAction, note: 'One engine is actionable and the other is WAIT -- informational only, not fail-closed (only opposing-direction actionable disagreement fails closed).' };
+      }
+    }
+  } catch (err) {
+    pine_reference = { status: 'READ_ERROR', error: err.message };
+  }
+  return { pine_reference, engine_disagreement };
+}
+
+/**
+ * intraday_5m ENGINE PROFILE (src/engine/intraday/). Same fetch/validate/
+ * store/Pine/HTF plumbing as the reference path above; only the decision
+ * layer differs:
+ *   5m  = entry authority (models, geometry, quality, signal identity)
+ *   15m = bias / regime / correction phase / eligible model set, with ONE
+ *         veto (fresh opposing CHoCH)
+ *   30m = two-factor conflict filter (regime AND structure opposed)
+ *   1H  = conflict filter for counter-trend / unaligned trades only
+ *   2H..1M = context only (unchanged)
+ * The reference engine's own functions/constants are never modified; it
+ * remains selectable as the `reference_15m` profile (the default).
+ */
+async function calculateIntradayEntry({ deps, symbol, split, calculated_at, enablePineComparison, profile }) {
+  const actionable = (a) => a === 'BUY' || a === 'SELL';
+
+  // Higher-timeframe context first: the 1H tier is an input to the 5m pipeline's quality penalty.
+  const contextByTf = {};
+  for (const tf of CONTEXT_TIMEFRAMES) {
+    contextByTf[tf] = split[tf].error
+      ? { status: 'DATA_UNAVAILABLE', regime: null, structure_direction: null, correction_state: null, last_event: null, last_swing_high: null, last_swing_low: null, range_high: null, range_low: null }
+      : computeHtfContext(split[tf].confirmed, { includeCorrection: CONTEXT_INCLUDE_CORRECTION.has(tf) });
+  }
+
+  const m30 = runPipeline({ confirmedBars: split[30].confirmed });
+  const bias = computeBias({ confirmedBars: split[15].confirmed, params: INTRADAY_PARAMS });
+  const intraday = runIntradayPipeline({ bars5: split[5].confirmed, bias, m30Regime: m30.regime, ctx1H: contextByTf[HTF_GATE_TIMEFRAME], params: INTRADAY_PARAMS });
+  const combined = combineIntraday({ intraday, bias, m30, ctx1H: contextByTf[HTF_GATE_TIMEFRAME] });
+
+  // Signal store: same real/ephemeral store discipline as the reference
+  // path. Intraday signals carry timeframe '5m', so they coexist with (and
+  // never collide with) the reference engine's '15m' records in the same
+  // file; every entry timeframe's OPEN records are still resolved.
+  const store = deps.loadStore(deps.storePath);
+  const resolutions = {};
+  for (const tf of ENTRY_TIMEFRAMES) {
+    if (!split[tf].error) resolutions[tf] = resolveOpenSignals(store, { timeframe: TF_LABEL[tf], confirmedBars: split[tf].confirmed });
+  }
+  let registeredSignal = null;
+  if (actionable(combined.action)) {
+    const bars5 = split[5].confirmed;
+    const lastBar = bars5.at(-1);
+    const candidate = intraday.evidence?.candidate ?? null;
+    const originBarTime = Number.isInteger(candidate?.originBar) && bars5[candidate.originBar] ? bars5[candidate.originBar].time : lastBar.time;
+    const thesisDirection = combined.action === 'BUY' ? 'BULLISH' : 'BEARISH';
+    // Thesis = the 5m setup level + side: a second qualified candidate on
+    // the SAME level/side while the first is still OPEN is folded into it
+    // (no independent second registration); a new level is a new thesis.
+    const thesisId = computeSetupId({ symbol, timeframe: '5m', direction: thesisDirection, structuralAnchorPrice: candidate?.anchor ?? resolveStructuralAnchorPrice({ structure: intraday.structure }), regime: combined.regime });
+    const { record, isNew, blockedByOpenThesis, existingSignalId } = registerOrGetSignal(store, {
+      symbol, timeframe: '5m', model: combined.model, side: combined.action, originBar: originBarTime,
+      signalBarTime: lastBar.time, entry: combined.decision.entry, stop_loss: combined.decision.stop_loss, tp1: combined.decision.tp1, tp2: combined.decision.tp2, rr: combined.decision.rr, quality: combined.quality?.score ?? null,
+      thesisId,
+    });
+    registeredSignal = { ...record, is_new_event: isNew, blocked_by_open_thesis: blockedByOpenThesis, existing_signal_id: existingSignalId };
+  }
+  deps.saveStore(deps.storePath, store);
+
+  const { pine_reference, engine_disagreement } = await readPineReference(deps, combined.action, enablePineComparison);
+  const materialDisagreement = detectMaterialDisagreement(combined.action, pine_reference?.status === 'OK' ? pine_reference.action : null);
+  const finalAction = materialDisagreement ? 'WAIT' : combined.action;
+  const finalReason = materialDisagreement ? 'ENGINE_DISAGREEMENT' : combined.wait_reason;
+  const isTrade = actionable(finalAction);
+
+  const entrySummary = {
+    '5m': {
+      role: 'entry', status: intraday.status, regime: intraday.regime, model: intraday.model, action: intraday.decision.action, wait_reason: intraday.decision.wait_reason,
+      correction_state: intraday.correction?.state ?? null, quality: intraday.quality?.score ?? null,
+      last_confirmed_bar_time: split[5].confirmed?.at(-1)?.time ?? null, data_error: split[5].error ?? null, stale: split[5].stale ?? null,
+      new_signals_resolved: resolutions[5] ?? [],
+    },
+    '15m': {
+      role: 'bias', status: bias.status, regime: bias.regime, direction: bias.direction, correction_state: bias.correction?.state ?? null,
+      structure_state: bias.structure?.state ?? null, fresh_opposing_choch: bias.fresh_opposing_choch, eligible_models: bias.eligible_models,
+      model: null, action: 'WAIT', wait_reason: null,
+      last_confirmed_bar_time: split[15].confirmed?.at(-1)?.time ?? null, data_error: split[15].error ?? null, stale: split[15].stale ?? null,
+      new_signals_resolved: resolutions[15] ?? [],
+    },
+    '30m': {
+      role: 'conflict_filter', status: m30.status, regime: m30.regime, structure_state: m30.structure?.state ?? null, model: null, action: 'WAIT', wait_reason: null,
+      correction_state: m30.correction?.state ?? null, quality: null,
+      last_confirmed_bar_time: split[30].confirmed?.at(-1)?.time ?? null, data_error: split[30].error ?? null, stale: split[30].stale ?? null,
+      new_signals_resolved: resolutions[30] ?? [],
+    },
+  };
+  const contextTimeframeSummary = Object.fromEntries(CONTEXT_TIMEFRAMES.map((tf) => {
+    const ctx = contextByTf[tf];
+    return [TF_LABEL[tf], {
+      status: ctx.status, regime: ctx.regime, structure_direction: ctx.structure_direction, correction_state: ctx.correction_state,
+      last_swing_high: ctx.last_swing_high, last_swing_low: ctx.last_swing_low, range_high: ctx.range_high, range_low: ctx.range_low,
+      last_confirmed_bar_time: split[tf].confirmed?.at(-1)?.time ?? null,
+      data_error: split[tf].error ?? null, stale: split[tf].stale ?? null,
+    }];
+  }));
+
+  const risk = intraday.evidence?.risk ?? null;
+  return {
+    schema_version: INTRADAY_SCHEMA_VERSION,
+    engine_profile: profile ?? ENGINE_PROFILES.INTRADAY_5M,
+    status: 'OK',
+    action: finalAction,
+    reason: finalAction === 'WAIT' ? finalReason : null,
+    symbol,
+    timeframes: { ...entrySummary, ...contextTimeframeSummary },
+    regime: intraday.regime ?? null,
+    bias: { timeframe: '15m', direction: bias.direction, regime: bias.regime, correction_state: bias.correction?.state ?? null, fresh_opposing_choch: bias.fresh_opposing_choch, eligible_models: bias.eligible_models },
+    direction: isTrade ? finalAction : null,
+    setup: combined.model ?? intraday.model ?? null,
+    entry: isTrade ? combined.decision.entry : null,
+    sl: isTrade ? combined.decision.stop_loss : null,
+    tp1: isTrade ? combined.decision.tp1 : null,
+    tp2: isTrade ? combined.decision.tp2 : null,
+    rr: isTrade ? combined.decision.rr : null,
+    quality: isTrade ? combined.quality?.score : null,
+    correction_state: bias.correction?.state ?? null,
+    confirmation_state: intraday.status,
+    overextension_state: intraday.decision.wait_reason === 'OVEREXTENDED' ? 'OVEREXTENDED' : 'NONE',
+    signal: registeredSignal,
+    market_data_times: Object.fromEntries(ALL_TIMEFRAMES.map((tf) => [TF_LABEL[tf], split[tf].confirmed?.at(-1)?.time ?? null])),
+    calculated_at,
+    pine_reference,
+    engine_disagreement,
+    diagnostics: {
+      engine_profile: profile ?? ENGINE_PROFILES.INTRADAY_5M,
+      source_timeframe: '5m',
+      bias_timeframe: '15m',
+      conflict: combined.conflict ?? null,
+      quality_breakdown: intraday.quality?.breakdown ?? null,
+      quality_threshold: intraday.quality?.threshold ?? null,
+      candidate: intraday.evidence?.candidate ? { model: intraday.evidence.candidate.model, side: intraday.evidence.candidate.side, anchor: intraday.evidence.candidate.anchor, reason: intraday.evidence.candidate.reason } : null,
+      // PLANNING-ONLY geometry of the 5m candidate this cycle (present on
+      // the OK / RR_NOT_ACCEPTABLE / NO_GOOD_ENTRY paths; null fields when
+      // the risk gate rejected before geometry existed). Never executable:
+      // the executor only ever reads the top-level entry/sl/tp fields,
+      // which stay null on WAIT.
+      candidate_geometry: risk ? { gate: risk.gate ?? null, entry: risk.entry ?? null, sl: risk.stop_loss ?? null, tp1: risk.tp1 ?? null, tp2: risk.tp2 ?? null, rr: risk.rr ?? null, quality: intraday.quality?.score ?? null, quality_threshold: intraday.quality?.threshold ?? null, quality_threshold_basis: intraday.quality?.threshold_basis ?? null } : null,
+      objective: risk?.objective ?? null,
+      skipped_minor_objectives: risk?.skipped_minor_objectives ?? null,
+      sl_source: risk?.sl_source ?? null,
+      htf_conflict: finalReason === 'HTF_CONFLICT' ? { gate_timeframe: TF_LABEL[HTF_GATE_TIMEFRAME], gate_regime: contextByTf[HTF_GATE_TIMEFRAME].regime, blocked_action: intraday.decision.action } : null,
+      htf_penalised: combined.htf_penalised ?? false,
     },
   };
 }

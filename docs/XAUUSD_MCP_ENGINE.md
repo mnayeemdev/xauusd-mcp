@@ -160,3 +160,62 @@ npm run test:unit                               # full project regression
   `validation/p8_forward_boundary.json` are untouched by this engine.
 - The MCP engine's own signal ledger (`validation/mcp_engine_signals.json`)
   is separate from P8's Pine-based ledger and is never mixed with it.
+
+## Engine profiles: `reference_15m` (default) and `intraday_5m`
+
+Two decision layers share every other part of the engine (10-timeframe
+fetch, validation, signal store, dedup, Pine comparison, MT5 execution):
+
+| | `reference_15m` (default, unchanged) | `intraday_5m` (DEMO forward test) |
+|---|---|---|
+| Entry authority | 15m pipeline | **5m** pipeline (`src/engine/intraday/`) |
+| 15m role | decides | bias / regime / correction phase / eligible model set |
+| 30m | regime opposition vetoes | vetoes only when regime **and** structure both oppose |
+| 1H | regime opposition vetoes | vetoes MR and trades not aligned with the 15m bias; aligned continuation gets a quality penalty |
+| TRANSITION | hard WAIT | NEUTRAL bias, level models only (quality bar 70) |
+| CORRECTION_ACTIVE | hard WAIT | selects the 5m Pullback model (5m correction measured against the 15m bias) |
+| Models | BO, TC, PB, MR, SR | **MC** (momentum continuation), PB (5m), BO, SR (with rejection-candle evidence), MR (15m RANGE only) |
+| TP2 | last-5-pivot extreme | nearest structural objective ≥ 1.0R, minor objectives skipped, cap 3R |
+| Quality / RR | 65 / 1.7 | 65 / 1.7 (verbatim); + volatility-sufficiency gate |
+| Signal identity | timeframe `15m` | timeframe `5m` (coexists in the same store) |
+| Result schema | `1.1.0` | `1.2.0`, plus `engine_profile`, `bias`, `diagnostics.objective` |
+
+Selection: `--engine intraday_5m` on `tv xauusd calculate|check|watch`, or
+`XAUUSD_ENGINE_PROFILE=intraday_5m`. Nothing selected = `reference_15m`,
+whose code path and constants are untouched (still the locked P7/C4
+reference). Unknown values throw before any chart sweep.
+
+Unchanged under both profiles: confirmed candles only, WAIT whenever no
+model triggers, one MCP position at a time, fresh signal after close,
+dedup/restart/replay/reconnect protection, and every MT5 DEMO safety rule
+(`docs/XAUUSD_MT5_DEMO_EXECUTION.md`). Tests: `tests/engine_intraday.test.js`.
+
+### intraday_5m: replay-verified adjustments (2026-09-25)
+
+A bar-by-bar replay of the 2026-09-25 session (89 confirmed 5m bars, prefix-only
+data on every timeframe, no look-ahead) found two implementation issues and
+one observability gap. Nothing else was changed; quality 65 / RR 1.7 are intact.
+
+1. **BO stop anchor** (`models5m.js`): the Breakout/Retest stop is now placed
+   beyond the *retest extreme* (highest high after the breakout for a SELL,
+   lowest low for a BUY). Before, the stop fell back to the prior 5m swing,
+   3 to 6 ATR away, and turned every BO candidate with a legitimate objective
+   into an RR 1.0 to 1.4 rejection. Objective selection was correct and is
+   unchanged.
+2. **Quality bar under NEUTRAL 15m bias** (`pipeline5m.js`,
+   `resolveQualityThreshold()`): the 70 bar applies only when *nothing*
+   supports the side. When the 1H tier supports it (regime or structure agrees
+   and neither opposes), the normal 65 bar applies, because that is
+   directional context. Model eligibility under NEUTRAL bias is unchanged
+   (MC/PB still require a directional 15m bias; the replay showed the
+   counterfactual "qualified bias" rule would have triggered nothing).
+3. **Planner** (`xauusd_analyze_market.js`, `presentation.js`): on the
+   intraday profile, evidence and the pre-entry plan are computed from the
+   confirmed 5m bars, and the engine's own blocked 5m candidate is attached as
+   `pre_entry_plan.engine_candidate` (model, side, provisional entry/SL/TP1/TP2,
+   RR, quality vs bar, exact blocker, condition still required). It is
+   planning-only: the top-level entry/sl/tp fields stay null on WAIT and are
+   the only fields the executor reads.
+
+Regression fixture: `tests/fixtures/xauusd_intraday_session_2026-09-25.json`
+(real bars, used for invariants only, never for trade counts or outcomes).

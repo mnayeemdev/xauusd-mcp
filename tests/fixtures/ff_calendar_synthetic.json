@@ -1,0 +1,13 @@
+[
+  { "title": "Bank Holiday", "country": "JPY", "date": "2026-09-20T19:00:00-04:00", "impact": "Holiday", "forecast": "", "previous": "" },
+  { "title": "Synthetic Unemployment Claims", "country": "USD", "date": "2026-09-24T08:30:00-04:00", "impact": "Medium", "forecast": "201K", "previous": "196K" },
+  { "title": "Synthetic ECB Press Conference", "country": "EUR", "date": "2026-09-24T08:45:00-04:00", "impact": "High", "forecast": "", "previous": "" },
+  { "title": "Synthetic CPI m/m", "country": "USD", "date": "2026-09-25T08:30:00-04:00", "impact": "High", "forecast": "0.3%", "previous": "0.2%" },
+  { "title": "Synthetic CPI m/m", "country": "USD", "date": "2026-09-25T08:30:00-04:00", "impact": "High", "forecast": "0.3%", "previous": "0.2%" },
+  { "title": "Synthetic Core CPI m/m", "country": "USD", "date": "2026-09-25T08:30:00-04:00", "impact": "High", "forecast": "0.3%", "previous": "0.3%" },
+  { "title": "FOMC Member Speaks", "country": "USD", "date": "2026-09-25T10:00:00-04:00", "impact": "Low", "forecast": "", "previous": "" },
+  { "title": "FOMC Statement", "country": "USD", "date": "2026-09-30T14:00:00-04:00", "impact": "Medium", "forecast": "", "previous": "" },
+  { "title": "Federal Funds Rate", "country": "USD", "date": "2026-09-30T14:00:00-04:00", "impact": "High", "forecast": "4.00%", "previous": "4.25%" },
+  { "title": "Naive Time Event", "country": "USD", "date": "2026-09-25 13:30", "impact": "High", "forecast": "", "previous": "" },
+  { "title": "Synthetic Non-Farm Employment Change", "country": "USD", "date": "2026-10-02T08:30:00-04:00", "impact": "High", "forecast": "150K", "previous": "142K" }
+]

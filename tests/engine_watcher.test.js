@@ -319,15 +319,19 @@ describe('watcher: chart restoration', () => {
     assert.deepEqual(setTimeframeCalls, ['5', '15']);
   });
 
-  it('restores the original resolution even when getOhlcv throws', async () => {
+  it('restores the original resolution even when getOhlcv PERSISTENTLY throws (retries within budget, then fails closed)', async () => {
     const setTimeframeCalls = [];
+    let getOhlcvCalls = 0;
     const deps = {
       getState: async () => ({ success: true, resolution: '30' }),
       setTimeframe: async ({ timeframe }) => { setTimeframeCalls.push(timeframe); return { success: true }; },
-      getOhlcv: async () => { throw new Error('chart still loading'); },
+      getOhlcv: async () => { getOhlcvCalls++; throw new Error('chart still loading'); },
+      sleep: async () => {},
     };
-    await assert.rejects(() => peekLatest5mCandle(deps));
-    assert.deepEqual(setTimeframeCalls, ['5', '30']);
+    await assert.rejects(() => peekLatest5mCandle(deps), /could not obtain a fresh, verified 5m candle/);
+    assert.ok(getOhlcvCalls > 1, 'a thrown getOhlcv() must be retried, not propagated on the first attempt');
+    assert.equal(setTimeframeCalls.at(0), '5');
+    assert.equal(setTimeframeCalls.at(-1), '30', 'must still restore the original resolution even after exhausting every retry');
   });
 
   it('does not switch timeframe at all if the chart is already on 5m', async () => {
@@ -596,5 +600,173 @@ describe('watcher: never duplicates the calculation engine', () => {
 
   it('regression guard — importing the watcher never changed the engine schema version', () => {
     assert.equal(CALCULATE_SCHEMA_VERSION, '1.1.0');
+  });
+});
+
+// Regression: reconnect/startup recovery must NOT be completed by a
+// reachable CDP endpoint alone. Live incident (2026-09-24, TradingView
+// relaunch): tick 1 -> CDP reachable but the chart was still loading, so the
+// 5m peek threw; that path used to flip last_connection_ok to true, so tick 2
+// skipped the explicit re-baseline and ran a full analysis on the latest
+// confirmed candle as if it were "new". Reconnection is complete only once a
+// valid latest confirmed 5m candle has been read; that read is a silent
+// baseline (no engine call, no alert, no MT5 execution), and only a LATER
+// confirmed candle starts normal processing.
+describe('watcher: reconnection completes only on a valid confirmed 5m candle read', () => {
+  function recoveryDeps({ engineResult = baseCalcResult(), onNotify = null, onExecute = null } = {}) {
+    const calls = { peek: 0, calc: 0, notify: 0, execute: 0 };
+    let peekMode = 'fail';
+    let peekTime = 5000;
+    const deps = {
+      isCdpReachable: async () => true,
+      peekLatest5mCandle: async () => {
+        calls.peek++;
+        if (peekMode === 'fail') throw new Error("JS evaluation error: TypeError: Cannot read properties of undefined (reading '_activeChartWidgetWV')");
+        return { time: peekTime };
+      },
+      analyzeMarket: async () => { calls.calc++; return engineResult; },
+      notify: (a) => { calls.notify++; if (onNotify) onNotify(a); },
+      executeSignal: async (ev) => { calls.execute++; return onExecute ? onExecute(ev) : { executed: false, reason: 'ALGO_TRADING_DISABLED' }; },
+    };
+    return { deps, calls, setPeek: (mode, time) => { peekMode = mode; if (time !== undefined) peekTime = time; } };
+  }
+
+  it('CDP reachable but the first candle read fails -> reconnection stays pending (last_connection_ok remains false), no engine call', async () => {
+    const log = makeLog();
+    const { deps, calls } = recoveryDeps();
+    const disconnected = freshState({ baseline_established: true, last_processed_5m_time: 1000, last_connection_ok: false });
+
+    const r1 = await runWatcherCycle({ state: disconnected, deps, log });
+    assert.equal(r1.action, 'CANDLE_READ_FAILED');
+    assert.equal(r1.state.last_connection_ok, false, 'a reachable CDP endpoint alone must never complete reconnection');
+    assert.equal(r1.state.last_processed_5m_time, 1000, 'baseline untouched until a candle is actually read');
+    assert.equal(calls.calc, 0);
+    assert.equal(calls.notify, 0);
+    assert.equal(calls.execute, 0);
+    assert.equal(log.lines.filter((l) => l.includes('reconnection still pending')).length, 1);
+
+    // Repeated read failures keep it pending -- no state drift.
+    const r2 = await runWatcherCycle({ state: r1.state, deps, log });
+    assert.equal(r2.action, 'CANDLE_READ_FAILED');
+    assert.equal(r2.state.last_connection_ok, false);
+    assert.equal(calls.calc, 0);
+  });
+
+  it('the next SUCCESSFUL candle read becomes the baseline only: no engine call, no alert, no MT5 execution', async () => {
+    const log = makeLog();
+    // Engine would return an actionable BUY if it were (wrongly) called.
+    const { deps, calls, setPeek } = recoveryDeps({ engineResult: buyResult({ signalId: 'must-not-fire' }) });
+    const disconnected = freshState({ baseline_established: true, last_processed_5m_time: 1000, last_connection_ok: false });
+
+    const r1 = await runWatcherCycle({ state: disconnected, deps, log });
+    assert.equal(r1.action, 'CANDLE_READ_FAILED');
+
+    setPeek('ok', 5000);
+    const r2 = await runWatcherCycle({ state: r1.state, deps, log });
+    assert.equal(r2.action, 'RECONNECTED_REBASELINE');
+    assert.equal(r2.alerted, false);
+    assert.equal(r2.state.last_connection_ok, true);
+    assert.equal(r2.state.last_processed_5m_time, 5000);
+    assert.equal(r2.state.baseline_established, true);
+    assert.equal(r2.state.last_alerted_signal_id, null, 'baseline event never records an alert');
+    assert.equal(calls.calc, 0, 'baseline read never calls the engine');
+    assert.equal(calls.notify, 0, 'baseline read never alerts');
+    assert.equal(calls.execute, 0, 'baseline read never reaches the MT5 executor');
+    assert.equal(log.lines.filter((l) => l.includes('connection restored')).length, 1);
+    assert.equal(r2.execution, undefined);
+  });
+
+  it('a LATER genuinely new confirmed candle after recovery is processed normally (exactly one analysis; alert + MT5 hook only then)', async () => {
+    const log = makeLog();
+    const { deps, calls, setPeek } = recoveryDeps({ engineResult: buyResult({ signalId: 'sig-after-recovery' }) });
+    const disconnected = freshState({ baseline_established: true, last_processed_5m_time: 1000, last_connection_ok: false });
+
+    const r1 = await runWatcherCycle({ state: disconnected, deps, log });
+    assert.equal(r1.action, 'CANDLE_READ_FAILED');
+    setPeek('ok', 5000);
+    const r2 = await runWatcherCycle({ state: r1.state, deps, log });
+    assert.equal(r2.action, 'RECONNECTED_REBASELINE');
+    assert.equal(calls.calc, 0);
+
+    // Same candle again -> ordinary no-op.
+    const r3 = await runWatcherCycle({ state: r2.state, deps, log });
+    assert.equal(r3.action, 'NO_NEW_CANDLE');
+    assert.equal(calls.calc, 0);
+
+    // A later confirmed candle -> normal processing resumes.
+    setPeek('ok', 5300);
+    const r4 = await runWatcherCycle({ state: r3.state, deps, log });
+    assert.equal(r4.action, 'ALERTED');
+    assert.equal(r4.alerted, true);
+    assert.equal(r4.state.last_processed_5m_time, 5300);
+    assert.equal(r4.state.last_alerted_signal_id, 'sig-after-recovery');
+    assert.equal(calls.calc, 1, 'exactly one analysis, for the later candle only');
+    assert.equal(calls.notify, 1);
+    assert.equal(calls.execute, 1, 'MT5 hook fires only for the genuinely new candle, never for the baseline');
+    assert.deepEqual(r4.execution, { executed: false, reason: 'ALGO_TRADING_DISABLED' });
+  });
+
+  it('WAIT after recovery is also processed normally (technical log only, no alert, no execution)', async () => {
+    const log = makeLog();
+    const { deps, calls, setPeek } = recoveryDeps();
+    let state = freshState({ baseline_established: true, last_processed_5m_time: 1000, last_connection_ok: false });
+    state = (await runWatcherCycle({ state, deps, log })).state; // read failed
+    setPeek('ok', 5000);
+    state = (await runWatcherCycle({ state, deps, log })).state; // re-baseline
+    setPeek('ok', 5300);
+    const r = await runWatcherCycle({ state, deps, log });
+    assert.equal(r.action, 'WAIT');
+    assert.equal(calls.calc, 1);
+    assert.equal(calls.notify, 0);
+    assert.equal(calls.execute, 0);
+  });
+
+  it('no historical replay: a long gap with several failed reads collapses to ONE silent baseline at the latest candle', async () => {
+    const log = makeLog();
+    const { deps, calls, setPeek } = recoveryDeps({ engineResult: buyResult({ signalId: 'gap-signal' }) });
+    // Watcher last saw candle 1000; many 5m candles (1300..9000) passed while disconnected.
+    let state = freshState({ baseline_established: true, last_processed_5m_time: 1000, last_connection_ok: false });
+    for (let i = 0; i < 4; i++) {
+      const r = await runWatcherCycle({ state, deps, log });
+      assert.equal(r.action, 'CANDLE_READ_FAILED');
+      state = r.state;
+    }
+    setPeek('ok', 9000);
+    const rb = await runWatcherCycle({ state, deps, log });
+    assert.equal(rb.action, 'RECONNECTED_REBASELINE');
+    assert.equal(rb.state.last_processed_5m_time, 9000, 'jumps straight to the latest candle');
+    assert.equal(calls.calc, 0, 'none of the missed candles (1300..9000) is ever analysed');
+    assert.equal(calls.notify, 0);
+    assert.equal(calls.execute, 0);
+    assert.equal(calls.peek, 5);
+  });
+
+  it('startup recovery: persisted state with last_connection_ok:false at process start behaves identically (the live incident shape)', async () => {
+    const log = makeLog();
+    const { deps, calls, setPeek } = recoveryDeps({ engineResult: buyResult({ signalId: 'startup-sig' }) });
+    // Exactly the persisted file the new watcher loaded on 2026-09-24.
+    const persisted = { ...DEFAULT_WATCHER_STATE, version: 1, last_processed_5m_time: 1790282100, baseline_established: true, last_alerted_signal_id: '979c1e71c587928d', last_connection_ok: false };
+    const r1 = await runWatcherCycle({ state: persisted, deps, log });
+    assert.equal(r1.action, 'CANDLE_READ_FAILED');
+    assert.equal(r1.state.last_connection_ok, false);
+    setPeek('ok', 1790283000);
+    const r2 = await runWatcherCycle({ state: r1.state, deps, log });
+    assert.equal(r2.action, 'RECONNECTED_REBASELINE', 'the first good read after startup is a baseline, not a "new candle"');
+    assert.equal(r2.state.last_processed_5m_time, 1790283000);
+    assert.equal(r2.state.last_alerted_signal_id, '979c1e71c587928d', 'prior alert identity preserved');
+    assert.equal(calls.calc, 0);
+    assert.equal(calls.notify, 0);
+    assert.equal(calls.execute, 0);
+  });
+
+  it('unchanged: a fresh (never-baselined) watcher whose first read fails still establishes its baseline on the first good read', async () => {
+    const { deps, calls, setPeek } = recoveryDeps();
+    const r1 = await runWatcherCycle({ state: freshState(), deps, log: () => {} });
+    assert.equal(r1.action, 'CANDLE_READ_FAILED');
+    assert.equal(r1.state.last_connection_ok, null, 'never-connected state is left as-is, not promoted to connected');
+    setPeek('ok', 2000);
+    const r2 = await runWatcherCycle({ state: r1.state, deps, log: () => {} });
+    assert.equal(r2.action, 'BASELINE_ESTABLISHED');
+    assert.equal(calls.calc, 0);
   });
 });

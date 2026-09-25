@@ -241,6 +241,17 @@ export function formatMarketAnalysis(analysisResult) {
     structuredExtra.pre_entry_plan = plan;
   }
 
+  // intraday_5m only: the engine's own blocked 5m candidate (planning
+  // geometry, never executable) -- see attachIntradayEngineCandidate().
+  const ec = plan?.engine_candidate;
+  if (ec) {
+    lines.push(`Intraday candidate: ${ec.model} ${ec.side} — blocked by ${ec.blocked_by ?? 'N/A'}`);
+    if (ec.entry != null) lines.push(`Provisional (planning only): Entry ${fmtNum(ec.entry)} SL ${fmtNum(ec.sl)} TP1 ${fmtNum(ec.tp1)} TP2 ${fmtNum(ec.tp2)} RR ${fmtNum(ec.rr)}`);
+    if (ec.quality != null) lines.push(`Candidate quality: ${fmtNum(ec.quality)} / ${fmtNum(ec.quality_threshold)}${ec.quality_threshold_basis ? ` (${ec.quality_threshold_basis})` : ''}`);
+    if (ec.condition_required) lines.push(`Needs before confirmation: ${ec.condition_required}`);
+    structuredExtra.pre_entry_plan = plan;
+  }
+
   if (lines.length === base.lines.length) return base;
 
   return {
