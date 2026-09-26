@@ -1,0 +1,134 @@
+done {
+ "15m": {
+  "bars": 100000,
+  "counts": {
+   "bars": 98667,
+   "matureRangeBars": 58475,
+   "bos": 2719,
+   "choch": 1972
+  },
+  "event_counts": {
+   "A_RANGE_SWEEP": {
+    "DISCOVERY": 206,
+    "VALIDATION": 139,
+    "HOLDOUT": 133
+   },
+   "B_SWEEP_RECLAIM": {
+    "DISCOVERY": 75,
+    "VALIDATION": 51,
+    "HOLDOUT": 47
+   },
+   "C_SWEEP_CHOCH": {
+    "DISCOVERY": 29,
+    "VALIDATION": 14,
+    "HOLDOUT": 15
+   },
+   "D_FAILED_BREAKOUT": {
+    "DISCOVERY": 286,
+    "VALIDATION": 194,
+    "HOLDOUT": 193
+   },
+   "E_BOS_RETEST_HOLD": {
+    "DISCOVERY": 510,
+    "VALIDATION": 295,
+    "HOLDOUT": 310
+   },
+   "E_BOS_RETEST_FAIL": {
+    "DISCOVERY": 106,
+    "VALIDATION": 65,
+    "HOLDOUT": 62
+   },
+   "F1_COMP_ATR_BREAK": {
+    "DISCOVERY": 814,
+    "VALIDATION": 305,
+    "HOLDOUT": 186
+   },
+   "F1_COMP_ATR_ACCEPT": {
+    "DISCOVERY": 605,
+    "VALIDATION": 232,
+    "HOLDOUT": 126
+   },
+   "F2_COMP_BOX_BREAK": {
+    "DISCOVERY": 5,
+    "VALIDATION": 1,
+    "HOLDOUT": 0
+   },
+   "BOS": {
+    "DISCOVERY": 1265,
+    "VALIDATION": 774,
+    "HOLDOUT": 680
+   },
+   "CHOCH": {
+    "DISCOVERY": 906,
+    "VALIDATION": 561,
+    "HOLDOUT": 505
+   }
+  }
+ },
+ "1H": {
+  "bars": 57443,
+  "counts": {
+   "bars": 56118,
+   "matureRangeBars": 31893,
+   "bos": 1605,
+   "choch": 1040
+  },
+  "event_counts": {
+   "A_RANGE_SWEEP": {
+    "DISCOVERY": 150,
+    "VALIDATION": 82,
+    "HOLDOUT": 62
+   },
+   "B_SWEEP_RECLAIM": {
+    "DISCOVERY": 51,
+    "VALIDATION": 30,
+    "HOLDOUT": 12
+   },
+   "C_SWEEP_CHOCH": {
+    "DISCOVERY": 25,
+    "VALIDATION": 13,
+    "HOLDOUT": 5
+   },
+   "D_FAILED_BREAKOUT": {
+    "DISCOVERY": 176,
+    "VALIDATION": 103,
+    "HOLDOUT": 78
+   },
+   "E_BOS_RETEST_HOLD": {
+    "DISCOVERY": 320,
+    "VALIDATION": 174,
+    "HOLDOUT": 129
+   },
+   "E_BOS_RETEST_FAIL": {
+    "DISCOVERY": 57,
+    "VALIDATION": 34,
+    "HOLDOUT": 29
+   },
+   "F1_COMP_ATR_BREAK": {
+    "DISCOVERY": 113,
+    "VALIDATION": 48,
+    "HOLDOUT": 51
+   },
+   "F1_COMP_ATR_ACCEPT": {
+    "DISCOVERY": 86,
+    "VALIDATION": 38,
+    "HOLDOUT": 39
+   },
+   "F2_COMP_BOX_BREAK": {
+    "DISCOVERY": 1,
+    "VALIDATION": 0,
+    "HOLDOUT": 0
+   },
+   "BOS": {
+    "DISCOVERY": 810,
+    "VALIDATION": 412,
+    "HOLDOUT": 383
+   },
+   "CHOCH": {
+    "DISCOVERY": 530,
+    "VALIDATION": 266,
+    "HOLDOUT": 244
+   }
+  }
+ }
+}

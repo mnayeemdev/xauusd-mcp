@@ -1,0 +1,1143 @@
+{
+ "region": "A",
+ "profit_protection_variant": false,
+ "sessions": 49,
+ "gates": {
+  "bars": 14373,
+  "eventA": 430,
+  "eventB": 175,
+  "eventC": 157,
+  "objectiveMissing": 95,
+  "rrRejected": 370,
+  "stopTooTight": 42
+ },
+ "overall": {
+  "n": 150,
+  "wr": 35.33,
+  "pf": 1.04,
+  "mean_r": -0.002,
+  "median_r": -0.891,
+  "total_r": -0.29,
+  "ci95": [
+   -0.323,
+   0.319
+  ],
+  "max_dd_r": 29.11,
+  "max_loss_streak": 9,
+  "mean_mae_r": 1.13,
+  "mean_mfe_r": 1.39,
+  "avg_hold": 16.01,
+  "total_ex_top1": -14.08,
+  "total_ex_top3": -26.34,
+  "total_ex_top5": -32.83,
+  "exits": {
+   "STRUCTURAL_TARGET": 38,
+   "EMERGENCY_BROKER_SL": 44,
+   "THESIS_INVALIDATION_CLOSE": 24,
+   "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 29,
+   "TIME_STOP_48_BARS": 15
+  }
+ },
+ "bootstrap": {
+  "n": 150,
+  "mean_r": -0.002,
+  "ci95": [
+   -0.312,
+   0.322
+  ],
+  "pf_ci95": [
+   0.68,
+   1.52
+  ],
+  "p_mean_le_0": 55.35
+ },
+ "by_family": {
+  "V2A_SWEEP_RECLAIM": {
+   "n": 102,
+   "wr": 31.37,
+   "pf": 0.77,
+   "mean_r": -0.171,
+   "median_r": -0.946,
+   "total_r": -17.4,
+   "ci95": [
+    -0.453,
+    0.112
+   ],
+   "max_dd_r": 31.07,
+   "max_loss_streak": 9,
+   "mean_mae_r": 1.06,
+   "mean_mfe_r": 1.18,
+   "avg_hold": 16.06,
+   "total_ex_top1": -21.95,
+   "total_ex_top3": -27.76,
+   "total_ex_top5": -32.74,
+   "exits": {
+    "EMERGENCY_BROKER_SL": 33,
+    "STRUCTURAL_TARGET": 20,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 21,
+    "THESIS_INVALIDATION_CLOSE": 16,
+    "TIME_STOP_48_BARS": 12
+   }
+  },
+  "V2C_COMPRESSION_EXPANSION": {
+   "n": 26,
+   "wr": 53.85,
+   "pf": 2.45,
+   "mean_r": 0.429,
+   "median_r": 0.58,
+   "total_r": 11.14,
+   "ci95": [
+    -0.066,
+    0.923
+   ],
+   "max_dd_r": 2.75,
+   "max_loss_streak": 4,
+   "mean_mae_r": 0.68,
+   "mean_mfe_r": 1.2,
+   "avg_hold": 24.27,
+   "total_ex_top1": 9.22,
+   "total_ex_top3": 5.43,
+   "total_ex_top5": 1.75,
+   "exits": {
+    "STRUCTURAL_TARGET": 11,
+    "THESIS_INVALIDATION_CLOSE": 2,
+    "TIME_STOP_48_BARS": 3,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 8,
+    "EMERGENCY_BROKER_SL": 2
+   }
+  },
+  "V2B_BOS_RETEST": {
+   "n": 22,
+   "wr": 31.82,
+   "pf": 1.24,
+   "mean_r": 0.271,
+   "median_r": -1.254,
+   "total_r": 5.96,
+   "ci95": [
+    -1.396,
+    1.938
+   ],
+   "max_dd_r": 13.92,
+   "max_loss_streak": 7,
+   "mean_mae_r": 1.97,
+   "mean_mfe_r": 2.57,
+   "avg_hold": 6.05,
+   "total_ex_top1": -7.82,
+   "total_ex_top3": -18.88,
+   "total_ex_top5": -23.81,
+   "exits": {
+    "STRUCTURAL_TARGET": 7,
+    "EMERGENCY_BROKER_SL": 9,
+    "THESIS_INVALIDATION_CLOSE": 6
+   }
+  }
+ },
+ "by_side": {
+  "SELL": {
+   "n": 86,
+   "wr": 43.02,
+   "pf": 1.62,
+   "mean_r": 0.34,
+   "median_r": -0.608,
+   "total_r": 29.21,
+   "ci95": [
+    -0.138,
+    0.817
+   ],
+   "max_dd_r": 7.9,
+   "max_loss_streak": 6,
+   "mean_mae_r": 1.01,
+   "mean_mfe_r": 1.59,
+   "avg_hold": 16.5,
+   "total_ex_top1": 15.43,
+   "total_ex_top3": 4.36,
+   "total_ex_top5": -1.39,
+   "exits": {
+    "STRUCTURAL_TARGET": 28,
+    "EMERGENCY_BROKER_SL": 22,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 15,
+    "THESIS_INVALIDATION_CLOSE": 12,
+    "TIME_STOP_48_BARS": 9
+   }
+  },
+  "BUY": {
+   "n": 64,
+   "wr": 25,
+   "pf": 0.51,
+   "mean_r": -0.461,
+   "median_r": -1.036,
+   "total_r": -29.51,
+   "ci95": [
+    -0.827,
+    -0.095
+   ],
+   "max_dd_r": 34.05,
+   "max_loss_streak": 7,
+   "mean_mae_r": 1.29,
+   "mean_mfe_r": 1.12,
+   "avg_hold": 15.36,
+   "total_ex_top1": -34.05,
+   "total_ex_top3": -39.19,
+   "total_ex_top5": -43.47,
+   "exits": {
+    "STRUCTURAL_TARGET": 10,
+    "THESIS_INVALIDATION_CLOSE": 12,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 14,
+    "TIME_STOP_48_BARS": 6,
+    "EMERGENCY_BROKER_SL": 22
+   }
+  }
+ },
+ "by_family_side": {
+  "V2A_SWEEP_RECLAIM_SELL": {
+   "n": 55,
+   "wr": 36.36,
+   "pf": 1.03,
+   "mean_r": -0.052,
+   "median_r": -0.902,
+   "total_r": -2.88,
+   "ci95": [
+    -0.434,
+    0.33
+   ],
+   "max_dd_r": 11.88,
+   "max_loss_streak": 7,
+   "mean_mae_r": 1.03,
+   "mean_mfe_r": 1.2,
+   "avg_hold": 16.36,
+   "total_ex_top1": -6.02,
+   "total_ex_top3": -10.76,
+   "total_ex_top5": -15.08,
+   "exits": {
+    "EMERGENCY_BROKER_SL": 19,
+    "STRUCTURAL_TARGET": 13,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 9,
+    "THESIS_INVALIDATION_CLOSE": 7,
+    "TIME_STOP_48_BARS": 7
+   }
+  },
+  "V2A_SWEEP_RECLAIM_BUY": {
+   "n": 47,
+   "wr": 25.53,
+   "pf": 0.53,
+   "mean_r": -0.309,
+   "median_r": -1.015,
+   "total_r": -14.52,
+   "ci95": [
+    -0.729,
+    0.111
+   ],
+   "max_dd_r": 20.64,
+   "max_loss_streak": 9,
+   "mean_mae_r": 1.11,
+   "mean_mfe_r": 1.16,
+   "avg_hold": 15.7,
+   "total_ex_top1": -19.07,
+   "total_ex_top3": -24.2,
+   "total_ex_top5": -28.49,
+   "exits": {
+    "STRUCTURAL_TARGET": 7,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 12,
+    "THESIS_INVALIDATION_CLOSE": 9,
+    "EMERGENCY_BROKER_SL": 14,
+    "TIME_STOP_48_BARS": 5
+   }
+  },
+  "V2C_COMPRESSION_EXPANSION_SELL": {
+   "n": 18,
+   "wr": 61.11,
+   "pf": 4.32,
+   "mean_r": 0.638,
+   "median_r": 1.709,
+   "total_r": 11.49,
+   "ci95": [
+    0.055,
+    1.221
+   ],
+   "max_dd_r": 2.24,
+   "max_loss_streak": 3,
+   "mean_mae_r": 0.58,
+   "mean_mfe_r": 1.24,
+   "avg_hold": 24.06,
+   "total_ex_top1": 9.56,
+   "total_ex_top3": 5.8,
+   "total_ex_top5": 2.14,
+   "exits": {
+    "STRUCTURAL_TARGET": 9,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 6,
+    "THESIS_INVALIDATION_CLOSE": 1,
+    "TIME_STOP_48_BARS": 2
+   }
+  },
+  "V2B_BOS_RETEST_SELL": {
+   "n": 13,
+   "wr": 46.15,
+   "pf": 2.5,
+   "mean_r": 1.585,
+   "median_r": -1.113,
+   "total_r": 20.6,
+   "ci95": [
+    -0.966,
+    4.135
+   ],
+   "max_dd_r": 4.78,
+   "max_loss_streak": 3,
+   "mean_mae_r": 1.55,
+   "mean_mfe_r": 3.71,
+   "avg_hold": 6.62,
+   "total_ex_top1": 6.82,
+   "total_ex_top3": -4.25,
+   "total_ex_top5": -9.18,
+   "exits": {
+    "STRUCTURAL_TARGET": 6,
+    "EMERGENCY_BROKER_SL": 3,
+    "THESIS_INVALIDATION_CLOSE": 4
+   }
+  },
+  "V2B_BOS_RETEST_BUY": {
+   "n": 9,
+   "wr": 11.11,
+   "pf": 0.2,
+   "mean_r": -1.626,
+   "median_r": -2.037,
+   "total_r": -14.64,
+   "ci95": [
+    -2.524,
+    -0.729
+   ],
+   "max_dd_r": 14.64,
+   "max_loss_streak": 4,
+   "mean_mae_r": 2.58,
+   "mean_mfe_r": 0.93,
+   "avg_hold": 5.22,
+   "total_ex_top1": -16.45,
+   "total_ex_top3": -13.76,
+   "total_ex_top5": -9.69,
+   "exits": {
+    "EMERGENCY_BROKER_SL": 6,
+    "STRUCTURAL_TARGET": 1,
+    "THESIS_INVALIDATION_CLOSE": 2
+   }
+  },
+  "V2C_COMPRESSION_EXPANSION_BUY": {
+   "n": 8,
+   "wr": 37.5,
+   "pf": 0.63,
+   "mean_r": -0.043,
+   "median_r": -0.515,
+   "total_r": -0.35,
+   "ci95": [
+    -0.942,
+    0.855
+   ],
+   "max_dd_r": 3.49,
+   "max_loss_streak": 4,
+   "mean_mae_r": 0.91,
+   "mean_mfe_r": 1.12,
+   "avg_hold": 24.75,
+   "total_ex_top1": -2.22,
+   "total_ex_top3": -4.62,
+   "total_ex_top5": -3.54,
+   "exits": {
+    "THESIS_INVALIDATION_CLOSE": 1,
+    "TIME_STOP_48_BARS": 1,
+    "STRUCTURAL_TARGET": 2,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 2,
+    "EMERGENCY_BROKER_SL": 2
+   }
+  }
+ },
+ "by_state": {
+  "TREND_CONTINUATION": {
+   "n": 77,
+   "wr": 28.57,
+   "pf": 0.68,
+   "mean_r": -0.145,
+   "median_r": -1.135,
+   "total_r": -11.18,
+   "ci95": [
+    -0.682,
+    0.392
+   ],
+   "max_dd_r": 31.02,
+   "max_loss_streak": 10,
+   "mean_mae_r": 1.38,
+   "mean_mfe_r": 1.58,
+   "avg_hold": 14.27,
+   "total_ex_top1": -24.96,
+   "total_ex_top3": -37.23,
+   "total_ex_top5": -42.51,
+   "exits": {
+    "STRUCTURAL_TARGET": 15,
+    "EMERGENCY_BROKER_SL": 29,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 10,
+    "THESIS_INVALIDATION_CLOSE": 16,
+    "TIME_STOP_48_BARS": 7
+   }
+  },
+  "COMPRESSION": {
+   "n": 30,
+   "wr": 50,
+   "pf": 2.12,
+   "mean_r": 0.28,
+   "median_r": 0.057,
+   "total_r": 8.39,
+   "ci95": [
+    -0.209,
+    0.768
+   ],
+   "max_dd_r": 5.08,
+   "max_loss_streak": 5,
+   "mean_mae_r": 0.79,
+   "mean_mfe_r": 1.24,
+   "avg_hold": 22.33,
+   "total_ex_top1": 6.47,
+   "total_ex_top3": 2.68,
+   "total_ex_top5": -1,
+   "exits": {
+    "STRUCTURAL_TARGET": 12,
+    "THESIS_INVALIDATION_CLOSE": 2,
+    "TIME_STOP_48_BARS": 3,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 8,
+    "EMERGENCY_BROKER_SL": 5
+   }
+  },
+  "BALANCED": {
+   "n": 29,
+   "wr": 31.03,
+   "pf": 0.8,
+   "mean_r": -0.059,
+   "median_r": -0.846,
+   "total_r": -1.72,
+   "ci95": [
+    -0.599,
+    0.48
+   ],
+   "max_dd_r": 6.48,
+   "max_loss_streak": 5,
+   "mean_mae_r": 0.9,
+   "mean_mfe_r": 1.05,
+   "avg_hold": 13.28,
+   "total_ex_top1": -4.86,
+   "total_ex_top3": -9.51,
+   "total_ex_top5": -13.47,
+   "exits": {
+    "EMERGENCY_BROKER_SL": 7,
+    "STRUCTURAL_TARGET": 7,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 8,
+    "THESIS_INVALIDATION_CLOSE": 5,
+    "TIME_STOP_48_BARS": 2
+   }
+  },
+  "EXPANSION": {
+   "n": 14,
+   "wr": 50,
+   "pf": 1.75,
+   "mean_r": 0.301,
+   "median_r": 1.106,
+   "total_r": 4.21,
+   "ci95": [
+    -0.594,
+    1.195
+   ],
+   "max_dd_r": 3.07,
+   "max_loss_streak": 3,
+   "mean_mae_r": 0.97,
+   "mean_mfe_r": 1.35,
+   "avg_hold": 17.71,
+   "total_ex_top1": 0.86,
+   "total_ex_top3": -2.92,
+   "total_ex_top5": -6.25,
+   "exits": {
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 3,
+    "THESIS_INVALIDATION_CLOSE": 1,
+    "STRUCTURAL_TARGET": 4,
+    "EMERGENCY_BROKER_SL": 3,
+    "TIME_STOP_48_BARS": 3
+   }
+  }
+ },
+ "by_session": {
+  "ASIA": {
+   "n": 51,
+   "wr": 33.33,
+   "pf": 0.82,
+   "mean_r": -0.004,
+   "median_r": -1.024,
+   "total_r": -0.18,
+   "ci95": [
+    -0.701,
+    0.694
+   ],
+   "max_dd_r": 14.27,
+   "max_loss_streak": 9,
+   "mean_mae_r": 1.36,
+   "mean_mfe_r": 1.58,
+   "avg_hold": 13.75,
+   "total_ex_top1": -13.96,
+   "total_ex_top3": -19.98,
+   "total_ex_top5": -24.35,
+   "exits": {
+    "STRUCTURAL_TARGET": 13,
+    "EMERGENCY_BROKER_SL": 22,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 8,
+    "THESIS_INVALIDATION_CLOSE": 4,
+    "TIME_STOP_48_BARS": 4
+   }
+  },
+  "NEW_YORK": {
+   "n": 50,
+   "wr": 40,
+   "pf": 1.25,
+   "mean_r": 0.059,
+   "median_r": -0.526,
+   "total_r": 2.97,
+   "ci95": [
+    -0.31,
+    0.429
+   ],
+   "max_dd_r": 9.24,
+   "max_loss_streak": 5,
+   "mean_mae_r": 0.89,
+   "mean_mfe_r": 1.1,
+   "avg_hold": 20,
+   "total_ex_top1": 0.36,
+   "total_ex_top3": -3.98,
+   "total_ex_top5": -7.85,
+   "exits": {
+    "THESIS_INVALIDATION_CLOSE": 12,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 13,
+    "TIME_STOP_48_BARS": 8,
+    "STRUCTURAL_TARGET": 12,
+    "EMERGENCY_BROKER_SL": 5
+   }
+  },
+  "LONDON": {
+   "n": 36,
+   "wr": 27.78,
+   "pf": 0.76,
+   "mean_r": -0.126,
+   "median_r": -1.073,
+   "total_r": -4.52,
+   "ci95": [
+    -0.817,
+    0.566
+   ],
+   "max_dd_r": 17.34,
+   "max_loss_streak": 12,
+   "mean_mae_r": 1.22,
+   "mean_mfe_r": 1.57,
+   "avg_hold": 13.5,
+   "total_ex_top1": -12.24,
+   "total_ex_top3": -19.92,
+   "total_ex_top5": -24.75,
+   "exits": {
+    "STRUCTURAL_TARGET": 8,
+    "EMERGENCY_BROKER_SL": 14,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 6,
+    "THESIS_INVALIDATION_CLOSE": 6,
+    "TIME_STOP_48_BARS": 2
+   }
+  },
+  "OTHER": {
+   "n": 13,
+   "wr": 46.15,
+   "pf": 2.02,
+   "mean_r": 0.11,
+   "median_r": -0.731,
+   "total_r": 1.44,
+   "ci95": [
+    -0.759,
+    0.98
+   ],
+   "max_dd_r": 3,
+   "max_loss_streak": 2,
+   "mean_mae_r": 0.91,
+   "mean_mfe_r": 1.27,
+   "avg_hold": 16.54,
+   "total_ex_top1": -1.03,
+   "total_ex_top3": -4.82,
+   "total_ex_top5": -8.28,
+   "exits": {
+    "THESIS_INVALIDATION_CLOSE": 2,
+    "STRUCTURAL_TARGET": 5,
+    "EMERGENCY_BROKER_SL": 3,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 2,
+    "TIME_STOP_48_BARS": 1
+   }
+  }
+ },
+ "by_stop": {
+  "c_5-8": {
+   "n": 50,
+   "wr": 36,
+   "pf": 0.9,
+   "mean_r": -0.079,
+   "median_r": -0.846,
+   "total_r": -3.94,
+   "ci95": [
+    -0.508,
+    0.351
+   ],
+   "max_dd_r": 18.81,
+   "max_loss_streak": 6,
+   "mean_mae_r": 1.15,
+   "mean_mfe_r": 1.23,
+   "avg_hold": 14.02,
+   "total_ex_top1": -8.49,
+   "total_ex_top3": -13.23,
+   "total_ex_top5": -17.55,
+   "exits": {
+    "STRUCTURAL_TARGET": 14,
+    "EMERGENCY_BROKER_SL": 18,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 8,
+    "THESIS_INVALIDATION_CLOSE": 6,
+    "TIME_STOP_48_BARS": 4
+   }
+  },
+  "d_8-12": {
+   "n": 36,
+   "wr": 36.11,
+   "pf": 1.1,
+   "mean_r": 0.018,
+   "median_r": -0.616,
+   "total_r": 0.63,
+   "ci95": [
+    -0.45,
+    0.485
+   ],
+   "max_dd_r": 7.64,
+   "max_loss_streak": 8,
+   "mean_mae_r": 0.91,
+   "mean_mfe_r": 1.32,
+   "avg_hold": 19.75,
+   "total_ex_top1": -2.51,
+   "total_ex_top3": -7.11,
+   "total_ex_top5": -10.89,
+   "exits": {
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 9,
+    "TIME_STOP_48_BARS": 5,
+    "THESIS_INVALIDATION_CLOSE": 6,
+    "STRUCTURAL_TARGET": 8,
+    "EMERGENCY_BROKER_SL": 8
+   }
+  },
+  "e_12-20": {
+   "n": 28,
+   "wr": 28.57,
+   "pf": 0.67,
+   "mean_r": -0.22,
+   "median_r": -0.747,
+   "total_r": -6.17,
+   "ci95": [
+    -0.66,
+    0.219
+   ],
+   "max_dd_r": 10.55,
+   "max_loss_streak": 7,
+   "mean_mae_r": 0.83,
+   "mean_mfe_r": 0.85,
+   "avg_hold": 21.43,
+   "total_ex_top1": -8.09,
+   "total_ex_top3": -11.75,
+   "total_ex_top5": -15.11,
+   "exits": {
+    "EMERGENCY_BROKER_SL": 6,
+    "THESIS_INVALIDATION_CLOSE": 5,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 9,
+    "STRUCTURAL_TARGET": 4,
+    "TIME_STOP_48_BARS": 4
+   }
+  },
+  "b_3-5": {
+   "n": 16,
+   "wr": 25,
+   "pf": 0.48,
+   "mean_r": -0.526,
+   "median_r": -1.224,
+   "total_r": -8.42,
+   "ci95": [
+    -1.339,
+    0.287
+   ],
+   "max_dd_r": 8.58,
+   "max_loss_streak": 6,
+   "mean_mae_r": 1.52,
+   "mean_mfe_r": 1.44,
+   "avg_hold": 8.13,
+   "total_ex_top1": -11.09,
+   "total_ex_top3": -15.3,
+   "total_ex_top5": -16.34,
+   "exits": {
+    "EMERGENCY_BROKER_SL": 5,
+    "THESIS_INVALIDATION_CLOSE": 5,
+    "STRUCTURAL_TARGET": 4,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 2
+   }
+  },
+  "a_<3": {
+   "n": 15,
+   "wr": 40,
+   "pf": 2.2,
+   "mean_r": 0.893,
+   "median_r": -1.219,
+   "total_r": 13.39,
+   "ci95": [
+    -1.461,
+    3.246
+   ],
+   "max_dd_r": 9.39,
+   "max_loss_streak": 4,
+   "mean_mae_r": 2.01,
+   "mean_mfe_r": 3.07,
+   "avg_hold": 5.87,
+   "total_ex_top1": -0.39,
+   "total_ex_top3": -11.46,
+   "total_ex_top5": -16.39,
+   "exits": {
+    "STRUCTURAL_TARGET": 6,
+    "EMERGENCY_BROKER_SL": 7,
+    "THESIS_INVALIDATION_CLOSE": 2
+   }
+  },
+  "f_>20": {
+   "n": 5,
+   "wr": 80,
+   "pf": 7.88,
+   "mean_r": 0.843,
+   "median_r": 1.245,
+   "total_r": 4.21,
+   "ci95": [
+    -0.158,
+    1.844
+   ],
+   "max_dd_r": 0.74,
+   "max_loss_streak": 1,
+   "mean_mae_r": 0.4,
+   "mean_mfe_r": 1.31,
+   "avg_hold": 34.4,
+   "total_ex_top1": 2.29,
+   "total_ex_top3": -0.68,
+   "total_ex_top5": 0,
+   "exits": {
+    "STRUCTURAL_TARGET": 2,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 1,
+    "TIME_STOP_48_BARS": 2
+   }
+  }
+ },
+ "by_rr": {
+  "a_1.7-2": {
+   "n": 60,
+   "wr": 46.67,
+   "pf": 1.48,
+   "mean_r": 0.212,
+   "median_r": -0.439,
+   "total_r": 12.71,
+   "ci95": [
+    -0.134,
+    0.558
+   ],
+   "max_dd_r": 8.29,
+   "max_loss_streak": 6,
+   "mean_mae_r": 0.84,
+   "mean_mfe_r": 1.18,
+   "avg_hold": 19.22,
+   "total_ex_top1": 10.77,
+   "total_ex_top3": 6.92,
+   "total_ex_top5": 3.2,
+   "exits": {
+    "STRUCTURAL_TARGET": 22,
+    "THESIS_INVALIDATION_CLOSE": 7,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 14,
+    "TIME_STOP_48_BARS": 6,
+    "EMERGENCY_BROKER_SL": 11
+   }
+  },
+  "d_3+": {
+   "n": 40,
+   "wr": 25,
+   "pf": 1.1,
+   "mean_r": 0.028,
+   "median_r": -1.039,
+   "total_r": 1.13,
+   "ci95": [
+    -0.912,
+    0.969
+   ],
+   "max_dd_r": 22.52,
+   "max_loss_streak": 12,
+   "mean_mae_r": 1.42,
+   "mean_mfe_r": 1.93,
+   "avg_hold": 16.23,
+   "total_ex_top1": -12.65,
+   "total_ex_top3": -24.91,
+   "total_ex_top5": -31.4,
+   "exits": {
+    "EMERGENCY_BROKER_SL": 13,
+    "STRUCTURAL_TARGET": 5,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 8,
+    "THESIS_INVALIDATION_CLOSE": 9,
+    "TIME_STOP_48_BARS": 5
+   }
+  },
+  "b_2-2.5": {
+   "n": 34,
+   "wr": 32.35,
+   "pf": 0.73,
+   "mean_r": -0.229,
+   "median_r": -1.073,
+   "total_r": -7.79,
+   "ci95": [
+    -0.766,
+    0.308
+   ],
+   "max_dd_r": 17.32,
+   "max_loss_streak": 7,
+   "mean_mae_r": 1.23,
+   "mean_mfe_r": 1.32,
+   "avg_hold": 12.24,
+   "total_ex_top1": -10.25,
+   "total_ex_top3": -14.8,
+   "total_ex_top5": -19.14,
+   "exits": {
+    "STRUCTURAL_TARGET": 8,
+    "EMERGENCY_BROKER_SL": 15,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 5,
+    "THESIS_INVALIDATION_CLOSE": 3,
+    "TIME_STOP_48_BARS": 3
+   }
+  },
+  "c_2.5-3": {
+   "n": 16,
+   "wr": 25,
+   "pf": 0.29,
+   "mean_r": -0.397,
+   "median_r": -1.05,
+   "total_r": -6.35,
+   "ci95": [
+    -1.173,
+    0.379
+   ],
+   "max_dd_r": 7.39,
+   "max_loss_streak": 5,
+   "mean_mae_r": 1.28,
+   "mean_mfe_r": 0.99,
+   "avg_hold": 11.5,
+   "total_ex_top1": -9.02,
+   "total_ex_top3": -14.15,
+   "total_ex_top5": -14.11,
+   "exits": {
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 2,
+    "THESIS_INVALIDATION_CLOSE": 5,
+    "STRUCTURAL_TARGET": 3,
+    "EMERGENCY_BROKER_SL": 5,
+    "TIME_STOP_48_BARS": 1
+   }
+  }
+ },
+ "by_ctx15": {
+  "15m_BULLISH_SELL": {
+   "n": 60,
+   "wr": 38.33,
+   "pf": 1.18,
+   "mean_r": -0.002,
+   "median_r": -0.781,
+   "total_r": -0.15,
+   "ci95": [
+    -0.369,
+    0.364
+   ],
+   "max_dd_r": 11.41,
+   "max_loss_streak": 6,
+   "mean_mae_r": 0.99,
+   "mean_mfe_r": 1.23,
+   "avg_hold": 16.92,
+   "total_ex_top1": -3.28,
+   "total_ex_top3": -8.03,
+   "total_ex_top5": -12.35,
+   "exits": {
+    "EMERGENCY_BROKER_SL": 18,
+    "STRUCTURAL_TARGET": 16,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 10,
+    "THESIS_INVALIDATION_CLOSE": 9,
+    "TIME_STOP_48_BARS": 7
+   }
+  },
+  "15m_BEARISH_BUY": {
+   "n": 48,
+   "wr": 25,
+   "pf": 0.56,
+   "mean_r": -0.371,
+   "median_r": -1.036,
+   "total_r": -17.79,
+   "ci95": [
+    -0.808,
+    0.066
+   ],
+   "max_dd_r": 23.64,
+   "max_loss_streak": 8,
+   "mean_mae_r": 1.19,
+   "mean_mfe_r": 1.17,
+   "avg_hold": 15.33,
+   "total_ex_top1": -22.33,
+   "total_ex_top3": -27.47,
+   "total_ex_top5": -31.75,
+   "exits": {
+    "STRUCTURAL_TARGET": 8,
+    "THESIS_INVALIDATION_CLOSE": 9,
+    "EMERGENCY_BROKER_SL": 16,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 11,
+    "TIME_STOP_48_BARS": 4
+   }
+  },
+  "15m_BEARISH_SELL": {
+   "n": 26,
+   "wr": 53.85,
+   "pf": 3.44,
+   "mean_r": 1.129,
+   "median_r": 0.981,
+   "total_r": 29.36,
+   "ci95": [
+    -0.174,
+    2.432
+   ],
+   "max_dd_r": 4.78,
+   "max_loss_streak": 3,
+   "mean_mae_r": 1.06,
+   "mean_mfe_r": 2.41,
+   "avg_hold": 15.54,
+   "total_ex_top1": 15.57,
+   "total_ex_top3": 4.51,
+   "total_ex_top5": -0.42,
+   "exits": {
+    "STRUCTURAL_TARGET": 12,
+    "EMERGENCY_BROKER_SL": 4,
+    "THESIS_INVALIDATION_CLOSE": 3,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 5,
+    "TIME_STOP_48_BARS": 2
+   }
+  },
+  "15m_BULLISH_BUY": {
+   "n": 16,
+   "wr": 25,
+   "pf": 0.34,
+   "mean_r": -0.732,
+   "median_r": -1.024,
+   "total_r": -11.72,
+   "ci95": [
+    -1.389,
+    -0.076
+   ],
+   "max_dd_r": 11.72,
+   "max_loss_streak": 6,
+   "mean_mae_r": 1.58,
+   "mean_mfe_r": 1,
+   "avg_hold": 15.44,
+   "total_ex_top1": -13.54,
+   "total_ex_top3": -16,
+   "total_ex_top5": -16.21,
+   "exits": {
+    "THESIS_INVALIDATION_CLOSE": 3,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 3,
+    "TIME_STOP_48_BARS": 2,
+    "EMERGENCY_BROKER_SL": 6,
+    "STRUCTURAL_TARGET": 2
+   }
+  }
+ },
+ "by_ctx1h": {
+  "1H_BEARISH_SELL": {
+   "n": 48,
+   "wr": 47.92,
+   "pf": 2.01,
+   "mean_r": 0.632,
+   "median_r": -0.049,
+   "total_r": 30.35,
+   "ci95": [
+    -0.124,
+    1.389
+   ],
+   "max_dd_r": 7.9,
+   "max_loss_streak": 8,
+   "mean_mae_r": 0.93,
+   "mean_mfe_r": 1.81,
+   "avg_hold": 17.35,
+   "total_ex_top1": 16.57,
+   "total_ex_top3": 5.71,
+   "total_ex_top5": 0.78,
+   "exits": {
+    "STRUCTURAL_TARGET": 18,
+    "EMERGENCY_BROKER_SL": 12,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 8,
+    "THESIS_INVALIDATION_CLOSE": 5,
+    "TIME_STOP_48_BARS": 5
+   }
+  },
+  "1H_BEARISH_BUY": {
+   "n": 44,
+   "wr": 22.73,
+   "pf": 0.45,
+   "mean_r": -0.461,
+   "median_r": -1.024,
+   "total_r": -20.3,
+   "ci95": [
+    -0.906,
+    -0.017
+   ],
+   "max_dd_r": 25.55,
+   "max_loss_streak": 8,
+   "mean_mae_r": 1.28,
+   "mean_mfe_r": 1.08,
+   "avg_hold": 15.25,
+   "total_ex_top1": -24.84,
+   "total_ex_top3": -28.94,
+   "total_ex_top5": -32.72,
+   "exits": {
+    "STRUCTURAL_TARGET": 7,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 11,
+    "EMERGENCY_BROKER_SL": 16,
+    "THESIS_INVALIDATION_CLOSE": 7,
+    "TIME_STOP_48_BARS": 3
+   }
+  },
+  "1H_BULLISH_SELL": {
+   "n": 38,
+   "wr": 36.84,
+   "pf": 1.19,
+   "mean_r": -0.03,
+   "median_r": -0.781,
+   "total_r": -1.14,
+   "ci95": [
+    -0.522,
+    0.462
+   ],
+   "max_dd_r": 8.59,
+   "max_loss_streak": 5,
+   "mean_mae_r": 1.12,
+   "mean_mfe_r": 1.31,
+   "avg_hold": 15.42,
+   "total_ex_top1": -4.49,
+   "total_ex_top3": -9.19,
+   "total_ex_top5": -13.11,
+   "exits": {
+    "EMERGENCY_BROKER_SL": 10,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 7,
+    "STRUCTURAL_TARGET": 10,
+    "THESIS_INVALIDATION_CLOSE": 7,
+    "TIME_STOP_48_BARS": 4
+   }
+  },
+  "1H_BULLISH_BUY": {
+   "n": 20,
+   "wr": 30,
+   "pf": 0.74,
+   "mean_r": -0.461,
+   "median_r": -1.066,
+   "total_r": -9.21,
+   "ci95": [
+    -1.123,
+    0.202
+   ],
+   "max_dd_r": 10.32,
+   "max_loss_streak": 6,
+   "mean_mae_r": 1.31,
+   "mean_mfe_r": 1.21,
+   "avg_hold": 15.6,
+   "total_ex_top1": -11.88,
+   "total_ex_top3": -16.48,
+   "total_ex_top5": -18.23,
+   "exits": {
+    "THESIS_INVALIDATION_CLOSE": 5,
+    "TIME_STOP_48_BARS": 3,
+    "EMERGENCY_BROKER_SL": 6,
+    "STRUCTURAL_TARGET": 3,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 3
+   }
+  }
+ },
+ "friction": {
+  "spread040": {
+   "n": 150,
+   "wr": 34.67,
+   "pf": 0.98,
+   "mean_r": -0.04,
+   "median_r": -0.919,
+   "total_r": -5.93,
+   "ci95": [
+    -0.361,
+    0.282
+   ],
+   "max_dd_r": 30.79,
+   "max_loss_streak": 11,
+   "mean_mae_r": 1.17,
+   "mean_mfe_r": 1.37,
+   "avg_hold": 16.11,
+   "total_ex_top1": -19.71,
+   "total_ex_top3": -31.95,
+   "total_ex_top5": -38.44,
+   "exits": {
+    "STRUCTURAL_TARGET": 37,
+    "EMERGENCY_BROKER_SL": 46,
+    "THESIS_INVALIDATION_CLOSE": 23,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 29,
+    "TIME_STOP_48_BARS": 15
+   }
+  },
+  "spread040_slip015": {
+   "n": 150,
+   "wr": 34.67,
+   "pf": 0.94,
+   "mean_r": -0.088,
+   "median_r": -0.937,
+   "total_r": -13.27,
+   "ci95": [
+    -0.41,
+    0.233
+   ],
+   "max_dd_r": 35.44,
+   "max_loss_streak": 11,
+   "mean_mae_r": 1.19,
+   "mean_mfe_r": 1.35,
+   "avg_hold": 16.11,
+   "total_ex_top1": -26.95,
+   "total_ex_top3": -39.01,
+   "total_ex_top5": -45.35,
+   "exits": {
+    "STRUCTURAL_TARGET": 37,
+    "EMERGENCY_BROKER_SL": 46,
+    "THESIS_INVALIDATION_CLOSE": 23,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 29,
+    "TIME_STOP_48_BARS": 15
+   }
+  }
+ },
+ "other_pp_variant": {
+  "n": 150,
+  "wr": 37.33,
+  "pf": 1.01,
+  "mean_r": -0.05,
+  "median_r": -0.616,
+  "total_r": -7.47,
+  "ci95": [
+   -0.301,
+   0.202
+  ],
+  "max_dd_r": 27.15,
+  "max_loss_streak": 9,
+  "mean_mae_r": 1.04,
+  "mean_mfe_r": 1.3,
+  "avg_hold": 14.68,
+  "total_ex_top1": -15.19,
+  "total_ex_top3": -23.08,
+  "total_ex_top5": -28.9,
+  "exits": {
+   "STRUCTURAL_TARGET": 34,
+   "EMERGENCY_BROKER_SL": 36,
+   "PROFIT_PROTECTION": 20,
+   "THESIS_INVALIDATION_CLOSE": 22,
+   "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 28,
+   "TIME_STOP_48_BARS": 10
+  }
+ }
+}

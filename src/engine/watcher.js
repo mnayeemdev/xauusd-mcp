@@ -34,7 +34,7 @@ import { resolveAllPendingOpportunityOutcomes as _resolveAllPendingOpportunityOu
 import { visualizeMarketAnalysis as _visualizeMarketAnalysis } from '../core/xauusd_visualize_market.js';
 import { visualizeActiveChartContext as _visualizeActiveChartContext } from '../core/xauusd_visualize_chart_context.js';
 import { CDP_HOST, CDP_PORT } from '../connection.js';
-import { notify as _notify, notifyPreEntryWatch as _notifyPreEntryWatch } from './notifier.js';
+import { notify as _notify, notifyPreEntryWatch as _notifyPreEntryWatch, notifyOps as _notifyOps } from './notifier.js';
 import { isBarFresh, timeframeSeconds } from './freshData.js';
 import { withCdpLock as _withCdpLock, DEFAULT_CDP_LOCK_PATH } from './cdpLock.js';
 import {
@@ -43,6 +43,18 @@ import {
 } from './watcherState.js';
 
 export const DEFAULT_POLL_INTERVAL_MS = 60_000;
+
+// Operational feed-stall alert (trackFeedHealth below): after this many
+// CONSECUTIVE polls that could not obtain a confirmed 5m candle -- CDP
+// unreachable (CONNECTION_UNAVAILABLE) or the chart refusing to yield a
+// fresh, verified 5m series (CANDLE_READ_FAILED) -- exactly ONE non-trade
+// operational notification is raised, and exactly ONE more when the feed
+// recovers. Five polls at the 60s cadence = one whole 5m bar missed. Live
+// incident 2026-09-25 13:29-13:57 UTC: 28 consecutive CANDLE_READ_FAILED
+// polls under host memory exhaustion went unnoticed because only the log
+// recorded them.
+export const DEFAULT_FEED_STALL_ALERT_AFTER_POLLS = 5;
+export const FEED_FAILURE_ACTIONS = Object.freeze(['CONNECTION_UNAVAILABLE', 'CANDLE_READ_FAILED']);
 
 // How many times peekLatest5mCandle will retry (re-issuing the resolution
 // switch, or simply re-reading) before giving up and failing closed (see
@@ -255,6 +267,13 @@ export function createCycleDeps(_deps = {}) {
     // when this fires (a genuine transition into ARMED, never every
     // DEVELOPING candle, never every poll).
     notifyPreEntryWatch: _deps.notifyPreEntryWatch ?? _notifyPreEntryWatch,
+    // Additive, OPTIONAL: operational (NON-TRADE) feed-health notification
+    // -- see trackFeedHealth() for exactly when it fires (one-shot on a
+    // prolonged candle-read failure streak, one-shot on recovery; never
+    // every poll). Purely observational: cannot alter `result`, the alert
+    // decision, candle gating or re-baselining.
+    notifyOps: _deps.notifyOps ?? _notifyOps,
+    feedStallAlertAfterPolls: _deps.feedStallAlertAfterPolls ?? DEFAULT_FEED_STALL_ALERT_AFTER_POLLS,
     // Additive, OPTIONAL, OFF by default (no default implementation): the
     // MT5 DEMO execution hook (src/engine/mt5Executor.js). Wired ONLY by
     // `tv xauusd watch --mt5-demo`. Called strictly AFTER the existing
@@ -355,7 +374,55 @@ async function evaluateEngineResult({ result, state, deps, log, stamp }) {
  */
 export async function runWatcherCycle({ state, deps, log = () => {} }) {
   const stamp = () => formatTimestamp(deps.now ? deps.now() : new Date());
+  const outcome = await runWatcherCycleCore({ state, deps, log, stamp });
+  return trackFeedHealth({ outcome, deps, log, stamp });
+}
 
+/**
+ * Operational feed-health bookkeeping (additive, never decision-relevant).
+ * Runs strictly AFTER a cycle has produced its outcome and only annotates
+ * `outcome.state` with a consecutive-failure streak: it never touches the
+ * engine result, the BUY/SELL alert decision, candle gating (last_processed_
+ * 5m_time) or re-baselining (last_connection_ok). Raises ONE operational
+ * (non-trade) notification via deps.notifyOps when the streak first
+ * reaches deps.feedStallAlertAfterPolls, and ONE when the feed then
+ * recovers (any outcome that obtained a confirmed candle: baseline,
+ * re-baseline, no-new-candle, or a processed candle), then resets -- never
+ * every poll. Failure-isolated: a throwing/missing notifier only logs.
+ */
+export function trackFeedHealth({ outcome, deps, log = () => {}, stamp = () => formatTimestamp(new Date()) }) {
+  if (!outcome || typeof outcome !== 'object') return outcome;
+  const state = outcome.state ?? {};
+  const failed = FEED_FAILURE_ACTIONS.includes(outcome.action);
+  const configured = deps?.feedStallAlertAfterPolls;
+  const threshold = Number.isInteger(configured) && configured > 0 ? configured : DEFAULT_FEED_STALL_ALERT_AFTER_POLLS;
+  const nowIso = (deps?.now ? deps.now() : new Date()).toISOString();
+  const notifyOps = (payload) => {
+    if (typeof deps?.notifyOps !== 'function') return;
+    try { deps.notifyOps(payload); } catch (err) { log(`[${stamp()}] Operational notification failed (non-fatal): ${err.message}`); }
+  };
+
+  if (failed) {
+    const streak = (Number.isInteger(state.feed_failure_streak) ? state.feed_failure_streak : 0) + 1;
+    const since = state.feed_failure_since ?? nowIso;
+    let alertedAt = state.feed_stall_alerted_at ?? null;
+    if (streak >= threshold && !alertedAt) {
+      alertedAt = nowIso;
+      log(`[${stamp()}] FEED STALLED — ${streak} consecutive poll(s) without a confirmed 5m candle since ${since} (last: ${outcome.action}) — operational alert sent`);
+      notifyOps({ kind: 'FEED_STALLED', consecutive_failures: streak, since, last_reason: outcome.action, last_processed_5m_time: state.last_processed_5m_time ?? null, at: nowIso });
+    }
+    return { ...outcome, state: { ...state, feed_failure_streak: streak, feed_failure_since: since, feed_stall_alerted_at: alertedAt } };
+  }
+
+  if (state.feed_stall_alerted_at) {
+    log(`[${stamp()}] FEED RECOVERED — after ${state.feed_failure_streak ?? '?'} failed poll(s) since ${state.feed_failure_since ?? '?'} (${outcome.action}) — operational alert sent`);
+    notifyOps({ kind: 'FEED_RECOVERED', consecutive_failures: state.feed_failure_streak ?? null, since: state.feed_failure_since ?? null, stalled_alerted_at: state.feed_stall_alerted_at, recovered_action: outcome.action, last_processed_5m_time: state.last_processed_5m_time ?? null, at: nowIso });
+  }
+  if (!state.feed_failure_streak && !state.feed_failure_since && !state.feed_stall_alerted_at) return outcome;
+  return { ...outcome, state: { ...state, feed_failure_streak: 0, feed_failure_since: null, feed_stall_alerted_at: null } };
+}
+
+async function runWatcherCycleCore({ state, deps, log, stamp }) {
   const connected = await deps.isCdpReachable();
   if (!connected) {
     const alreadyKnownDown = state.last_connection_ok === false;

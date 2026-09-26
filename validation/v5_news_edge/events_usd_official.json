@@ -1,0 +1,5074 @@
+{
+ "summary": {
+  "built_at": "2026-09-26T08:04:41.534Z",
+  "counts_all": {
+   "FOMC": 38,
+   "NFP": 55,
+   "CPI": 55,
+   "PPI": 55,
+   "JOLTS": 47,
+   "GDP_ADV": 12,
+   "PCE": 43
+  },
+  "counts_with_15m_price_coverage": {
+   "JOLTS": 43,
+   "NFP": 50,
+   "CPI": 50,
+   "PPI": 50,
+   "FOMC": 34,
+   "GDP_ADV": 12,
+   "PCE": 43
+  },
+  "first": "2022-01-26T19:00:00.000Z",
+  "last": "2026-09-16T18:00:00.000Z",
+  "checks": {
+   "dst_label_checks": 93,
+   "dst_label_mismatches": [],
+   "excluded_unverified_time": [
+    {
+     "family": "FOMC",
+     "date": "20250822",
+     "reason": "not a 2:00 p.m. FOMC statement (10:00 Federal Reserve Board - Federal Open Mar)"
+    },
+    {
+     "family": "GDP_ADV",
+     "href": "/news/2022/gross-domestic-product-third-quarter-2022-advance-estimate",
+     "reason": "no embargo line found on the archived page"
+    },
+    {
+     "family": "GDP_ADV",
+     "href": "/news/2022/gross-domestic-product-first-quarter-2022-advance-estimate",
+     "reason": "no embargo line found on the archived page"
+    },
+    {
+     "family": "GDP_ADV",
+     "href": "/news/2022/gross-domestic-product-fourth-quarter-and-year-2021-advance-estimate",
+     "reason": "no embargo line found on the archived page"
+    },
+    {
+     "family": "PCE",
+     "href": "/news/2026/personal-income-and-outlays-january-2026",
+     "reason": "no embargo line found on the archived page"
+    },
+    {
+     "family": "PCE",
+     "href": "/news/2025/personal-income-and-outlays-data-update-september-2025",
+     "reason": "no embargo line found on the archived page"
+    },
+    {
+     "family": "PCE",
+     "href": "/news/2024/personal-income-and-outlays-november-2024",
+     "reason": "no embargo line found on the archived page"
+    },
+    {
+     "family": "PCE",
+     "href": "/news/2024/personal-income-and-outlays-august-2024",
+     "reason": "no embargo line found on the archived page"
+    },
+    {
+     "family": "PCE",
+     "href": "/news/2022/personal-income-and-outlays-july-2022",
+     "reason": "no embargo line found on the archived page"
+    },
+    {
+     "family": "PCE",
+     "href": "/news/2022/personal-income-and-outlays-june-2022",
+     "reason": "no embargo line found on the archived page"
+    },
+    {
+     "family": "PCE",
+     "href": "/news/2022/personal-income-and-outlays-may-2022",
+     "reason": "no embargo line found on the archived page"
+    },
+    {
+     "family": "PCE",
+     "href": "/news/2022/personal-income-and-outlays-april-2022",
+     "reason": "no embargo line found on the archived page"
+    },
+    {
+     "family": "PCE",
+     "href": "/news/2022/personal-income-and-outlays-march-2022",
+     "reason": "no embargo line found on the archived page"
+    },
+    {
+     "family": "PCE",
+     "href": "/news/2022/personal-income-and-outlays-february-2022",
+     "reason": "no embargo line found on the archived page"
+    },
+    {
+     "family": "PCE",
+     "href": "/news/2022/personal-income-and-outlays-january-2022",
+     "reason": "no embargo line found on the archived page"
+    },
+    {
+     "family": "PCE",
+     "href": "/news/2022/personal-income-and-outlays-december-2021",
+     "reason": "no embargo line found on the archived page"
+    }
+   ],
+   "weekend_events": []
+  },
+  "spike_integrity": {
+   "JOLTS": {
+    "n": 43,
+    "largest_at_0": 24,
+    "largest_at_0_or_1": 26,
+    "largest_at_minus4": 0,
+    "largest_at_plus4": 0,
+    "median_ratio": 2.02,
+    "share_at_0": 0.558,
+    "share_at_0_or_1": 0.605
+   },
+   "NFP": {
+    "n": 48,
+    "largest_at_0": 33,
+    "largest_at_0_or_1": 36,
+    "largest_at_minus4": 0,
+    "largest_at_plus4": 3,
+    "median_ratio": 6.72,
+    "share_at_0": 0.688,
+    "share_at_0_or_1": 0.75
+   },
+   "CPI": {
+    "n": 50,
+    "largest_at_0": 35,
+    "largest_at_0_or_1": 37,
+    "largest_at_minus4": 0,
+    "largest_at_plus4": 6,
+    "median_ratio": 7.77,
+    "share_at_0": 0.7,
+    "share_at_0_or_1": 0.74
+   },
+   "PPI": {
+    "n": 50,
+    "largest_at_0": 26,
+    "largest_at_0_or_1": 27,
+    "largest_at_minus4": 0,
+    "largest_at_plus4": 6,
+    "median_ratio": 3.4,
+    "share_at_0": 0.52,
+    "share_at_0_or_1": 0.54
+   },
+   "FOMC": {
+    "n": 34,
+    "largest_at_0": 14,
+    "largest_at_0_or_1": 14,
+    "largest_at_minus4": 0,
+    "largest_at_plus4": 3,
+    "median_ratio": 4.64,
+    "share_at_0": 0.412,
+    "share_at_0_or_1": 0.412
+   },
+   "GDP_ADV": {
+    "n": 12,
+    "largest_at_0": 5,
+    "largest_at_0_or_1": 7,
+    "largest_at_minus4": 0,
+    "largest_at_plus4": 2,
+    "median_ratio": 2.63,
+    "share_at_0": 0.417,
+    "share_at_0_or_1": 0.583
+   },
+   "PCE": {
+    "n": 42,
+    "largest_at_0": 17,
+    "largest_at_0_or_1": 20,
+    "largest_at_minus4": 0,
+    "largest_at_plus4": 3,
+    "median_ratio": 2.63,
+    "share_at_0": 0.405,
+    "share_at_0_or_1": 0.476
+   }
+  }
+ },
+ "events": [
+  {
+   "family": "FOMC",
+   "date": "2022-01-26",
+   "et_time": "14:00",
+   "tz": "EST",
+   "utc": "2022-01-26T19:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20220126a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": false
+  },
+  {
+   "family": "NFP",
+   "date": "2022-02-04",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2022-02-04T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_02042022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": false
+  },
+  {
+   "family": "CPI",
+   "date": "2022-02-10",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2022-02-10T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_02102022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": false
+  },
+  {
+   "family": "PPI",
+   "date": "2022-02-15",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2022-02-15T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_02152022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": false
+  },
+  {
+   "family": "NFP",
+   "date": "2022-03-04",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2022-03-04T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_03042022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": false
+  },
+  {
+   "family": "JOLTS",
+   "date": "2022-03-09",
+   "et_time": "10:00",
+   "tz": "EST",
+   "utc": "2022-03-09T15:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_03092022.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": false
+  },
+  {
+   "family": "CPI",
+   "date": "2022-03-10",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2022-03-10T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_03102022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": false
+  },
+  {
+   "family": "PPI",
+   "date": "2022-03-15",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2022-03-15T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_03152022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": false
+  },
+  {
+   "family": "FOMC",
+   "date": "2022-03-16",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2022-03-16T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20220316a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": false
+  },
+  {
+   "family": "JOLTS",
+   "date": "2022-03-29",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2022-03-29T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_03292022.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": false
+  },
+  {
+   "family": "NFP",
+   "date": "2022-04-01",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2022-04-01T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_04012022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": false
+  },
+  {
+   "family": "CPI",
+   "date": "2022-04-12",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2022-04-12T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_04122022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": false
+  },
+  {
+   "family": "PPI",
+   "date": "2022-04-13",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2022-04-13T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_04132022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": false
+  },
+  {
+   "family": "JOLTS",
+   "date": "2022-05-03",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2022-05-03T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_05032022.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": false
+  },
+  {
+   "family": "FOMC",
+   "date": "2022-05-04",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2022-05-04T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20220504a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": false
+  },
+  {
+   "family": "NFP",
+   "date": "2022-05-06",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2022-05-06T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_05062022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": false
+  },
+  {
+   "family": "CPI",
+   "date": "2022-05-11",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2022-05-11T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_05112022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": false
+  },
+  {
+   "family": "PPI",
+   "date": "2022-05-12",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2022-05-12T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_05122022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": false
+  },
+  {
+   "family": "JOLTS",
+   "date": "2022-06-01",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2022-06-01T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_06012022.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": false
+  },
+  {
+   "family": "NFP",
+   "date": "2022-06-03",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2022-06-03T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_06032022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": false
+  },
+  {
+   "family": "CPI",
+   "date": "2022-06-10",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2022-06-10T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_06102022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": false
+  },
+  {
+   "family": "PPI",
+   "date": "2022-06-14",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2022-06-14T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_06142022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": false
+  },
+  {
+   "family": "FOMC",
+   "date": "2022-06-15",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2022-06-15T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20220615a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": false
+  },
+  {
+   "family": "JOLTS",
+   "date": "2022-07-06",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2022-07-06T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_07062022.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": -1,
+    "release_bar_over_pre_median": 1.81
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2022-07-08",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2022-07-08T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_07082022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 4.7
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2022-07-13",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2022-07-13T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_07132022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 11.77
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2022-07-14",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2022-07-14T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_07142022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 5,
+    "release_bar_over_pre_median": 1.33
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2022-07-27",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2022-07-27T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20220727a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 2,
+    "release_bar_over_pre_median": 4.17
+   }
+  },
+  {
+   "family": "GDP_ADV",
+   "date": "2022-07-28",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2022-07-28T12:30:00.000Z",
+   "title": "Gross Domestic Product, Second Quarter 2022 (Advance Estimate)",
+   "source": "https://www.bea.gov/news/2022/gross-domestic-product-second-quarter-2022-advance-estimate",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 4.9
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2022-08-02",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2022-08-02T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_08022022.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": -3,
+    "release_bar_over_pre_median": 1.12
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2022-08-05",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2022-08-05T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_08052022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 7.94
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2022-08-10",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2022-08-10T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_08102022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 9.73
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2022-08-11",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2022-08-11T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_08112022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 4.74
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2022-08-30",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2022-08-30T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_08302022.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 1,
+    "release_bar_over_pre_median": 1.32
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2022-09-02",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2022-09-02T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_09022022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 6.68
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2022-09-13",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2022-09-13T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_09132022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 12.66
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2022-09-14",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2022-09-14T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_09142022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 3.23
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2022-09-21",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2022-09-21T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20220921a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 2,
+    "release_bar_over_pre_median": 9.34
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2022-09-30",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2022-09-30T12:30:00.000Z",
+   "title": "Personal Income and Outlays, August 2022 and Annual Update",
+   "source": "https://www.bea.gov/news/2022/personal-income-and-outlays-august-2022-and-annual-update",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 3.05
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2022-10-04",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2022-10-04T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_10042022.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 1.85
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2022-10-07",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2022-10-07T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_10072022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 1,
+    "release_bar_over_pre_median": 5.41
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2022-10-12",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2022-10-12T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_10122022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 2.52
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2022-10-13",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2022-10-13T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_10132022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 8.45
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2022-10-28",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2022-10-28T12:30:00.000Z",
+   "title": "Personal Income and Outlays, September 2022",
+   "source": "https://www.bea.gov/news/2022/personal-income-and-outlays-september-2022",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 4.86
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2022-11-01",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2022-11-01T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_11012022.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 2.99
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2022-11-02",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2022-11-02T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20221102a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 12.02
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2022-11-04",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2022-11-04T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_11042022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 6.81
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2022-11-10",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2022-11-10T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_11102022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 13.14
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2022-11-15",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2022-11-15T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_11152022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 4.25
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2022-11-30",
+   "et_time": "10:00",
+   "tz": "EST",
+   "utc": "2022-11-30T15:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_11302022.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": -6,
+    "release_bar_over_pre_median": 1.09
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2022-12-01",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2022-12-01T13:30:00.000Z",
+   "title": "Personal Income and Outlays, October 2022",
+   "source": "https://www.bea.gov/news/2022/personal-income-and-outlays-october-2022",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 2,
+    "release_bar_over_pre_median": 2.2
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2022-12-02",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2022-12-02T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_12022022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 10.83
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2022-12-09",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2022-12-09T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_12092022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 7.29
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2022-12-13",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2022-12-13T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_12132022.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 12.42
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2022-12-14",
+   "et_time": "14:00",
+   "tz": "EST",
+   "utc": "2022-12-14T19:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20221214a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 9.99
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2022-12-23",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2022-12-23T13:30:00.000Z",
+   "title": "Personal Income and Outlays, November 2022",
+   "source": "https://www.bea.gov/news/2022/personal-income-and-outlays-november-2022",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 4.46
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2023-01-04",
+   "et_time": "10:00",
+   "tz": "EST",
+   "utc": "2023-01-04T15:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_01042023.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 2.46
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2023-01-06",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2023-01-06T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_01062023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 6,
+    "release_bar_over_pre_median": 5.46
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2023-01-12",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2023-01-12T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_01122023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 12.12
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2023-01-18",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2023-01-18T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_01182023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 3.51
+   }
+  },
+  {
+   "family": "GDP_ADV",
+   "date": "2023-01-26",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2023-01-26T13:30:00.000Z",
+   "title": "Gross Domestic Product, Fourth Quarter and Year 2022 (Advance Estimate)",
+   "source": "https://www.bea.gov/news/2023/gross-domestic-product-fourth-quarter-and-year-2022-advance-estimate",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 8,
+    "release_bar_over_pre_median": 3.4
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2023-01-27",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2023-01-27T13:30:00.000Z",
+   "title": "Personal Income and Outlays, December 2022",
+   "source": "https://www.bea.gov/news/2023/personal-income-and-outlays-december-2022",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 6,
+    "release_bar_over_pre_median": 2.64
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2023-02-01",
+   "et_time": "10:00",
+   "tz": "EST",
+   "utc": "2023-02-01T15:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_02012023.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [
+    "FOMC@+240m"
+   ],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 2.14
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2023-02-01",
+   "et_time": "14:00",
+   "tz": "EST",
+   "utc": "2023-02-01T19:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20230201a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [
+    "JOLTS@-240m"
+   ],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 2,
+    "release_bar_over_pre_median": 2.64
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2023-02-03",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2023-02-03T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_02032023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 15.07
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2023-02-14",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2023-02-14T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_02142023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 6.28
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2023-02-16",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2023-02-16T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_02162023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 4.82
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2023-02-24",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2023-02-24T13:30:00.000Z",
+   "title": "Personal Income and Outlays, January 2023",
+   "source": "https://www.bea.gov/news/2023/personal-income-and-outlays-january-2023",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 5,
+    "release_bar_over_pre_median": 2.27
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2023-03-08",
+   "et_time": "10:00",
+   "tz": "EST",
+   "utc": "2023-03-08T15:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_03082023.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 1,
+    "release_bar_over_pre_median": 1.8
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2023-03-10",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2023-03-10T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_03102023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 6.18
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2023-03-14",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-03-14T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_03142023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 7.25
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2023-03-15",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-03-15T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_03152023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 5,
+    "release_bar_over_pre_median": 0.98
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2023-03-22",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2023-03-22T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20230322a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 2,
+    "release_bar_over_pre_median": 6.9
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2023-03-31",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-03-31T12:30:00.000Z",
+   "title": "Personal Income and Outlays, February 2023",
+   "source": "https://www.bea.gov/news/2023/personal-income-and-outlays-february-2023",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 5.9
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2023-04-04",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2023-04-04T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_04042023.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 7.81
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2023-04-07",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-04-07T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_04072023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": "NO_BAR_AT_RELEASE"
+  },
+  {
+   "family": "CPI",
+   "date": "2023-04-12",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-04-12T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_04122023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 15.29
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2023-04-13",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-04-13T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_04132023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 7.08
+   }
+  },
+  {
+   "family": "GDP_ADV",
+   "date": "2023-04-27",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-04-27T12:30:00.000Z",
+   "title": "Gross Domestic Product, First Quarter 2023 (Advance Estimate)",
+   "source": "https://www.bea.gov/news/2023/gross-domestic-product-first-quarter-2023-advance-estimate",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 10.06
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2023-04-28",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-04-28T12:30:00.000Z",
+   "title": "Personal Income and Outlays, March 2023",
+   "source": "https://www.bea.gov/news/2023/personal-income-and-outlays-march-2023",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 5.68
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2023-05-02",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2023-05-02T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_05022023.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 4.42
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2023-05-03",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2023-05-03T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20230503a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 7.12
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2023-05-05",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-05-05T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_05052023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 10.76
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2023-05-10",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-05-10T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_05102023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 8.28
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2023-05-11",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-05-11T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_05112023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 5,
+    "release_bar_over_pre_median": 2.66
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2023-05-26",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-05-26T12:30:00.000Z",
+   "title": "Personal Income and Outlays, April 2023",
+   "source": "https://www.bea.gov/news/2023/personal-income-and-outlays-april-2023",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 5.48
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2023-05-31",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2023-05-31T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_05312023.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 3.87
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2023-06-02",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-06-02T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_06022023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 4,
+    "release_bar_over_pre_median": 3.7
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2023-06-13",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-06-13T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_06132023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 16.01
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2023-06-14",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-06-14T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_06142023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 6.96
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2023-06-14",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2023-06-14T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20230614a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 9.45
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2023-06-30",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-06-30T12:30:00.000Z",
+   "title": "Personal Income and Outlays, May 2023",
+   "source": "https://www.bea.gov/news/2023/personal-income-and-outlays-may-2023",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 4.77
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2023-07-06",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2023-07-06T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_07062023.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": -7,
+    "release_bar_over_pre_median": 1.05
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2023-07-07",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-07-07T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_07072023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 5.13
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2023-07-12",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-07-12T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_07122023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 9.06
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2023-07-13",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-07-13T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_07132023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 5.26
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2023-07-26",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2023-07-26T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20230726a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 2,
+    "release_bar_over_pre_median": 5.13
+   }
+  },
+  {
+   "family": "GDP_ADV",
+   "date": "2023-07-27",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-07-27T12:30:00.000Z",
+   "title": "Gross Domestic Product, Second Quarter 2023 (Advance Estimate)",
+   "source": "https://www.bea.gov/news/2023/gross-domestic-product-second-quarter-2023-advance-estimate",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 6.05
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2023-07-28",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-07-28T12:30:00.000Z",
+   "title": "Personal Income and Outlays, June 2023",
+   "source": "https://www.bea.gov/news/2023/personal-income-and-outlays-june-2023",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 2.93
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2023-08-01",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2023-08-01T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_08012023.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 1.73
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2023-08-04",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-08-04T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_08042023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 10.86
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2023-08-10",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-08-10T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_08102023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 7.29
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2023-08-11",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-08-11T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_08112023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 6,
+    "release_bar_over_pre_median": 5.82
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2023-08-29",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2023-08-29T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_08292023.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 5.53
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2023-08-31",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-08-31T12:30:00.000Z",
+   "title": "Personal Income and Outlays, July 2023",
+   "source": "https://www.bea.gov/news/2023/personal-income-and-outlays-july-2023",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 5.39
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2023-09-01",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-09-01T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_09012023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 4,
+    "release_bar_over_pre_median": 5.89
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2023-09-13",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-09-13T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_09132023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 7.1
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2023-09-14",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-09-14T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_09142023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 5.32
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2023-09-20",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2023-09-20T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20230920a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 4.64
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2023-09-29",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-09-29T12:30:00.000Z",
+   "title": "Personal Income and Outlays, August 2023",
+   "source": "https://www.bea.gov/news/2023/personal-income-and-outlays-august-2023",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 6,
+    "release_bar_over_pre_median": 3.8
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2023-10-03",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2023-10-03T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_10032023.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 3.45
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2023-10-06",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-10-06T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_10062023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 7.85
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2023-10-11",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-10-11T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_10112023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 2.25
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2023-10-12",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-10-12T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_10122023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 5.8
+   }
+  },
+  {
+   "family": "GDP_ADV",
+   "date": "2023-10-26",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-10-26T12:30:00.000Z",
+   "title": "Gross Domestic Product, Third Quarter 2023 (Advance Estimate)",
+   "source": "https://www.bea.gov/news/2023/gross-domestic-product-third-quarter-2023-advance-estimate",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 1,
+    "release_bar_over_pre_median": 2.27
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2023-10-27",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-10-27T12:30:00.000Z",
+   "title": "Personal Income and Outlays, September 2023",
+   "source": "https://www.bea.gov/news/2023/personal-income-and-outlays-september-2023",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 1,
+    "release_bar_over_pre_median": 2.31
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2023-11-01",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2023-11-01T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_11012023.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [
+    "FOMC@+240m"
+   ],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 2.33
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2023-11-01",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2023-11-01T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20231101a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [
+    "JOLTS@-240m"
+   ],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 2,
+    "release_bar_over_pre_median": 1.85
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2023-11-03",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2023-11-03T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_11032023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 3,
+    "release_bar_over_pre_median": 11.9
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2023-11-14",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2023-11-14T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_11142023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 18.69
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2023-11-15",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2023-11-15T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_11152023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 7.45
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2023-11-30",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2023-11-30T13:30:00.000Z",
+   "title": "Personal Income and Outlays, October 2023",
+   "source": "https://www.bea.gov/news/2023/personal-income-and-outlays-october-2023",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 4.06
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2023-12-05",
+   "et_time": "10:00",
+   "tz": "EST",
+   "utc": "2023-12-05T15:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_12052023.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 2.46
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2023-12-08",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2023-12-08T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_12082023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 9.93
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2023-12-12",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2023-12-12T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_12122023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 7.86
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2023-12-13",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2023-12-13T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_12132023.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 3.76
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2023-12-13",
+   "et_time": "14:00",
+   "tz": "EST",
+   "utc": "2023-12-13T19:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20231213a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 12.84
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2023-12-22",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2023-12-22T13:30:00.000Z",
+   "title": "Personal Income and Outlays, November 2023",
+   "source": "https://www.bea.gov/news/2023/personal-income-and-outlays-november-2023",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 1,
+    "release_bar_over_pre_median": 1.48
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2024-01-03",
+   "et_time": "10:00",
+   "tz": "EST",
+   "utc": "2024-01-03T15:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_01032024.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 2.56
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2024-01-05",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2024-01-05T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_01052024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 6,
+    "release_bar_over_pre_median": 8.09
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2024-01-11",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2024-01-11T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_01112024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 10.83
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2024-01-12",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2024-01-12T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_01122024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": -6,
+    "release_bar_over_pre_median": 2.79
+   }
+  },
+  {
+   "family": "GDP_ADV",
+   "date": "2024-01-25",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2024-01-25T13:30:00.000Z",
+   "title": "Gross Domestic Product, Fourth Quarter and Year 2023 (Advance Estimate)",
+   "source": "https://www.bea.gov/news/2024/gross-domestic-product-fourth-quarter-and-year-2023-advance-estimate",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 5.97
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2024-01-26",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2024-01-26T13:30:00.000Z",
+   "title": "Personal Income and Outlays, December 2023",
+   "source": "https://www.bea.gov/news/2024/personal-income-and-outlays-december-2023",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 4.03
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2024-01-30",
+   "et_time": "10:00",
+   "tz": "EST",
+   "utc": "2024-01-30T15:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_01302024.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 4.96
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2024-01-31",
+   "et_time": "14:00",
+   "tz": "EST",
+   "utc": "2024-01-31T19:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20240131a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 4,
+    "release_bar_over_pre_median": 5.9
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2024-02-02",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2024-02-02T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_02022024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 14.61
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2024-02-13",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2024-02-13T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_02132024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 17.23
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2024-02-16",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2024-02-16T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_02162024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 10.2
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2024-02-29",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2024-02-29T13:30:00.000Z",
+   "title": "Personal Income and Outlays, January 2024",
+   "source": "https://www.bea.gov/news/2024/personal-income-and-outlays-january-2024",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 8.44
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2024-03-06",
+   "et_time": "10:00",
+   "tz": "EST",
+   "utc": "2024-03-06T15:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_03062024.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 2.74
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2024-03-08",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2024-03-08T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_03082024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 13.79
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2024-03-12",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-03-12T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_03122024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 9.05
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2024-03-14",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-03-14T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_03142024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 1,
+    "release_bar_over_pre_median": 5.57
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2024-03-20",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2024-03-20T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20240320a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 9.87
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2024-03-29",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-03-29T12:30:00.000Z",
+   "title": "Personal Income and Outlays, February 2024",
+   "source": "https://www.bea.gov/news/2024/personal-income-and-outlays-february-2024",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": "NO_BAR_AT_RELEASE"
+  },
+  {
+   "family": "JOLTS",
+   "date": "2024-04-02",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2024-04-02T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_04022024.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 2,
+    "release_bar_over_pre_median": 2.15
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2024-04-05",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-04-05T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_04052024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 5.46
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2024-04-10",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-04-10T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_04102024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 8.03
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2024-04-11",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-04-11T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_04112024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 4.03
+   }
+  },
+  {
+   "family": "GDP_ADV",
+   "date": "2024-04-25",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-04-25T12:30:00.000Z",
+   "title": "Gross Domestic Product, First Quarter 2024 (Advance Estimate)",
+   "source": "https://www.bea.gov/news/2024/gross-domestic-product-first-quarter-2024-advance-estimate",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 8,
+    "release_bar_over_pre_median": 2.63
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2024-04-26",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-04-26T12:30:00.000Z",
+   "title": "Personal Income and Outlays, March 2024",
+   "source": "https://www.bea.gov/news/2024/personal-income-and-outlays-march-2024",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 3.5
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2024-05-01",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2024-05-01T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_05012024.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [
+    "FOMC@+240m"
+   ],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 2.02
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2024-05-01",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2024-05-01T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20240501a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [
+    "JOLTS@-240m"
+   ],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 2,
+    "release_bar_over_pre_median": 3.31
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2024-05-03",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-05-03T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_05032024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 4,
+    "release_bar_over_pre_median": 8.49
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2024-05-14",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-05-14T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_05142024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 4.37
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2024-05-15",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-05-15T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_05152024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 5.88
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2024-05-31",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-05-31T12:30:00.000Z",
+   "title": "Personal Income and Outlays, April 2024",
+   "source": "https://www.bea.gov/news/2024/personal-income-and-outlays-april-2024",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 5,
+    "release_bar_over_pre_median": 4.8
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2024-06-04",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2024-06-04T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_06042024.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 2.34
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2024-06-07",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-06-07T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_06072024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 5.03
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2024-06-12",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-06-12T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_06122024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 8.72
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2024-06-12",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2024-06-12T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20240612a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 3.51
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2024-06-13",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-06-13T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_06132024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 5.15
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2024-06-28",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-06-28T12:30:00.000Z",
+   "title": "Personal Income and Outlays, May 2024",
+   "source": "https://www.bea.gov/news/2024/personal-income-and-outlays-may-2024",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 4.1
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2024-07-02",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2024-07-02T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_07022024.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 2.92
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2024-07-05",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-07-05T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_07052024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 12.39
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2024-07-11",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-07-11T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_07112024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 13.45
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2024-07-12",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-07-12T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_07122024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 5.82
+   }
+  },
+  {
+   "family": "GDP_ADV",
+   "date": "2024-07-25",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-07-25T12:30:00.000Z",
+   "title": "Gross Domestic Product, Second Quarter 2024 (Advance Estimate)",
+   "source": "https://www.bea.gov/news/2024/gross-domestic-product-second-quarter-2024-advance-estimate",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 2.38
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2024-07-26",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-07-26T12:30:00.000Z",
+   "title": "Personal Income and Outlays, June 2024",
+   "source": "https://www.bea.gov/news/2024/personal-income-and-outlays-june-2024",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 6,
+    "release_bar_over_pre_median": 2.6
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2024-07-30",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2024-07-30T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_07302024.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 5,
+    "release_bar_over_pre_median": 2.05
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2024-07-31",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2024-07-31T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20240731a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 5,
+    "release_bar_over_pre_median": 2.45
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2024-08-02",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-08-02T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_08022024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 8,
+    "release_bar_over_pre_median": 6.74
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2024-08-13",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-08-13T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_08132024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 3,
+    "release_bar_over_pre_median": 2.65
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2024-08-14",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-08-14T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_08142024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 8.01
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2024-08-30",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-08-30T12:30:00.000Z",
+   "title": "Personal Income and Outlays, July 2024",
+   "source": "https://www.bea.gov/news/2024/personal-income-and-outlays-july-2024",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 2.63
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2024-09-04",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2024-09-04T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_09042024.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 3.01
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2024-09-06",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-09-06T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_09062024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 8.02
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2024-09-11",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-09-11T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_09112024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 7.84
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2024-09-12",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-09-12T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_09122024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 2,
+    "release_bar_over_pre_median": 3.36
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2024-09-18",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2024-09-18T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20240918a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 8.69
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2024-10-01",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2024-10-01T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_10012024.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": -2,
+    "release_bar_over_pre_median": 1.86
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2024-10-04",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-10-04T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_10042024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 8.72
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2024-10-10",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-10-10T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_10102024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 9.41
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2024-10-11",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-10-11T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_10112024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 3.5
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2024-10-29",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2024-10-29T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_10292024.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": -2,
+    "release_bar_over_pre_median": 1.37
+   }
+  },
+  {
+   "family": "GDP_ADV",
+   "date": "2024-10-30",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-10-30T12:30:00.000Z",
+   "title": "Gross Domestic Product, Third Quarter 2024 (Advance Estimate)",
+   "source": "https://www.bea.gov/news/2024/gross-domestic-product-third-quarter-2024-advance-estimate",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 4,
+    "release_bar_over_pre_median": 1.8
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2024-10-31",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-10-31T12:30:00.000Z",
+   "title": "Personal Income and Outlays, September 2024",
+   "source": "https://www.bea.gov/news/2024/personal-income-and-outlays-september-2024",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 8,
+    "release_bar_over_pre_median": 1.48
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2024-11-01",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2024-11-01T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_11012024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 8,
+    "release_bar_over_pre_median": 2.95
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2024-11-07",
+   "et_time": "14:00",
+   "tz": "EST",
+   "utc": "2024-11-07T19:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20241107a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 4,
+    "release_bar_over_pre_median": 3.38
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2024-11-13",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2024-11-13T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_11132024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 3.77
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2024-11-14",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2024-11-14T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_11142024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 6,
+    "release_bar_over_pre_median": 2.46
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2024-11-27",
+   "et_time": "10:00",
+   "tz": "EST",
+   "utc": "2024-11-27T15:00:00.000Z",
+   "title": "Personal Income and Outlays, October 2024",
+   "source": "https://www.bea.gov/news/2024/personal-income-and-outlays-october-2024",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 2.54
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2024-12-03",
+   "et_time": "10:00",
+   "tz": "EST",
+   "utc": "2024-12-03T15:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_12032024.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 1.67
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2024-12-06",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2024-12-06T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_12062024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 2,
+    "release_bar_over_pre_median": 3.57
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2024-12-11",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2024-12-11T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_12112024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 3.18
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2024-12-12",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2024-12-12T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_12122024.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 8,
+    "release_bar_over_pre_median": 1.82
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2024-12-18",
+   "et_time": "14:00",
+   "tz": "EST",
+   "utc": "2024-12-18T19:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20241218a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 8.87
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2025-01-07",
+   "et_time": "10:00",
+   "tz": "EST",
+   "utc": "2025-01-07T15:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_01072025.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 3.4
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2025-01-10",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2025-01-10T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_01102025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 4.69
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2025-01-14",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2025-01-14T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_01142025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 4.76
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2025-01-15",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2025-01-15T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_01152025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 4,
+    "release_bar_over_pre_median": 3.68
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2025-01-29",
+   "et_time": "14:00",
+   "tz": "EST",
+   "utc": "2025-01-29T19:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20250129a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 2,
+    "release_bar_over_pre_median": 2.8
+   }
+  },
+  {
+   "family": "GDP_ADV",
+   "date": "2025-01-30",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2025-01-30T13:30:00.000Z",
+   "title": "Gross Domestic Product, 4th Quarter and Year 2024 (Advance Estimate)",
+   "source": "https://www.bea.gov/news/2025/gross-domestic-product-4th-quarter-and-year-2024-advance-estimate",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 4,
+    "release_bar_over_pre_median": 2.49
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2025-01-31",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2025-01-31T13:30:00.000Z",
+   "title": "Personal Income and Outlays, December 2024",
+   "source": "https://www.bea.gov/news/2025/personal-income-and-outlays-december-2024",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 5,
+    "release_bar_over_pre_median": 1.7
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2025-02-04",
+   "et_time": "10:00",
+   "tz": "EST",
+   "utc": "2025-02-04T15:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_02042025.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": -7,
+    "release_bar_over_pre_median": 1.02
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2025-02-07",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2025-02-07T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_02072025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 6.82
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2025-02-12",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2025-02-12T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_02122025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 1,
+    "release_bar_over_pre_median": 3.18
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2025-02-13",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2025-02-13T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_02132025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 2.67
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2025-02-28",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2025-02-28T13:30:00.000Z",
+   "title": "Personal Income and Outlays, January 2025",
+   "source": "https://www.bea.gov/news/2025/personal-income-and-outlays-january-2025",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 6,
+    "release_bar_over_pre_median": 1.66
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2025-03-07",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2025-03-07T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_03072025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 4.46
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2025-03-11",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2025-03-11T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_03112025.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": -2,
+    "release_bar_over_pre_median": 0.94
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2025-03-12",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-03-12T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_03122025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 3,
+    "release_bar_over_pre_median": 3.04
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2025-03-13",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-03-13T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_03132025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 8,
+    "release_bar_over_pre_median": 2.13
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2025-03-19",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2025-03-19T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20250319a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 2,
+    "release_bar_over_pre_median": 2.68
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2025-03-28",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-03-28T12:30:00.000Z",
+   "title": "Personal Income and Outlays, February 2025",
+   "source": "https://www.bea.gov/news/2025/personal-income-and-outlays-february-2025",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 5,
+    "release_bar_over_pre_median": 2.47
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2025-04-01",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2025-04-01T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_04012025.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 2.11
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2025-04-04",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-04-04T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_04042025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 1.8
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2025-04-10",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-04-10T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_04102025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 6,
+    "release_bar_over_pre_median": 2.69
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2025-04-11",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-04-11T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_04112025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 5,
+    "release_bar_over_pre_median": 0.6
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2025-04-29",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2025-04-29T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_04292025.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": -1,
+    "release_bar_over_pre_median": 1.33
+   }
+  },
+  {
+   "family": "GDP_ADV",
+   "date": "2025-04-30",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-04-30T12:30:00.000Z",
+   "title": "Gross Domestic Product, 1st Quarter 2025 (Advance Estimate)",
+   "source": "https://www.bea.gov/news/2025/gross-domestic-product-1st-quarter-2025-advance-estimate",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [
+    "PCE@+90m"
+   ],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": -1,
+    "release_bar_over_pre_median": 1.2
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2025-04-30",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2025-04-30T14:00:00.000Z",
+   "title": "Personal Income and Outlays, March 2025",
+   "source": "https://www.bea.gov/news/2025/personal-income-and-outlays-march-2025",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [
+    "GDP_ADV@-90m"
+   ],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 3,
+    "release_bar_over_pre_median": 0.98
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2025-05-02",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-05-02T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_05022025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 3,
+    "release_bar_over_pre_median": 2.26
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2025-05-07",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2025-05-07T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20250507a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 4,
+    "release_bar_over_pre_median": 2.79
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2025-05-13",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-05-13T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_05132025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 4,
+    "release_bar_over_pre_median": 1.84
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2025-05-15",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-05-15T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_05152025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 6,
+    "release_bar_over_pre_median": 1.16
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2025-05-30",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-05-30T12:30:00.000Z",
+   "title": "Personal Income and Outlays, April 2025",
+   "source": "https://www.bea.gov/news/2025/personal-income-and-outlays-april-2025",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": -2,
+    "release_bar_over_pre_median": 2.05
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2025-06-03",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2025-06-03T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_06032025.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 1.29
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2025-06-06",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-06-06T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_06062025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 4.88
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2025-06-11",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-06-11T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_06112025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 1,
+    "release_bar_over_pre_median": 4.28
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2025-06-12",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-06-12T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_06122025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 4,
+    "release_bar_over_pre_median": 1.35
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2025-06-18",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2025-06-18T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20250618a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 6,
+    "release_bar_over_pre_median": 3.92
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2025-06-27",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-06-27T12:30:00.000Z",
+   "title": "Personal Income and Outlays, May 2025",
+   "source": "https://www.bea.gov/news/2025/personal-income-and-outlays-may-2025",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 8,
+    "release_bar_over_pre_median": 1.59
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2025-07-01",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2025-07-01T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_07012025.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": -1,
+    "release_bar_over_pre_median": 1.03
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2025-07-03",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-07-03T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_07032025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 8.1
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2025-07-15",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-07-15T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_07152025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 4.32
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2025-07-16",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-07-16T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_07162025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 4,
+    "release_bar_over_pre_median": 1.72
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2025-07-29",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2025-07-29T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_07292025.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": -2,
+    "release_bar_over_pre_median": 1.36
+   }
+  },
+  {
+   "family": "GDP_ADV",
+   "date": "2025-07-30",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-07-30T12:30:00.000Z",
+   "title": "Gross Domestic Product, 2nd Quarter 2025 (Advance Estimate)",
+   "source": "https://www.bea.gov/news/2025/gross-domestic-product-2nd-quarter-2025-advance-estimate",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 1,
+    "release_bar_over_pre_median": 1.58
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2025-07-30",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2025-07-30T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20250730a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 3,
+    "release_bar_over_pre_median": 2.7
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2025-07-31",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-07-31T12:30:00.000Z",
+   "title": "Personal Income and Outlays, June 2025",
+   "source": "https://www.bea.gov/news/2025/personal-income-and-outlays-june-2025",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": -6,
+    "release_bar_over_pre_median": 1.51
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2025-08-01",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-08-01T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_08012025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 10.36
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2025-08-12",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-08-12T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_08122025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 4,
+    "release_bar_over_pre_median": 3.22
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2025-08-14",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-08-14T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_08142025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 6,
+    "release_bar_over_pre_median": 3.19
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2025-08-29",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-08-29T12:30:00.000Z",
+   "title": "Personal Income and Outlays, July 2025",
+   "source": "https://www.bea.gov/news/2025/personal-income-and-outlays-july-2025",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 4,
+    "release_bar_over_pre_median": 2.29
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2025-09-03",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2025-09-03T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_09032025.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": -2,
+    "release_bar_over_pre_median": 1.06
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2025-09-05",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-09-05T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_09052025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 7.04
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2025-09-10",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-09-10T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_09102025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 4.45
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2025-09-11",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-09-11T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_09112025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 7.77
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2025-09-17",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2025-09-17T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20250917a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 18.86
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2025-09-26",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-09-26T12:30:00.000Z",
+   "title": "Personal Income and Outlays, August 2025",
+   "source": "https://www.bea.gov/news/2025/personal-income-and-outlays-august-2025",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 2,
+    "release_bar_over_pre_median": 2.75
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2025-09-30",
+   "et_time": "10:00",
+   "tz": "EDT",
+   "utc": "2025-09-30T14:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_09302025.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 3.44
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2025-10-24",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2025-10-24T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_10242025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 2,
+    "release_bar_over_pre_median": 4.65
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2025-10-29",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2025-10-29T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20251029a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 2,
+    "release_bar_over_pre_median": 3.52
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2025-11-20",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2025-11-20T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_11202025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 2.86
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2025-11-25",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2025-11-25T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_11252025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 4,
+    "release_bar_over_pre_median": 1
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2025-12-05",
+   "et_time": "10:00",
+   "tz": "EST",
+   "utc": "2025-12-05T15:00:00.000Z",
+   "title": "Personal Income and Outlays, September 2025",
+   "source": "https://www.bea.gov/news/2025/personal-income-and-outlays-september-2025",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 4,
+    "release_bar_over_pre_median": 1.19
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2025-12-09",
+   "et_time": "10:00",
+   "tz": "EST",
+   "utc": "2025-12-09T15:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_12092025.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 3,
+    "release_bar_over_pre_median": 1.83
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2025-12-10",
+   "et_time": "14:00",
+   "tz": "EST",
+   "utc": "2025-12-10T19:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20251210a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 2,
+    "release_bar_over_pre_median": 5.81
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2025-12-16",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2025-12-16T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_12162025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 6,
+    "release_bar_over_pre_median": 1.95
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2025-12-18",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2025-12-18T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_12182025.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 4,
+    "release_bar_over_pre_median": 3.48
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2026-01-07",
+   "et_time": "10:00",
+   "tz": "EST",
+   "utc": "2026-01-07T15:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_01072026.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": -8,
+    "release_bar_over_pre_median": 1.52
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2026-01-09",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2026-01-09T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_01092026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 4.13
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2026-01-13",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2026-01-13T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_01132026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 7,
+    "release_bar_over_pre_median": 2.77
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2026-01-14",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2026-01-14T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_01142026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 4,
+    "release_bar_over_pre_median": 1.71
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2026-01-22",
+   "et_time": "10:00",
+   "tz": "EST",
+   "utc": "2026-01-22T15:00:00.000Z",
+   "title": "Personal Income and Outlays, October and November 2025",
+   "source": "https://www.bea.gov/news/2026/personal-income-and-outlays-october-and-november-2025",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 1,
+    "release_bar_over_pre_median": 1.16
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2026-01-28",
+   "et_time": "14:00",
+   "tz": "EST",
+   "utc": "2026-01-28T19:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260128a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": -2,
+    "release_bar_over_pre_median": 1.41
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2026-01-30",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2026-01-30T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_01302026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 5,
+    "release_bar_over_pre_median": 0.82
+   }
+  },
+  {
+   "family": "JOLTS",
+   "date": "2026-02-05",
+   "et_time": "10:00",
+   "tz": "EST",
+   "utc": "2026-02-05T15:00:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/jolts_02052026.htm",
+   "time_basis": "verified 10:00 a.m. (ET) on archived release jolts_10042022",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": -2,
+    "release_bar_over_pre_median": 1.09
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2026-02-11",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2026-02-11T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_02112026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 3.23
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2026-02-13",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2026-02-13T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_02132026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 4,
+    "release_bar_over_pre_median": 2.76
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2026-02-20",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2026-02-20T13:30:00.000Z",
+   "title": "Personal Income and Outlays, December 2025",
+   "source": "https://www.bea.gov/news/2026/personal-income-and-outlays-december-2025",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 6,
+    "release_bar_over_pre_median": 1.25
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2026-02-27",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2026-02-27T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_02272026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 4.74
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2026-03-06",
+   "et_time": "8:30",
+   "tz": "EST",
+   "utc": "2026-03-06T13:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_03062026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 1,
+    "release_bar_over_pre_median": 2.9
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2026-03-11",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2026-03-11T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_03112026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 5,
+    "release_bar_over_pre_median": 1.77
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2026-03-18",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2026-03-18T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_03182026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 4,
+    "release_bar_over_pre_median": 1.04
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2026-03-18",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2026-03-18T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260318a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 3,
+    "release_bar_over_pre_median": 1.81
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2026-04-03",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2026-04-03T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_04032026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": "NO_BAR_AT_RELEASE"
+  },
+  {
+   "family": "PCE",
+   "date": "2026-04-09",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2026-04-09T12:30:00.000Z",
+   "title": "Personal Income and Outlays, February 2026",
+   "source": "https://www.bea.gov/news/2026/personal-income-and-outlays-february-2026",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 4,
+    "release_bar_over_pre_median": 1.58
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2026-04-10",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2026-04-10T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_04102026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 8,
+    "release_bar_over_pre_median": 3.22
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2026-04-14",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2026-04-14T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_04142026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": -8,
+    "release_bar_over_pre_median": 0.81
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2026-04-29",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2026-04-29T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260429a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 3.26
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2026-04-30",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2026-04-30T12:30:00.000Z",
+   "title": "Personal Income and Outlays, March 2026",
+   "source": "https://www.bea.gov/news/2026/personal-income-and-outlays-march-2026",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 6,
+    "release_bar_over_pre_median": 1.14
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2026-05-08",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2026-05-08T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_05082026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 6,
+    "release_bar_over_pre_median": 3.41
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2026-05-12",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2026-05-12T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_05122026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 5,
+    "release_bar_over_pre_median": 1.98
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2026-05-13",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2026-05-13T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_05132026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 4,
+    "release_bar_over_pre_median": 1.4
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2026-05-28",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2026-05-28T12:30:00.000Z",
+   "title": "Personal Income and Outlays, April 2026",
+   "source": "https://www.bea.gov/news/2026/personal-income-and-outlays-april-2026",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 6,
+    "release_bar_over_pre_median": 1.93
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2026-06-05",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2026-06-05T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_06052026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 1,
+    "release_bar_over_pre_median": 3.83
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2026-06-10",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2026-06-10T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_06102026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 4,
+    "release_bar_over_pre_median": 2.25
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2026-06-11",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2026-06-11T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_06112026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 6,
+    "release_bar_over_pre_median": 2.46
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2026-06-17",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2026-06-17T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260617a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 16.59
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2026-06-25",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2026-06-25T12:30:00.000Z",
+   "title": "Personal Income and Outlays, May 2026",
+   "source": "https://www.bea.gov/news/2026/personal-income-and-outlays-may-2026",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 3.95
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2026-07-02",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2026-07-02T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_07022026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 9.16
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2026-07-14",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2026-07-14T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_07142026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 9.36
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2026-07-15",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2026-07-15T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_07152026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 5
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2026-07-29",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2026-07-29T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 3.88
+   }
+  },
+  {
+   "family": "PCE",
+   "date": "2026-07-30",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2026-07-30T12:30:00.000Z",
+   "title": "Personal Income and Outlays, June 2026",
+   "source": "https://www.bea.gov/news/2026/personal-income-and-outlays-june-2026",
+   "time_basis": "printed embargo line on the archived release page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 5,
+    "release_bar_over_pre_median": 2.85
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2026-08-07",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2026-08-07T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_08072026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 6.72
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2026-08-12",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2026-08-12T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_08122026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 7.53
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2026-08-13",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2026-08-13T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_08132026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 8,
+    "release_bar_over_pre_median": 3.4
+   }
+  },
+  {
+   "family": "NFP",
+   "date": "2026-09-04",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2026-09-04T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/empsit_09042026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 17.31
+   }
+  },
+  {
+   "family": "PPI",
+   "date": "2026-09-10",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2026-09-10T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/ppi_09102026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 4.3
+   }
+  },
+  {
+   "family": "CPI",
+   "date": "2026-09-11",
+   "et_time": "8:30",
+   "tz": "EDT",
+   "utc": "2026-09-11T12:30:00.000Z",
+   "source": "https://www.bls.gov/news.release/archives/cpi_09112026.htm",
+   "time_basis": "verified 8:30 a.m. (ET) on archived releases (2022 and 2025 samples)",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 0,
+    "release_bar_over_pre_median": 8.85
+   }
+  },
+  {
+   "family": "FOMC",
+   "date": "2026-09-16",
+   "et_time": "14:00",
+   "tz": "EDT",
+   "utc": "2026-09-16T18:00:00.000Z",
+   "press_conference": true,
+   "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm",
+   "time_basis": "printed \"For release at 2:00 p.m.\" on the statement page",
+   "same_minute_with": [],
+   "within_4h": [],
+   "price_coverage": true,
+   "spike_check": {
+    "largest_bar_offset_15m": 2,
+    "release_bar_over_pre_median": 9.6
+   }
+  }
+ ]
+}

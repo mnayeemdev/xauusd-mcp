@@ -1,0 +1,9 @@
+gate candidates 4280 passed 3185
+simulated 500
+simulated 1000
+simulated 1500
+simulated 2000
+simulated 2500
+simulated 3000
+simulated 3500
+simulated 4000

@@ -1,0 +1,2698 @@
+{
+ "generated_at": "2026-09-25T19:47:57.120Z",
+ "regions": {
+  "A_end_exclusive": "2026-07-13",
+  "B_end_exclusive": "2026-08-19",
+  "A_sessions": 64,
+  "B_sessions": 32,
+  "C_sessions": 33
+ },
+ "control": {
+  "A": {
+   "n": 722,
+   "wr": 52.77,
+   "pf": 1.22,
+   "mr": 0.056,
+   "tot": 40.16,
+   "ci": [
+    -0.062,
+    0.173
+   ],
+   "maxDD_R": 43.86,
+   "maxLossStreak": 8,
+   "top1": 9.97,
+   "top3": 28.93,
+   "top5": 46.73,
+   "tot_ex_top5": -6.57,
+   "byModel": {
+    "BO": 51.07,
+    "MC": 10.81,
+    "PB": -2.66,
+    "SR": -25.35,
+    "MR": 6.61
+   }
+  },
+  "B": {
+   "n": 333,
+   "wr": 45.95,
+   "pf": 0.71,
+   "mr": -0.168,
+   "tot": -55.86,
+   "ci": [
+    -0.317,
+    -0.019
+   ],
+   "maxDD_R": 72.51,
+   "maxLossStreak": 8,
+   "top1": 10.56,
+   "top3": 21.67,
+   "top5": 30.42,
+   "tot_ex_top5": -86.28,
+   "byModel": {
+    "PB": -20.58,
+    "MC": -8.25,
+    "BO": -33.22,
+    "SR": -6.94,
+    "MR": 13.33
+   }
+  },
+  "C_holdout": {
+   "n": 351,
+   "wr": 50.14,
+   "pf": 1.11,
+   "mr": 0.05,
+   "tot": 17.62,
+   "ci": [
+    -0.139,
+    0.24
+   ],
+   "maxDD_R": 31.12,
+   "maxLossStreak": 9,
+   "top1": 14.35,
+   "top3": 34.66,
+   "top5": 46.07,
+   "tot_ex_top5": -28.45,
+   "byModel": {
+    "PB": -4.16,
+    "SR": -8,
+    "BO": 21.84,
+    "MC": 1.96,
+    "MR": 6.06
+   }
+  },
+  "all": {
+   "n": 1406,
+   "wr": 50.5,
+   "pf": 1.07,
+   "mr": 0.001,
+   "tot": 1.92,
+   "ci": [
+    -0.083,
+    0.086
+   ],
+   "maxDD_R": 87.07,
+   "maxLossStreak": 9,
+   "top1": 14.35,
+   "top3": 38.43,
+   "top5": 58.01,
+   "tot_ex_top5": -56.09,
+   "byModel": {
+    "BO": 39.72,
+    "MC": 4.5,
+    "PB": -27.42,
+    "SR": -40.28,
+    "MR": 26
+   }
+  }
+ },
+ "candidates": {
+  "SR-A": {
+   "A": {
+    "n": 700,
+    "wr": 53.86,
+    "pf": 1.27,
+    "mr": 0.084,
+    "tot": 58.92,
+    "ci": [
+     -0.036,
+     0.205
+    ],
+    "maxDD_R": 37.37,
+    "maxLossStreak": 7,
+    "top1": 9.97,
+    "top3": 28.93,
+    "top5": 46.73,
+    "tot_ex_top5": 12.19,
+    "byModel": {
+     "BO": 51.07,
+     "MC": 10.81,
+     "PB": -1.75,
+     "SR": -7.52,
+     "MR": 6.61
+    }
+   },
+   "B": {
+    "n": 324,
+    "wr": 45.99,
+    "pf": 0.7,
+    "mr": -0.17,
+    "tot": -55.01,
+    "ci": [
+     -0.319,
+     -0.021
+    ],
+    "maxDD_R": 71.66,
+    "maxLossStreak": 11,
+    "top1": 10.56,
+    "top3": 21.63,
+    "top5": 29.19,
+    "tot_ex_top5": -84.2,
+    "byModel": {
+     "PB": -20.58,
+     "MC": -8.25,
+     "BO": -33.22,
+     "SR": -6.11,
+     "MR": 13.33
+    }
+   },
+   "removed_vs_control": 42,
+   "family": "SR",
+   "rationale": "SR trades against the current 5m structure lose almost always on discovery (n 21, PF 0.09); the counter-structure allowance (bias support or fresh sweep) is the failing path",
+   "note": null,
+   "selection": {
+    "dA": 0.028,
+    "dB": -0.002,
+    "tA": 18.76,
+    "tB": 0.85,
+    "ddB_ok": true,
+    "streakB_ok": false,
+    "pass": false
+   },
+   "affected": 42,
+   "added": 0,
+   "removed": 42
+  },
+  "SR-B": {
+   "A": {
+    "n": 687,
+    "wr": 53.86,
+    "pf": 1.27,
+    "mr": 0.091,
+    "tot": 62.29,
+    "ci": [
+     -0.032,
+     0.213
+    ],
+    "maxDD_R": 35.99,
+    "maxLossStreak": 7,
+    "top1": 9.97,
+    "top3": 28.93,
+    "top5": 46.73,
+    "tot_ex_top5": 15.56,
+    "byModel": {
+     "BO": 51.07,
+     "MC": 10.81,
+     "PB": -1.75,
+     "MR": 6.61,
+     "SR": -4.16
+    }
+   },
+   "B": {
+    "n": 320,
+    "wr": 45.63,
+    "pf": 0.69,
+    "mr": -0.179,
+    "tot": -57.39,
+    "ci": [
+     -0.329,
+     -0.029
+    ],
+    "maxDD_R": 74.04,
+    "maxLossStreak": 11,
+    "top1": 10.56,
+    "top3": 21.63,
+    "top5": 29.19,
+    "tot_ex_top5": -86.58,
+    "byModel": {
+     "PB": -20.58,
+     "MC": -8.25,
+     "BO": -33.22,
+     "SR": -8.49,
+     "MR": 13.33
+    }
+   },
+   "removed_vs_control": 63,
+   "family": "SR",
+   "rationale": "stronger alignment: SR only with 5m structure AND an aligned 15m bias",
+   "note": null,
+   "selection": {
+    "dA": 0.035,
+    "dB": -0.011,
+    "tA": 22.13,
+    "tB": -1.53,
+    "ddB_ok": true,
+    "streakB_ok": false,
+    "pass": false
+   },
+   "affected": 63,
+   "added": 0,
+   "removed": 63
+  },
+  "SR-C": {
+   "A": {
+    "n": 682,
+    "wr": 52.93,
+    "pf": 1.24,
+    "mr": 0.075,
+    "tot": 51.17,
+    "ci": [
+     -0.047,
+     0.198
+    ],
+    "maxDD_R": 37.35,
+    "maxLossStreak": 8,
+    "top1": 9.97,
+    "top3": 28.93,
+    "top5": 46.73,
+    "tot_ex_top5": 4.44,
+    "byModel": {
+     "BO": 50.86,
+     "MC": 10.81,
+     "PB": -4.05,
+     "MR": 6.61,
+     "SR": -12.78
+    }
+   },
+   "B": {
+    "n": 311,
+    "wr": 46.62,
+    "pf": 0.73,
+    "mr": -0.144,
+    "tot": -44.75,
+    "ci": [
+     -0.301,
+     0.013
+    ],
+    "maxDD_R": 61.74,
+    "maxLossStreak": 10,
+    "top1": 10.56,
+    "top3": 21.67,
+    "top5": 30.42,
+    "tot_ex_top5": -75.17,
+    "byModel": {
+     "PB": -20.58,
+     "MC": -8.25,
+     "BO": -33.22,
+     "SR": 4.13,
+     "MR": 13.33
+    }
+   },
+   "removed_vs_control": 77,
+   "family": "SR",
+   "rationale": "require a fresh sweep (≤ 3 bars) for every SR (expected to fail: fresh-sweep SR was the worst subtype on discovery)",
+   "note": null,
+   "selection": {
+    "dA": 0.019,
+    "dB": 0.024,
+    "tA": 11.01,
+    "tB": 11.11,
+    "ddB_ok": true,
+    "streakB_ok": false,
+    "pass": false
+   },
+   "affected": 81,
+   "added": 2,
+   "removed": 79
+  },
+  "SR-D": {
+   "A": {
+    "n": 661,
+    "wr": 53.86,
+    "pf": 1.29,
+    "mr": 0.098,
+    "tot": 64.88,
+    "ci": [
+     -0.027,
+     0.224
+    ],
+    "maxDD_R": 32.61,
+    "maxLossStreak": 7,
+    "top1": 9.97,
+    "top3": 28.93,
+    "top5": 46.73,
+    "tot_ex_top5": 18.15,
+    "byModel": {
+     "BO": 50.86,
+     "MC": 10.81,
+     "PB": -3.14,
+     "MR": 6.61
+    }
+   },
+   "B": {
+    "n": 304,
+    "wr": 46.05,
+    "pf": 0.71,
+    "mr": -0.161,
+    "tot": -48.87,
+    "ci": [
+     -0.317,
+     -0.004
+    ],
+    "maxDD_R": 65.45,
+    "maxLossStreak": 10,
+    "top1": 10.56,
+    "top3": 21.63,
+    "top5": 29.19,
+    "tot_ex_top5": -78.06,
+    "byModel": {
+     "PB": -20.58,
+     "MC": -8.25,
+     "BO": -33.22,
+     "MR": 13.33
+    }
+   },
+   "removed_vs_control": 116,
+   "family": "SR",
+   "rationale": "benchmark only: SR disabled",
+   "note": null,
+   "selection": {
+    "dA": 0.042,
+    "dB": 0.007,
+    "tA": 24.72,
+    "tB": 6.99,
+    "ddB_ok": true,
+    "streakB_ok": false,
+    "pass": false
+   },
+   "affected": 118,
+   "added": 1,
+   "removed": 117
+  },
+  "QUALITY-A": {
+   "A": {
+    "n": 714,
+    "wr": 52.1,
+    "pf": 1.18,
+    "mr": 0.048,
+    "tot": 34.43,
+    "ci": [
+     -0.07,
+     0.166
+    ],
+    "maxDD_R": 45.27,
+    "maxLossStreak": 7,
+    "top1": 9.97,
+    "top3": 28.93,
+    "top5": 46.73,
+    "tot_ex_top5": -12.31,
+    "byModel": {
+     "BO": 46.61,
+     "MC": 10.84,
+     "PB": -2.61,
+     "SR": -28.47,
+     "MR": 8.37
+    }
+   },
+   "B": {
+    "n": 331,
+    "wr": 46.53,
+    "pf": 0.72,
+    "mr": -0.167,
+    "tot": -55.41,
+    "ci": [
+     -0.315,
+     -0.02
+    ],
+    "maxDD_R": 72.06,
+    "maxLossStreak": 8,
+    "top1": 10.56,
+    "top3": 21.67,
+    "top5": 30.42,
+    "tot_ex_top5": -85.83,
+    "byModel": {
+     "PB": -21.63,
+     "MC": -7.63,
+     "BO": -28.83,
+     "SR": -5.97,
+     "MR": 8.86
+    }
+   },
+   "removed_vs_control": 13,
+   "family": "QUALITY",
+   "rationale": "qEntryLocation is inverted on discovery (below-mean +0.216 R vs above-mean −0.049 R); removed from research scoring with a discovery-calibrated threshold shift",
+   "note": "shift 8",
+   "selection": {
+    "dA": -0.008,
+    "dB": 0.001,
+    "tA": -5.73,
+    "tB": 0.45,
+    "ddB_ok": true,
+    "streakB_ok": true,
+    "pass": false
+   },
+   "affected": 123,
+   "added": 55,
+   "removed": 68
+  },
+  "QUALITY-B": {
+   "A": {
+    "n": 720,
+    "wr": 51.81,
+    "pf": 1.18,
+    "mr": 0.042,
+    "tot": 29.96,
+    "ci": [
+     -0.076,
+     0.16
+    ],
+    "maxDD_R": 47.68,
+    "maxLossStreak": 7,
+    "top1": 9.97,
+    "top3": 28.93,
+    "top5": 46.73,
+    "tot_ex_top5": -16.78,
+    "byModel": {
+     "BO": 45.12,
+     "MC": 11.06,
+     "PB": -4.6,
+     "SR": -28.47,
+     "MR": 7.16
+    }
+   },
+   "B": {
+    "n": 330,
+    "wr": 45.76,
+    "pf": 0.7,
+    "mr": -0.178,
+    "tot": -58.77,
+    "ci": [
+     -0.326,
+     -0.03
+    ],
+    "maxDD_R": 75.42,
+    "maxLossStreak": 8,
+    "top1": 10.56,
+    "top3": 21.67,
+    "top5": 30.42,
+    "tot_ex_top5": -89.19,
+    "byModel": {
+     "PB": -21.65,
+     "MC": -7.72,
+     "BO": -32.15,
+     "SR": -6.94,
+     "MR": 9.91
+    }
+   },
+   "removed_vs_control": 13,
+   "family": "QUALITY",
+   "rationale": "cap qEntryLocation at 7.5 (half) with discovery-calibrated shift",
+   "note": "shift 2",
+   "selection": {
+    "dA": -0.014,
+    "dB": -0.01,
+    "tA": -10.2,
+    "tB": -2.91,
+    "ddB_ok": true,
+    "streakB_ok": true,
+    "pass": false
+   },
+   "affected": 93,
+   "added": 40,
+   "removed": 53
+  },
+  "QUALITY-C": {
+   "A": {
+    "n": 714,
+    "wr": 52.1,
+    "pf": 1.18,
+    "mr": 0.048,
+    "tot": 34.43,
+    "ci": [
+     -0.07,
+     0.166
+    ],
+    "maxDD_R": 45.27,
+    "maxLossStreak": 7,
+    "top1": 9.97,
+    "top3": 28.93,
+    "top5": 46.73,
+    "tot_ex_top5": -12.31,
+    "byModel": {
+     "BO": 46.61,
+     "MC": 10.84,
+     "PB": -2.61,
+     "SR": -28.47,
+     "MR": 8.37
+    }
+   },
+   "B": {
+    "n": 331,
+    "wr": 46.53,
+    "pf": 0.72,
+    "mr": -0.167,
+    "tot": -55.41,
+    "ci": [
+     -0.315,
+     -0.02
+    ],
+    "maxDD_R": 72.06,
+    "maxLossStreak": 8,
+    "top1": 10.56,
+    "top3": 21.67,
+    "top5": 30.42,
+    "tot_ex_top5": -85.83,
+    "byModel": {
+     "PB": -21.63,
+     "MC": -7.63,
+     "BO": -28.83,
+     "SR": -5.97,
+     "MR": 8.86
+    }
+   },
+   "removed_vs_control": 13,
+   "family": "QUALITY",
+   "rationale": "qEntryLocation eligibility-neutral (replaced by its discovery mean 10.55) with shift",
+   "note": "shift -2.5",
+   "selection": {
+    "dA": -0.008,
+    "dB": 0.001,
+    "tA": -5.73,
+    "tB": 0.45,
+    "ddB_ok": true,
+    "streakB_ok": true,
+    "pass": false
+   },
+   "affected": 123,
+   "added": 55,
+   "removed": 68
+  },
+  "QUALITY-D": {
+   "A": {
+    "n": 711,
+    "wr": 52.04,
+    "pf": 1.16,
+    "mr": 0.058,
+    "tot": 40.91,
+    "ci": [
+     -0.062,
+     0.177
+    ],
+    "maxDD_R": 49.62,
+    "maxLossStreak": 8,
+    "top1": 9.97,
+    "top3": 28.93,
+    "top5": 46.73,
+    "tot_ex_top5": -5.82,
+    "byModel": {
+     "BO": 52.78,
+     "MC": 7.92,
+     "PB": -2.81,
+     "SR": -25.35,
+     "MR": 8.71
+    }
+   },
+   "B": {
+    "n": 324,
+    "wr": 47.53,
+    "pf": 0.73,
+    "mr": -0.146,
+    "tot": -47.33,
+    "ci": [
+     -0.297,
+     0.004
+    ],
+    "maxDD_R": 63.52,
+    "maxLossStreak": 6,
+    "top1": 10.56,
+    "top3": 21.67,
+    "top5": 30.42,
+    "tot_ex_top5": -77.74,
+    "byModel": {
+     "PB": -18.2,
+     "MC": -7.08,
+     "BO": -26.01,
+     "SR": -5.75,
+     "MR": 9.91
+    }
+   },
+   "removed_vs_control": 22,
+   "family": "QUALITY",
+   "rationale": "reduced score from the only components with non-negative ordering on discovery (qTrigger, qMtf, qSession), threshold calibrated on discovery",
+   "note": "threshold 64",
+   "selection": {
+    "dA": 0.002,
+    "dB": 0.022,
+    "tA": 0.75,
+    "tB": 8.53,
+    "ddB_ok": true,
+    "streakB_ok": true,
+    "pass": true
+   },
+   "affected": 182,
+   "added": 80,
+   "removed": 102
+  },
+  "LAG-B": {
+   "A": {
+    "n": 686,
+    "wr": 53.64,
+    "pf": 1.24,
+    "mr": 0.08,
+    "tot": 54.89,
+    "ci": [
+     -0.042,
+     0.202
+    ],
+    "maxDD_R": 33.9,
+    "maxLossStreak": 7,
+    "top1": 9.97,
+    "top3": 28.93,
+    "top5": 46.73,
+    "tot_ex_top5": 8.16,
+    "byModel": {
+     "BO": 51.07,
+     "MC": 10.03,
+     "SR": -12.64,
+     "MR": 6.61,
+     "PB": 0.12
+    }
+   },
+   "B": {
+    "n": 315,
+    "wr": 46.98,
+    "pf": 0.75,
+    "mr": -0.138,
+    "tot": -43.62,
+    "ci": [
+     -0.294,
+     0.017
+    ],
+    "maxDD_R": 60.87,
+    "maxLossStreak": 10,
+    "top1": 10.56,
+    "top3": 21.67,
+    "top5": 30.42,
+    "tot_ex_top5": -74.04,
+    "byModel": {
+     "PB": -14.45,
+     "MC": -8.25,
+     "BO": -33.22,
+     "SR": -0.84,
+     "MR": 13.33
+    }
+   },
+   "removed_vs_control": 83,
+   "family": "LAG",
+   "rationale": "during a 15m-lag episode (directional bias disagreeing with 5m structure) block bias-side trades against 5m structure; do NOT authorize the opposite side",
+   "note": null,
+   "selection": {
+    "dA": 0.024,
+    "dB": 0.03,
+    "tA": 14.73,
+    "tB": 12.24,
+    "ddB_ok": true,
+    "streakB_ok": false,
+    "pass": false
+   },
+   "affected": 85,
+   "added": 1,
+   "removed": 84
+  },
+  "EXIT-C": {
+   "A": {
+    "n": 739,
+    "wr": 48.85,
+    "pf": 1.26,
+    "mr": 0.092,
+    "tot": 67.62,
+    "ci": [
+     -0.019,
+     0.202
+    ],
+    "maxDD_R": 35.36,
+    "maxLossStreak": 9,
+    "top1": 11.32,
+    "top3": 30.9,
+    "top5": 48.71,
+    "tot_ex_top5": 18.91,
+    "byModel": {
+     "BO": 67.99,
+     "MC": 8.61,
+     "PB": -1.06,
+     "SR": -16.26,
+     "MR": 8.59
+    }
+   },
+   "B": {
+    "n": 344,
+    "wr": 42.15,
+    "pf": 0.75,
+    "mr": -0.121,
+    "tot": -41.46,
+    "ci": [
+     -0.26,
+     0.019
+    ],
+    "maxDD_R": 59.76,
+    "maxLossStreak": 10,
+    "top1": 10.56,
+    "top3": 23.1,
+    "top5": 32.76,
+    "tot_ex_top5": -74.22,
+    "byModel": {
+     "PB": -15.36,
+     "MC": -7.56,
+     "BO": -24.58,
+     "SR": -7.33,
+     "MR": 13.58
+    }
+   },
+   "removed_vs_control": 0,
+   "family": "EXIT",
+   "rationale": "broker fail-safe placed at 1.0 × structural + spread instead of 1.5 ×; thesis/adaptive exits unchanged",
+   "note": null,
+   "selection": {
+    "dA": 0.036,
+    "dB": 0.047,
+    "tA": 27.46,
+    "tB": 14.4,
+    "ddB_ok": true,
+    "streakB_ok": false,
+    "pass": false
+   },
+   "affected": 458
+  },
+  "EXIT-B": {
+   "A": {
+    "n": 726,
+    "wr": 51.52,
+    "pf": 1.24,
+    "mr": 0.068,
+    "tot": 49.22,
+    "ci": [
+     -0.047,
+     0.182
+    ],
+    "maxDD_R": 45.04,
+    "maxLossStreak": 8,
+    "top1": 9.97,
+    "top3": 28.93,
+    "top5": 46.73,
+    "tot_ex_top5": 2.49,
+    "byModel": {
+     "BO": 55.1,
+     "MC": 11.37,
+     "PB": -2.64,
+     "SR": -22.28,
+     "MR": 7.99
+    }
+   },
+   "B": {
+    "n": 335,
+    "wr": 44.78,
+    "pf": 0.7,
+    "mr": -0.169,
+    "tot": -56.67,
+    "ci": [
+     -0.313,
+     -0.025
+    ],
+    "maxDD_R": 74.74,
+    "maxLossStreak": 8,
+    "top1": 10.56,
+    "top3": 21.67,
+    "top5": 30.42,
+    "tot_ex_top5": -87.09,
+    "byModel": {
+     "PB": -18.67,
+     "MC": -8.19,
+     "BO": -34.26,
+     "SR": -8.37,
+     "MR": 13.03
+    }
+   },
+   "removed_vs_control": 0,
+   "family": "EXIT",
+   "rationale": "broker fail-safe at 1.25 × structural + spread",
+   "note": null,
+   "selection": {
+    "dA": 0.012,
+    "dB": -0.001,
+    "tA": 9.06,
+    "tB": -0.81,
+    "ddB_ok": true,
+    "streakB_ok": true,
+    "pass": false
+   },
+   "affected": 317
+  },
+  "EXIT-D": {
+   "A": {
+    "n": 747,
+    "wr": 55.29,
+    "pf": 0.86,
+    "mr": -0.162,
+    "tot": -121.13,
+    "ci": [
+     -0.244,
+     -0.08
+    ],
+    "maxDD_R": 127.47,
+    "maxLossStreak": 7,
+    "top1": 5.81,
+    "top3": 16.95,
+    "top5": 25.56,
+    "tot_ex_top5": -146.69,
+    "byModel": {
+     "BO": -74.11,
+     "MC": 3.26,
+     "PB": -27.86,
+     "SR": -23.72,
+     "MR": 1.47
+    }
+   },
+   "B": {
+    "n": 344,
+    "wr": 50.87,
+    "pf": 0.51,
+    "mr": -0.323,
+    "tot": -111.24,
+    "ci": [
+     -0.419,
+     -0.228
+    ],
+    "maxDD_R": 113.41,
+    "maxLossStreak": 8,
+    "top1": 4.85,
+    "top3": 9.92,
+    "top5": 13.51,
+    "tot_ex_top5": -124.75,
+    "byModel": {
+     "PB": -23.25,
+     "MC": -10.1,
+     "BO": -67.51,
+     "SR": -9.62,
+     "MR": -0.65
+    }
+   },
+   "removed_vs_control": 0,
+   "family": "EXIT",
+   "rationale": "profit lock: once MFE ≥ 1 R, exit at +0.25 R (expected to fail: cuts the large winners)",
+   "note": null,
+   "selection": {
+    "dA": -0.218,
+    "dB": -0.155,
+    "tA": -161.29,
+    "tB": -55.38,
+    "ddB_ok": false,
+    "streakB_ok": true,
+    "pass": false
+   },
+   "affected": 358
+  },
+  "PB-A": {
+   "A": {
+    "n": 687,
+    "wr": 53.13,
+    "pf": 1.25,
+    "mr": 0.069,
+    "tot": 47.31,
+    "ci": [
+     -0.053,
+     0.191
+    ],
+    "maxDD_R": 38.24,
+    "maxLossStreak": 9,
+    "top1": 9.97,
+    "top3": 28.93,
+    "top5": 46.73,
+    "tot_ex_top5": 0.58,
+    "byModel": {
+     "BO": 50.85,
+     "MC": 10.81,
+     "PB": 4.67,
+     "SR": -25.35,
+     "MR": 6.61
+    }
+   },
+   "B": {
+    "n": 305,
+    "wr": 46.23,
+    "pf": 0.72,
+    "mr": -0.157,
+    "tot": -47.85,
+    "ci": [
+     -0.315,
+     0.002
+    ],
+    "maxDD_R": 66.05,
+    "maxLossStreak": 8,
+    "top1": 10.56,
+    "top3": 21.67,
+    "top5": 30.42,
+    "tot_ex_top5": -78.27,
+    "byModel": {
+     "PB": -12.58,
+     "MC": -8.25,
+     "BO": -33.22,
+     "SR": -6.94,
+     "MR": 13.33
+    }
+   },
+   "removed_vs_control": 90,
+   "family": "PB",
+   "rationale": "PB fired while the 5m regime already trends in the trade direction is a late continuation entry (discovery n 40, PF 0.57); blocked",
+   "note": null,
+   "selection": {
+    "dA": 0.013,
+    "dB": 0.011,
+    "tA": 7.15,
+    "tB": 8.01,
+    "ddB_ok": true,
+    "streakB_ok": true,
+    "pass": true
+   },
+   "affected": 116,
+   "added": 13,
+   "removed": 103
+  },
+  "PB-C": {
+   "A": {
+    "n": 613,
+    "wr": 53.67,
+    "pf": 1.24,
+    "mr": 0.07,
+    "tot": 42.68,
+    "ci": [
+     -0.062,
+     0.201
+    ],
+    "maxDD_R": 34.1,
+    "maxLossStreak": 8,
+    "top1": 9.97,
+    "top3": 28.93,
+    "top5": 46.73,
+    "tot_ex_top5": -4.05,
+    "byModel": {
+     "BO": 50.85,
+     "MC": 10.81,
+     "SR": -25.35,
+     "MR": 6.61
+    }
+   },
+   "B": {
+    "n": 273,
+    "wr": 47.25,
+    "pf": 0.78,
+    "mr": -0.126,
+    "tot": -34.39,
+    "ci": [
+     -0.298,
+     0.046
+    ],
+    "maxDD_R": 54.35,
+    "maxLossStreak": 7,
+    "top1": 10.56,
+    "top3": 21.67,
+    "top5": 30.42,
+    "tot_ex_top5": -64.8,
+    "byModel": {
+     "MC": -8.25,
+     "BO": -32.34,
+     "SR": -6.94,
+     "MR": 13.33
+    }
+   },
+   "removed_vs_control": 239,
+   "family": "PB",
+   "rationale": "benchmark only: PB disabled",
+   "note": null,
+   "selection": {
+    "dA": 0.014,
+    "dB": 0.042,
+    "tA": 2.52,
+    "tB": 21.47,
+    "ddB_ok": true,
+    "streakB_ok": true,
+    "pass": true
+   },
+   "affected": 239,
+   "added": 0,
+   "removed": 239
+  },
+  "BO-A": {
+   "A": {
+    "n": 692,
+    "wr": 52.6,
+    "pf": 1.22,
+    "mr": 0.068,
+    "tot": 47.36,
+    "ci": [
+     -0.052,
+     0.189
+    ],
+    "maxDD_R": 44.62,
+    "maxLossStreak": 8,
+    "top1": 9.97,
+    "top3": 28.93,
+    "top5": 46.73,
+    "tot_ex_top5": 0.63,
+    "byModel": {
+     "MC": 10.81,
+     "BO": 58.24,
+     "PB": -2.66,
+     "SR": -25.35,
+     "MR": 6.61
+    }
+   },
+   "B": {
+    "n": 319,
+    "wr": 45.45,
+    "pf": 0.71,
+    "mr": -0.213,
+    "tot": -68.02,
+    "ci": [
+     -0.35,
+     -0.076
+    ],
+    "maxDD_R": 74.12,
+    "maxLossStreak": 7,
+    "top1": 6.26,
+    "top3": 15.92,
+    "top5": 23.48,
+    "tot_ex_top5": -91.5,
+    "byModel": {
+     "PB": -20.58,
+     "MC": -8.25,
+     "BO": -45.39,
+     "SR": -6.94,
+     "MR": 13.33
+    }
+   },
+   "removed_vs_control": 66,
+   "family": "BO",
+   "rationale": "BO whose stop had to be widened to the 0.5-ATR floor has no genuine structural stop (discovery n 47, PF 0.59); blocked",
+   "note": null,
+   "selection": {
+    "dA": 0.012,
+    "dB": -0.045,
+    "tA": 7.2,
+    "tB": -12.16,
+    "ddB_ok": true,
+    "streakB_ok": true,
+    "pass": false
+   },
+   "affected": 180,
+   "added": 57,
+   "removed": 123
+  }
+ },
+ "selection_rule": "pass iff Δmean R > 0 and Δtotal R > 0 in BOTH A and B, validation max DD ≤ 1.1 × control, validation loss streak ≤ control + 1, affected trades ≥ 30 (A+B); benchmarks SR-D/PB-C never selected; one candidate per family; at most one exit stack",
+ "passing_candidates": [
+  "QUALITY-D",
+  "PB-A"
+ ],
+ "chosen": [
+  "QUALITY-D",
+  "PB-A"
+ ],
+ "combos": {
+  "COMBO-1": {
+   "keys": [
+    "QUALITY-D"
+   ],
+   "A": {
+    "n": 711,
+    "wr": 52.04,
+    "pf": 1.16,
+    "mr": 0.058,
+    "tot": 40.91,
+    "ci": [
+     -0.062,
+     0.177
+    ],
+    "maxDD_R": 49.62,
+    "maxLossStreak": 8,
+    "top1": 9.97,
+    "top3": 28.93,
+    "top5": 46.73,
+    "tot_ex_top5": -5.82,
+    "byModel": {
+     "BO": 52.78,
+     "MC": 7.92,
+     "PB": -2.81,
+     "SR": -25.35,
+     "MR": 8.71
+    }
+   },
+   "B": {
+    "n": 324,
+    "wr": 47.53,
+    "pf": 0.73,
+    "mr": -0.146,
+    "tot": -47.33,
+    "ci": [
+     -0.297,
+     0.004
+    ],
+    "maxDD_R": 63.52,
+    "maxLossStreak": 6,
+    "top1": 10.56,
+    "top3": 21.67,
+    "top5": 30.42,
+    "tot_ex_top5": -77.74,
+    "byModel": {
+     "PB": -18.2,
+     "MC": -7.08,
+     "BO": -26.01,
+     "SR": -5.75,
+     "MR": 9.91
+    }
+   }
+  },
+  "COMBO-2": {
+   "keys": [
+    "QUALITY-D",
+    "PB-A"
+   ],
+   "A": {
+    "n": 680,
+    "wr": 52.21,
+    "pf": 1.18,
+    "mr": 0.069,
+    "tot": 46.87,
+    "ci": [
+     -0.054,
+     0.192
+    ],
+    "maxDD_R": 44,
+    "maxLossStreak": 8,
+    "top1": 9.97,
+    "top3": 28.93,
+    "top5": 46.73,
+    "tot_ex_top5": 0.13,
+    "byModel": {
+     "BO": 52.56,
+     "MC": 7.92,
+     "PB": 3.33,
+     "SR": -25.35,
+     "MR": 8.71
+    }
+   },
+   "B": {
+    "n": 299,
+    "wr": 47.83,
+    "pf": 0.74,
+    "mr": -0.136,
+    "tot": -40.54,
+    "ci": [
+     -0.295,
+     0.023
+    ],
+    "maxDD_R": 58.74,
+    "maxLossStreak": 6,
+    "top1": 10.56,
+    "top3": 21.67,
+    "top5": 30.42,
+    "tot_ex_top5": -70.96,
+    "byModel": {
+     "PB": -11.41,
+     "MC": -7.08,
+     "BO": -26.01,
+     "SR": -5.75,
+     "MR": 9.91
+    }
+   }
+  },
+  "COMBO-3": {
+   "keys": [
+    "QUALITY-D",
+    "PB-A"
+   ],
+   "A": {
+    "n": 680,
+    "wr": 52.21,
+    "pf": 1.18,
+    "mr": 0.069,
+    "tot": 46.87,
+    "ci": [
+     -0.054,
+     0.192
+    ],
+    "maxDD_R": 44,
+    "maxLossStreak": 8,
+    "top1": 9.97,
+    "top3": 28.93,
+    "top5": 46.73,
+    "tot_ex_top5": 0.13,
+    "byModel": {
+     "BO": 52.56,
+     "MC": 7.92,
+     "PB": 3.33,
+     "SR": -25.35,
+     "MR": 8.71
+    }
+   },
+   "B": {
+    "n": 299,
+    "wr": 47.83,
+    "pf": 0.74,
+    "mr": -0.136,
+    "tot": -40.54,
+    "ci": [
+     -0.295,
+     0.023
+    ],
+    "maxDD_R": 58.74,
+    "maxLossStreak": 6,
+    "top1": 10.56,
+    "top3": 21.67,
+    "top5": 30.42,
+    "tot_ex_top5": -70.96,
+    "byModel": {
+     "PB": -11.41,
+     "MC": -7.08,
+     "BO": -26.01,
+     "SR": -5.75,
+     "MR": 9.91
+    }
+   }
+  }
+ },
+ "holdout": {
+  "CONTROL": {
+   "n": 351,
+   "wr": 50.14,
+   "pf": 1.11,
+   "mr": 0.05,
+   "tot": 17.62,
+   "ci": [
+    -0.139,
+    0.24
+   ],
+   "maxDD_R": 31.12,
+   "maxLossStreak": 9,
+   "top1": 14.35,
+   "top3": 34.66,
+   "top5": 46.07,
+   "tot_ex_top5": -28.45,
+   "byModel": {
+    "PB": -4.16,
+    "SR": -8,
+    "BO": 21.84,
+    "MC": 1.96,
+    "MR": 6.06
+   }
+  },
+  "COMBO-1": {
+   "keys": [
+    "QUALITY-D"
+   ],
+   "n": 347,
+   "wr": 50.43,
+   "pf": 1.07,
+   "mr": 0.056,
+   "tot": 19.5,
+   "ci": [
+    -0.132,
+    0.244
+   ],
+   "maxDD_R": 26.49,
+   "maxLossStreak": 9,
+   "top1": 14.35,
+   "top3": 34.66,
+   "top5": 46.07,
+   "tot_ex_top5": -26.57,
+   "byModel": {
+    "PB": 4.65,
+    "SR": -8,
+    "BO": 15.25,
+    "MC": -1.18,
+    "MR": 8.86
+   }
+  },
+  "COMBO-2": {
+   "keys": [
+    "QUALITY-D",
+    "PB-A"
+   ],
+   "n": 326,
+   "wr": 50.92,
+   "pf": 1.11,
+   "mr": 0.063,
+   "tot": 20.7,
+   "ci": [
+    -0.131,
+    0.258
+   ],
+   "maxDD_R": 25.23,
+   "maxLossStreak": 8,
+   "top1": 14.35,
+   "top3": 34.66,
+   "top5": 46.07,
+   "tot_ex_top5": -25.37,
+   "byModel": {
+    "SR": -8,
+    "BO": 15.25,
+    "PB": 5.84,
+    "MC": -1.18,
+    "MR": 8.86
+   }
+  },
+  "COMBO-3": {
+   "keys": [
+    "QUALITY-D",
+    "PB-A"
+   ],
+   "n": 326,
+   "wr": 50.92,
+   "pf": 1.11,
+   "mr": 0.063,
+   "tot": 20.7,
+   "ci": [
+    -0.131,
+    0.258
+   ],
+   "maxDD_R": 25.23,
+   "maxLossStreak": 8,
+   "top1": 14.35,
+   "top3": 34.66,
+   "top5": 46.07,
+   "tot_ex_top5": -25.37,
+   "byModel": {
+    "SR": -8,
+    "BO": 15.25,
+    "PB": 5.84,
+    "MC": -1.18,
+    "MR": 8.86
+   }
+  }
+ },
+ "holdout_singles_after_the_fact": {
+  "SR-A": {
+   "n": 341,
+   "wr": 50.15,
+   "pf": 1.11,
+   "mr": 0.049,
+   "tot": 16.59,
+   "ci": [
+    -0.145,
+    0.242
+   ],
+   "maxDD_R": 31.21,
+   "maxLossStreak": 9,
+   "top1": 14.35,
+   "top3": 34.66,
+   "top5": 46.07,
+   "tot_ex_top5": -29.48,
+   "byModel": {
+    "PB": -4.16,
+    "BO": 21.84,
+    "SR": -9.04,
+    "MC": 1.96,
+    "MR": 6.06
+   }
+  },
+  "SR-B": {
+   "n": 337,
+   "wr": 50.74,
+   "pf": 1.14,
+   "mr": 0.061,
+   "tot": 20.62,
+   "ci": [
+    -0.134,
+    0.257
+   ],
+   "maxDD_R": 28.69,
+   "maxLossStreak": 9,
+   "top1": 14.35,
+   "top3": 34.66,
+   "top5": 46.07,
+   "tot_ex_top5": -25.45,
+   "byModel": {
+    "PB": -4.16,
+    "BO": 21.84,
+    "SR": -5.01,
+    "MC": 1.96,
+    "MR": 6.06
+   }
+  },
+  "SR-C": {
+   "n": 339,
+   "wr": 50.74,
+   "pf": 1.13,
+   "mr": 0.067,
+   "tot": 22.55,
+   "ci": [
+    -0.127,
+    0.26
+   ],
+   "maxDD_R": 26.89,
+   "maxLossStreak": 9,
+   "top1": 14.35,
+   "top3": 34.66,
+   "top5": 46.07,
+   "tot_ex_top5": -23.53,
+   "byModel": {
+    "PB": -2.61,
+    "SR": -4.64,
+    "BO": 21.84,
+    "MC": 1.96,
+    "MR": 6.06
+   }
+  },
+  "SR-D": {
+   "n": 330,
+   "wr": 51.21,
+   "pf": 1.17,
+   "mr": 0.082,
+   "tot": 27.18,
+   "ci": [
+    -0.116,
+    0.281
+   ],
+   "maxDD_R": 24.14,
+   "maxLossStreak": 9,
+   "top1": 14.35,
+   "top3": 34.66,
+   "top5": 46.07,
+   "tot_ex_top5": -18.89,
+   "byModel": {
+    "PB": -2.61,
+    "BO": 21.84,
+    "MC": 1.96,
+    "MR": 6.06
+   }
+  },
+  "QUALITY-A": {
+   "n": 351,
+   "wr": 49.57,
+   "pf": 1.07,
+   "mr": 0.05,
+   "tot": 17.68,
+   "ci": [
+    -0.139,
+    0.239
+   ],
+   "maxDD_R": 30.26,
+   "maxLossStreak": 9,
+   "top1": 14.35,
+   "top3": 34.66,
+   "top5": 46.07,
+   "tot_ex_top5": -28.39,
+   "byModel": {
+    "PB": -2.1,
+    "SR": -8,
+    "BO": 20.46,
+    "MC": 0.87,
+    "MR": 6.51
+   }
+  },
+  "QUALITY-B": {
+   "n": 347,
+   "wr": 49.57,
+   "pf": 1.07,
+   "mr": 0.048,
+   "tot": 16.81,
+   "ci": [
+    -0.142,
+    0.239
+   ],
+   "maxDD_R": 31.02,
+   "maxLossStreak": 9,
+   "top1": 14.35,
+   "top3": 34.66,
+   "top5": 46.07,
+   "tot_ex_top5": -29.26,
+   "byModel": {
+    "PB": -4.32,
+    "SR": -8,
+    "BO": 21.84,
+    "MC": 0.87,
+    "MR": 6.51
+   }
+  },
+  "QUALITY-C": {
+   "n": 351,
+   "wr": 49.57,
+   "pf": 1.07,
+   "mr": 0.05,
+   "tot": 17.68,
+   "ci": [
+    -0.139,
+    0.239
+   ],
+   "maxDD_R": 30.26,
+   "maxLossStreak": 9,
+   "top1": 14.35,
+   "top3": 34.66,
+   "top5": 46.07,
+   "tot_ex_top5": -28.39,
+   "byModel": {
+    "PB": -2.1,
+    "SR": -8,
+    "BO": 20.46,
+    "MC": 0.87,
+    "MR": 6.51
+   }
+  },
+  "QUALITY-D": {
+   "n": 347,
+   "wr": 50.43,
+   "pf": 1.07,
+   "mr": 0.056,
+   "tot": 19.5,
+   "ci": [
+    -0.132,
+    0.244
+   ],
+   "maxDD_R": 26.49,
+   "maxLossStreak": 9,
+   "top1": 14.35,
+   "top3": 34.66,
+   "top5": 46.07,
+   "tot_ex_top5": -26.57,
+   "byModel": {
+    "PB": 4.65,
+    "SR": -8,
+    "BO": 15.25,
+    "MC": -1.18,
+    "MR": 8.86
+   }
+  },
+  "LAG-B": {
+   "n": 324,
+   "wr": 51.23,
+   "pf": 1.21,
+   "mr": 0.076,
+   "tot": 24.55,
+   "ci": [
+    -0.124,
+    0.276
+   ],
+   "maxDD_R": 30.12,
+   "maxLossStreak": 8,
+   "top1": 14.35,
+   "top3": 34.66,
+   "top5": 46.07,
+   "tot_ex_top5": -21.52,
+   "byModel": {
+    "SR": -9.99,
+    "BO": 21.84,
+    "PB": 3.44,
+    "MC": 3.24,
+    "MR": 6.06
+   }
+  },
+  "EXIT-C": {
+   "n": 366,
+   "wr": 44.26,
+   "pf": 1.01,
+   "mr": -0.012,
+   "tot": -4.23,
+   "ci": [
+    -0.167,
+    0.144
+   ],
+   "maxDD_R": 32.87,
+   "maxLossStreak": 16,
+   "top1": 14.35,
+   "top3": 27.55,
+   "top5": 36.93,
+   "tot_ex_top5": -41.16,
+   "byModel": {
+    "PB": 0.11,
+    "SR": -6.37,
+    "BO": -8.22,
+    "MC": 3.58,
+    "MR": 6.73
+   }
+  },
+  "EXIT-B": {
+   "n": 355,
+   "wr": 49.3,
+   "pf": 1.1,
+   "mr": 0.065,
+   "tot": 23.06,
+   "ci": [
+    -0.12,
+    0.25
+   ],
+   "maxDD_R": 26.06,
+   "maxLossStreak": 9,
+   "top1": 14.35,
+   "top3": 34.66,
+   "top5": 46.07,
+   "tot_ex_top5": -23.01,
+   "byModel": {
+    "PB": -3.02,
+    "SR": -7.05,
+    "BO": 24.69,
+    "MC": 2.32,
+    "MR": 6.14
+   }
+  },
+  "EXIT-D": {
+   "n": 363,
+   "wr": 57.02,
+   "pf": 0.78,
+   "mr": -0.159,
+   "tot": -57.85,
+   "ci": [
+    -0.29,
+    -0.028
+   ],
+   "maxDD_R": 78.15,
+   "maxLossStreak": 9,
+   "top1": 14.35,
+   "top3": 22.77,
+   "top5": 28.82,
+   "tot_ex_top5": -86.67,
+   "byModel": {
+    "PB": -7.75,
+    "SR": -9.2,
+    "BO": -33.99,
+    "MC": -6.21,
+    "MR": -0.62
+   }
+  },
+  "PB-A": {
+   "n": 328,
+   "wr": 50.91,
+   "pf": 1.17,
+   "mr": 0.067,
+   "tot": 21.99,
+   "ci": [
+    -0.13,
+    0.264
+   ],
+   "maxDD_R": 26.42,
+   "maxLossStreak": 8,
+   "top1": 14.35,
+   "top3": 34.66,
+   "top5": 46.07,
+   "tot_ex_top5": -24.09,
+   "byModel": {
+    "SR": -8,
+    "BO": 21.84,
+    "PB": 0.19,
+    "MC": 1.96,
+    "MR": 6.06
+   }
+  },
+  "PB-C": {
+   "n": 291,
+   "wr": 50.86,
+   "pf": 1.15,
+   "mr": 0.075,
+   "tot": 21.8,
+   "ci": [
+    -0.141,
+    0.291
+   ],
+   "maxDD_R": 25.83,
+   "maxLossStreak": 7,
+   "top1": 14.35,
+   "top3": 34.66,
+   "top5": 46.07,
+   "tot_ex_top5": -24.28,
+   "byModel": {
+    "SR": -8,
+    "BO": 21.84,
+    "MC": 1.96,
+    "MR": 6.06
+   }
+  },
+  "BO-A": {
+   "n": 332,
+   "wr": 52.41,
+   "pf": 1.14,
+   "mr": 0.092,
+   "tot": 30.66,
+   "ci": [
+    -0.094,
+    0.279
+   ],
+   "maxDD_R": 19.86,
+   "maxLossStreak": 9,
+   "top1": 14.35,
+   "top3": 29.96,
+   "top5": 41.38,
+   "tot_ex_top5": -10.73,
+   "byModel": {
+    "PB": -4.16,
+    "SR": -8,
+    "BO": 34.89,
+    "MC": 1.96,
+    "MR": 6.06
+   }
+  }
+ },
+ "robustness": {
+  "CONTROL": {
+   "all": {
+    "n": 1406,
+    "wr": 50.5,
+    "pf": 1.07,
+    "mr": 0.001,
+    "tot": 1.92,
+    "ci": [
+     -0.083,
+     0.086
+    ],
+    "maxDD_R": 87.07,
+    "maxLossStreak": 9,
+    "top1": 14.35,
+    "top3": 38.43,
+    "top5": 58.01,
+    "tot_ex_top5": -56.09,
+    "byModel": {
+     "BO": 39.72,
+     "MC": 4.5,
+     "PB": -27.42,
+     "SR": -40.28,
+     "MR": 26
+    }
+   },
+   "bootstrap_all": {
+    "n": 1406,
+    "mean": 0.001,
+    "ci95": [
+     -0.083,
+     0.089
+    ],
+    "p_le_0": 50.4
+   },
+   "bootstrap_BC": {
+    "n": 684,
+    "mean": -0.056,
+    "ci95": [
+     -0.168,
+     0.075
+    ],
+    "p_le_0": 82.2
+   },
+   "friction_spread040": {
+    "n": 1360,
+    "wr": 49.78,
+    "pf": 1.03,
+    "mr": -0.046,
+    "tot": -62.8,
+    "ci": [
+     -0.129,
+     0.037
+    ],
+    "maxDD_R": 116.54,
+    "maxLossStreak": 12,
+    "top1": 13.51,
+    "top3": 33.69,
+    "top5": 51.97,
+    "tot_ex_top5": -114.77,
+    "byModel": {
+     "BO": -1.11,
+     "MC": 2.43,
+     "PB": -41.92,
+     "SR": -45.81,
+     "MR": 24.18
+    }
+   },
+   "friction_spread040_slip015": {
+    "n": 1276,
+    "wr": 48.51,
+    "pf": 0.97,
+    "mr": -0.095,
+    "tot": -121.54,
+    "ci": [
+     -0.182,
+     -0.009
+    ],
+    "maxDD_R": 145.54,
+    "maxLossStreak": 10,
+    "top1": 13.45,
+    "top3": 33.79,
+    "top5": 51.97,
+    "tot_ex_top5": -173.51,
+    "byModel": {
+     "BO": -44.7,
+     "MC": -2.73,
+     "PB": -50.16,
+     "SR": -47.92,
+     "MR": 24.3
+    }
+   }
+  },
+  "COMBO-1": {
+   "all": {
+    "n": 1382,
+    "wr": 50.58,
+    "pf": 1.04,
+    "mr": 0.009,
+    "tot": 13.09,
+    "ci": [
+     -0.076,
+     0.095
+    ],
+    "maxDD_R": 81.01,
+    "maxLossStreak": 9,
+    "top1": 14.35,
+    "top3": 38.43,
+    "top5": 58.01,
+    "tot_ex_top5": -44.93,
+    "byModel": {
+     "BO": 42.01,
+     "MC": -0.34,
+     "PB": -16.39,
+     "SR": -39.12,
+     "MR": 27.48
+    }
+   },
+   "bootstrap_all": {
+    "n": 1382,
+    "mean": 0.009,
+    "ci95": [
+     -0.07,
+     0.092
+    ],
+    "p_le_0": 41.35
+   },
+   "bootstrap_BC": {
+    "n": 671,
+    "mean": -0.041,
+    "ci95": [
+     -0.157,
+     0.091
+    ],
+    "p_le_0": 74.55
+   },
+   "friction_spread040": {
+    "n": 1337,
+    "wr": 49.89,
+    "pf": 1,
+    "mr": -0.036,
+    "tot": -48.49,
+    "ci": [
+     -0.12,
+     0.047
+    ],
+    "maxDD_R": 107.49,
+    "maxLossStreak": 10,
+    "top1": 13.51,
+    "top3": 33.69,
+    "top5": 51.97,
+    "tot_ex_top5": -100.46,
+    "byModel": {
+     "BO": 3.29,
+     "MC": -2.39,
+     "PB": -30.47,
+     "SR": -44.41,
+     "MR": 25.98
+    }
+   },
+   "friction_spread040_slip015": {
+    "n": 1248,
+    "wr": 48.88,
+    "pf": 0.95,
+    "mr": -0.078,
+    "tot": -96.78,
+    "ci": [
+     -0.165,
+     0.01
+    ],
+    "maxDD_R": 134.74,
+    "maxLossStreak": 10,
+    "top1": 13.45,
+    "top3": 33.79,
+    "top5": 51.97,
+    "tot_ex_top5": -148.75,
+    "byModel": {
+     "BO": -29.91,
+     "MC": -7.5,
+     "PB": -38.17,
+     "SR": -45.9,
+     "MR": 25.03
+    }
+   }
+  },
+  "COMBO-2": {
+   "all": {
+    "n": 1305,
+    "wr": 50.88,
+    "pf": 1.07,
+    "mr": 0.021,
+    "tot": 27.03,
+    "ci": [
+     -0.068,
+     0.109
+    ],
+    "maxDD_R": 74.72,
+    "maxLossStreak": 8,
+    "top1": 14.35,
+    "top3": 38.43,
+    "top5": 58.01,
+    "tot_ex_top5": -30.98,
+    "byModel": {
+     "BO": 41.83,
+     "MC": -0.34,
+     "PB": -2.24,
+     "SR": -39.12,
+     "MR": 27.48
+    }
+   },
+   "bootstrap_all": {
+    "n": 1305,
+    "mean": 0.021,
+    "ci95": [
+     -0.069,
+     0.116
+    ],
+    "p_le_0": 33.05
+   },
+   "bootstrap_BC": {
+    "n": 625,
+    "mean": -0.032,
+    "ci95": [
+     -0.15,
+     0.105
+    ],
+    "p_le_0": 69.65
+   },
+   "friction_spread040": {
+    "n": 1264,
+    "wr": 50.32,
+    "pf": 1.03,
+    "mr": -0.023,
+    "tot": -29.22,
+    "ci": [
+     -0.11,
+     0.063
+    ],
+    "maxDD_R": 97.36,
+    "maxLossStreak": 8,
+    "top1": 13.51,
+    "top3": 33.69,
+    "top5": 51.97,
+    "tot_ex_top5": -81.18,
+    "byModel": {
+     "BO": 3.09,
+     "MC": -2.39,
+     "PB": -11.06,
+     "SR": -44.41,
+     "MR": 25.98
+    }
+   },
+   "friction_spread040_slip015": {
+    "n": 1181,
+    "wr": 49.28,
+    "pf": 0.97,
+    "mr": -0.066,
+    "tot": -77.66,
+    "ci": [
+     -0.156,
+     0.025
+    ],
+    "maxDD_R": 121.45,
+    "maxLossStreak": 9,
+    "top1": 13.45,
+    "top3": 33.79,
+    "top5": 51.97,
+    "tot_ex_top5": -129.63,
+    "byModel": {
+     "BO": -29.95,
+     "MC": -7.5,
+     "PB": -18.93,
+     "SR": -45.9,
+     "MR": 25.03
+    }
+   }
+  },
+  "COMBO-3": {
+   "all": {
+    "n": 1305,
+    "wr": 50.88,
+    "pf": 1.07,
+    "mr": 0.021,
+    "tot": 27.03,
+    "ci": [
+     -0.068,
+     0.109
+    ],
+    "maxDD_R": 74.72,
+    "maxLossStreak": 8,
+    "top1": 14.35,
+    "top3": 38.43,
+    "top5": 58.01,
+    "tot_ex_top5": -30.98,
+    "byModel": {
+     "BO": 41.83,
+     "MC": -0.34,
+     "PB": -2.24,
+     "SR": -39.12,
+     "MR": 27.48
+    }
+   },
+   "bootstrap_all": {
+    "n": 1305,
+    "mean": 0.021,
+    "ci95": [
+     -0.068,
+     0.114
+    ],
+    "p_le_0": 32.4
+   },
+   "bootstrap_BC": {
+    "n": 625,
+    "mean": -0.032,
+    "ci95": [
+     -0.152,
+     0.096
+    ],
+    "p_le_0": 70.3
+   },
+   "friction_spread040": {
+    "n": 1264,
+    "wr": 50.32,
+    "pf": 1.03,
+    "mr": -0.023,
+    "tot": -29.22,
+    "ci": [
+     -0.11,
+     0.063
+    ],
+    "maxDD_R": 97.36,
+    "maxLossStreak": 8,
+    "top1": 13.51,
+    "top3": 33.69,
+    "top5": 51.97,
+    "tot_ex_top5": -81.18,
+    "byModel": {
+     "BO": 3.09,
+     "MC": -2.39,
+     "PB": -11.06,
+     "SR": -44.41,
+     "MR": 25.98
+    }
+   },
+   "friction_spread040_slip015": {
+    "n": 1181,
+    "wr": 49.28,
+    "pf": 0.97,
+    "mr": -0.066,
+    "tot": -77.66,
+    "ci": [
+     -0.156,
+     0.025
+    ],
+    "maxDD_R": 121.45,
+    "maxLossStreak": 9,
+    "top1": 13.45,
+    "top3": 33.79,
+    "top5": 51.97,
+    "tot_ex_top5": -129.63,
+    "byModel": {
+     "BO": -29.95,
+     "MC": -7.5,
+     "PB": -18.93,
+     "SR": -45.9,
+     "MR": 25.03
+    }
+   }
+  }
+ },
+ "mr": {
+  "A": {
+   "n": 23,
+   "wr": 47.83,
+   "pf": 1.7,
+   "mr": 0.287,
+   "tot": 6.6,
+   "ci": [
+    -0.57,
+    1.144
+   ],
+   "maxDD_R": 4.95,
+   "maxLossStreak": 3,
+   "top1": 5.81,
+   "top3": 14.13,
+   "top5": 17.77,
+   "tot_ex_top5": -11.18,
+   "byModel": {
+    "MR": 6.61
+   }
+  },
+  "B": {
+   "n": 14,
+   "wr": 64.29,
+   "pf": 3.85,
+   "mr": 0.952,
+   "tot": 13.33,
+   "ci": [
+    -0.139,
+    2.044
+   ],
+   "maxDD_R": 2.59,
+   "maxLossStreak": 2,
+   "top1": 4.81,
+   "top3": 11.85,
+   "top5": 17.28,
+   "tot_ex_top5": -3.95,
+   "byModel": {
+    "MR": 13.33
+   }
+  },
+  "C": {
+   "n": 16,
+   "wr": 56.25,
+   "pf": 2.11,
+   "mr": 0.379,
+   "tot": 6.06,
+   "ci": [
+    -0.585,
+    1.342
+   ],
+   "maxDD_R": 3.86,
+   "maxLossStreak": 3,
+   "top1": 6.79,
+   "top3": 9.49,
+   "top5": 11.11,
+   "tot_ex_top5": -5.05,
+   "byModel": {
+    "MR": 6.06
+   }
+  },
+  "all": {
+   "n": 53,
+   "wr": 54.72,
+   "pf": 2.31,
+   "mr": 0.49,
+   "tot": 25.98,
+   "ci": [
+    -0.058,
+    1.038
+   ],
+   "maxDD_R": 4.95,
+   "maxLossStreak": 3,
+   "top1": 6.79,
+   "top3": 18.14,
+   "top5": 26.56,
+   "tot_ex_top5": -0.58,
+   "byModel": {
+    "MR": 26
+   }
+  },
+  "bootstrap": {
+   "n": 53,
+   "mean": 0.49,
+   "ci95": [
+    -0.024,
+    1.056
+   ],
+   "p_le_0": 3.05
+  },
+  "dependence": {
+   "top1_share_of_total": 26.14,
+   "top3_share": 69.82,
+   "top5_share": 102.23,
+   "total_ex_top5": -0.58,
+   "mean_ex_top5": -0.012
+  }
+ },
+ "lag": {
+  "fired": {
+   "A": {
+    "n": 36,
+    "wr": 36.11,
+    "pf": 0.82,
+    "mr": -0.409,
+    "tot": -14.73,
+    "ci": [
+     -0.757,
+     -0.061
+    ],
+    "maxDD_R": 19.3,
+    "maxLossStreak": 6,
+    "top1": 1.84,
+    "top3": 5.02,
+    "top5": 6.96,
+    "tot_ex_top5": -21.7,
+    "byModel": {
+     "PB": -2.78,
+     "SR": -12.7,
+     "MC": 0.77
+    }
+   },
+   "B": {
+    "n": 19,
+    "wr": 26.32,
+    "pf": 0.11,
+    "mr": -0.699,
+    "tot": -13.28,
+    "ci": [
+     -1.046,
+     -0.351
+    ],
+    "maxDD_R": 13.28,
+    "maxLossStreak": 4,
+    "top1": 0.84,
+    "top3": 1.76,
+    "top5": 2,
+    "tot_ex_top5": -15.28,
+    "byModel": {
+     "PB": -7.16,
+     "SR": -6.12
+    }
+   },
+   "C": {
+    "n": 27,
+    "wr": 37.04,
+    "pf": 0.32,
+    "mr": -0.257,
+    "tot": -6.93,
+    "ci": [
+     -0.797,
+     0.283
+    ],
+    "maxDD_R": 11.14,
+    "maxLossStreak": 4,
+    "top1": 4.04,
+    "top3": 8.34,
+    "top5": 9.76,
+    "tot_ex_top5": -16.69,
+    "byModel": {
+     "PB": -7.61,
+     "SR": 1.99,
+     "MC": -1.28
+    }
+   },
+   "all": {
+    "n": 82,
+    "wr": 34.15,
+    "pf": 0.47,
+    "mr": -0.426,
+    "tot": -34.94,
+    "ci": [
+     -0.674,
+     -0.179
+    ],
+    "maxDD_R": 39.5,
+    "maxLossStreak": 6,
+    "top1": 4.04,
+    "top3": 9.4,
+    "top5": 12.58,
+    "tot_ex_top5": -47.52,
+    "byModel": {
+     "PB": -17.57,
+     "SR": -16.82,
+     "MC": -0.51
+    }
+   },
+   "byModel": {
+    "SR": {
+     "n": 29,
+     "wr": 31.03,
+     "pf": 0.2,
+     "mr": -0.581,
+     "tot": -16.86,
+     "ci": [
+      -0.986,
+      -0.177
+     ],
+     "maxDD_R": 18.84,
+     "maxLossStreak": 10,
+     "top1": 3.53,
+     "top3": 4.78,
+     "top5": 5.89,
+     "tot_ex_top5": -22.75,
+     "byModel": {
+      "SR": -16.82
+     }
+    },
+    "PB": {
+     "n": 51,
+     "wr": 35.29,
+     "pf": 0.58,
+     "mr": -0.344,
+     "tot": -17.57,
+     "ci": [
+      -0.665,
+      -0.024
+     ],
+     "maxDD_R": 23.19,
+     "maxLossStreak": 8,
+     "top1": 4.04,
+     "top3": 7.66,
+     "top5": 10.23,
+     "tot_ex_top5": -27.8,
+     "byModel": {
+      "PB": -17.57
+     }
+    },
+    "MC": {
+     "n": 2,
+     "wr": 50,
+     "pf": 0.63,
+     "mr": -0.258,
+     "tot": -0.52,
+     "ci": [
+      -2.268,
+      1.751
+     ],
+     "maxDD_R": 1.28,
+     "maxLossStreak": 1,
+     "top1": 0.77,
+     "top3": -0.52,
+     "top5": -0.52,
+     "tot_ex_top5": 0,
+     "byModel": {
+      "MC": -0.51
+     }
+    },
+    "BO": {
+     "n": 0
+    }
+   }
+  }
+ },
+ "exit_audit": {
+  "losses": 696,
+  "gt1R": 509,
+  "gt12R": 351,
+  "gt15R": 252,
+  "avoidable_R_beyond_1R_total": 190.66,
+  "unavoidable_R_total": 630.32,
+  "latency_thesis_stop_bars": {
+   "n": 248,
+   "median": 0,
+   "mean": 1.21,
+   "p90": 3,
+   "seconds_note": "adaptive manager acts once per confirmed 5m close (~80 s after close), so 0 bars = same bar as the stop touch, 1 bar = 5 min"
+  },
+  "stacks_all_regions": {
+   "prod": {
+    "n": 1406,
+    "wr": 50.5,
+    "pf": 1.07,
+    "mr": 0.001,
+    "tot": 1.92,
+    "ci": [
+     -0.083,
+     0.086
+    ],
+    "maxDD_R": 87.07,
+    "maxLossStreak": 9,
+    "top1": 14.35,
+    "top3": 38.43,
+    "top5": 58.01,
+    "tot_ex_top5": -56.09,
+    "byModel": {
+     "BO": 39.72,
+     "MC": 4.5,
+     "PB": -27.42,
+     "SR": -40.28,
+     "MR": 26
+    }
+   },
+   "structSL": {
+    "n": 1449,
+    "wr": 46.1,
+    "pf": 1.07,
+    "mr": 0.015,
+    "tot": 21.93,
+    "ci": [
+     -0.061,
+     0.092
+    ],
+    "maxDD_R": 69.73,
+    "maxLossStreak": 16,
+    "top1": 14.35,
+    "top3": 36.24,
+    "top5": 55.82,
+    "tot_ex_top5": -33.89,
+    "byModel": {
+     "BO": 35.15,
+     "MC": 4.63,
+     "PB": -16.31,
+     "SR": -29.96,
+     "MR": 28.91
+    }
+   },
+   "sl125": {
+    "n": 1416,
+    "wr": 49.36,
+    "pf": 1.08,
+    "mr": 0.011,
+    "tot": 15.61,
+    "ci": [
+     -0.071,
+     0.093
+    ],
+    "maxDD_R": 86.95,
+    "maxLossStreak": 9,
+    "top1": 14.35,
+    "top3": 38.43,
+    "top5": 58.01,
+    "tot_ex_top5": -42.4,
+    "byModel": {
+     "BO": 45.55,
+     "MC": 5.5,
+     "PB": -24.33,
+     "SR": -37.7,
+     "MR": 27.17
+    }
+   },
+   "lock": {
+    "n": 1454,
+    "wr": 54.68,
+    "pf": 0.76,
+    "mr": -0.2,
+    "tot": -290.22,
+    "ci": [
+     -0.258,
+     -0.142
+    ],
+    "maxDD_R": 296.56,
+    "maxLossStreak": 9,
+    "top1": 14.35,
+    "top3": 25.81,
+    "top5": 36.31,
+    "tot_ex_top5": -326.53,
+    "byModel": {
+     "BO": -175.6,
+     "MC": -13.05,
+     "PB": -58.86,
+     "SR": -42.55,
+     "MR": 0.2
+    }
+   }
+  },
+  "stacks_by_region": {
+   "A": {
+    "prod": {
+     "n": 722,
+     "wr": 52.77,
+     "pf": 1.22,
+     "mr": 0.056,
+     "tot": 40.16,
+     "ci": [
+      -0.062,
+      0.173
+     ],
+     "maxDD_R": 43.86,
+     "maxLossStreak": 8,
+     "top1": 9.97,
+     "top3": 28.93,
+     "top5": 46.73,
+     "tot_ex_top5": -6.57,
+     "byModel": {
+      "BO": 51.07,
+      "MC": 10.81,
+      "PB": -2.66,
+      "SR": -25.35,
+      "MR": 6.61
+     }
+    },
+    "structSL": {
+     "n": 739,
+     "wr": 48.85,
+     "pf": 1.26,
+     "mr": 0.092,
+     "tot": 67.62,
+     "ci": [
+      -0.019,
+      0.202
+     ],
+     "maxDD_R": 35.36,
+     "maxLossStreak": 9,
+     "top1": 11.32,
+     "top3": 30.9,
+     "top5": 48.71,
+     "tot_ex_top5": 18.91,
+     "byModel": {
+      "BO": 67.99,
+      "MC": 8.61,
+      "PB": -1.06,
+      "SR": -16.26,
+      "MR": 8.59
+     }
+    },
+    "sl125": {
+     "n": 726,
+     "wr": 51.52,
+     "pf": 1.24,
+     "mr": 0.068,
+     "tot": 49.22,
+     "ci": [
+      -0.047,
+      0.182
+     ],
+     "maxDD_R": 45.04,
+     "maxLossStreak": 8,
+     "top1": 9.97,
+     "top3": 28.93,
+     "top5": 46.73,
+     "tot_ex_top5": 2.49,
+     "byModel": {
+      "BO": 55.1,
+      "MC": 11.37,
+      "PB": -2.64,
+      "SR": -22.28,
+      "MR": 7.99
+     }
+    }
+   },
+   "B": {
+    "prod": {
+     "n": 333,
+     "wr": 45.95,
+     "pf": 0.71,
+     "mr": -0.168,
+     "tot": -55.86,
+     "ci": [
+      -0.317,
+      -0.019
+     ],
+     "maxDD_R": 72.51,
+     "maxLossStreak": 8,
+     "top1": 10.56,
+     "top3": 21.67,
+     "top5": 30.42,
+     "tot_ex_top5": -86.28,
+     "byModel": {
+      "PB": -20.58,
+      "MC": -8.25,
+      "BO": -33.22,
+      "SR": -6.94,
+      "MR": 13.33
+     }
+    },
+    "structSL": {
+     "n": 344,
+     "wr": 42.15,
+     "pf": 0.75,
+     "mr": -0.121,
+     "tot": -41.46,
+     "ci": [
+      -0.26,
+      0.019
+     ],
+     "maxDD_R": 59.76,
+     "maxLossStreak": 10,
+     "top1": 10.56,
+     "top3": 23.1,
+     "top5": 32.76,
+     "tot_ex_top5": -74.22,
+     "byModel": {
+      "PB": -15.36,
+      "MC": -7.56,
+      "BO": -24.58,
+      "SR": -7.33,
+      "MR": 13.58
+     }
+    },
+    "sl125": {
+     "n": 335,
+     "wr": 44.78,
+     "pf": 0.7,
+     "mr": -0.169,
+     "tot": -56.67,
+     "ci": [
+      -0.313,
+      -0.025
+     ],
+     "maxDD_R": 74.74,
+     "maxLossStreak": 8,
+     "top1": 10.56,
+     "top3": 21.67,
+     "top5": 30.42,
+     "tot_ex_top5": -87.09,
+     "byModel": {
+      "PB": -18.67,
+      "MC": -8.19,
+      "BO": -34.26,
+      "SR": -8.37,
+      "MR": 13.03
+     }
+    }
+   },
+   "C": {
+    "prod": {
+     "n": 351,
+     "wr": 50.14,
+     "pf": 1.11,
+     "mr": 0.05,
+     "tot": 17.62,
+     "ci": [
+      -0.139,
+      0.24
+     ],
+     "maxDD_R": 31.12,
+     "maxLossStreak": 9,
+     "top1": 14.35,
+     "top3": 34.66,
+     "top5": 46.07,
+     "tot_ex_top5": -28.45,
+     "byModel": {
+      "PB": -4.16,
+      "SR": -8,
+      "BO": 21.84,
+      "MC": 1.96,
+      "MR": 6.06
+     }
+    },
+    "structSL": {
+     "n": 366,
+     "wr": 44.26,
+     "pf": 1.01,
+     "mr": -0.012,
+     "tot": -4.23,
+     "ci": [
+      -0.167,
+      0.144
+     ],
+     "maxDD_R": 32.87,
+     "maxLossStreak": 16,
+     "top1": 14.35,
+     "top3": 27.55,
+     "top5": 36.93,
+     "tot_ex_top5": -41.16,
+     "byModel": {
+      "PB": 0.11,
+      "SR": -6.37,
+      "BO": -8.22,
+      "MC": 3.58,
+      "MR": 6.73
+     }
+    },
+    "sl125": {
+     "n": 355,
+     "wr": 49.3,
+     "pf": 1.1,
+     "mr": 0.065,
+     "tot": 23.06,
+     "ci": [
+      -0.12,
+      0.25
+     ],
+     "maxDD_R": 26.06,
+     "maxLossStreak": 9,
+     "top1": 14.35,
+     "top3": 34.66,
+     "top5": 46.07,
+     "tot_ex_top5": -23.01,
+     "byModel": {
+      "PB": -3.02,
+      "SR": -7.05,
+      "BO": 24.69,
+      "MC": 2.32,
+      "MR": 6.14
+     }
+    }
+   }
+  }
+ },
+ "quality_calibration": {
+  "A_shift": 8,
+  "B_shift": 2,
+  "C_shift": -2.5,
+  "D_threshold": 64
+ }
+}

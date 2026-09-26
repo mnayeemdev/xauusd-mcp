@@ -1,0 +1,2914 @@
+{
+ "region": "A",
+ "families": "C",
+ "profit_protection_variant": false,
+ "sessions": 23,
+ "gates": {
+  "bars": 14373,
+  "eventA": 0,
+  "eventB": 0,
+  "eventC": 157,
+  "objectiveMissing": 0,
+  "rrRejected": 122,
+  "stopTooTight": 0
+ },
+ "overall": {
+  "n": 27,
+  "wr": 51.85,
+  "pf": 2.1,
+  "mean_r": 0.374,
+  "median_r": 0.057,
+  "total_r": 10.11,
+  "ci95": [
+   -0.114,
+   0.862
+  ],
+  "max_dd_r": 3.79,
+  "max_loss_streak": 5,
+  "mean_mae_r": 0.73,
+  "mean_mfe_r": 1.2,
+  "avg_hold": 25.19,
+  "total_ex_top1": 8.18,
+  "total_ex_top3": 4.39,
+  "total_ex_top5": 0.71,
+  "exits": {
+   "STRUCTURAL_TARGET": 11,
+   "THESIS_INVALIDATION_CLOSE": 2,
+   "TIME_STOP_48_BARS": 3,
+   "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 8,
+   "EMERGENCY_BROKER_SL": 3
+  }
+ },
+ "bootstrap": {
+  "n": 27,
+  "mean_r": 0.374,
+  "ci95": [
+   -0.087,
+   0.845
+  ],
+  "pf_ci95": [
+   0.82,
+   4.92
+  ],
+  "p_mean_le_0": 6.6
+ },
+ "by_family": {
+  "V2C_COMPRESSION_EXPANSION": {
+   "n": 27,
+   "wr": 51.85,
+   "pf": 2.1,
+   "mean_r": 0.374,
+   "median_r": 0.057,
+   "total_r": 10.11,
+   "ci95": [
+    -0.114,
+    0.862
+   ],
+   "max_dd_r": 3.79,
+   "max_loss_streak": 5,
+   "mean_mae_r": 0.73,
+   "mean_mfe_r": 1.2,
+   "avg_hold": 25.19,
+   "total_ex_top1": 8.18,
+   "total_ex_top3": 4.39,
+   "total_ex_top5": 0.71,
+   "exits": {
+    "STRUCTURAL_TARGET": 11,
+    "THESIS_INVALIDATION_CLOSE": 2,
+    "TIME_STOP_48_BARS": 3,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 8,
+    "EMERGENCY_BROKER_SL": 3
+   }
+  }
+ },
+ "by_side": {
+  "SELL": {
+   "n": 18,
+   "wr": 61.11,
+   "pf": 4.09,
+   "mean_r": 0.626,
+   "median_r": 1.709,
+   "total_r": 11.27,
+   "ci95": [
+    0.036,
+    1.217
+   ],
+   "max_dd_r": 2.45,
+   "max_loss_streak": 3,
+   "mean_mae_r": 0.64,
+   "mean_mfe_r": 1.26,
+   "avg_hold": 25.17,
+   "total_ex_top1": 9.35,
+   "total_ex_top3": 5.58,
+   "total_ex_top5": 1.92,
+   "exits": {
+    "STRUCTURAL_TARGET": 9,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 5,
+    "THESIS_INVALIDATION_CLOSE": 1,
+    "TIME_STOP_48_BARS": 2,
+    "EMERGENCY_BROKER_SL": 1
+   }
+  },
+  "BUY": {
+   "n": 9,
+   "wr": 33.33,
+   "pf": 0.49,
+   "mean_r": -0.13,
+   "median_r": -0.566,
+   "total_r": -1.17,
+   "ci95": [
+    -0.94,
+    0.68
+   ],
+   "max_dd_r": 4.31,
+   "max_loss_streak": 5,
+   "mean_mae_r": 0.9,
+   "mean_mfe_r": 1.08,
+   "avg_hold": 25.22,
+   "total_ex_top1": -3.04,
+   "total_ex_top3": -5.44,
+   "total_ex_top5": -4.36,
+   "exits": {
+    "THESIS_INVALIDATION_CLOSE": 1,
+    "TIME_STOP_48_BARS": 1,
+    "STRUCTURAL_TARGET": 2,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 3,
+    "EMERGENCY_BROKER_SL": 2
+   }
+  }
+ },
+ "by_family_side": {
+  "V2C_COMPRESSION_EXPANSION_SELL": {
+   "n": 18,
+   "wr": 61.11,
+   "pf": 4.09,
+   "mean_r": 0.626,
+   "median_r": 1.709,
+   "total_r": 11.27,
+   "ci95": [
+    0.036,
+    1.217
+   ],
+   "max_dd_r": 2.45,
+   "max_loss_streak": 3,
+   "mean_mae_r": 0.64,
+   "mean_mfe_r": 1.26,
+   "avg_hold": 25.17,
+   "total_ex_top1": 9.35,
+   "total_ex_top3": 5.58,
+   "total_ex_top5": 1.92,
+   "exits": {
+    "STRUCTURAL_TARGET": 9,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 5,
+    "THESIS_INVALIDATION_CLOSE": 1,
+    "TIME_STOP_48_BARS": 2,
+    "EMERGENCY_BROKER_SL": 1
+   }
+  },
+  "V2C_COMPRESSION_EXPANSION_BUY": {
+   "n": 9,
+   "wr": 33.33,
+   "pf": 0.49,
+   "mean_r": -0.13,
+   "median_r": -0.566,
+   "total_r": -1.17,
+   "ci95": [
+    -0.94,
+    0.68
+   ],
+   "max_dd_r": 4.31,
+   "max_loss_streak": 5,
+   "mean_mae_r": 0.9,
+   "mean_mfe_r": 1.08,
+   "avg_hold": 25.22,
+   "total_ex_top1": -3.04,
+   "total_ex_top3": -5.44,
+   "total_ex_top5": -4.36,
+   "exits": {
+    "THESIS_INVALIDATION_CLOSE": 1,
+    "TIME_STOP_48_BARS": 1,
+    "STRUCTURAL_TARGET": 2,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 3,
+    "EMERGENCY_BROKER_SL": 2
+   }
+  }
+ },
+ "by_state": {
+  "COMPRESSION": {
+   "n": 27,
+   "wr": 51.85,
+   "pf": 2.1,
+   "mean_r": 0.374,
+   "median_r": 0.057,
+   "total_r": 10.11,
+   "ci95": [
+    -0.114,
+    0.862
+   ],
+   "max_dd_r": 3.79,
+   "max_loss_streak": 5,
+   "mean_mae_r": 0.73,
+   "mean_mfe_r": 1.2,
+   "avg_hold": 25.19,
+   "total_ex_top1": 8.18,
+   "total_ex_top3": 4.39,
+   "total_ex_top5": 0.71,
+   "exits": {
+    "STRUCTURAL_TARGET": 11,
+    "THESIS_INVALIDATION_CLOSE": 2,
+    "TIME_STOP_48_BARS": 3,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 8,
+    "EMERGENCY_BROKER_SL": 3
+   }
+  }
+ },
+ "by_session": {
+  "NEW_YORK": {
+   "n": 15,
+   "wr": 53.33,
+   "pf": 2.29,
+   "mean_r": 0.438,
+   "median_r": 0.58,
+   "total_r": 6.58,
+   "ci95": [
+    -0.202,
+    1.079
+   ],
+   "max_dd_r": 1.27,
+   "max_loss_streak": 2,
+   "mean_mae_r": 0.62,
+   "mean_mfe_r": 1.22,
+   "avg_hold": 27.67,
+   "total_ex_top1": 4.66,
+   "total_ex_top3": 0.98,
+   "total_ex_top5": -2.56,
+   "exits": {
+    "THESIS_INVALIDATION_CLOSE": 1,
+    "TIME_STOP_48_BARS": 2,
+    "STRUCTURAL_TARGET": 6,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 5,
+    "EMERGENCY_BROKER_SL": 1
+   }
+  },
+  "OTHER": {
+   "n": 6,
+   "wr": 50,
+   "pf": 3.11,
+   "mean_r": 0.479,
+   "median_r": 1.713,
+   "total_r": 2.87,
+   "ci95": [
+    -0.717,
+    1.674
+   ],
+   "max_dd_r": 1.09,
+   "max_loss_streak": 1,
+   "mean_mae_r": 0.72,
+   "mean_mfe_r": 1.2,
+   "avg_hold": 22,
+   "total_ex_top1": 0.95,
+   "total_ex_top3": -2.64,
+   "total_ex_top5": -1.09,
+   "exits": {
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 2,
+    "STRUCTURAL_TARGET": 3,
+    "THESIS_INVALIDATION_CLOSE": 1
+   }
+  },
+  "ASIA": {
+   "n": 3,
+   "wr": 66.67,
+   "pf": 2.32,
+   "mean_r": 0.765,
+   "median_r": 1.709,
+   "total_r": 2.3,
+   "ci95": [
+    -1.2,
+    2.731
+   ],
+   "max_dd_r": 1.24,
+   "max_loss_streak": 1,
+   "mean_mae_r": 0.97,
+   "mean_mfe_r": 1.37,
+   "avg_hold": 10.33,
+   "total_ex_top1": 0.47,
+   "total_ex_top3": 0,
+   "total_ex_top5": 0,
+   "exits": {
+    "STRUCTURAL_TARGET": 2,
+    "EMERGENCY_BROKER_SL": 1
+   }
+  },
+  "LONDON": {
+   "n": 3,
+   "wr": 33.33,
+   "pf": 0.07,
+   "mean_r": -0.546,
+   "median_r": -0.515,
+   "total_r": -1.64,
+   "ci95": [
+    -1.246,
+    0.154
+   ],
+   "max_dd_r": 1.69,
+   "max_loss_streak": 2,
+   "mean_mae_r": 1,
+   "mean_mfe_r": 0.94,
+   "avg_hold": 34,
+   "total_ex_top1": -1.69,
+   "total_ex_top3": 0,
+   "total_ex_top5": 0,
+   "exits": {
+    "TIME_STOP_48_BARS": 1,
+    "EMERGENCY_BROKER_SL": 1,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 1
+   }
+  }
+ },
+ "by_stop": {
+  "e_12-20": {
+   "n": 11,
+   "wr": 27.27,
+   "pf": 0.7,
+   "mean_r": -0.206,
+   "median_r": -0.526,
+   "total_r": -2.27,
+   "ci95": [
+    -0.865,
+    0.453
+   ],
+   "max_dd_r": 3.79,
+   "max_loss_streak": 5,
+   "mean_mae_r": 0.84,
+   "mean_mfe_r": 0.9,
+   "avg_hold": 29.55,
+   "total_ex_top1": -4.18,
+   "total_ex_top3": -6.48,
+   "total_ex_top5": -5.57,
+   "exits": {
+    "THESIS_INVALIDATION_CLOSE": 1,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 5,
+    "EMERGENCY_BROKER_SL": 2,
+    "TIME_STOP_48_BARS": 1,
+    "STRUCTURAL_TARGET": 2
+   }
+  },
+  "d_8-12": {
+   "n": 8,
+   "wr": 62.5,
+   "pf": 2.95,
+   "mean_r": 0.646,
+   "median_r": 1.778,
+   "total_r": 5.17,
+   "ci95": [
+    -0.307,
+    1.599
+   ],
+   "max_dd_r": 2.78,
+   "max_loss_streak": 3,
+   "mean_mae_r": 0.68,
+   "mean_mfe_r": 1.45,
+   "avg_hold": 20,
+   "total_ex_top1": 3.3,
+   "total_ex_top3": -0.36,
+   "total_ex_top5": -2.78,
+   "exits": {
+    "TIME_STOP_48_BARS": 1,
+    "STRUCTURAL_TARGET": 4,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 2,
+    "EMERGENCY_BROKER_SL": 1
+   }
+  },
+  "c_5-8": {
+   "n": 5,
+   "wr": 60,
+   "pf": 2.83,
+   "mean_r": 0.7,
+   "median_r": 1.709,
+   "total_r": 3.5,
+   "ci95": [
+    -0.593,
+    1.992
+   ],
+   "max_dd_r": 1.82,
+   "max_loss_streak": 2,
+   "mean_mae_r": 0.77,
+   "mean_mfe_r": 1.19,
+   "avg_hold": 17.6,
+   "total_ex_top1": 1.65,
+   "total_ex_top3": -1.82,
+   "total_ex_top5": 0,
+   "exits": {
+    "STRUCTURAL_TARGET": 3,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 1,
+    "THESIS_INVALIDATION_CLOSE": 1
+   }
+  },
+  "f_>20": {
+   "n": 3,
+   "wr": 100,
+   "pf": null,
+   "mean_r": 1.235,
+   "median_r": 1.721,
+   "total_r": 3.7,
+   "ci95": [
+    0.075,
+    2.395
+   ],
+   "max_dd_r": 0,
+   "max_loss_streak": 0,
+   "mean_mae_r": 0.36,
+   "mean_mfe_r": 1.64,
+   "avg_hold": 35.67,
+   "total_ex_top1": 1.78,
+   "total_ex_top3": 0,
+   "total_ex_top5": 0,
+   "exits": {
+    "STRUCTURAL_TARGET": 2,
+    "TIME_STOP_48_BARS": 1
+   }
+  }
+ },
+ "by_rr": {
+  "a_1.7-2": {
+   "n": 27,
+   "wr": 51.85,
+   "pf": 2.1,
+   "mean_r": 0.374,
+   "median_r": 0.057,
+   "total_r": 10.11,
+   "ci95": [
+    -0.114,
+    0.862
+   ],
+   "max_dd_r": 3.79,
+   "max_loss_streak": 5,
+   "mean_mae_r": 0.73,
+   "mean_mfe_r": 1.2,
+   "avg_hold": 25.19,
+   "total_ex_top1": 8.18,
+   "total_ex_top3": 4.39,
+   "total_ex_top5": 0.71,
+   "exits": {
+    "STRUCTURAL_TARGET": 11,
+    "THESIS_INVALIDATION_CLOSE": 2,
+    "TIME_STOP_48_BARS": 3,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 8,
+    "EMERGENCY_BROKER_SL": 3
+   }
+  }
+ },
+ "by_ctx15": {
+  "15m_BEARISH_SELL": {
+   "n": 10,
+   "wr": 50,
+   "pf": 3.46,
+   "mean_r": 0.396,
+   "median_r": 0.58,
+   "total_r": 3.96,
+   "ci95": [
+    -0.404,
+    1.197
+   ],
+   "max_dd_r": 2.68,
+   "max_loss_streak": 3,
+   "mean_mae_r": 0.69,
+   "mean_mfe_r": 1.06,
+   "avg_hold": 24.7,
+   "total_ex_top1": 2.04,
+   "total_ex_top3": -1.51,
+   "total_ex_top5": -3.8,
+   "exits": {
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 4,
+    "TIME_STOP_48_BARS": 1,
+    "STRUCTURAL_TARGET": 4,
+    "EMERGENCY_BROKER_SL": 1
+   }
+  },
+  "15m_BULLISH_SELL": {
+   "n": 8,
+   "wr": 75,
+   "pf": 5.76,
+   "mean_r": 0.914,
+   "median_r": 1.778,
+   "total_r": 7.31,
+   "ci95": [
+    0.022,
+    1.806
+   ],
+   "max_dd_r": 1.09,
+   "max_loss_streak": 1,
+   "mean_mae_r": 0.58,
+   "mean_mfe_r": 1.51,
+   "avg_hold": 25.75,
+   "total_ex_top1": 5.39,
+   "total_ex_top3": 1.71,
+   "total_ex_top5": -1.78,
+   "exits": {
+    "STRUCTURAL_TARGET": 5,
+    "THESIS_INVALIDATION_CLOSE": 1,
+    "TIME_STOP_48_BARS": 1,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 1
+   }
+  },
+  "15m_BEARISH_BUY": {
+   "n": 5,
+   "wr": 20,
+   "pf": 0.34,
+   "mean_r": -0.386,
+   "median_r": -0.821,
+   "total_r": -1.93,
+   "ci95": [
+    -1.516,
+    0.745
+   ],
+   "max_dd_r": 3.8,
+   "max_loss_streak": 4,
+   "mean_mae_r": 1.11,
+   "mean_mfe_r": 1.06,
+   "avg_hold": 22.4,
+   "total_ex_top1": -3.8,
+   "total_ex_top3": -2.41,
+   "total_ex_top5": 0,
+   "exits": {
+    "STRUCTURAL_TARGET": 1,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 2,
+    "EMERGENCY_BROKER_SL": 2
+   }
+  },
+  "15m_BULLISH_BUY": {
+   "n": 4,
+   "wr": 50,
+   "pf": 0.87,
+   "mean_r": 0.19,
+   "median_r": 0.645,
+   "total_r": 0.76,
+   "ci95": [
+    -1.063,
+    1.443
+   ],
+   "max_dd_r": 1.13,
+   "max_loss_streak": 1,
+   "mean_mae_r": 0.63,
+   "mean_mfe_r": 1.1,
+   "avg_hold": 28.75,
+   "total_ex_top1": -1,
+   "total_ex_top3": -1.13,
+   "total_ex_top5": 0,
+   "exits": {
+    "THESIS_INVALIDATION_CLOSE": 1,
+    "TIME_STOP_48_BARS": 1,
+    "STRUCTURAL_TARGET": 1,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 1
+   }
+  }
+ },
+ "by_ctx1h": {
+  "1H_BEARISH_SELL": {
+   "n": 12,
+   "wr": 75,
+   "pf": 7.58,
+   "mean_r": 0.911,
+   "median_r": 1.713,
+   "total_r": 10.93,
+   "ci95": [
+    0.247,
+    1.575
+   ],
+   "max_dd_r": 1.18,
+   "max_loss_streak": 2,
+   "mean_mae_r": 0.56,
+   "mean_mfe_r": 1.38,
+   "avg_hold": 30.33,
+   "total_ex_top1": 9,
+   "total_ex_top3": 5.26,
+   "total_ex_top5": 1.76,
+   "exits": {
+    "STRUCTURAL_TARGET": 7,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 2,
+    "TIME_STOP_48_BARS": 2,
+    "EMERGENCY_BROKER_SL": 1
+   }
+  },
+  "1H_BEARISH_BUY": {
+   "n": 7,
+   "wr": 28.57,
+   "pf": 0.52,
+   "mean_r": -0.098,
+   "median_r": -0.566,
+   "total_r": -0.68,
+   "ci95": [
+    -1.087,
+    0.891
+   ],
+   "max_dd_r": 4.31,
+   "max_loss_streak": 5,
+   "mean_mae_r": 0.94,
+   "mean_mfe_r": 1.19,
+   "avg_hold": 25,
+   "total_ex_top1": -2.55,
+   "total_ex_top3": -3.8,
+   "total_ex_top5": -2.41,
+   "exits": {
+    "STRUCTURAL_TARGET": 2,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 3,
+    "EMERGENCY_BROKER_SL": 2
+   }
+  },
+  "1H_BULLISH_SELL": {
+   "n": 6,
+   "wr": 33.33,
+   "pf": 0.97,
+   "mean_r": 0.057,
+   "median_r": -0.526,
+   "total_r": 0.34,
+   "ci95": [
+    -1.059,
+    1.173
+   ],
+   "max_dd_r": 2.25,
+   "max_loss_streak": 3,
+   "mean_mae_r": 0.79,
+   "mean_mfe_r": 1.01,
+   "avg_hold": 14.83,
+   "total_ex_top1": -1.5,
+   "total_ex_top3": -2.81,
+   "total_ex_top5": -1.09,
+   "exits": {
+    "STRUCTURAL_TARGET": 2,
+    "THESIS_INVALIDATION_CLOSE": 1,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 3
+   }
+  },
+  "1H_BULLISH_BUY": {
+   "n": 2,
+   "wr": 50,
+   "pf": 0.39,
+   "mean_r": -0.242,
+   "median_r": 0.645,
+   "total_r": -0.48,
+   "ci95": [
+    -1.981,
+    1.497
+   ],
+   "max_dd_r": 1.13,
+   "max_loss_streak": 1,
+   "mean_mae_r": 0.75,
+   "mean_mfe_r": 0.7,
+   "avg_hold": 26,
+   "total_ex_top1": -1.13,
+   "total_ex_top3": 0,
+   "total_ex_top5": 0,
+   "exits": {
+    "THESIS_INVALIDATION_CLOSE": 1,
+    "TIME_STOP_48_BARS": 1
+   }
+  }
+ },
+ "friction": {
+  "spread040": {
+   "n": 27,
+   "wr": 51.85,
+   "pf": 2.05,
+   "mean_r": 0.362,
+   "median_r": 0.051,
+   "total_r": 9.77,
+   "ci95": [
+    -0.129,
+    0.853
+   ],
+   "max_dd_r": 3.83,
+   "max_loss_streak": 5,
+   "mean_mae_r": 0.74,
+   "mean_mfe_r": 1.2,
+   "avg_hold": 25.22,
+   "total_ex_top1": 7.85,
+   "total_ex_top3": 4.07,
+   "total_ex_top5": 0.39,
+   "exits": {
+    "STRUCTURAL_TARGET": 11,
+    "THESIS_INVALIDATION_CLOSE": 1,
+    "TIME_STOP_48_BARS": 3,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 8,
+    "EMERGENCY_BROKER_SL": 4
+   }
+  },
+  "spread040_slip015": {
+   "n": 27,
+   "wr": 51.85,
+   "pf": 1.97,
+   "mean_r": 0.335,
+   "median_r": 0.04,
+   "total_r": 9.06,
+   "ci95": [
+    -0.156,
+    0.826
+   ],
+   "max_dd_r": 3.94,
+   "max_loss_streak": 5,
+   "mean_mae_r": 0.75,
+   "mean_mfe_r": 1.19,
+   "avg_hold": 25.22,
+   "total_ex_top1": 7.14,
+   "total_ex_top3": 3.42,
+   "total_ex_top5": -0.19,
+   "exits": {
+    "STRUCTURAL_TARGET": 11,
+    "THESIS_INVALIDATION_CLOSE": 1,
+    "TIME_STOP_48_BARS": 3,
+    "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 8,
+    "EMERGENCY_BROKER_SL": 4
+   }
+  }
+ },
+ "other_pp_variant": {
+  "n": 27,
+  "wr": 51.85,
+  "pf": 2.35,
+  "mean_r": 0.369,
+  "median_r": 0.057,
+  "total_r": 9.98,
+  "ci95": [
+   -0.095,
+   0.834
+  ],
+  "max_dd_r": 3.79,
+  "max_loss_streak": 5,
+  "mean_mae_r": 0.7,
+  "mean_mfe_r": 1.18,
+  "avg_hold": 24.78,
+  "total_ex_top1": 8.05,
+  "total_ex_top3": 4.26,
+  "total_ex_top5": 0.58,
+  "exits": {
+   "STRUCTURAL_TARGET": 10,
+   "THESIS_INVALIDATION_CLOSE": 2,
+   "TIME_STOP_48_BARS": 3,
+   "PROFIT_PROTECTION": 2,
+   "THESIS_DETERIORATION_OPPOSITE_STRUCTURE": 8,
+   "EMERGENCY_BROKER_SL": 2
+  }
+ },
+ "signals": [
+  {
+   "i": 943,
+   "t": 1777593600,
+   "time": "2026-05-01 00:00",
+   "day": "2026-05-01",
+   "region": "A",
+   "family": "V2C_COMPRESSION_EXPANSION",
+   "dir": -1,
+   "side": "SELL",
+   "state": "COMPRESSION",
+   "s5": "BULLISH",
+   "s5event": "CHOCH",
+   "ctx15": {
+    "state": "BULLISH",
+    "lastEvent": "CHOCH",
+    "rangeHigh": 4647.03,
+    "rangeLow": 4539.17
+   },
+   "ctx30": {
+    "state": "BULLISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4647.03,
+    "rangeLow": 4510.09
+   },
+   "ctx1h": {
+    "state": "BEARISH",
+    "lastEvent": "CHOCH",
+    "rangeHigh": 4730.15,
+    "rangeLow": 4510.09
+   },
+   "trigger": "COMPRESSION_BREAK_CLOSE",
+   "confirmation": "ACCEPTANCE_SECOND_CLOSE",
+   "entry": 4627.59,
+   "stop": 4634.4,
+   "stop_dist": 6.81,
+   "stop_atr": 2.14,
+   "target": 4615.95,
+   "target_source": "measured_move_2x_box",
+   "rr": 1.71,
+   "level": 4628.04,
+   "extra": {
+    "boxHeightAtr": 1.9
+   },
+   "o": {
+    "pnl": 11.64,
+    "r": 1.709,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 957,
+    "hold": 14,
+    "mfe_r": 1.74,
+    "mae_r": 0.53
+   },
+   "o_spread040": {
+    "pnl": 11.64,
+    "r": 1.709,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 957,
+    "hold": 14,
+    "mfe_r": 1.72,
+    "mae_r": 0.55
+   },
+   "o_spread040_slip015": {
+    "pnl": 11.34,
+    "r": 1.665,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 957,
+    "hold": 14,
+    "mfe_r": 1.69,
+    "mae_r": 0.58
+   },
+   "o_ppOther": {
+    "pnl": 11.64,
+    "r": 1.709,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 957,
+    "hold": 14,
+    "mfe_r": 1.74,
+    "mae_r": 0.53
+   }
+  },
+  {
+   "i": 1175,
+   "t": 1777663200,
+   "time": "2026-05-01 19:20",
+   "day": "2026-05-01",
+   "region": "A",
+   "family": "V2C_COMPRESSION_EXPANSION",
+   "dir": 1,
+   "side": "BUY",
+   "state": "COMPRESSION",
+   "s5": "BEARISH",
+   "s5event": "BOS",
+   "ctx15": {
+    "state": "BULLISH",
+    "lastEvent": "CHOCH",
+    "rangeHigh": 4660.29,
+    "rangeLow": 4559.77
+   },
+   "ctx30": {
+    "state": "BULLISH",
+    "lastEvent": "CHOCH",
+    "rangeHigh": 4660.29,
+    "rangeLow": 4517.92
+   },
+   "ctx1h": {
+    "state": "BULLISH",
+    "lastEvent": "CHOCH",
+    "rangeHigh": 4701.45,
+    "rangeLow": 4510.09
+   },
+   "trigger": "COMPRESSION_BREAK_CLOSE",
+   "confirmation": "ACCEPTANCE_SECOND_CLOSE",
+   "entry": 4626.77,
+   "stop": 4613.32,
+   "stop_dist": 13.45,
+   "stop_atr": 3.21,
+   "target": 4652.24,
+   "target_source": "measured_move_2x_box",
+   "rr": 1.89,
+   "level": 4626.57,
+   "extra": {
+    "boxHeightAtr": 3.06
+   },
+   "o": {
+    "pnl": -15.18,
+    "r": -1.129,
+    "exit": "THESIS_INVALIDATION_CLOSE",
+    "closeIdx": 1179,
+    "hold": 4,
+    "mfe_r": 0.06,
+    "mae_r": 1.16
+   },
+   "o_spread040": {
+    "pnl": -15.34,
+    "r": -1.141,
+    "exit": "THESIS_INVALIDATION_CLOSE",
+    "closeIdx": 1179,
+    "hold": 4,
+    "mfe_r": 0.05,
+    "mae_r": 1.17
+   },
+   "o_spread040_slip015": {
+    "pnl": -15.64,
+    "r": -1.163,
+    "exit": "THESIS_INVALIDATION_CLOSE",
+    "closeIdx": 1179,
+    "hold": 4,
+    "mfe_r": 0.03,
+    "mae_r": 1.19
+   },
+   "o_ppOther": {
+    "pnl": -15.18,
+    "r": -1.129,
+    "exit": "THESIS_INVALIDATION_CLOSE",
+    "closeIdx": 1179,
+    "hold": 4,
+    "mfe_r": 0.06,
+    "mae_r": 1.16
+   }
+  },
+  {
+   "i": 1991,
+   "t": 1778091600,
+   "time": "2026-05-06 18:20",
+   "day": "2026-05-06",
+   "region": "A",
+   "family": "V2C_COMPRESSION_EXPANSION",
+   "dir": 1,
+   "side": "BUY",
+   "state": "COMPRESSION",
+   "s5": "BEARISH",
+   "s5event": "BOS",
+   "ctx15": {
+    "state": "BULLISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4723.01,
+    "rangeLow": 4539.73
+   },
+   "ctx30": {
+    "state": "BULLISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4723.01,
+    "rangeLow": 4513.42
+   },
+   "ctx1h": {
+    "state": "BULLISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4723.01,
+    "rangeLow": 4500.44
+   },
+   "trigger": "COMPRESSION_BREAK_CLOSE",
+   "confirmation": "ACCEPTANCE_SECOND_CLOSE",
+   "entry": 4687.61,
+   "stop": 4678.35,
+   "stop_dist": 9.27,
+   "stop_atr": 2.43,
+   "target": 4704.81,
+   "target_source": "measured_move_2x_box",
+   "rr": 1.86,
+   "level": 4687.42,
+   "extra": {
+    "boxHeightAtr": 2.28
+   },
+   "o": {
+    "pnl": 5.97,
+    "r": 0.645,
+    "exit": "TIME_STOP_48_BARS",
+    "closeIdx": 2039,
+    "hold": 48,
+    "mfe_r": 1.33,
+    "mae_r": 0.34
+   },
+   "o_spread040": {
+    "pnl": 5.81,
+    "r": 0.627,
+    "exit": "TIME_STOP_48_BARS",
+    "closeIdx": 2039,
+    "hold": 48,
+    "mfe_r": 1.32,
+    "mae_r": 0.36
+   },
+   "o_spread040_slip015": {
+    "pnl": 5.51,
+    "r": 0.595,
+    "exit": "TIME_STOP_48_BARS",
+    "closeIdx": 2039,
+    "hold": 48,
+    "mfe_r": 1.3,
+    "mae_r": 0.37
+   },
+   "o_ppOther": {
+    "pnl": 5.97,
+    "r": 0.645,
+    "exit": "TIME_STOP_48_BARS",
+    "closeIdx": 2039,
+    "hold": 48,
+    "mfe_r": 1.33,
+    "mae_r": 0.34
+   }
+  },
+  {
+   "i": 2567,
+   "t": 1778271600,
+   "time": "2026-05-08 20:20",
+   "day": "2026-05-08",
+   "region": "A",
+   "family": "V2C_COMPRESSION_EXPANSION",
+   "dir": -1,
+   "side": "SELL",
+   "state": "COMPRESSION",
+   "s5": "BEARISH",
+   "s5event": "BOS",
+   "ctx15": {
+    "state": "BULLISH",
+    "lastEvent": "CHOCH",
+    "rangeHigh": 4749.63,
+    "rangeLow": 4696.99
+   },
+   "ctx30": {
+    "state": "BULLISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4764.79,
+    "rangeLow": 4681.73
+   },
+   "ctx1h": {
+    "state": "BULLISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4764.79,
+    "rangeLow": 4500.44
+   },
+   "trigger": "COMPRESSION_BREAK_CLOSE",
+   "confirmation": "ACCEPTANCE_SECOND_CLOSE",
+   "entry": 4716.74,
+   "stop": 4727.21,
+   "stop_dist": 10.47,
+   "stop_atr": 3.7,
+   "target": 4697.55,
+   "target_source": "measured_move_2x_box",
+   "rr": 1.83,
+   "level": 4717.14,
+   "extra": {
+    "boxHeightAtr": 3.46
+   },
+   "o": {
+    "pnl": 19.19,
+    "r": 1.833,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 2575,
+    "hold": 8,
+    "mfe_r": 3.57,
+    "mae_r": 0.25
+   },
+   "o_spread040": {
+    "pnl": 19.19,
+    "r": 1.833,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 2575,
+    "hold": 8,
+    "mfe_r": 3.56,
+    "mae_r": 0.27
+   },
+   "o_spread040_slip015": {
+    "pnl": 18.89,
+    "r": 1.804,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 2575,
+    "hold": 8,
+    "mfe_r": 3.54,
+    "mae_r": 0.28
+   },
+   "o_ppOther": {
+    "pnl": 19.19,
+    "r": 1.833,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 2575,
+    "hold": 8,
+    "mfe_r": 3.57,
+    "mae_r": 0.25
+   }
+  },
+  {
+   "i": 3394,
+   "t": 1778703300,
+   "time": "2026-05-13 20:15",
+   "day": "2026-05-13",
+   "region": "A",
+   "family": "V2C_COMPRESSION_EXPANSION",
+   "dir": 1,
+   "side": "BUY",
+   "state": "COMPRESSION",
+   "s5": "BULLISH",
+   "s5event": "CHOCH",
+   "ctx15": {
+    "state": "BULLISH",
+    "lastEvent": "CHOCH",
+    "rangeHigh": 4715.17,
+    "rangeLow": 4669.39
+   },
+   "ctx30": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4727.06,
+    "rangeLow": 4638
+   },
+   "ctx1h": {
+    "state": "BEARISH",
+    "lastEvent": "CHOCH",
+    "rangeHigh": 4773.6,
+    "rangeLow": 4638
+   },
+   "trigger": "COMPRESSION_BREAK_CLOSE",
+   "confirmation": "ACCEPTANCE_SECOND_CLOSE",
+   "entry": 4690.84,
+   "stop": 4683.57,
+   "stop_dist": 7.27,
+   "stop_atr": 2.16,
+   "target": 4703.87,
+   "target_source": "measured_move_2x_box",
+   "rr": 1.79,
+   "level": 4690.56,
+   "extra": {
+    "boxHeightAtr": 1.97
+   },
+   "o": {
+    "pnl": 12.79,
+    "r": 1.759,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 3430,
+    "hold": 36,
+    "mfe_r": 1.99,
+    "mae_r": 0.45
+   },
+   "o_spread040": {
+    "pnl": 12.63,
+    "r": 1.737,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 3430,
+    "hold": 36,
+    "mfe_r": 1.96,
+    "mae_r": 0.47
+   },
+   "o_spread040_slip015": {
+    "pnl": 12.33,
+    "r": 1.696,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 3430,
+    "hold": 36,
+    "mfe_r": 1.94,
+    "mae_r": 0.49
+   },
+   "o_ppOther": {
+    "pnl": 3.61,
+    "r": 0.497,
+    "exit": "PROFIT_PROTECTION",
+    "closeIdx": 3423,
+    "hold": 29,
+    "mfe_r": 1.54,
+    "mae_r": 0.45
+   }
+  },
+  {
+   "i": 3945,
+   "t": 1778875800,
+   "time": "2026-05-15 20:10",
+   "day": "2026-05-15",
+   "region": "A",
+   "family": "V2C_COMPRESSION_EXPANSION",
+   "dir": -1,
+   "side": "SELL",
+   "state": "COMPRESSION",
+   "s5": "BEARISH",
+   "s5event": "BOS",
+   "ctx15": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4665.42,
+    "rangeLow": 4511.19
+   },
+   "ctx30": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4718.9,
+    "rangeLow": 4511.19
+   },
+   "ctx1h": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4773.6,
+    "rangeLow": 4511.19
+   },
+   "trigger": "COMPRESSION_BREAK_CLOSE",
+   "confirmation": "ACCEPTANCE_SECOND_CLOSE",
+   "entry": 4538.4,
+   "stop": 4556.27,
+   "stop_dist": 17.88,
+   "stop_atr": 4.1,
+   "target": 4505.16,
+   "target_source": "measured_move_2x_box",
+   "rr": 1.86,
+   "level": 4538.95,
+   "extra": {
+    "boxHeightAtr": 3.87
+   },
+   "o": {
+    "pnl": -6.94,
+    "r": -0.388,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 3955,
+    "hold": 10,
+    "mfe_r": 0.29,
+    "mae_r": 0.4
+   },
+   "o_spread040": {
+    "pnl": -7.1,
+    "r": -0.397,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 3955,
+    "hold": 10,
+    "mfe_r": 0.28,
+    "mae_r": 0.41
+   },
+   "o_spread040_slip015": {
+    "pnl": -7.4,
+    "r": -0.414,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 3955,
+    "hold": 10,
+    "mfe_r": 0.27,
+    "mae_r": 0.42
+   },
+   "o_ppOther": {
+    "pnl": -6.94,
+    "r": -0.388,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 3955,
+    "hold": 10,
+    "mfe_r": 0.29,
+    "mae_r": 0.4
+   }
+  },
+  {
+   "i": 4511,
+   "t": 1779229200,
+   "time": "2026-05-19 22:20",
+   "day": "2026-05-19",
+   "region": "A",
+   "family": "V2C_COMPRESSION_EXPANSION",
+   "dir": -1,
+   "side": "SELL",
+   "state": "COMPRESSION",
+   "s5": "BEARISH",
+   "s5event": "BOS",
+   "ctx15": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4589.39,
+    "rangeLow": 4464.39
+   },
+   "ctx30": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4589.39,
+    "rangeLow": 4464.39
+   },
+   "ctx1h": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4727.06,
+    "rangeLow": 4464.39
+   },
+   "trigger": "COMPRESSION_BREAK_CLOSE",
+   "confirmation": "ACCEPTANCE_SECOND_CLOSE",
+   "entry": 4480.54,
+   "stop": 4488.3,
+   "stop_dist": 7.76,
+   "stop_atr": 2.52,
+   "target": 4467.01,
+   "target_source": "measured_move_2x_box",
+   "rr": 1.74,
+   "level": 4481,
+   "extra": {
+    "boxHeightAtr": 2.27
+   },
+   "o": {
+    "pnl": -5.67,
+    "r": -0.731,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 4521,
+    "hold": 10,
+    "mfe_r": 0.38,
+    "mae_r": 0.83
+   },
+   "o_spread040": {
+    "pnl": -5.83,
+    "r": -0.751,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 4521,
+    "hold": 10,
+    "mfe_r": 0.36,
+    "mae_r": 0.85
+   },
+   "o_spread040_slip015": {
+    "pnl": -6.13,
+    "r": -0.79,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 4521,
+    "hold": 10,
+    "mfe_r": 0.34,
+    "mae_r": 0.87
+   },
+   "o_ppOther": {
+    "pnl": -5.67,
+    "r": -0.731,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 4521,
+    "hold": 10,
+    "mfe_r": 0.38,
+    "mae_r": 0.83
+   }
+  },
+  {
+   "i": 4523,
+   "t": 1779232800,
+   "time": "2026-05-19 23:20",
+   "day": "2026-05-19",
+   "region": "A",
+   "family": "V2C_COMPRESSION_EXPANSION",
+   "dir": 1,
+   "side": "BUY",
+   "state": "COMPRESSION",
+   "s5": "BULLISH",
+   "s5event": "BOS",
+   "ctx15": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4589.39,
+    "rangeLow": 4464.39
+   },
+   "ctx30": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4589.39,
+    "rangeLow": 4464.39
+   },
+   "ctx1h": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4727.06,
+    "rangeLow": 4464.39
+   },
+   "trigger": "COMPRESSION_BREAK_CLOSE",
+   "confirmation": "ACCEPTANCE_SECOND_CLOSE",
+   "entry": 4486.85,
+   "stop": 4476.99,
+   "stop_dist": 9.86,
+   "stop_atr": 2.74,
+   "target": 4505.53,
+   "target_source": "measured_move_2x_box",
+   "rr": 1.89,
+   "level": 4486.75,
+   "extra": {
+    "boxHeightAtr": 2.61
+   },
+   "o": {
+    "pnl": 18.44,
+    "r": 1.87,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 4537,
+    "hold": 14,
+    "mfe_r": 2.06,
+    "mae_r": 0.76
+   },
+   "o_spread040": {
+    "pnl": 18.28,
+    "r": 1.854,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 4537,
+    "hold": 14,
+    "mfe_r": 2.04,
+    "mae_r": 0.77
+   },
+   "o_spread040_slip015": {
+    "pnl": 17.98,
+    "r": 1.824,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 4537,
+    "hold": 14,
+    "mfe_r": 2.03,
+    "mae_r": 0.79
+   },
+   "o_ppOther": {
+    "pnl": 18.44,
+    "r": 1.87,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 4537,
+    "hold": 14,
+    "mfe_r": 2.06,
+    "mae_r": 0.76
+   }
+  },
+  {
+   "i": 5843,
+   "t": 1779825000,
+   "time": "2026-05-26 19:50",
+   "day": "2026-05-26",
+   "region": "A",
+   "family": "V2C_COMPRESSION_EXPANSION",
+   "dir": 1,
+   "side": "BUY",
+   "state": "COMPRESSION",
+   "s5": "BEARISH",
+   "s5event": "BOS",
+   "ctx15": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4540.65,
+    "rangeLow": 4482.19
+   },
+   "ctx30": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4580.23,
+    "rangeLow": 4500.52
+   },
+   "ctx1h": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4580.23,
+    "rangeLow": 4467.03
+   },
+   "trigger": "COMPRESSION_BREAK_CLOSE",
+   "confirmation": "ACCEPTANCE_SECOND_CLOSE",
+   "entry": 4506.11,
+   "stop": 4495.56,
+   "stop_dist": 10.55,
+   "stop_atr": 3.3,
+   "target": 4526.21,
+   "target_source": "measured_move_2x_box",
+   "rr": 1.91,
+   "level": 4505.99,
+   "extra": {
+    "boxHeightAtr": 3.17
+   },
+   "o": {
+    "pnl": -5.97,
+    "r": -0.566,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 5863,
+    "hold": 20,
+    "mfe_r": 0.43,
+    "mae_r": 0.57
+   },
+   "o_spread040": {
+    "pnl": -6.13,
+    "r": -0.581,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 5863,
+    "hold": 20,
+    "mfe_r": 0.41,
+    "mae_r": 0.58
+   },
+   "o_spread040_slip015": {
+    "pnl": -6.43,
+    "r": -0.609,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 5863,
+    "hold": 20,
+    "mfe_r": 0.4,
+    "mae_r": 0.6
+   },
+   "o_ppOther": {
+    "pnl": -5.97,
+    "r": -0.566,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 5863,
+    "hold": 20,
+    "mfe_r": 0.43,
+    "mae_r": 0.57
+   }
+  },
+  {
+   "i": 6430,
+   "t": 1780011900,
+   "time": "2026-05-28 23:45",
+   "day": "2026-05-28",
+   "region": "A",
+   "family": "V2C_COMPRESSION_EXPANSION",
+   "dir": -1,
+   "side": "SELL",
+   "state": "COMPRESSION",
+   "s5": "BEARISH",
+   "s5event": "BOS",
+   "ctx15": {
+    "state": "BULLISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4516.6,
+    "rangeLow": 4366.25
+   },
+   "ctx30": {
+    "state": "BULLISH",
+    "lastEvent": "CHOCH",
+    "rangeHigh": 4540.65,
+    "rangeLow": 4366.25
+   },
+   "ctx1h": {
+    "state": "BULLISH",
+    "lastEvent": "CHOCH",
+    "rangeHigh": 4580.23,
+    "rangeLow": 4366.25
+   },
+   "trigger": "COMPRESSION_BREAK_CLOSE",
+   "confirmation": "ACCEPTANCE_SECOND_CLOSE",
+   "entry": 4490.61,
+   "stop": 4497.21,
+   "stop_dist": 6.6,
+   "stop_atr": 2.47,
+   "target": 4478.41,
+   "target_source": "measured_move_2x_box",
+   "rr": 1.85,
+   "level": 4490.77,
+   "extra": {
+    "boxHeightAtr": 2.31
+   },
+   "o": {
+    "pnl": -7.17,
+    "r": -1.086,
+    "exit": "THESIS_INVALIDATION_CLOSE",
+    "closeIdx": 6435,
+    "hold": 5,
+    "mfe_r": 0,
+    "mae_r": 1.19
+   },
+   "o_spread040": {
+    "pnl": -7.94,
+    "r": -1.203,
+    "exit": "EMERGENCY_BROKER_SL",
+    "closeIdx": 6433,
+    "hold": 3,
+    "mfe_r": 0,
+    "mae_r": 1.21
+   },
+   "o_spread040_slip015": {
+    "pnl": -8.24,
+    "r": -1.248,
+    "exit": "EMERGENCY_BROKER_SL",
+    "closeIdx": 6433,
+    "hold": 3,
+    "mfe_r": 0,
+    "mae_r": 1.24
+   },
+   "o_ppOther": {
+    "pnl": -7.17,
+    "r": -1.086,
+    "exit": "THESIS_INVALIDATION_CLOSE",
+    "closeIdx": 6435,
+    "hold": 5,
+    "mfe_r": 0,
+    "mae_r": 1.19
+   }
+  },
+  {
+   "i": 7784,
+   "t": 1780605300,
+   "time": "2026-06-04 20:35",
+   "day": "2026-06-04",
+   "region": "A",
+   "family": "V2C_COMPRESSION_EXPANSION",
+   "dir": -1,
+   "side": "SELL",
+   "state": "COMPRESSION",
+   "s5": "BEARISH",
+   "s5event": "CHOCH",
+   "ctx15": {
+    "state": "BULLISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4515.52,
+    "rangeLow": 4423.59
+   },
+   "ctx30": {
+    "state": "BULLISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4515.52,
+    "rangeLow": 4423.59
+   },
+   "ctx1h": {
+    "state": "BULLISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4595.2,
+    "rangeLow": 4423.59
+   },
+   "trigger": "COMPRESSION_BREAK_CLOSE",
+   "confirmation": "ACCEPTANCE_SECOND_CLOSE",
+   "entry": 4476.29,
+   "stop": 4482.72,
+   "stop_dist": 6.44,
+   "stop_atr": 2.64,
+   "target": 4464.41,
+   "target_source": "measured_move_2x_box",
+   "rr": 1.85,
+   "level": 4476.46,
+   "extra": {
+    "boxHeightAtr": 2.47
+   },
+   "o": {
+    "pnl": 11.88,
+    "r": 1.848,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 7807,
+    "hold": 23,
+    "mfe_r": 1.86,
+    "mae_r": 0.84
+   },
+   "o_spread040": {
+    "pnl": 11.88,
+    "r": 1.848,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 7808,
+    "hold": 24,
+    "mfe_r": 2.11,
+    "mae_r": 0.87
+   },
+   "o_spread040_slip015": {
+    "pnl": 11.58,
+    "r": 1.801,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 7808,
+    "hold": 24,
+    "mfe_r": 2.09,
+    "mae_r": 0.89
+   },
+   "o_ppOther": {
+    "pnl": 11.88,
+    "r": 1.848,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 7807,
+    "hold": 23,
+    "mfe_r": 1.86,
+    "mae_r": 0.84
+   }
+  },
+  {
+   "i": 8063,
+   "t": 1780692600,
+   "time": "2026-06-05 20:50",
+   "day": "2026-06-05",
+   "region": "A",
+   "family": "V2C_COMPRESSION_EXPANSION",
+   "dir": 1,
+   "side": "BUY",
+   "state": "COMPRESSION",
+   "s5": "BULLISH",
+   "s5event": "CHOCH",
+   "ctx15": {
+    "state": "BEARISH",
+    "lastEvent": "CHOCH",
+    "rangeHigh": 4475.91,
+    "rangeLow": 4323.09
+   },
+   "ctx30": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4515.52,
+    "rangeLow": 4428.56
+   },
+   "ctx1h": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4541.61,
+    "rangeLow": 4423.59
+   },
+   "trigger": "COMPRESSION_BREAK_CLOSE",
+   "confirmation": "ACCEPTANCE_SECOND_CLOSE",
+   "entry": 4327.54,
+   "stop": 4311.07,
+   "stop_dist": 16.47,
+   "stop_atr": 3.18,
+   "target": 4356.24,
+   "target_source": "measured_move_2x_box",
+   "rr": 1.74,
+   "level": 4326.47,
+   "extra": {
+    "boxHeightAtr": 2.87
+   },
+   "o": {
+    "pnl": -19.3,
+    "r": -1.172,
+    "exit": "EMERGENCY_BROKER_SL",
+    "closeIdx": 8107,
+    "hold": 44,
+    "mfe_r": 1.55,
+    "mae_r": 1.69
+   },
+   "o_spread040": {
+    "pnl": -19.46,
+    "r": -1.182,
+    "exit": "EMERGENCY_BROKER_SL",
+    "closeIdx": 8107,
+    "hold": 44,
+    "mfe_r": 1.54,
+    "mae_r": 1.7
+   },
+   "o_spread040_slip015": {
+    "pnl": -19.76,
+    "r": -1.2,
+    "exit": "EMERGENCY_BROKER_SL",
+    "closeIdx": 8107,
+    "hold": 44,
+    "mfe_r": 1.54,
+    "mae_r": 1.71
+   },
+   "o_ppOther": {
+    "pnl": -0.66,
+    "r": -0.04,
+    "exit": "PROFIT_PROTECTION",
+    "closeIdx": 8103,
+    "hold": 40,
+    "mfe_r": 1.55,
+    "mae_r": 1.07
+   }
+  },
+  {
+   "i": 8322,
+   "t": 1780946700,
+   "time": "2026-06-08 19:25",
+   "day": "2026-06-08",
+   "region": "A",
+   "family": "V2C_COMPRESSION_EXPANSION",
+   "dir": -1,
+   "side": "SELL",
+   "state": "COMPRESSION",
+   "s5": "BEARISH",
+   "s5event": "CHOCH",
+   "ctx15": {
+    "state": "BEARISH",
+    "lastEvent": "CHOCH",
+    "rangeHigh": 4353.37,
+    "rangeLow": 4268.26
+   },
+   "ctx30": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4515.52,
+    "rangeLow": 4268.26
+   },
+   "ctx1h": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4515.52,
+    "rangeLow": 4268.26
+   },
+   "trigger": "COMPRESSION_BREAK_CLOSE",
+   "confirmation": "ACCEPTANCE_SECOND_CLOSE",
+   "entry": 4327.85,
+   "stop": 4346.24,
+   "stop_dist": 18.39,
+   "stop_atr": 4.85,
+   "target": 4292.61,
+   "target_source": "measured_move_2x_box",
+   "rr": 1.92,
+   "level": 4328.11,
+   "extra": {
+    "boxHeightAtr": 4.68
+   },
+   "o": {
+    "pnl": 10.66,
+    "r": 0.58,
+    "exit": "TIME_STOP_48_BARS",
+    "closeIdx": 8370,
+    "hold": 48,
+    "mfe_r": 0.81,
+    "mae_r": 0.26
+   },
+   "o_spread040": {
+    "pnl": 10.5,
+    "r": 0.571,
+    "exit": "TIME_STOP_48_BARS",
+    "closeIdx": 8370,
+    "hold": 48,
+    "mfe_r": 0.8,
+    "mae_r": 0.27
+   },
+   "o_spread040_slip015": {
+    "pnl": 10.2,
+    "r": 0.555,
+    "exit": "TIME_STOP_48_BARS",
+    "closeIdx": 8370,
+    "hold": 48,
+    "mfe_r": 0.79,
+    "mae_r": 0.28
+   },
+   "o_ppOther": {
+    "pnl": 10.66,
+    "r": 0.58,
+    "exit": "TIME_STOP_48_BARS",
+    "closeIdx": 8370,
+    "hold": 48,
+    "mfe_r": 0.81,
+    "mae_r": 0.26
+   }
+  },
+  {
+   "i": 8628,
+   "t": 1781045700,
+   "time": "2026-06-09 22:55",
+   "day": "2026-06-09",
+   "region": "A",
+   "family": "V2C_COMPRESSION_EXPANSION",
+   "dir": -1,
+   "side": "SELL",
+   "state": "COMPRESSION",
+   "s5": "BEARISH",
+   "s5event": "CHOCH",
+   "ctx15": {
+    "state": "BEARISH",
+    "lastEvent": "CHOCH",
+    "rangeHigh": 4363.47,
+    "rangeLow": 4236.4
+   },
+   "ctx30": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4363.47,
+    "rangeLow": 4236.4
+   },
+   "ctx1h": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4475.91,
+    "rangeLow": 4268.26
+   },
+   "trigger": "COMPRESSION_BREAK_CLOSE",
+   "confirmation": "ACCEPTANCE_SECOND_CLOSE",
+   "entry": 4236.97,
+   "stop": 4262.25,
+   "stop_dist": 25.28,
+   "stop_atr": 5.04,
+   "target": 4188.28,
+   "target_source": "measured_move_2x_box",
+   "rr": 1.93,
+   "level": 4237.26,
+   "extra": {
+    "boxHeightAtr": 4.88
+   },
+   "o": {
+    "pnl": 48.69,
+    "r": 1.926,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 8654,
+    "hold": 26,
+    "mfe_r": 1.96,
+    "mae_r": 0.41
+   },
+   "o_spread040": {
+    "pnl": 48.69,
+    "r": 1.926,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 8654,
+    "hold": 26,
+    "mfe_r": 1.95,
+    "mae_r": 0.42
+   },
+   "o_spread040_slip015": {
+    "pnl": 48.39,
+    "r": 1.914,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 8654,
+    "hold": 26,
+    "mfe_r": 1.95,
+    "mae_r": 0.43
+   },
+   "o_ppOther": {
+    "pnl": 48.69,
+    "r": 1.926,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 8654,
+    "hold": 26,
+    "mfe_r": 1.96,
+    "mae_r": 0.41
+   }
+  },
+  {
+   "i": 8874,
+   "t": 1781119500,
+   "time": "2026-06-10 19:25",
+   "day": "2026-06-10",
+   "region": "A",
+   "family": "V2C_COMPRESSION_EXPANSION",
+   "dir": -1,
+   "side": "SELL",
+   "state": "COMPRESSION",
+   "s5": "BEARISH",
+   "s5event": "BOS",
+   "ctx15": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4274.35,
+    "rangeLow": 4106.84
+   },
+   "ctx30": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4363.47,
+    "rangeLow": 4172.13
+   },
+   "ctx1h": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4363.47,
+    "rangeLow": 4268.26
+   },
+   "trigger": "COMPRESSION_BREAK_CLOSE",
+   "confirmation": "ACCEPTANCE_SECOND_CLOSE",
+   "entry": 4084.68,
+   "stop": 4115.75,
+   "stop_dist": 31.07,
+   "stop_atr": 4.95,
+   "target": 4031.2,
+   "target_source": "measured_move_2x_box",
+   "rr": 1.72,
+   "level": 4087.15,
+   "extra": {
+    "boxHeightAtr": 4.46
+   },
+   "o": {
+    "pnl": 53.48,
+    "r": 1.721,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 8907,
+    "hold": 33,
+    "mfe_r": 1.95,
+    "mae_r": 0.27
+   },
+   "o_spread040": {
+    "pnl": 53.48,
+    "r": 1.721,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 8907,
+    "hold": 33,
+    "mfe_r": 1.95,
+    "mae_r": 0.27
+   },
+   "o_spread040_slip015": {
+    "pnl": 53.18,
+    "r": 1.712,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 8907,
+    "hold": 33,
+    "mfe_r": 1.94,
+    "mae_r": 0.28
+   },
+   "o_ppOther": {
+    "pnl": 53.48,
+    "r": 1.721,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 8907,
+    "hold": 33,
+    "mfe_r": 1.95,
+    "mae_r": 0.27
+   }
+  },
+  {
+   "i": 9025,
+   "t": 1781168400,
+   "time": "2026-06-11 09:00",
+   "day": "2026-06-11",
+   "region": "A",
+   "family": "V2C_COMPRESSION_EXPANSION",
+   "dir": -1,
+   "side": "SELL",
+   "state": "COMPRESSION",
+   "s5": "BEARISH",
+   "s5event": "CHOCH",
+   "ctx15": {
+    "state": "BULLISH",
+    "lastEvent": "CHOCH",
+    "rangeHigh": 4221.92,
+    "rangeLow": 4023.76
+   },
+   "ctx30": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4363.47,
+    "rangeLow": 4023.76
+   },
+   "ctx1h": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4363.47,
+    "rangeLow": 4023.76
+   },
+   "trigger": "COMPRESSION_BREAK_CLOSE",
+   "confirmation": "ACCEPTANCE_SECOND_CLOSE",
+   "entry": 4085.37,
+   "stop": 4113.2,
+   "stop_dist": 27.83,
+   "stop_atr": 5.05,
+   "target": 4034.96,
+   "target_source": "measured_move_2x_box",
+   "rr": 1.81,
+   "level": 4086.75,
+   "extra": {
+    "boxHeightAtr": 4.7
+   },
+   "o": {
+    "pnl": 1.59,
+    "r": 0.057,
+    "exit": "TIME_STOP_48_BARS",
+    "closeIdx": 9073,
+    "hold": 48,
+    "mfe_r": 1,
+    "mae_r": 0.4
+   },
+   "o_spread040": {
+    "pnl": 1.42,
+    "r": 0.051,
+    "exit": "TIME_STOP_48_BARS",
+    "closeIdx": 9073,
+    "hold": 48,
+    "mfe_r": 0.99,
+    "mae_r": 0.41
+   },
+   "o_spread040_slip015": {
+    "pnl": 1.12,
+    "r": 0.04,
+    "exit": "TIME_STOP_48_BARS",
+    "closeIdx": 9073,
+    "hold": 48,
+    "mfe_r": 0.99,
+    "mae_r": 0.42
+   },
+   "o_ppOther": {
+    "pnl": 1.59,
+    "r": 0.057,
+    "exit": "TIME_STOP_48_BARS",
+    "closeIdx": 9073,
+    "hold": 48,
+    "mfe_r": 1,
+    "mae_r": 0.4
+   }
+  },
+  {
+   "i": 10361,
+   "t": 1781760000,
+   "time": "2026-06-18 05:20",
+   "day": "2026-06-18",
+   "region": "A",
+   "family": "V2C_COMPRESSION_EXPANSION",
+   "dir": 1,
+   "side": "BUY",
+   "state": "COMPRESSION",
+   "s5": "BEARISH",
+   "s5event": "CHOCH",
+   "ctx15": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4382.36,
+    "rangeLow": 4218.83
+   },
+   "ctx30": {
+    "state": "BEARISH",
+    "lastEvent": "CHOCH",
+    "rangeHigh": 4382.36,
+    "rangeLow": 4218.83
+   },
+   "ctx1h": {
+    "state": "BEARISH",
+    "lastEvent": "CHOCH",
+    "rangeHigh": 4382.36,
+    "rangeLow": 4176.96
+   },
+   "trigger": "COMPRESSION_BREAK_CLOSE",
+   "confirmation": "ACCEPTANCE_SECOND_CLOSE",
+   "entry": 4319.26,
+   "stop": 4309.21,
+   "stop_dist": 10.06,
+   "stop_atr": 2.33,
+   "target": 4337.6,
+   "target_source": "measured_move_2x_box",
+   "rr": 1.82,
+   "level": 4318.96,
+   "extra": {
+    "boxHeightAtr": 2.16
+   },
+   "o": {
+    "pnl": -12.45,
+    "r": -1.239,
+    "exit": "EMERGENCY_BROKER_SL",
+    "closeIdx": 10366,
+    "hold": 5,
+    "mfe_r": 0.53,
+    "mae_r": 1.7
+   },
+   "o_spread040": {
+    "pnl": -12.61,
+    "r": -1.255,
+    "exit": "EMERGENCY_BROKER_SL",
+    "closeIdx": 10366,
+    "hold": 5,
+    "mfe_r": 0.51,
+    "mae_r": 1.72
+   },
+   "o_spread040_slip015": {
+    "pnl": -12.91,
+    "r": -1.285,
+    "exit": "EMERGENCY_BROKER_SL",
+    "closeIdx": 10366,
+    "hold": 5,
+    "mfe_r": 0.5,
+    "mae_r": 1.73
+   },
+   "o_ppOther": {
+    "pnl": -12.45,
+    "r": -1.239,
+    "exit": "EMERGENCY_BROKER_SL",
+    "closeIdx": 10366,
+    "hold": 5,
+    "mfe_r": 0.53,
+    "mae_r": 1.7
+   }
+  },
+  {
+   "i": 10550,
+   "t": 1781820300,
+   "time": "2026-06-18 22:05",
+   "day": "2026-06-18",
+   "region": "A",
+   "family": "V2C_COMPRESSION_EXPANSION",
+   "dir": -1,
+   "side": "SELL",
+   "state": "COMPRESSION",
+   "s5": "BULLISH",
+   "s5event": "BOS",
+   "ctx15": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4329.96,
+    "rangeLow": 4201.21
+   },
+   "ctx30": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4382.36,
+    "rangeLow": 4218.83
+   },
+   "ctx1h": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4382.36,
+    "rangeLow": 4176.96
+   },
+   "trigger": "COMPRESSION_BREAK_CLOSE",
+   "confirmation": "ACCEPTANCE_SECOND_CLOSE",
+   "entry": 4206.73,
+   "stop": 4220.04,
+   "stop_dist": 13.31,
+   "stop_atr": 3.35,
+   "target": 4183.93,
+   "target_source": "measured_move_2x_box",
+   "rr": 1.71,
+   "level": 4207.74,
+   "extra": {
+    "boxHeightAtr": 3
+   },
+   "o": {
+    "pnl": 22.8,
+    "r": 1.713,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 10598,
+    "hold": 48,
+    "mfe_r": 2.07,
+    "mae_r": 0.31
+   },
+   "o_spread040": {
+    "pnl": 22.8,
+    "r": 1.713,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 10598,
+    "hold": 48,
+    "mfe_r": 2.06,
+    "mae_r": 0.32
+   },
+   "o_spread040_slip015": {
+    "pnl": 22.5,
+    "r": 1.69,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 10598,
+    "hold": 48,
+    "mfe_r": 2.05,
+    "mae_r": 0.34
+   },
+   "o_ppOther": {
+    "pnl": 22.8,
+    "r": 1.713,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 10598,
+    "hold": 48,
+    "mfe_r": 2.07,
+    "mae_r": 0.31
+   }
+  },
+  {
+   "i": 11038,
+   "t": 1782157500,
+   "time": "2026-06-22 19:45",
+   "day": "2026-06-22",
+   "region": "A",
+   "family": "V2C_COMPRESSION_EXPANSION",
+   "dir": -1,
+   "side": "SELL",
+   "state": "COMPRESSION",
+   "s5": "BEARISH",
+   "s5event": "BOS",
+   "ctx15": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4221.17,
+    "rangeLow": 4136.45
+   },
+   "ctx30": {
+    "state": "BEARISH",
+    "lastEvent": "CHOCH",
+    "rangeHigh": 4276.77,
+    "rangeLow": 4136.45
+   },
+   "ctx1h": {
+    "state": "BULLISH",
+    "lastEvent": "CHOCH",
+    "rangeHigh": 4382.36,
+    "rangeLow": 4121.61
+   },
+   "trigger": "COMPRESSION_BREAK_CLOSE",
+   "confirmation": "ACCEPTANCE_SECOND_CLOSE",
+   "entry": 4185.35,
+   "stop": 4193.71,
+   "stop_dist": 8.37,
+   "stop_atr": 2.85,
+   "target": 4170.69,
+   "target_source": "measured_move_2x_box",
+   "rr": 1.75,
+   "level": 4185.84,
+   "extra": {
+    "boxHeightAtr": 2.58
+   },
+   "o": {
+    "pnl": -8.18,
+    "r": -0.978,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 11048,
+    "hold": 10,
+    "mfe_r": 0.03,
+    "mae_r": 1.03
+   },
+   "o_spread040": {
+    "pnl": -8.34,
+    "r": -0.998,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 11048,
+    "hold": 10,
+    "mfe_r": 0.01,
+    "mae_r": 1.05
+   },
+   "o_spread040_slip015": {
+    "pnl": -8.64,
+    "r": -1.033,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 11048,
+    "hold": 10,
+    "mfe_r": 0,
+    "mae_r": 1.07
+   },
+   "o_ppOther": {
+    "pnl": -8.18,
+    "r": -0.978,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 11048,
+    "hold": 10,
+    "mfe_r": 0.03,
+    "mae_r": 1.03
+   }
+  },
+  {
+   "i": 11303,
+   "t": 1782240600,
+   "time": "2026-06-23 18:50",
+   "day": "2026-06-23",
+   "region": "A",
+   "family": "V2C_COMPRESSION_EXPANSION",
+   "dir": -1,
+   "side": "SELL",
+   "state": "COMPRESSION",
+   "s5": "BEARISH",
+   "s5event": "BOS",
+   "ctx15": {
+    "state": "BULLISH",
+    "lastEvent": "CHOCH",
+    "rangeHigh": 4198.58,
+    "rangeLow": 4090.63
+   },
+   "ctx30": {
+    "state": "BULLISH",
+    "lastEvent": "CHOCH",
+    "rangeHigh": 4221.17,
+    "rangeLow": 4090.63
+   },
+   "ctx1h": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4329.96,
+    "rangeLow": 4090.63
+   },
+   "trigger": "COMPRESSION_BREAK_CLOSE",
+   "confirmation": "ACCEPTANCE_SECOND_CLOSE",
+   "entry": 4115.89,
+   "stop": 4133.51,
+   "stop_dist": 17.62,
+   "stop_atr": 4.75,
+   "target": 4082.09,
+   "target_source": "measured_move_2x_box",
+   "rr": 1.92,
+   "level": 4116.13,
+   "extra": {
+    "boxHeightAtr": 4.59
+   },
+   "o": {
+    "pnl": 33.8,
+    "r": 1.918,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 11348,
+    "hold": 45,
+    "mfe_r": 1.99,
+    "mae_r": 0.59
+   },
+   "o_spread040": {
+    "pnl": 33.8,
+    "r": 1.918,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 11348,
+    "hold": 45,
+    "mfe_r": 1.98,
+    "mae_r": 0.6
+   },
+   "o_spread040_slip015": {
+    "pnl": 33.5,
+    "r": 1.901,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 11348,
+    "hold": 45,
+    "mfe_r": 1.97,
+    "mae_r": 0.6
+   },
+   "o_ppOther": {
+    "pnl": 33.8,
+    "r": 1.918,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 11348,
+    "hold": 45,
+    "mfe_r": 1.99,
+    "mae_r": 0.59
+   }
+  },
+  {
+   "i": 11606,
+   "t": 1782338700,
+   "time": "2026-06-24 22:05",
+   "day": "2026-06-24",
+   "region": "A",
+   "family": "V2C_COMPRESSION_EXPANSION",
+   "dir": 1,
+   "side": "BUY",
+   "state": "COMPRESSION",
+   "s5": "BULLISH",
+   "s5event": "BOS",
+   "ctx15": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4115.08,
+    "rangeLow": 3958.81
+   },
+   "ctx30": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4215.31,
+    "rangeLow": 3958.81
+   },
+   "ctx1h": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4221.17,
+    "rangeLow": 4050.26
+   },
+   "trigger": "COMPRESSION_BREAK_CLOSE",
+   "confirmation": "ACCEPTANCE_SECOND_CLOSE",
+   "entry": 4003.69,
+   "stop": 3984.12,
+   "stop_dist": 19.57,
+   "stop_atr": 3.45,
+   "target": 4039.45,
+   "target_source": "measured_move_2x_box",
+   "rr": 1.83,
+   "level": 4002.94,
+   "extra": {
+    "boxHeightAtr": 3.22
+   },
+   "o": {
+    "pnl": -16.06,
+    "r": -0.821,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 11635,
+    "hold": 29,
+    "mfe_r": 0.74,
+    "mae_r": 0.83
+   },
+   "o_spread040": {
+    "pnl": -16.22,
+    "r": -0.829,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 11635,
+    "hold": 29,
+    "mfe_r": 0.73,
+    "mae_r": 0.84
+   },
+   "o_spread040_slip015": {
+    "pnl": -16.52,
+    "r": -0.844,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 11635,
+    "hold": 29,
+    "mfe_r": 0.73,
+    "mae_r": 0.85
+   },
+   "o_ppOther": {
+    "pnl": -16.06,
+    "r": -0.821,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 11635,
+    "hold": 29,
+    "mfe_r": 0.74,
+    "mae_r": 0.83
+   }
+  },
+  {
+   "i": 11752,
+   "t": 1782382500,
+   "time": "2026-06-25 10:15",
+   "day": "2026-06-25",
+   "region": "A",
+   "family": "V2C_COMPRESSION_EXPANSION",
+   "dir": -1,
+   "side": "SELL",
+   "state": "COMPRESSION",
+   "s5": "BEARISH",
+   "s5event": "CHOCH",
+   "ctx15": {
+    "state": "BEARISH",
+    "lastEvent": "CHOCH",
+    "rangeHigh": 4022.3,
+    "rangeLow": 3958.81
+   },
+   "ctx30": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4198.58,
+    "rangeLow": 3958.81
+   },
+   "ctx1h": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4221.17,
+    "rangeLow": 3958.81
+   },
+   "trigger": "COMPRESSION_BREAK_CLOSE",
+   "confirmation": "ACCEPTANCE_SECOND_CLOSE",
+   "entry": 3984.51,
+   "stop": 3998.15,
+   "stop_dist": 13.64,
+   "stop_atr": 2.8,
+   "target": 3960.46,
+   "target_source": "measured_move_2x_box",
+   "rr": 1.76,
+   "level": 3985.26,
+   "extra": {
+    "boxHeightAtr": 2.55
+   },
+   "o": {
+    "pnl": -16.08,
+    "r": -1.179,
+    "exit": "EMERGENCY_BROKER_SL",
+    "closeIdx": 11779,
+    "hold": 27,
+    "mfe_r": 0.79,
+    "mae_r": 2.02
+   },
+   "o_spread040": {
+    "pnl": -16.08,
+    "r": -1.179,
+    "exit": "EMERGENCY_BROKER_SL",
+    "closeIdx": 11779,
+    "hold": 27,
+    "mfe_r": 0.77,
+    "mae_r": 2.03
+   },
+   "o_spread040_slip015": {
+    "pnl": -16.38,
+    "r": -1.201,
+    "exit": "EMERGENCY_BROKER_SL",
+    "closeIdx": 11779,
+    "hold": 27,
+    "mfe_r": 0.76,
+    "mae_r": 2.04
+   },
+   "o_ppOther": {
+    "pnl": -16.08,
+    "r": -1.179,
+    "exit": "EMERGENCY_BROKER_SL",
+    "closeIdx": 11779,
+    "hold": 27,
+    "mfe_r": 0.79,
+    "mae_r": 2.02
+   }
+  },
+  {
+   "i": 12134,
+   "t": 1782500700,
+   "time": "2026-06-26 19:05",
+   "day": "2026-06-26",
+   "region": "A",
+   "family": "V2C_COMPRESSION_EXPANSION",
+   "dir": -1,
+   "side": "SELL",
+   "state": "COMPRESSION",
+   "s5": "BEARISH",
+   "s5event": "BOS",
+   "ctx15": {
+    "state": "BULLISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4096.05,
+    "rangeLow": 3982.88
+   },
+   "ctx30": {
+    "state": "BULLISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4097.6,
+    "rangeLow": 3962.37
+   },
+   "ctx1h": {
+    "state": "BULLISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4215.31,
+    "rangeLow": 3958.81
+   },
+   "trigger": "COMPRESSION_BREAK_CLOSE",
+   "confirmation": "ACCEPTANCE_SECOND_CLOSE",
+   "entry": 4066.59,
+   "stop": 4079.24,
+   "stop_dist": 12.65,
+   "stop_atr": 3.52,
+   "target": 4043.21,
+   "target_source": "measured_move_2x_box",
+   "rr": 1.85,
+   "level": 4066.99,
+   "extra": {
+    "boxHeightAtr": 3.3
+   },
+   "o": {
+    "pnl": -9.45,
+    "r": -0.747,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 12154,
+    "hold": 20,
+    "mfe_r": 0.15,
+    "mae_r": 0.78
+   },
+   "o_spread040": {
+    "pnl": -9.61,
+    "r": -0.76,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 12154,
+    "hold": 20,
+    "mfe_r": 0.14,
+    "mae_r": 0.79
+   },
+   "o_spread040_slip015": {
+    "pnl": -9.91,
+    "r": -0.783,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 12154,
+    "hold": 20,
+    "mfe_r": 0.13,
+    "mae_r": 0.8
+   },
+   "o_ppOther": {
+    "pnl": -9.45,
+    "r": -0.747,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 12154,
+    "hold": 20,
+    "mfe_r": 0.15,
+    "mae_r": 0.78
+   }
+  },
+  {
+   "i": 12410,
+   "t": 1782759900,
+   "time": "2026-06-29 19:05",
+   "day": "2026-06-29",
+   "region": "A",
+   "family": "V2C_COMPRESSION_EXPANSION",
+   "dir": -1,
+   "side": "SELL",
+   "state": "COMPRESSION",
+   "s5": "BEARISH",
+   "s5event": "BOS",
+   "ctx15": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4075.71,
+    "rangeLow": 4000.15
+   },
+   "ctx30": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4096.05,
+    "rangeLow": 4000.15
+   },
+   "ctx1h": {
+    "state": "BULLISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4198.58,
+    "rangeLow": 3958.81
+   },
+   "trigger": "COMPRESSION_BREAK_CLOSE",
+   "confirmation": "ACCEPTANCE_SECOND_CLOSE",
+   "entry": 4011.6,
+   "stop": 4025.58,
+   "stop_dist": 13.98,
+   "stop_atr": 4.14,
+   "target": 3985.09,
+   "target_source": "measured_move_2x_box",
+   "rr": 1.9,
+   "level": 4011.86,
+   "extra": {
+    "boxHeightAtr": 3.96
+   },
+   "o": {
+    "pnl": -7.35,
+    "r": -0.526,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 12433,
+    "hold": 23,
+    "mfe_r": 0.44,
+    "mae_r": 0.66
+   },
+   "o_spread040": {
+    "pnl": -7.51,
+    "r": -0.537,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 12433,
+    "hold": 23,
+    "mfe_r": 0.43,
+    "mae_r": 0.67
+   },
+   "o_spread040_slip015": {
+    "pnl": -7.81,
+    "r": -0.559,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 12433,
+    "hold": 23,
+    "mfe_r": 0.42,
+    "mae_r": 0.68
+   },
+   "o_ppOther": {
+    "pnl": -7.35,
+    "r": -0.526,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 12433,
+    "hold": 23,
+    "mfe_r": 0.44,
+    "mae_r": 0.66
+   }
+  },
+  {
+   "i": 12578,
+   "t": 1782813900,
+   "time": "2026-06-30 10:05",
+   "day": "2026-06-30",
+   "region": "A",
+   "family": "V2C_COMPRESSION_EXPANSION",
+   "dir": 1,
+   "side": "BUY",
+   "state": "COMPRESSION",
+   "s5": "BULLISH",
+   "s5event": "BOS",
+   "ctx15": {
+    "state": "BULLISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4052.36,
+    "rangeLow": 3942.1
+   },
+   "ctx30": {
+    "state": "BULLISH",
+    "lastEvent": "CHOCH",
+    "rangeHigh": 4075.71,
+    "rangeLow": 3942.1
+   },
+   "ctx1h": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4198.58,
+    "rangeLow": 3942.1
+   },
+   "trigger": "COMPRESSION_BREAK_CLOSE",
+   "confirmation": "ACCEPTANCE_SECOND_CLOSE",
+   "entry": 4024.29,
+   "stop": 4011.86,
+   "stop_dist": 12.43,
+   "stop_atr": 2.78,
+   "target": 4047.32,
+   "target_source": "measured_move_2x_box",
+   "rr": 1.85,
+   "level": 4023.98,
+   "extra": {
+    "boxHeightAtr": 2.61
+   },
+   "o": {
+    "pnl": -6.4,
+    "r": -0.515,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 12605,
+    "hold": 27,
+    "mfe_r": 1.03,
+    "mae_r": 0.57
+   },
+   "o_spread040": {
+    "pnl": -6.56,
+    "r": -0.528,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 12605,
+    "hold": 27,
+    "mfe_r": 1.01,
+    "mae_r": 0.59
+   },
+   "o_spread040_slip015": {
+    "pnl": -6.86,
+    "r": -0.552,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 12605,
+    "hold": 27,
+    "mfe_r": 1,
+    "mae_r": 0.6
+   },
+   "o_ppOther": {
+    "pnl": -6.4,
+    "r": -0.515,
+    "exit": "THESIS_DETERIORATION_OPPOSITE_STRUCTURE",
+    "closeIdx": 12605,
+    "hold": 27,
+    "mfe_r": 1.03,
+    "mae_r": 0.57
+   }
+  },
+  {
+   "i": 12688,
+   "t": 1782846900,
+   "time": "2026-06-30 19:15",
+   "day": "2026-06-30",
+   "region": "A",
+   "family": "V2C_COMPRESSION_EXPANSION",
+   "dir": -1,
+   "side": "SELL",
+   "state": "COMPRESSION",
+   "s5": "BEARISH",
+   "s5event": "CHOCH",
+   "ctx15": {
+    "state": "BULLISH",
+    "lastEvent": "CHOCH",
+    "rangeHigh": 4063.36,
+    "rangeLow": 3942.1
+   },
+   "ctx30": {
+    "state": "BEARISH",
+    "lastEvent": "CHOCH",
+    "rangeHigh": 4063.36,
+    "rangeLow": 3942.1
+   },
+   "ctx1h": {
+    "state": "BEARISH",
+    "lastEvent": "BOS",
+    "rangeHigh": 4145.1,
+    "rangeLow": 3942.1
+   },
+   "trigger": "COMPRESSION_BREAK_CLOSE",
+   "confirmation": "ACCEPTANCE_SECOND_CLOSE",
+   "entry": 4023.99,
+   "stop": 4033.94,
+   "stop_dist": 9.95,
+   "stop_atr": 3.42,
+   "target": 4006.3,
+   "target_source": "measured_move_2x_box",
+   "rr": 1.78,
+   "level": 4024.53,
+   "extra": {
+    "boxHeightAtr": 3.13
+   },
+   "o": {
+    "pnl": 17.69,
+    "r": 1.778,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 12731,
+    "hold": 43,
+    "mfe_r": 1.78,
+    "mae_r": 0.06
+   },
+   "o_spread040": {
+    "pnl": 17.69,
+    "r": 1.778,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 12732,
+    "hold": 44,
+    "mfe_r": 1.84,
+    "mae_r": 0.07
+   },
+   "o_spread040_slip015": {
+    "pnl": 17.39,
+    "r": 1.748,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 12732,
+    "hold": 44,
+    "mfe_r": 1.83,
+    "mae_r": 0.09
+   },
+   "o_ppOther": {
+    "pnl": 17.69,
+    "r": 1.778,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 12731,
+    "hold": 43,
+    "mfe_r": 1.78,
+    "mae_r": 0.06
+   }
+  },
+  {
+   "i": 13790,
+   "t": 1783382700,
+   "time": "2026-07-07 00:05",
+   "day": "2026-07-07",
+   "region": "A",
+   "family": "V2C_COMPRESSION_EXPANSION",
+   "dir": -1,
+   "side": "SELL",
+   "state": "COMPRESSION",
+   "s5": "BULLISH",
+   "s5event": "CHOCH",
+   "ctx15": {
+    "state": "BEARISH",
+    "lastEvent": "CHOCH",
+    "rangeHigh": 4203.19,
+    "rangeLow": 4128.46
+   },
+   "ctx30": {
+    "state": "BULLISH",
+    "lastEvent": "CHOCH",
+    "rangeHigh": 4203.19,
+    "rangeLow": 4128.46
+   },
+   "ctx1h": {
+    "state": "BEARISH",
+    "lastEvent": "CHOCH",
+    "rangeHigh": 4203.19,
+    "rangeLow": 3959.98
+   },
+   "trigger": "COMPRESSION_BREAK_CLOSE",
+   "confirmation": "ACCEPTANCE_SECOND_CLOSE",
+   "entry": 4156.59,
+   "stop": 4166.02,
+   "stop_dist": 9.43,
+   "stop_atr": 3.88,
+   "target": 4139.37,
+   "target_source": "measured_move_2x_box",
+   "rr": 1.83,
+   "level": 4156.97,
+   "extra": {
+    "boxHeightAtr": 3.62
+   },
+   "o": {
+    "pnl": 17.22,
+    "r": 1.826,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 13802,
+    "hold": 12,
+    "mfe_r": 1.83,
+    "mae_r": 0.69
+   },
+   "o_spread040": {
+    "pnl": 17.22,
+    "r": 1.826,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 13803,
+    "hold": 13,
+    "mfe_r": 1.97,
+    "mae_r": 0.7
+   },
+   "o_spread040_slip015": {
+    "pnl": 16.92,
+    "r": 1.794,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 13803,
+    "hold": 13,
+    "mfe_r": 1.96,
+    "mae_r": 0.72
+   },
+   "o_ppOther": {
+    "pnl": 17.22,
+    "r": 1.826,
+    "exit": "STRUCTURAL_TARGET",
+    "closeIdx": 13802,
+    "hold": 12,
+    "mfe_r": 1.83,
+    "mae_r": 0.69
+   }
+  }
+ ]
+}

@@ -1,0 +1,337 @@
+{
+ "bars": 3909,
+ "weeks": 663,
+ "obs": 3368,
+ "wobs": 628,
+ "gates": {
+  "D1": {
+   "UP": {
+    "pass": false,
+    "discovery_positive_horizons": [
+     5
+    ],
+    "ci_ok": false,
+    "ratio_ok": true,
+    "validation_positive": [
+     5,
+     10
+    ],
+    "holdout_positive": [
+     5
+    ],
+    "common_positive": [
+     5
+    ],
+    "pos_year_share": 0.5,
+    "max_year_share_of_excess": 0,
+    "outlier_ok": false
+   },
+   "DOWN": {
+    "pass": false,
+    "discovery_positive_horizons": [
+     5,
+     10,
+     20
+    ],
+    "ci_ok": false,
+    "ratio_ok": false,
+    "validation_positive": [],
+    "holdout_positive": [
+     5,
+     10,
+     20
+    ],
+    "common_positive": [],
+    "pos_year_share": 0.58,
+    "max_year_share_of_excess": 0,
+    "outlier_ok": true
+   }
+  },
+  "D2": {
+   "UP": {
+    "pass": false,
+    "discovery_positive_horizons": [
+     5,
+     10,
+     20
+    ],
+    "ci_ok": false,
+    "ratio_ok": true,
+    "validation_positive": [
+     5,
+     10,
+     20
+    ],
+    "holdout_positive": [
+     5,
+     10,
+     20
+    ],
+    "common_positive": [
+     5,
+     10,
+     20
+    ],
+    "pos_year_share": 0.67,
+    "max_year_share_of_excess": 0.54,
+    "outlier_ok": false
+   },
+   "DOWN": {
+    "pass": false,
+    "discovery_positive_horizons": [
+     5,
+     10,
+     20
+    ],
+    "ci_ok": false,
+    "ratio_ok": false,
+    "validation_positive": [
+     5,
+     10
+    ],
+    "holdout_positive": [
+     5,
+     10,
+     20
+    ],
+    "common_positive": [
+     5,
+     10
+    ],
+    "pos_year_share": 0.58,
+    "max_year_share_of_excess": 1.1,
+    "outlier_ok": true
+   }
+  },
+  "D3": {
+   "UPTREND": {
+    "pass": false,
+    "discovery_positive_horizons": [
+     5,
+     10,
+     20
+    ],
+    "ci_ok": false,
+    "ratio_ok": true,
+    "validation_positive": [
+     5
+    ],
+    "holdout_positive": [
+     5,
+     10,
+     20
+    ],
+    "common_positive": [
+     5
+    ],
+    "pos_year_share": 0.42,
+    "max_year_share_of_excess": 0,
+    "outlier_ok": false
+   },
+   "DOWNTREND": {
+    "pass": false,
+    "discovery_positive_horizons": [
+     5,
+     10,
+     20
+    ],
+    "ci_ok": false,
+    "ratio_ok": false,
+    "validation_positive": [],
+    "holdout_positive": [
+     5,
+     10,
+     20
+    ],
+    "common_positive": [],
+    "pos_year_share": 0.55,
+    "max_year_share_of_excess": 1.28,
+    "outlier_ok": true
+   }
+  },
+  "ALIGN": {
+   "ALIGNED_BULL": {
+    "pass": false,
+    "discovery_positive_horizons": [],
+    "ci_ok": false,
+    "ratio_ok": true,
+    "validation_positive": [
+     5
+    ],
+    "holdout_positive": [
+     5,
+     10,
+     20
+    ],
+    "common_positive": [],
+    "pos_year_share": 0.27,
+    "max_year_share_of_excess": 0,
+    "outlier_ok": false
+   },
+   "ALIGNED_BEAR": {
+    "pass": false,
+    "discovery_positive_horizons": [
+     5,
+     10,
+     20
+    ],
+    "ci_ok": false,
+    "ratio_ok": true,
+    "validation_positive": [],
+    "holdout_positive": [
+     5,
+     10,
+     20
+    ],
+    "common_positive": [],
+    "pos_year_share": 0.29,
+    "max_year_share_of_excess": 0,
+    "outlier_ok": true
+   },
+   "CONFLICT_D_UP_W_DOWN": {
+    "pass": false,
+    "reason": "N"
+   },
+   "CONFLICT_D_DOWN_W_UP": {
+    "pass": false,
+    "reason": "N"
+   }
+  },
+  "MATRIX": {
+   "ALIGNED_BULL|LOW": {
+    "pass": false,
+    "reason": "N"
+   },
+   "ALIGNED_BULL|NORMAL": {
+    "pass": false,
+    "reason": "N"
+   },
+   "ALIGNED_BULL|HIGH": {
+    "pass": false,
+    "discovery_positive_horizons": [],
+    "ci_ok": false,
+    "ratio_ok": true,
+    "validation_positive": [
+     5
+    ],
+    "holdout_positive": [],
+    "common_positive": [],
+    "pos_year_share": 0.38,
+    "max_year_share_of_excess": 0,
+    "outlier_ok": false
+   },
+   "ALIGNED_BEAR|LOW": {
+    "pass": false,
+    "reason": "N"
+   },
+   "ALIGNED_BEAR|NORMAL": {
+    "pass": false,
+    "reason": "N"
+   },
+   "ALIGNED_BEAR|HIGH": {
+    "pass": false,
+    "reason": "N"
+   }
+  },
+  "W1": {
+   "UP": {
+    "pass": false,
+    "discovery_positive_horizons": [
+     1,
+     2,
+     4
+    ],
+    "ci_ok": false,
+    "ratio_ok": true,
+    "validation_positive": [
+     1,
+     2
+    ],
+    "holdout_positive": [
+     1,
+     2,
+     4
+    ],
+    "common_positive": [
+     1,
+     2
+    ]
+   },
+   "DOWN": {
+    "pass": false,
+    "discovery_positive_horizons": [
+     1,
+     2
+    ],
+    "ci_ok": false,
+    "ratio_ok": false,
+    "validation_positive": [
+     1,
+     2
+    ],
+    "holdout_positive": [
+     1,
+     2,
+     4
+    ],
+    "common_positive": [
+     1,
+     2
+    ]
+   }
+  },
+  "W2": {
+   "ALIGNED_BULL": {
+    "pass": false,
+    "discovery_positive_horizons": [],
+    "ci_ok": false,
+    "ratio_ok": false,
+    "validation_positive": [],
+    "holdout_positive": [
+     1,
+     2,
+     4
+    ],
+    "common_positive": []
+   },
+   "ALIGNED_BEAR": {
+    "pass": false,
+    "reason": "N"
+   }
+  },
+  "W3": {
+   "UPTREND": {
+    "pass": false,
+    "discovery_positive_horizons": [],
+    "ci_ok": false,
+    "ratio_ok": true,
+    "validation_positive": [
+     4
+    ],
+    "holdout_positive": [
+     1,
+     2,
+     4
+    ],
+    "common_positive": []
+   },
+   "DOWNTREND": {
+    "pass": false,
+    "discovery_positive_horizons": [
+     1,
+     2,
+     4
+    ],
+    "ci_ok": false,
+    "ratio_ok": false,
+    "validation_positive": [],
+    "holdout_positive": [
+     1,
+     2,
+     4
+    ],
+    "common_positive": []
+   }
+  }
+ }
+}

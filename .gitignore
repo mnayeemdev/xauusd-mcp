@@ -9,3 +9,17 @@ rules.json
 # XAUUSD auto signal watcher — local runtime bookkeeping (last processed
 # candle, last alerted signal, single-instance lock), not a trading ledger.
 state/
+
+# research raw inputs (regenerable; see validation/RESEARCH_DATA_EXCLUDED.md)
+__pycache__/
+validation/v3_multiyear_event_study/xauusdm_multiyear_bars.json
+validation/strategy_improvement_lab/lab_dataset.json
+validation/master_edge_validation/xauusdm_bars_master.json
+validation/replay_audit_2026-09-25/xauusdm_bars_extended.json
+validation/replay_audit_2026-09-25/xauusdm_bars_snapshot.json
+validation/v5_news_edge/xauusdm_m1_recent.json
+validation/v5_news_edge/raw/*.htm
+validation/v5_news_edge/raw/*.pdf
+validation/v5_news_edge/raw/bea/
+validation/v5_news_edge/raw/bea_releases/
+validation/v5_news_edge/raw/fed_statements/

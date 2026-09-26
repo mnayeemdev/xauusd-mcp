@@ -22,6 +22,14 @@ export const DEFAULT_WATCHER_STATE = Object.freeze({
   baseline_established: false,
   last_alerted_signal_id: null,
   last_connection_ok: null,
+  // Operational feed-health bookkeeping (src/engine/watcher.js
+  // trackFeedHealth): consecutive polls that could not obtain a confirmed
+  // 5m candle, when that streak began, and when (if) the one-shot
+  // FEED_STALLED operational alert was raised for it. Never decision-
+  // relevant: candle gating, re-baselining and alert dedup ignore these.
+  feed_failure_streak: 0,
+  feed_failure_since: null,
+  feed_stall_alerted_at: null,
   updated_at: null,
 });
 

@@ -125,3 +125,51 @@ export function notifyPreEntryWatch(plan, { channels = ['console', 'desktop'], _
   if (channels.includes('console')) consolePreEntryNotify(plan, _deps);
   if (channels.includes('desktop')) windowsDesktopPreEntryNotify(plan, _deps);
 }
+
+// ── Operational (NON-TRADE) notification ────────────────────────────────
+// Raised by src/engine/watcher.js trackFeedHealth() ONLY for feed-health
+// transitions: FEED_STALLED (a prolonged run of polls that could not
+// obtain a confirmed 5m candle -- CDP unreachable or the chart refusing to
+// yield a fresh, verified 5m series) and FEED_RECOVERED. Deliberately its
+// own format/function, structurally impossible to confuse with a BUY/SELL
+// alert: distinct header and an explicit "NOT A TRADE SIGNAL" footer. It
+// carries no trade geometry and never influences any decision.
+export function formatOpsAlert(ops) {
+  const kind = ops?.kind ?? 'UNKNOWN';
+  const lines = [`XAUUSD WATCHER OPS — ${kind}`];
+  if (kind === 'FEED_STALLED') {
+    lines.push(`No confirmed 5m candle for ${fmtNum(ops.consecutive_failures)} consecutive poll(s)`);
+    lines.push(`Since: ${fmtNum(ops.since)}`);
+    lines.push(`Last reason: ${fmtNum(ops.last_reason)}`);
+    lines.push(`Last processed 5m bar: ${fmtNum(ops.last_processed_5m_time)}`);
+  } else if (kind === 'FEED_RECOVERED') {
+    lines.push(`Feed recovered after ${fmtNum(ops.consecutive_failures)} failed poll(s)`);
+    lines.push(`Stalled since: ${fmtNum(ops.since)}`);
+    lines.push(`Recovered via: ${fmtNum(ops.recovered_action)}`);
+  } else {
+    lines.push(fmtNum(ops?.message));
+  }
+  lines.push(`Time: ${fmtNum(ops?.at)}`);
+  lines.push('NOT A TRADE SIGNAL');
+  return lines.join('\n');
+}
+
+function consoleOpsNotify(ops, { log = (msg) => console.log(msg) } = {}) {
+  log(formatOpsAlert(ops));
+}
+
+function windowsDesktopOpsNotify(ops, { spawnImpl } = {}) {
+  const kind = ops?.kind ?? 'UNKNOWN';
+  const body = kind === 'FEED_STALLED'
+    ? `${fmtNum(ops.consecutive_failures)} polls without a 5m candle since ${fmtNum(ops.since)} | NOT A TRADE SIGNAL`
+    : kind === 'FEED_RECOVERED'
+      ? `Feed back after ${fmtNum(ops.consecutive_failures)} failed polls | NOT A TRADE SIGNAL`
+      : `${fmtNum(ops?.message)} | NOT A TRADE SIGNAL`;
+  spawnWindowsToast(`XAUUSD WATCHER OPS — ${kind}`, body, { spawnImpl });
+}
+
+/** Same channel semantics as notify(); fires unconditionally whenever called -- the CALLER (watcher.js trackFeedHealth) owns the one-shot gating. */
+export function notifyOps(ops, { channels = ['console', 'desktop'], _deps } = {}) {
+  if (channels.includes('console')) consoleOpsNotify(ops, _deps);
+  if (channels.includes('desktop')) windowsDesktopOpsNotify(ops, _deps);
+}

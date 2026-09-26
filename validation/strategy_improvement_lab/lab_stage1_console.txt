@@ -1,0 +1,18 @@
+{
+ "window": {
+  "from": "2026-04-29 09:00",
+  "to": "2026-09-25 19:20"
+ },
+ "sessions": 129,
+ "candles": 29500,
+ "gate": 4280,
+ "control": 3185,
+ "control_distinct": 1447,
+ "regions": {
+  "A_end_exclusive": "2026-07-13",
+  "B_end_exclusive": "2026-08-19",
+  "A_sessions": 64,
+  "B_sessions": 32,
+  "C_sessions": 33
+ }
+}

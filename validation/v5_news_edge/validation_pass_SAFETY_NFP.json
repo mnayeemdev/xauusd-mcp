@@ -1,0 +1,47 @@
+{
+ "candidate": "SAFETY_NFP",
+ "written_at": "2026-09-26T08:04:42.436Z",
+ "gate": {
+  "type": "SAFETY",
+  "pass": true,
+  "reasons": []
+ },
+ "discovery": {
+  "n": 23,
+  "mean": 7.18,
+  "median": 6.553,
+  "ci95": [
+   6.302,
+   8.072
+  ],
+  "ctrl_mean": 2.317,
+  "n_with_ctrl": 23,
+  "ratio": 3.099,
+  "ratio_ci95": [
+   2.644,
+   3.626
+  ],
+  "p_ratio_le_1": 0,
+  "mean_no_top1": 6.966,
+  "mean_winsor": 7.133
+ },
+ "validation": {
+  "n": 14,
+  "mean": 6.5,
+  "median": 5.276,
+  "ci95": [
+   4.651,
+   8.786
+  ],
+  "ctrl_mean": 1.576,
+  "n_with_ctrl": 14,
+  "ratio": 4.125,
+  "ratio_ci95": [
+   2.917,
+   5.805
+  ],
+  "p_ratio_le_1": 0,
+  "mean_no_top1": 5.698,
+  "mean_winsor": 6.5
+ }
+}

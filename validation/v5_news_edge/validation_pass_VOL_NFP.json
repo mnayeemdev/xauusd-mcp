@@ -1,0 +1,47 @@
+{
+ "candidate": "VOL_NFP",
+ "written_at": "2026-09-26T08:04:42.436Z",
+ "gate": {
+  "type": "VOL",
+  "pass": true,
+  "reasons": []
+ },
+ "discovery": {
+  "n": 23,
+  "mean": 16.184,
+  "median": 16.01,
+  "ci95": [
+   14.474,
+   18.116
+  ],
+  "ctrl_mean": 7.317,
+  "n_with_ctrl": 23,
+  "ratio": 2.212,
+  "ratio_ci95": [
+   1.999,
+   2.431
+  ],
+  "p_ratio_le_1": 0,
+  "mean_no_top1": 15.739,
+  "mean_winsor": 16.16
+ },
+ "validation": {
+  "n": 14,
+  "mean": 14.766,
+  "median": 13.795,
+  "ci95": [
+   12.078,
+   17.906
+  ],
+  "ctrl_mean": 6.16,
+  "n_with_ctrl": 14,
+  "ratio": 2.397,
+  "ratio_ci95": [
+   2.015,
+   2.872
+  ],
+  "p_ratio_le_1": 0,
+  "mean_no_top1": 13.701,
+  "mean_winsor": 14.766
+ }
+}

@@ -1,0 +1,47 @@
+{
+ "candidate": "VOL_USD_0830",
+ "written_at": "2026-09-26T08:04:44.830Z",
+ "gate": {
+  "type": "VOL",
+  "pass": true,
+  "reasons": []
+ },
+ "discovery": {
+  "n": 99,
+  "mean": 14.24,
+  "median": 12.364,
+  "ci95": [
+   13.069,
+   15.401
+  ],
+  "ctrl_mean": 7.521,
+  "n_with_ctrl": 99,
+  "ratio": 1.893,
+  "ratio_ci95": [
+   1.729,
+   2.061
+  ],
+  "p_ratio_le_1": 0,
+  "mean_no_top1": 14.084,
+  "mean_winsor": 14.199
+ },
+ "validation": {
+  "n": 57,
+  "mean": 10.307,
+  "median": 9.503,
+  "ci95": [
+   9.021,
+   11.682
+  ],
+  "ctrl_mean": 6.367,
+  "n_with_ctrl": 57,
+  "ratio": 1.619,
+  "ratio_ci95": [
+   1.415,
+   1.831
+  ],
+  "p_ratio_le_1": 0,
+  "mean_no_top1": 9.981,
+  "mean_winsor": 10.135
+ }
+}
