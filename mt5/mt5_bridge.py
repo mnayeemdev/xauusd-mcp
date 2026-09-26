@@ -79,12 +79,16 @@ DEAL_FIELDS = ("ticket", "order", "time", "time_msc", "type", "entry", "magic", 
 RESULT_FIELDS = ("retcode", "deal", "order", "volume", "price", "bid", "ask", "comment", "request_id", "retcode_external")
 
 
+TERMINAL_PATH = os.environ.get("XAUUSD_MT5_TERMINAL_PATH") or None  # Stage 12: attach to a SPECIFIC (DEMO) terminal instance; never a login/password switch
+
+
 def ensure_initialized():
     global _initialized
     if _initialized:
         return
-    if not mt5.initialize():
-        raise BridgeError("MT5_INIT_FAILED", "mt5.initialize() failed: %s" % (mt5.last_error(),))
+    ok = mt5.initialize(TERMINAL_PATH) if TERMINAL_PATH else mt5.initialize()
+    if not ok:
+        raise BridgeError("MT5_INIT_FAILED", "mt5.initialize(%s) failed: %s" % (TERMINAL_PATH or "", mt5.last_error()))
     _initialized = True
 
 
