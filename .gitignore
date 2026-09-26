@@ -23,3 +23,4 @@ validation/v5_news_edge/raw/*.pdf
 validation/v5_news_edge/raw/bea/
 validation/v5_news_edge/raw/bea_releases/
 validation/v5_news_edge/raw/fed_statements/
+validation/next_edge_session/cross_asset_bars_15m.json

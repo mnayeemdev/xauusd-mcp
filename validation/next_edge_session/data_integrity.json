@@ -1,0 +1,227 @@
+{
+ "generated_at": "2026-09-26T09:33:36.338Z",
+ "gold_15m": {
+  "bars": 100000,
+  "first": "2022-07-04T15:45:00.000Z",
+  "last": "2026-09-25T20:45:00.000Z",
+  "duplicates": 0,
+  "non_monotonic": 0,
+  "bad_geometry": 0,
+  "saturday_or_sunday_daytime_bars": 0,
+  "non_weekend_gaps_over_3_bars": 656,
+  "largest_gaps": [
+   {
+    "from": "2024-12-24T18:15:00.000Z",
+    "to": "2024-12-25T23:00:00.000Z",
+    "hours": 28.8
+   },
+   {
+    "from": "2025-12-24T18:15:00.000Z",
+    "to": "2025-12-25T23:00:00.000Z",
+    "hours": 28.8
+   },
+   {
+    "from": "2024-12-31T21:45:00.000Z",
+    "to": "2025-01-01T23:00:00.000Z",
+    "hours": 25.3
+   },
+   {
+    "from": "2025-12-31T21:45:00.000Z",
+    "to": "2026-01-01T23:00:00.000Z",
+    "hours": 25.3
+   },
+   {
+    "from": "2023-11-23T18:00:00.000Z",
+    "to": "2023-11-23T23:00:00.000Z",
+    "hours": 5
+   }
+  ],
+  "sha256": "9eedfb7d60663833"
+ },
+ "gold_1d": {
+  "bars": 3909,
+  "first": "2014-01-14T00:00:00.000Z",
+  "last": "2026-09-25T00:00:00.000Z",
+  "duplicates": 0,
+  "non_monotonic": 0,
+  "bad_geometry": 0,
+  "saturday_or_sunday_daytime_bars": 617,
+  "non_weekend_gaps_over_3_bars": 4,
+  "largest_gaps": [
+   {
+    "from": "2016-12-23T00:00:00.000Z",
+    "to": "2016-12-27T00:00:00.000Z",
+    "hours": 96
+   },
+   {
+    "from": "2016-12-30T00:00:00.000Z",
+    "to": "2017-01-03T00:00:00.000Z",
+    "hours": 96
+   },
+   {
+    "from": "2017-12-22T00:00:00.000Z",
+    "to": "2017-12-26T00:00:00.000Z",
+    "hours": 96
+   },
+   {
+    "from": "2017-12-29T00:00:00.000Z",
+    "to": "2018-01-02T00:00:00.000Z",
+    "hours": 96
+   }
+  ],
+  "sha256": "8cd6fcfb1ea95785"
+ },
+ "DXYm": {
+  "bars": 101020,
+  "first": "2022-09-05T00:00:00.000Z",
+  "last": "2026-09-25T20:45:00.000Z",
+  "duplicates": 0,
+  "non_monotonic": 0,
+  "bad_geometry": 0,
+  "saturday_or_sunday_daytime_bars": 475,
+  "non_weekend_gaps_over_3_bars": 7,
+  "largest_gaps": [
+   {
+    "from": "2024-12-24T21:45:00.000Z",
+    "to": "2024-12-25T22:00:00.000Z",
+    "hours": 24.3
+   },
+   {
+    "from": "2024-12-31T21:45:00.000Z",
+    "to": "2025-01-01T22:00:00.000Z",
+    "hours": 24.3
+   },
+   {
+    "from": "2025-12-24T21:45:00.000Z",
+    "to": "2025-12-25T22:00:00.000Z",
+    "hours": 24.3
+   },
+   {
+    "from": "2025-12-31T21:45:00.000Z",
+    "to": "2026-01-01T22:00:00.000Z",
+    "hours": 24.3
+   },
+   {
+    "from": "2024-01-02T01:15:00.000Z",
+    "to": "2024-01-02T04:30:00.000Z",
+    "hours": 3.3
+   }
+  ],
+  "sha256": "069725687b62bc92"
+ },
+ "XAGUSDm": {
+  "bars": 101207,
+  "first": "2022-06-15T00:00:00.000Z",
+  "last": "2026-09-25T20:45:00.000Z",
+  "duplicates": 0,
+  "non_monotonic": 0,
+  "bad_geometry": 0,
+  "saturday_or_sunday_daytime_bars": 0,
+  "non_weekend_gaps_over_3_bars": 664,
+  "largest_gaps": [
+   {
+    "from": "2025-12-24T18:15:00.000Z",
+    "to": "2025-12-25T23:15:00.000Z",
+    "hours": 29
+   },
+   {
+    "from": "2024-12-24T18:15:00.000Z",
+    "to": "2024-12-25T23:00:00.000Z",
+    "hours": 28.8
+   },
+   {
+    "from": "2024-12-31T21:45:00.000Z",
+    "to": "2025-01-01T23:00:00.000Z",
+    "hours": 25.3
+   },
+   {
+    "from": "2025-12-31T21:45:00.000Z",
+    "to": "2026-01-01T23:00:00.000Z",
+    "hours": 25.3
+   },
+   {
+    "from": "2023-11-23T18:00:00.000Z",
+    "to": "2023-11-23T23:00:00.000Z",
+    "hours": 5
+   }
+  ],
+  "sha256": "b908967747f49672"
+ },
+ "USTECm": {
+  "bars": 100536,
+  "first": "2022-05-25T00:00:00.000Z",
+  "last": "2026-09-25T20:45:00.000Z",
+  "duplicates": 0,
+  "non_monotonic": 0,
+  "bad_geometry": 0,
+  "saturday_or_sunday_daytime_bars": 0,
+  "non_weekend_gaps_over_3_bars": 676,
+  "largest_gaps": [
+   {
+    "from": "2024-12-24T18:00:00.000Z",
+    "to": "2024-12-25T23:00:00.000Z",
+    "hours": 29
+   },
+   {
+    "from": "2025-12-24T18:00:00.000Z",
+    "to": "2025-12-25T23:00:00.000Z",
+    "hours": 29
+   },
+   {
+    "from": "2024-12-31T21:45:00.000Z",
+    "to": "2025-01-01T23:00:00.000Z",
+    "hours": 25.3
+   },
+   {
+    "from": "2025-12-31T21:45:00.000Z",
+    "to": "2026-01-01T23:00:00.000Z",
+    "hours": 25.3
+   },
+   {
+    "from": "2025-11-28T02:30:00.000Z",
+    "to": "2025-11-28T13:30:00.000Z",
+    "hours": 11
+   }
+  ],
+  "sha256": "050573e8ba41226a"
+ },
+ "DXYm_alignment": {
+  "common_from": "2022-09-05T00:00:00.000Z",
+  "cross_bars_in_range": 101020,
+  "matched_gold_timestamps": 95906,
+  "share": 0.9494
+ },
+ "XAGUSDm_alignment": {
+  "common_from": "2022-07-04T15:45:00.000Z",
+  "cross_bars_in_range": 99963,
+  "matched_gold_timestamps": 99960,
+  "share": 1
+ },
+ "USTECm_alignment": {
+  "common_from": "2022-07-04T15:45:00.000Z",
+  "cross_bars_in_range": 98093,
+  "matched_gold_timestamps": 97968,
+  "share": 0.9987
+ },
+ "gold_daily_close_gap_start_hour_utc_by_month": {
+  "0": "21",
+  "1": "21",
+  "2": "20",
+  "3": "20",
+  "4": "20",
+  "5": "20",
+  "6": "20",
+  "7": "20",
+  "8": "20",
+  "9": "20",
+  "10": "21",
+  "11": "21"
+ },
+ "previously_inspected": {
+  "gold_15m": "YES (V3 structure events, V5 news, V2 protection replay)",
+  "gold_1d": "YES (V4)",
+  "DXYm": "NO (fetched 2026-09-26 for this stage)",
+  "XAGUSDm": "NO",
+  "USTECm": "NO"
+ }
+}

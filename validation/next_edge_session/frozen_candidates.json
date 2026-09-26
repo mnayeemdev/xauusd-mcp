@@ -1,0 +1,52 @@
+{
+ "frozen_at": "2026-09-26T09:37:54.804Z",
+ "protocol": "docs/XAUUSD_NEXT_EDGE_RESEARCH_PROTOCOL.md",
+ "candidates": [
+  {
+   "key": "S5H:H21",
+   "family": "S5H",
+   "side": "H21",
+   "params": {
+    "orBars": 2,
+    "lonScanEnd": 720,
+    "nyScanEnd": 780,
+    "s3Atr": 4,
+    "s4Sessions": true,
+    "dz": 1.5,
+    "sigmaWin": 96,
+    "horizons": [
+     4,
+     8,
+     16
+    ],
+    "cost": 0.26,
+    "costStress": 0.4,
+    "slip": 0.1
+   },
+   "horizons": [
+    4,
+    8,
+    16
+   ],
+   "discovery": {
+    "n": 1680,
+    "h8": {
+     "mean": 0.337,
+     "median": 0.272,
+     "ci95": [
+      0.195,
+      0.484
+     ],
+     "ci99": [
+      0.151,
+      0.527
+     ],
+     "p_le_0": 0,
+     "p_win": 0.595,
+     "net_026": 0.164,
+     "net_040": 0.071
+    }
+   }
+  }
+ ]
+}

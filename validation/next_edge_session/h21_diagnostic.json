@@ -1,0 +1,84 @@
+{
+ "DISCOVERY": {
+  "n": 1680,
+  "share_crossing_close": 1,
+  "mean_total_atr": 0.419,
+  "mean_close_to_reopen_gap_atr": 0.076,
+  "mean_intra_session_atr": 0.344,
+  "mean_atr_usd": 1.81,
+  "net_spread_only": 0.246,
+  "net_spread_swap": -0.119,
+  "net_spread_swap_reopen_spread": -1.117,
+  "by_year": {
+   "2022": {
+    "n": 304,
+    "mean": 0.284
+   },
+   "2023": {
+    "n": 936,
+    "mean": 0.527
+   },
+   "2024": {
+    "n": 440,
+    "mean": 0.284
+   }
+  },
+  "by_15m_slot": {
+   "0": {
+    "n": 420,
+    "mean": 0.365
+   },
+   "15": {
+    "n": 420,
+    "mean": 0.396
+   },
+   "30": {
+    "n": 420,
+    "mean": 0.456
+   },
+   "45": {
+    "n": 420,
+    "mean": 0.46
+   }
+  }
+ },
+ "VALIDATION": {
+  "n": 1088,
+  "share_crossing_close": 1,
+  "mean_total_atr": 0.242,
+  "mean_close_to_reopen_gap_atr": 0.071,
+  "mean_intra_session_atr": 0.172,
+  "mean_atr_usd": 3.06,
+  "net_spread_only": 0.142,
+  "net_spread_swap": -0.07,
+  "net_spread_swap_reopen_spread": -0.649,
+  "by_year": {
+   "2024": {
+    "n": 484,
+    "mean": 0.302
+   },
+   "2025": {
+    "n": 604,
+    "mean": 0.194
+   }
+  },
+  "by_15m_slot": {
+   "0": {
+    "n": 272,
+    "mean": 0.271
+   },
+   "15": {
+    "n": 272,
+    "mean": 0.245
+   },
+   "30": {
+    "n": 272,
+    "mean": 0.213
+   },
+   "45": {
+    "n": 272,
+    "mean": 0.24
+   }
+  }
+ }
+}
