@@ -93,6 +93,15 @@ export const REAL_DEFAULTS = Object.freeze({
   newsCooldownMin: 30,
   newsStaleSec: 6 * 3600,
   newsDataUnavailablePolicy: 'BLOCK', // BLOCK | ALLOW (ALLOW still audits every entry as NEWS_DATA_UNAVAILABLE)
+  // NEWS PROTECTION V2 (2026-09-26, docs/XAUUSD_NEWS_PROTECTION_V2_SPEC.md): tiered SAFETY windows
+  // from the V5 magnitude evidence. Tier B = CPI/NFP, Tier A = FOMC cluster, Tier C = V1 generic.
+  newsTierBCooldownMin: 55,
+  newsTierAPostMin: 150,
+  newsTierAPressConfCoverMin: 90,
+  newsTierAClusterGapMin: 120,
+  newsNormalizationRatio: 1.5,
+  newsNormalizationConfirmBars: 2,
+  newsNormalizationMaxExtensionMin: 0, // extension OFF by default (shadow-audited); enable only with an unbiased baseline, see docs/XAUUSD_NEWS_PROTECTION_V2.md
   shockClearAfterSec: SHOCK_PARAMS.clearAfterSec,
 });
 
@@ -113,6 +122,13 @@ const ENV_MAP = Object.freeze({
   XAUUSD_NEWS_COOLDOWN_MIN: ['newsCooldownMin', 'number'],
   XAUUSD_NEWS_STALE_SEC: ['newsStaleSec', 'int'],
   XAUUSD_SHOCK_CLEAR_AFTER_SEC: ['shockClearAfterSec', 'int'],
+  XAUUSD_NEWS_TIER_B_COOLDOWN_MIN: ['newsTierBCooldownMin', 'number'],
+  XAUUSD_NEWS_TIER_A_POST_MIN: ['newsTierAPostMin', 'number'],
+  XAUUSD_NEWS_TIER_A_PRESSCONF_COVER_MIN: ['newsTierAPressConfCoverMin', 'number'],
+  XAUUSD_NEWS_TIER_A_CLUSTER_GAP_MIN: ['newsTierAClusterGapMin', 'number'],
+  XAUUSD_NEWS_NORMALIZATION_RATIO: ['newsNormalizationRatio', 'number'],
+  XAUUSD_NEWS_NORMALIZATION_CONFIRM_BARS: ['newsNormalizationConfirmBars', 'int'],
+  XAUUSD_NEWS_NORMALIZATION_MAX_EXTENSION_MIN: ['newsNormalizationMaxExtensionMin', 'number'],
 });
 // String-valued news configuration (validated below).
 const STRING_ENV_MAP = Object.freeze({
@@ -185,7 +201,20 @@ export function resolveRealExecutorConfig(env = {}) {
   if (!(cfg.newsStaleSec >= 600 && cfg.newsStaleSec <= 172800)) throw new Error('XAUUSD_NEWS_STALE_SEC must be within [600, 172800]');
   if (!['BLOCK', 'ALLOW'].includes(cfg.newsDataUnavailablePolicy)) throw new Error('XAUUSD_NEWS_DATA_UNAVAILABLE_POLICY must be BLOCK or ALLOW');
   if (!(cfg.shockClearAfterSec >= 60 && cfg.shockClearAfterSec <= 3600)) throw new Error('XAUUSD_SHOCK_CLEAR_AFTER_SEC must be within [60, 3600]');
-  cfg.newsRiskParams = Object.freeze({ preNewsWindowMin: cfg.newsPreWindowMin, newsActiveWindowMin: cfg.newsActiveWindowMin, postNewsCooldownMin: cfg.newsCooldownMin, staleCalendarSec: cfg.newsStaleSec, dataUnavailablePolicy: cfg.newsDataUnavailablePolicy, lookaheadHours: 48 });
+  // V2 tier / normalisation ranges. Tier B may never be shorter than the generic cooldown (a tier only ADDS protection).
+  if (!(cfg.newsTierBCooldownMin >= 30 && cfg.newsTierBCooldownMin <= 120)) throw new Error('XAUUSD_NEWS_TIER_B_COOLDOWN_MIN must be within [30, 120]');
+  if (cfg.newsTierBCooldownMin < cfg.newsCooldownMin) throw new Error('XAUUSD_NEWS_TIER_B_COOLDOWN_MIN may not be shorter than XAUUSD_NEWS_COOLDOWN_MIN');
+  if (!(cfg.newsTierAPostMin >= 65 && cfg.newsTierAPostMin <= 240)) throw new Error('XAUUSD_NEWS_TIER_A_POST_MIN must be within [65, 240]');
+  if (!(cfg.newsTierAPressConfCoverMin >= 30 && cfg.newsTierAPressConfCoverMin <= 180)) throw new Error('XAUUSD_NEWS_TIER_A_PRESSCONF_COVER_MIN must be within [30, 180]');
+  if (!(cfg.newsTierAClusterGapMin >= 30 && cfg.newsTierAClusterGapMin <= 240)) throw new Error('XAUUSD_NEWS_TIER_A_CLUSTER_GAP_MIN must be within [30, 240]');
+  if (!(cfg.newsNormalizationRatio >= 1.2 && cfg.newsNormalizationRatio <= 3.0)) throw new Error('XAUUSD_NEWS_NORMALIZATION_RATIO must be within [1.2, 3.0]');
+  if (!(cfg.newsNormalizationConfirmBars >= 1 && cfg.newsNormalizationConfirmBars <= 4)) throw new Error('XAUUSD_NEWS_NORMALIZATION_CONFIRM_BARS must be within [1, 4]');
+  if (!(cfg.newsNormalizationMaxExtensionMin >= 0 && cfg.newsNormalizationMaxExtensionMin <= 240)) throw new Error('XAUUSD_NEWS_NORMALIZATION_MAX_EXTENSION_MIN must be within [0, 240]');
+  cfg.newsRiskParams = Object.freeze({
+    preNewsWindowMin: cfg.newsPreWindowMin, newsActiveWindowMin: cfg.newsActiveWindowMin, postNewsCooldownMin: cfg.newsCooldownMin, staleCalendarSec: cfg.newsStaleSec, dataUnavailablePolicy: cfg.newsDataUnavailablePolicy, lookaheadHours: 48,
+    tierBCooldownMin: cfg.newsTierBCooldownMin, tierAPostMin: cfg.newsTierAPostMin, tierAPressConfCoverMin: cfg.newsTierAPressConfCoverMin, tierAClusterGapMin: cfg.newsTierAClusterGapMin,
+    normalizationRatio: cfg.newsNormalizationRatio, normalizationConfirmBars: cfg.newsNormalizationConfirmBars, normalizationMaxExtensionMin: cfg.newsNormalizationMaxExtensionMin, normalizationReferenceHours: 24, normalizationReferenceMinBars: 24,
+  });
   cfg.shockParams = Object.freeze({ ...SHOCK_PARAMS, clearAfterSec: cfg.shockClearAfterSec });
 
   /**

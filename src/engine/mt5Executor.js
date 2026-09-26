@@ -35,7 +35,7 @@ import { evaluateTradeManagement, isEvidenceFresh, exitStateFor } from './mt5Tra
 import { capitalSnapshot } from './mt5CapitalPolicy.js';
 import { evaluateShockSignals, advanceShockState, initialShockState, computeSpreadBaseline, evaluateEmergency, SHOCK_PARAMS } from './marketShock.js';
 import { runEntryGuards, createNewsGuard, createShockGuard, createFeedHealthGuard, createSpreadGuard, createNormalizationGuard } from './protectionGuards.js';
-import { BLOCKING_NEWS_STATES } from './newsRisk.js';
+import { BLOCKING_NEWS_STATES, aggregateCompleted15m } from './newsRisk.js';
 
 export const DEFAULT_MT5_STATE_PATH = fileURLToPath(new URL('../../state/xauusd_mt5_executor_state.json', import.meta.url));
 export const DEFAULT_MT5_LOG_PATH = fileURLToPath(new URL('../../state/xauusd_mt5_trade_log.jsonl', import.meta.url));
@@ -194,7 +194,12 @@ export function createMt5Executor({ config, bridge, statePath = DEFAULT_MT5_STAT
     if (!protectionOn) return null;
     const unavailable = (reason) => ({ state: 'DATA_UNAVAILABLE', reason, event: null, next_event: null, contributing_events: [], calendar: { status: 'ERROR', source: null, freshness: null, error: reason } });
     if (!newsMonitor) return unavailable('NEWS_MONITOR_MISSING');
-    try { return newsMonitor.evaluate({ now: nowDate() }); } catch (err) { return unavailable(`NEWS_MONITOR_THREW:${err.message}`); }
+    // V2: the COMPLETED 15m bars aggregated from this cycle's confirmed 5m bars
+    // feed the Tier A/B normalisation check (evidence only; missing bars never
+    // shorten a clock minimum, they only skip the extension, audited).
+    let bars15m = null;
+    try { bars15m = aggregateCompleted15m(prot.bars5m, nowDate().getTime() / 1000); } catch { bars15m = null; }
+    try { return newsMonitor.evaluate({ now: nowDate(), bars15m }); } catch (err) { return unavailable(`NEWS_MONITOR_THREW:${err.message}`); }
   }
   function protectionAuditFields() {
     if (!protectionOn) return {};
@@ -202,6 +207,7 @@ export function createMt5Executor({ config, bridge, statePath = DEFAULT_MT5_STAT
     const ps = state?.protection ?? null;
     return { protection: {
       news_state: n?.state ?? null, news_reason: n?.reason ?? null, event_id: n?.event?.event_id ?? null, event_name: n?.event?.event_name ?? null, currency: n?.event?.currency ?? null, impact: n?.event?.impact ?? null,
+      news_tier: n?.event?.tier ?? n?.tier ?? null, clock_min_end_utc: n?.event?.clock_min_end_utc ?? null, cluster_anchor_utc: n?.event?.cluster_anchor_utc ?? null, normalization: n?.normalization ?? null, normalization_shadow: n?.normalization_shadow ?? null, remembered_block_active: n?.remembered_block?.active ?? null,
       release_time_utc: n?.event?.event_time_utc ?? null, minutes_to_event: n?.event?.minutes_to_event ?? null, actual: n?.event?.actual ?? null, forecast: n?.event?.forecast ?? null, previous: n?.event?.previous ?? null,
       next_event: n?.next_event ?? null, block_ends_utc: n?.block_ends_utc ?? null, provider: n?.calendar?.source ?? null, provider_status: n?.calendar?.status ?? null, provider_freshness: n?.calendar?.freshness ?? null, provider_error: n?.calendar?.error ?? null,
       shock_state: s?.state ?? null, shock_since: s?.since ?? null, shock_triggers: s?.triggers ?? [], shock_last_trigger_at: s?.last_trigger_at ?? null,
@@ -223,8 +229,10 @@ export function createMt5Executor({ config, bridge, statePath = DEFAULT_MT5_STAT
     prot.news = news;
     if (news?.transition) record('NEWS_STATE_CHANGED', { from: news.transition.from, to: news.transition.to, reason: news.reason, ...protectionAuditFields() });
     const ps = protectionState();
+    // V2: under ALLOW, a window remembered from the last accepted calendar still blocks while the provider is not trusted.
+    const rememberedBlocks = !!news && news.state === 'DATA_UNAVAILABLE' && config.newsRiskParams?.dataUnavailablePolicy === 'ALLOW' && news.remembered_block?.active === true;
     const newsBlocks = !!news && (BLOCKING_NEWS_STATES.includes(news.state) || (news.state === 'DATA_UNAVAILABLE' && config.newsRiskParams?.dataUnavailablePolicy !== 'ALLOW'));
-    const reasons = [...(newsBlocks ? [`NEWS:${news.state}`] : []), ...(nextShock.state === 'VOLATILITY_SHOCK' ? ['VOLATILITY_SHOCK'] : []), ...(evaluation.feed_stale ? ['FEED_STALE'] : [])];
+    const reasons = [...(newsBlocks ? [`NEWS:${news.state}`] : []), ...(rememberedBlocks ? ['NEWS:REMEMBERED_EVENT'] : []), ...(nextShock.state === 'VOLATILITY_SHOCK' ? ['VOLATILITY_SHOCK'] : []), ...(evaluation.feed_stale ? ['FEED_STALE'] : [])];
     const blocking = reasons.length > 0;
     if (blocking && !ps.blocking) {
       ps.blocking = true; ps.blocking_since = nowIso(); ps.block_reasons = reasons;
@@ -835,7 +843,7 @@ export function createMt5Executor({ config, bridge, statePath = DEFAULT_MT5_STAT
       kill_switch: deps.readKillSwitch(killSwitchPath),
       news_protection: protectionOn ? {
         enabled: true,
-        news: prot.news ? { state: prot.news.state, reason: prot.news.reason, event: prot.news.event ?? null, next_event: prot.news.next_event ?? null, block_ends_utc: prot.news.block_ends_utc ?? null, calendar: prot.news.calendar ?? null } : null,
+        news: prot.news ? { state: prot.news.state, reason: prot.news.reason, event: prot.news.event ?? null, next_event: prot.news.next_event ?? null, block_ends_utc: prot.news.block_ends_utc ?? null, calendar: prot.news.calendar ?? null, tier: prot.news.tier ?? null, normalization: prot.news.normalization ?? null, remembered_block: prot.news.remembered_block ?? null } : null,
         shock: { state: prot.shock.state, since: prot.shock.since, triggers: prot.shock.triggers, last_trigger_at: prot.shock.last_trigger_at, normalized_at: prot.shock.normalized_at, evidence: prot.shock.evidence },
         blocking: state?.protection?.blocking ?? false, block_reasons: state?.protection?.block_reasons ?? [], blocking_since: state?.protection?.blocking_since ?? null, last_block_cleared_at: state?.protection?.last_block_cleared_at ?? null,
         samples: prot.samples.length, spread_baseline: computeSpreadBaseline(prot.samples, nowDate().getTime() / 1000, shockParams).baseline, confirmed_bars_5m: prot.bars5m?.length ?? 0, confirmed_bars_at: prot.bars5m_at,

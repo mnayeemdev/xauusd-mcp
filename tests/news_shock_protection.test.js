@@ -108,15 +108,20 @@ describe('newsRisk: deterministic state machine and entry verdict', () => {
     assert.deepEqual(BLOCKING_NEWS_STATES, ['PRE_NEWS', 'NEWS_ACTIVE', 'POST_NEWS_COOLDOWN']);
     assert.equal(NEWS_RISK_PARAMS.preNewsWindowMin, 30); assert.equal(NEWS_RISK_PARAMS.newsActiveWindowMin, 5); assert.equal(NEWS_RISK_PARAMS.postNewsCooldownMin, 30); assert.equal(NEWS_RISK_PARAMS.staleCalendarSec, 21600); assert.equal(NEWS_RISK_PARAMS.dataUnavailablePolicy, 'BLOCK');
   });
-  it('window boundaries: NORMAL -> PRE_NEWS (T-30m) -> NEWS_ACTIVE (T..T+5m) -> POST_NEWS_COOLDOWN (..T+35m) -> NORMAL', () => {
-    const s0 = state('2026-09-25T11:59:59Z'); assert.equal(s0.state, 'NORMAL'); assert.equal(s0.next_event.event_name, 'Synthetic CPI m/m'); assert.equal(s0.next_event.minutes_to_event, 30);
-    const s1 = state('2026-09-25T12:00:00Z'); assert.equal(s1.state, 'PRE_NEWS'); assert.equal(s1.block_ends_utc, '2026-09-25T12:30:00.000Z'); assert.equal(s1.event.minutes_to_event, 30); assert.equal(s1.reason, 'PRE_NEWS:Synthetic CPI m/m');
+  it('window boundaries (V2, CPI = Tier B): NORMAL -> PRE_NEWS (T-30m) -> NEWS_ACTIVE (T..T+5m) -> POST_NEWS_COOLDOWN (..T+60m clock minimum, no bars => no extension) -> NORMAL', () => {
+    const s0 = state('2026-09-25T11:59:59Z'); assert.equal(s0.state, 'NORMAL'); assert.equal(s0.next_event.event_name, 'Synthetic CPI m/m'); assert.equal(s0.next_event.minutes_to_event, 30); assert.equal(s0.next_event.tier, 'B');
+    const s1 = state('2026-09-25T12:00:00Z'); assert.equal(s1.state, 'PRE_NEWS'); assert.equal(s1.block_ends_utc, '2026-09-25T12:30:00.000Z'); assert.equal(s1.event.minutes_to_event, 30); assert.equal(s1.reason, 'PRE_NEWS:Synthetic CPI m/m'); assert.equal(s1.event.tier, 'B');
     assert.equal(state('2026-09-25T12:29:59Z').state, 'PRE_NEWS');
     const s2 = state('2026-09-25T12:30:00Z'); assert.equal(s2.state, 'NEWS_ACTIVE'); assert.equal(s2.block_ends_utc, '2026-09-25T12:35:00.000Z'); assert.equal(s2.event.minutes_to_event, 0);
     assert.equal(state('2026-09-25T12:34:59Z').state, 'NEWS_ACTIVE');
-    const s3 = state('2026-09-25T12:35:00Z'); assert.equal(s3.state, 'POST_NEWS_COOLDOWN'); assert.equal(s3.block_ends_utc, '2026-09-25T13:05:00.000Z');
-    assert.equal(state('2026-09-25T13:04:59Z').state, 'POST_NEWS_COOLDOWN');
-    const s4 = state('2026-09-25T13:05:00Z'); assert.equal(s4.state, 'NORMAL'); assert.equal(s4.next_event, null); assert.equal(s4.block_ends_utc, undefined);
+    const s3 = state('2026-09-25T12:35:00Z'); assert.equal(s3.state, 'POST_NEWS_COOLDOWN'); assert.equal(s3.block_ends_utc, '2026-09-25T13:30:00.000Z', 'Tier B: 5 min active + 55 min cooldown = T+60'); assert.equal(s3.event.clock_min_end_utc, '2026-09-25T13:30:00.000Z');
+    assert.equal(state('2026-09-25T13:04:59Z').state, 'POST_NEWS_COOLDOWN', 'the V1 T+35 boundary no longer ends a Tier-B block');
+    assert.equal(state('2026-09-25T13:29:59Z').state, 'POST_NEWS_COOLDOWN');
+    const s4 = state('2026-09-25T13:30:00Z'); assert.equal(s4.state, 'NORMAL', 'without completed 15m bars there is no normalisation extension (audited), the block ends at the clock minimum'); assert.equal(s4.next_event, null); assert.equal(s4.block_ends_utc, undefined);
+    // Tier C (generic, V1 windows) is unchanged: T+35.
+    const c = evaluateNewsState({ events: [ev({ title: 'Synthetic PPI m/m' })], now: at('2026-09-25T12:35:00Z'), calendar: CAL_OK });
+    assert.equal(c.state, 'POST_NEWS_COOLDOWN'); assert.equal(c.block_ends_utc, '2026-09-25T13:05:00.000Z'); assert.equal(c.event.tier, 'C');
+    assert.equal(evaluateNewsState({ events: [ev({ title: 'Synthetic PPI m/m' })], now: at('2026-09-25T13:05:00Z'), calendar: CAL_OK }).state, 'NORMAL');
   });
   it('same events + same clock => identical output (determinism); windows are parameters, not constants', () => {
     assert.equal(JSON.stringify(state('2026-09-25T12:10:00Z')), JSON.stringify(state('2026-09-25T12:10:00Z')));
@@ -128,7 +133,7 @@ describe('newsRisk: deterministic state machine and entry verdict', () => {
     const s = evaluateNewsState({ events: two, now: at('2026-09-25T12:31:00Z'), calendar: CAL_OK });
     assert.equal(s.state, 'NEWS_ACTIVE'); assert.equal(s.event.event_name, 'Synthetic CPI m/m'); assert.equal(s.contributing_events.length, 2); assert.equal(s.contributing_events[1].phase, 'PRE_NEWS');
     const later = evaluateNewsState({ events: two, now: at('2026-09-25T12:36:00Z'), calendar: CAL_OK });
-    assert.equal(later.state, 'NEWS_ACTIVE', 'FFR active (12:33-12:38) outranks CPI cooldown'); assert.equal(later.event.event_name, 'Federal Funds Rate'); assert.equal(later.block_ends_utc, '2026-09-25T13:05:00.000Z', 'block end = latest end of the CURRENT phases (CPI cooldown); the FFR cooldown is reported once it begins'); assert.equal(later.contributing_events.map((c) => c.phase).sort().join('+'), 'NEWS_ACTIVE+POST_NEWS_COOLDOWN');
+    assert.equal(later.state, 'NEWS_ACTIVE', 'FFR active (12:33-12:38) outranks CPI cooldown'); assert.equal(later.event.event_name, 'Federal Funds Rate'); assert.equal(later.block_ends_utc, '2026-09-25T13:30:00.000Z', 'block end = latest end of the CURRENT phases (CPI Tier-B cooldown, T+60); the FFR Tier-A cooldown is reported once it begins'); assert.equal(later.contributing_events.map((c) => c.phase).sort().join('+'), 'NEWS_ACTIVE+POST_NEWS_COOLDOWN');
   });
   it('irrelevant events never open a window: USD Medium, EUR High, JPY holiday', () => {
     const irrelevant = [ev({ title: 'Unemployment Claims', impact: 'Medium' }), ev({ title: 'ECB Press Conference', country: 'EUR' }), ev({ title: 'Bank Holiday', country: 'JPY', impact: 'Holiday' })];
@@ -419,7 +424,7 @@ describe('mt5RealPolicy: NEWS + SHOCK protection configuration', () => {
   it('defaults: protection on, Forex Factory JSON provider every 15 min, 30/5/30 min windows, 6 h stale, BLOCK, shock clear 600 s; unchanged REAL authorities', () => {
     const c = resolveRealExecutorConfig({});
     assert.equal(c.newsProtection, true); assert.equal(c.newsProvider, 'http_json'); assert.equal(c.newsCalendarUrl, FOREX_FACTORY_WEEKLY_JSON_URL); assert.equal(c.newsFetchIntervalSec, 900);
-    assert.deepEqual(c.newsRiskParams, { preNewsWindowMin: 30, newsActiveWindowMin: 5, postNewsCooldownMin: 30, staleCalendarSec: 21600, dataUnavailablePolicy: 'BLOCK', lookaheadHours: 48 });
+    assert.deepEqual(c.newsRiskParams, { preNewsWindowMin: 30, newsActiveWindowMin: 5, postNewsCooldownMin: 30, staleCalendarSec: 21600, dataUnavailablePolicy: 'BLOCK', lookaheadHours: 48, tierBCooldownMin: 55, tierAPostMin: 150, tierAPressConfCoverMin: 90, tierAClusterGapMin: 120, normalizationRatio: 1.5, normalizationConfirmBars: 2, normalizationMaxExtensionMin: 0, normalizationReferenceHours: 24, normalizationReferenceMinBars: 24 });
     assert.equal(c.shockParams.clearAfterSec, 600); assert.equal(c.shockParams.spreadShockRatio, SHOCK_PARAMS.spreadShockRatio); assert.ok(Object.isFrozen(c.newsRiskParams)); assert.ok(Object.isFrozen(c.shockParams));
     assert.equal(c.lotSize, 0.01); assert.equal(c.exactLot, 0.01); assert.equal(c.thesisExit, true); assert.equal(c.maxConsecutiveLosses, 2); assert.equal(c.maxSpreadUsd, 0.6); assert.equal(c.computeSizing, undefined);
   });
@@ -441,7 +446,7 @@ describe('mt5RealPolicy: NEWS + SHOCK protection configuration', () => {
     assert.throws(() => resolveRealExecutorConfig({ XAUUSD_SHOCK_CLEAR_AFTER_SEC: '59' }), /\[60, 3600\]/);
     assert.throws(() => resolveRealExecutorConfig({ XAUUSD_NEWS_STALE_SEC: '1.5' }), /must be an integer/);
     const c = resolveRealExecutorConfig({ XAUUSD_NEWS_PROVIDER: 'file', XAUUSD_NEWS_CALENDAR_FILE: 'C:/cal.json', XAUUSD_NEWS_PRE_WINDOW_MIN: '45', XAUUSD_NEWS_ACTIVE_WINDOW_MIN: '10', XAUUSD_NEWS_COOLDOWN_MIN: '20', XAUUSD_NEWS_STALE_SEC: '7200', XAUUSD_NEWS_DATA_UNAVAILABLE_POLICY: 'ALLOW', XAUUSD_SHOCK_CLEAR_AFTER_SEC: '120', XAUUSD_NEWS_FETCH_INTERVAL_SEC: '600' });
-    assert.equal(c.newsCalendarFile, 'C:/cal.json'); assert.deepEqual(c.newsRiskParams, { preNewsWindowMin: 45, newsActiveWindowMin: 10, postNewsCooldownMin: 20, staleCalendarSec: 7200, dataUnavailablePolicy: 'ALLOW', lookaheadHours: 48 }); assert.equal(c.shockParams.clearAfterSec, 120); assert.equal(c.newsFetchIntervalSec, 600);
+    assert.equal(c.newsCalendarFile, 'C:/cal.json'); assert.deepEqual(c.newsRiskParams, { preNewsWindowMin: 45, newsActiveWindowMin: 10, postNewsCooldownMin: 20, staleCalendarSec: 7200, dataUnavailablePolicy: 'ALLOW', lookaheadHours: 48, tierBCooldownMin: 55, tierAPostMin: 150, tierAPressConfCoverMin: 90, tierAClusterGapMin: 120, normalizationRatio: 1.5, normalizationConfirmBars: 2, normalizationMaxExtensionMin: 0, normalizationReferenceHours: 24, normalizationReferenceMinBars: 24 }); assert.equal(c.shockParams.clearAfterSec, 120); assert.equal(c.newsFetchIntervalSec, 600);
   });
   it('the DEMO policy has no protection flag (isolation: DEMO behaviour unchanged)', () => {
     const d = resolveExecutorConfig({}, { mode: 'demo' });
@@ -559,7 +564,8 @@ describe('REAL executor: news protection vetoes NEW orders only, with a full aud
     assert.equal((await step('2026-09-25T12:31:00Z')).state, 'NEWS_ACTIVE');
     assert.equal((await step('2026-09-25T12:36:00Z')).state, 'POST_NEWS_COOLDOWN');
     assert.equal((await step('2026-09-25T13:04:00Z')).state, 'POST_NEWS_COOLDOWN');
-    const n = await step('2026-09-25T13:06:00Z'); assert.equal(n.state, 'NORMAL'); assert.equal(n.next_event, null, 'the Low-impact member speech is not relevant; FOMC/NFP are beyond 48 h');
+    assert.equal((await step('2026-09-25T13:29:00Z')).state, 'POST_NEWS_COOLDOWN', 'V2: CPI is Tier B, clock minimum T+60');
+    const n = await step('2026-09-25T13:31:00Z'); assert.equal(n.state, 'NORMAL'); assert.equal(n.next_event, null, 'the Low-impact member speech is not relevant; FOMC/NFP are beyond 48 h');
     assert.deepEqual(store.events('NEWS_STATE_CHANGED').map((e) => e.to), ['PRE_NEWS', 'NEWS_ACTIVE', 'POST_NEWS_COOLDOWN', 'NORMAL']);
     assert.equal(store.events('PROTECTION_NORMALIZED').length, 1);
     assert.equal((await ex.executeSignal(sig(clock, SIG2))).reason, 'SIGNAL_PREDATES_NORMALIZATION', 'a signal calculated 20 s before the clear is not replayed');

@@ -1,5 +1,7 @@
 # XAUUSD MCP — NEWS + VOLATILITY SHOCK PROTECTION V1 (2026-09-25)
 
+> **Superseded on 2026-09-26 by News Protection V2** (`docs/XAUUSD_NEWS_PROTECTION_V2.md`): tiered calendar windows (Tier B CPI/NFP T+60, Tier A FOMC cluster anchor+150) and remembered events; everything else in this document (shock detector, guards, emergency handling, DATA_UNAVAILABLE, audit) is unchanged and remains authoritative. The generic 30 / 5 / 30 windows below are now the Tier C defaults.
+
 A safety/context layer for the REAL MT5 profile. It sits on top of the unchanged
 intraday_5m entry authority and does exactly two things:
 

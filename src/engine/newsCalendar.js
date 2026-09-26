@@ -146,6 +146,31 @@ export function isGoldRelevant(event, params = GOLD_RELEVANCE_PARAMS) {
   return params.alwaysRelevantPatterns.some((re) => re.test(String(event.event_name ?? '')));
 }
 
+/**
+ * NEWS PROTECTION V2 (2026-09-26) event TIERS -- a SAFETY classification of a
+ * relevant event by release family, derived from the V5 scheduled-news study
+ * (docs/XAUUSD_V5_NEWS_EDGE_MATRIX.md) and frozen in
+ * docs/XAUUSD_NEWS_PROTECTION_V2_SPEC.md. Tiers only size protection windows:
+ *   A  FOMC decision cluster (statement, rate decision, projections, press conference)
+ *   B  CPI cluster and Employment Situation (NFP) cluster
+ *   C  every other relevant event, including unknown USD HIGH releases (V1 windows)
+ * A tier never says anything about direction, model, quality or size.
+ */
+export const NEWS_TIERS = Object.freeze({ A: 'A', B: 'B', C: 'C' });
+export const TIER_PATTERNS = Object.freeze({
+  A: [/\bFOMC (Statement|Press Conference|Economic Projections)\b/i, /\bFederal Funds Rate\b/i],
+  B: [/\bCPI\b/i, /\bConsumer Price Index\b/i, /\bNon-?Farm\b/i, /\bEmployment Situation\b/i, /\bUnemployment Rate\b/i, /\bAverage Hourly Earnings\b/i],
+});
+export const PRESS_CONFERENCE_PATTERN = /\bFOMC Press Conference\b/i;
+
+/** Tier of a RELEVANT event (callers check isGoldRelevant first). Unknown => C (the safe V1 fallback). */
+export function classifyNewsTier(event) {
+  const name = String(event?.event_name ?? '');
+  if (TIER_PATTERNS.A.some((re) => re.test(name))) return NEWS_TIERS.A;
+  if (TIER_PATTERNS.B.some((re) => re.test(name))) return NEWS_TIERS.B;
+  return NEWS_TIERS.C;
+}
+
 /** Freshness of a calendar payload relative to `now`. */
 export function calendarFreshness({ sourceTimestamp, now, staleAfterSec }) {
   // `now` may be a Date, an ISO string or epoch milliseconds (the state machine passes a number).

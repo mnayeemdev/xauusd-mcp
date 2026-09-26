@@ -142,10 +142,11 @@ export function createNewsMonitor({ provider, params = NEWS_RISK_PARAMS, relevan
     try { return await inflight; } finally { inflight = null; }
   }
 
-  function evaluate({ now: at, scheduleRefresh = true } = {}) {
+  function evaluate({ now: at, scheduleRefresh = true, bars15m = null } = {}) {
     const t = at ?? nowDate();
     if (scheduleRefresh && !inflight && refreshDue(t.getTime())) refresh({ now: t }).catch(() => {});
-    const next = evaluateNewsState({ events: cache.events, now: t, calendar: cache.calendar, params, relevance });
+    // bars15m: COMPLETED 15m bars supplied by the executor (V2 Tier A/B normalisation); evidence only, never required.
+    const next = evaluateNewsState({ events: cache.events, now: t, calendar: cache.calendar, params, relevance, bars15m });
     const tr = newsTransition(lastState, next, t);
     if (tr) { transitions.push(tr); if (transitions.length > 200) transitions.shift(); }
     lastState = next;

@@ -1,0 +1,273 @@
+{
+ "generated_at": "2026-09-26T08:55:48.945Z",
+ "events": 279,
+ "per_family": {
+  "JOLTS": {
+   "n": 43,
+   "abnormal_bars": 332,
+   "v1": {
+    "covered": 116,
+    "residual_bars": 216,
+    "residual_minutes": 3240,
+    "blocked_min": 2795,
+    "quiet_blocked_min": 195,
+    "events_with_residual": 41,
+    "coverage": 0.349,
+    "blocked_min_per_event": 65,
+    "blocked_h_per_month": 0.92,
+    "quiet_share_of_post_block": 0.07
+   },
+   "v2": {
+    "covered": 116,
+    "residual_bars": 216,
+    "residual_minutes": 3240,
+    "blocked_min": 2795,
+    "quiet_blocked_min": 195,
+    "events_with_residual": 41,
+    "extensions": 0,
+    "extension_min_total": 0,
+    "max_extension_hits": 0,
+    "ref_unavailable": 0,
+    "coverage": 0.349,
+    "blocked_min_per_event": 65,
+    "blocked_h_per_month": 0.92,
+    "quiet_share_of_post_block": 0.07,
+    "extension_rate": 0,
+    "mean_extension_min_when_extended": 0
+   }
+  },
+  "NFP": {
+   "n": 48,
+   "abnormal_bars": 619,
+   "v1": {
+    "covered": 139,
+    "residual_bars": 480,
+    "residual_minutes": 7200,
+    "blocked_min": 3120,
+    "quiet_blocked_min": 75,
+    "events_with_residual": 48,
+    "coverage": 0.225,
+    "blocked_min_per_event": 65,
+    "blocked_h_per_month": 1.03,
+    "quiet_share_of_post_block": 0.024
+   },
+   "v2": {
+    "covered": 184,
+    "residual_bars": 435,
+    "residual_minutes": 6525,
+    "blocked_min": 4320,
+    "quiet_blocked_min": 120,
+    "events_with_residual": 48,
+    "extensions": 0,
+    "extension_min_total": 0,
+    "max_extension_hits": 0,
+    "ref_unavailable": 0,
+    "coverage": 0.297,
+    "blocked_min_per_event": 90,
+    "blocked_h_per_month": 1.43,
+    "quiet_share_of_post_block": 0.028,
+    "extension_rate": 0,
+    "mean_extension_min_when_extended": 0
+   }
+  },
+  "CPI": {
+   "n": 50,
+   "abnormal_bars": 596,
+   "v1": {
+    "covered": 136,
+    "residual_bars": 460,
+    "residual_minutes": 6900,
+    "blocked_min": 3250,
+    "quiet_blocked_min": 210,
+    "events_with_residual": 50,
+    "coverage": 0.228,
+    "blocked_min_per_event": 65,
+    "blocked_h_per_month": 1.08,
+    "quiet_share_of_post_block": 0.065
+   },
+   "v2": {
+    "covered": 176,
+    "residual_bars": 420,
+    "residual_minutes": 6300,
+    "blocked_min": 4500,
+    "quiet_blocked_min": 360,
+    "events_with_residual": 50,
+    "extensions": 0,
+    "extension_min_total": 0,
+    "max_extension_hits": 0,
+    "ref_unavailable": 0,
+    "coverage": 0.295,
+    "blocked_min_per_event": 90,
+    "blocked_h_per_month": 1.49,
+    "quiet_share_of_post_block": 0.08,
+    "extension_rate": 0,
+    "mean_extension_min_when_extended": 0
+   }
+  },
+  "PPI": {
+   "n": 50,
+   "abnormal_bars": 505,
+   "v1": {
+    "covered": 120,
+    "residual_bars": 385,
+    "residual_minutes": 5775,
+    "blocked_min": 3250,
+    "quiet_blocked_min": 450,
+    "events_with_residual": 50,
+    "coverage": 0.238,
+    "blocked_min_per_event": 65,
+    "blocked_h_per_month": 1.08,
+    "quiet_share_of_post_block": 0.138
+   },
+   "v2": {
+    "covered": 120,
+    "residual_bars": 385,
+    "residual_minutes": 5775,
+    "blocked_min": 3250,
+    "quiet_blocked_min": 450,
+    "events_with_residual": 50,
+    "extensions": 0,
+    "extension_min_total": 0,
+    "max_extension_hits": 0,
+    "ref_unavailable": 0,
+    "coverage": 0.238,
+    "blocked_min_per_event": 65,
+    "blocked_h_per_month": 1.08,
+    "quiet_share_of_post_block": 0.138,
+    "extension_rate": 0,
+    "mean_extension_min_when_extended": 0
+   }
+  },
+  "FOMC": {
+   "n": 34,
+   "abnormal_bars": 346,
+   "v1": {
+    "covered": 164,
+    "residual_bars": 182,
+    "residual_minutes": 2730,
+    "blocked_min": 3230,
+    "quiet_blocked_min": 90,
+    "events_with_residual": 33,
+    "coverage": 0.474,
+    "blocked_min_per_event": 95,
+    "blocked_h_per_month": 1.07,
+    "quiet_share_of_post_block": 0.028
+   },
+   "v2": {
+    "covered": 285,
+    "residual_bars": 61,
+    "residual_minutes": 915,
+    "blocked_min": 6120,
+    "quiet_blocked_min": 825,
+    "events_with_residual": 27,
+    "extensions": 0,
+    "extension_min_total": 0,
+    "max_extension_hits": 0,
+    "ref_unavailable": 0,
+    "coverage": 0.824,
+    "blocked_min_per_event": 180,
+    "blocked_h_per_month": 2.03,
+    "quiet_share_of_post_block": 0.135,
+    "extension_rate": 0,
+    "mean_extension_min_when_extended": 0
+   }
+  },
+  "GDP_ADV": {
+   "n": 12,
+   "abnormal_bars": 143,
+   "v1": {
+    "covered": 33,
+    "residual_bars": 110,
+    "residual_minutes": 1650,
+    "blocked_min": 780,
+    "quiet_blocked_min": 45,
+    "events_with_residual": 12,
+    "coverage": 0.231,
+    "blocked_min_per_event": 65,
+    "blocked_h_per_month": 0.26,
+    "quiet_share_of_post_block": 0.058
+   },
+   "v2": {
+    "covered": 33,
+    "residual_bars": 110,
+    "residual_minutes": 1650,
+    "blocked_min": 780,
+    "quiet_blocked_min": 45,
+    "events_with_residual": 12,
+    "extensions": 0,
+    "extension_min_total": 0,
+    "max_extension_hits": 0,
+    "ref_unavailable": 0,
+    "coverage": 0.231,
+    "blocked_min_per_event": 65,
+    "blocked_h_per_month": 0.26,
+    "quiet_share_of_post_block": 0.058,
+    "extension_rate": 0,
+    "mean_extension_min_when_extended": 0
+   }
+  },
+  "PCE": {
+   "n": 42,
+   "abnormal_bars": 419,
+   "v1": {
+    "covered": 103,
+    "residual_bars": 316,
+    "residual_minutes": 4740,
+    "blocked_min": 2730,
+    "quiet_blocked_min": 345,
+    "events_with_residual": 42,
+    "coverage": 0.246,
+    "blocked_min_per_event": 65,
+    "blocked_h_per_month": 0.9,
+    "quiet_share_of_post_block": 0.126
+   },
+   "v2": {
+    "covered": 103,
+    "residual_bars": 316,
+    "residual_minutes": 4740,
+    "blocked_min": 2730,
+    "quiet_blocked_min": 345,
+    "events_with_residual": 42,
+    "extensions": 0,
+    "extension_min_total": 0,
+    "max_extension_hits": 0,
+    "ref_unavailable": 0,
+    "coverage": 0.246,
+    "blocked_min_per_event": 65,
+    "blocked_h_per_month": 0.9,
+    "quiet_share_of_post_block": 0.126,
+    "extension_rate": 0,
+    "mean_extension_min_when_extended": 0
+   }
+  }
+ },
+ "totals": {
+  "v1": {
+   "events": 279,
+   "abnormal_bars_0_240": 2960,
+   "covered": 811,
+   "coverage": 0.274,
+   "residual_bars": 2149,
+   "residual_minutes": 32235,
+   "events_with_residual": 276,
+   "blocked_hours_total": 319.3,
+   "blocked_hours_per_month": 6.34,
+   "quiet_blocked_share_of_post_block": 0.074
+  },
+  "v2": {
+   "events": 279,
+   "abnormal_bars_0_240": 2960,
+   "covered": 1017,
+   "coverage": 0.344,
+   "residual_bars": 1943,
+   "residual_minutes": 29145,
+   "events_with_residual": 270,
+   "blocked_hours_total": 408.3,
+   "blocked_hours_per_month": 8.11,
+   "quiet_blocked_share_of_post_block": 0.096
+  },
+  "months": 50.4,
+  "incremental_blocked_hours_per_month": 1.77
+ },
+ "note": "Events = the 7 official V5 families only (CPI, NFP, PPI, JOLTS, FOMC, PCE, GDP advance); production also blocks other provider-rated USD HIGH rows (retail sales, ISM, ...) identically under V1 and V2 (Tier C), so their block time is unchanged and not counted here. Abnormal bar = completed 15m true range > 1.5x the pre-event reference (V5 definition). No tick/spread data: release-second executability is not claimed."
+}
