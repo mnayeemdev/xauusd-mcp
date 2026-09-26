@@ -111,13 +111,18 @@ derived after the fact, or moved once a signal is registered
 signal time and enforces immutability; the same setup on the same origin
 bar reuses the same signal ID rather than emitting a duplicate).
 
-## Pine comparison (informational only)
+## Pine comparison (VETO on opposing direction; otherwise informational)
 
-If the Pine indicator is present and readable, its state is attached as
-`pine_reference` for comparison — it never changes the MCP result. If
+If the Pine indicator is present and readable (`status: OK`), its state is
+attached as `pine_reference`. It can never CREATE or FLIP a direction. If
 both engines are independently **actionable but pointing opposite
 directions**, the combined result fails closed to `WAIT / ENGINE_DISAGREEMENT`
-for launch safety. One engine being WAIT while the other is actionable
+for launch safety — this is the ONE case where the reference changes the
+result (production authority, pinned by `tests/weekend_hardening.test.js` H;
+see `docs/XAUUSD_AUTHORITY_MAP.md`). Any other reference status (NOT_FOUND,
+AMBIGUOUS, READ_ERROR) has no effect. Note (2026-09-26): the signal is
+registered in the signal store BEFORE this veto is applied, so a vetoed
+candidate still occupies its signal id / thesis slot for dedup purposes. One engine being WAIT while the other is actionable
 is recorded informationally and does not force WAIT.
 
 ## Claude's role
@@ -166,7 +171,7 @@ npm run test:unit                               # full project regression
 Two decision layers share every other part of the engine (10-timeframe
 fetch, validation, signal store, dedup, Pine comparison, MT5 execution):
 
-| | `reference_15m` (default, unchanged) | `intraday_5m` (DEMO forward test) |
+| | `reference_15m` (default for manual reads, unchanged) | `intraday_5m` (PRODUCTION REAL profile since 2026-09-25; REQUIRED for `--mt5-real`) |
 |---|---|---|
 | Entry authority | 15m pipeline | **5m** pipeline (`src/engine/intraday/`) |
 | 15m role | decides | bias / regime / correction phase / eligible model set |

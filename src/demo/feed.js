@@ -5,34 +5,14 @@
  * cycle run on Exness XAUUSDm bars instead of the TradingView chart. No chart is touched, no lock is shared
  * with the production watcher, and no trading command exists in this protocol.
  */
-import { spawn } from 'node:child_process';
-import { createInterface } from 'node:readline';
-import { fileURLToPath } from 'node:url';
 import { isBarFresh } from '../engine/freshData.js';
+import { createFeedReader as _createFeedReader, FEED_COMMANDS, FEED_SYMBOL, DEFAULT_FEED_SCRIPT } from '../engine/mt5FeedReader.js';
 
-export const DEFAULT_FEED_SCRIPT = fileURLToPath(new URL('../../mt5/mt5_feed_reader.py', import.meta.url));
-export const FEED_COMMANDS = Object.freeze(['rates', 'tick', 'select', 'ping', 'quit']);
+export { FEED_COMMANDS, FEED_SYMBOL, DEFAULT_FEED_SCRIPT };
 export const ENGINE_TIMEFRAMES = Object.freeze(['5', '15', '30', '60', '120', '240', '480', 'D', 'W', 'M']);
-export const FEED_SYMBOL = 'XAUUSDm';
 
-export function createFeedReader({ python = 'python', script = DEFAULT_FEED_SCRIPT, env = { ...process.env, OPENBLAS_NUM_THREADS: '1' }, timeoutMs = 20_000, log = () => {} } = {}) {
-  let child = null, rl = null, hello = null, seq = 0; const pending = new Map();
-  async function start() {
-    child = spawn(python, ['-u', script], { env, stdio: ['pipe', 'pipe', 'pipe'] });
-    child.stderr.on('data', (d) => log(`[demo-feed] ${String(d).trim()}`));
-    rl = createInterface({ input: child.stdout });
-    hello = await new Promise((res, rej) => { const t = setTimeout(() => rej(new Error('FEED_HELLO_TIMEOUT')), timeoutMs * 3); rl.once('line', (line) => { clearTimeout(t); try { const h = JSON.parse(line); h.ok ? res(h) : rej(new Error(h.error)); } catch (e) { rej(e); } }); });
-    rl.on('line', (line) => { let m; try { m = JSON.parse(line); } catch { return; } const p = pending.get(m.id); if (p) { pending.delete(m.id); clearTimeout(p.t); p.res(m); } });
-    child.on('exit', (code) => { log(`[demo-feed] exited ${code}`); for (const p of pending.values()) { clearTimeout(p.t); p.rej(new Error('FEED_EXITED')); } pending.clear(); child = null; });
-    return hello;
-  }
-  function request(cmd, params = {}) {
-    if (!FEED_COMMANDS.includes(cmd)) return Promise.reject(new Error(`FEED_CMD_NOT_ALLOWED:${cmd}`)); if (!child) return Promise.reject(new Error('FEED_NOT_RUNNING'));
-    const id = ++seq; return new Promise((res, rej) => { const t = setTimeout(() => { pending.delete(id); rej(new Error(`FEED_TIMEOUT:${cmd}`)); }, timeoutMs); pending.set(id, { res, rej, t }); child.stdin.write(JSON.stringify({ id, cmd, ...params }) + '\n'); });
-  }
-  async function stop() { if (!child) return; try { await request('quit'); } catch { /* ignore */ } try { child.kill(); } catch { /* ignore */ } child = null; }
-  return { start, stop, request, hello: () => hello, alive: () => !!child, rates: (symbol, tf, count) => request('rates', { symbol, tf, count }), tick: (symbol) => request('tick', { symbol }), ping: () => request('ping') };
-}
+/** The shared READ-ONLY reader (src/engine/mt5FeedReader.js), tagged for the validator log. */
+export function createFeedReader(opts = {}) { return _createFeedReader({ tag: 'demo-feed', ...opts }); }
 
 /**
  * Engine/watcher dependency adapters over the feed. `sweep()` fetches all ten engine timeframes once per

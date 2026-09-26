@@ -24,3 +24,6 @@ validation/v5_news_edge/raw/bea/
 validation/v5_news_edge/raw/bea_releases/
 validation/v5_news_edge/raw/fed_statements/
 validation/next_edge_session/cross_asset_bars_15m.json
+
+# production engine signal store: runtime dedup state written by the live watcher (moved out of version control 2026-09-26)
+validation/mcp_engine_signals.json

@@ -1,6 +1,6 @@
 # XAUUSD Adaptive Master ↔ MCP Output Contract (Phase 2B)
 
-**Status: provisional design, not yet implemented in a real Pine script.**
+**Status (updated 2026-09-26): the Pine indicator exists (`pine/XAUUSD_Adaptive_Master.pine`) and this contract is implemented in `src/core/master_contract.js`. In the PRODUCTION watcher path the MCP engine (`src/core/xauusd_calculate.js`) is the decision authority and the Pine reference is a VETO only (opposing actionable direction => WAIT/ENGINE_DISAGREEMENT) — see `docs/XAUUSD_AUTHORITY_MAP.md`. The text below is the original Phase 2B design record.**
 The XAUUSD Adaptive Master Pine indicator does not exist yet. This document
 and `src/core/master_contract.js` define the contract that indicator MUST
 implement once it is authored. Every field name, enum value, and transport

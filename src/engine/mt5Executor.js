@@ -22,7 +22,7 @@
  *                                      content "close" = also close the open
  *                                      MCP position
  */
-import { readFileSync, writeFileSync, renameSync, existsSync, mkdirSync, appendFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, renameSync, existsSync, mkdirSync, appendFileSync, copyFileSync, openSync, closeSync, fstatSync, readSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { randomUUID } from 'node:crypto';
@@ -62,22 +62,44 @@ export function loadMt5State(path) {
   } catch {
     // A corrupt state file is an unreconcilable state: fail closed for new
     // entries until a human looks (position adoption still works from the
-    // broker side on the next start()).
-    return { ...DEFAULT_MT5_STATE, executed_signals: {}, halted: { reason: 'STATE_FILE_CORRUPT', at: new Date().toISOString() } };
+    // broker side on the next start()). The corrupt bytes are PRESERVED as
+    // evidence (copied aside) because the next persist() overwrites the file.
+    let preserved = null;
+    try { preserved = `${path}.corrupt-${Date.now()}`; copyFileSync(path, preserved); } catch { preserved = null; }
+    return { ...DEFAULT_MT5_STATE, executed_signals: {}, halted: { reason: 'STATE_FILE_CORRUPT', at: new Date().toISOString(), preserved_copy: preserved } };
   }
 }
+
+const sleepSync = (ms) => { try { Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms); } catch { /* best-effort */ } };
 
 export function saveMt5State(path, state) {
   mkdirSync(dirname(path), { recursive: true });
   const payload = JSON.stringify({ ...state, updated_at: new Date().toISOString() }, null, 2) + '\n';
   const tmp = `${path}.tmp-${process.pid}`;
   writeFileSync(tmp, payload);
-  renameSync(tmp, path);
+  // Windows: rename over a file another process holds open can fail with
+  // EPERM/EBUSY for a few ms (antivirus, a reader). Retry briefly, then throw.
+  for (let attempt = 1; ; attempt++) {
+    try { renameSync(tmp, path); return; } catch (err) {
+      if (attempt >= 5 || !['EPERM', 'EBUSY', 'EACCES'].includes(err.code)) throw err;
+      sleepSync(40 * attempt);
+    }
+  }
 }
 
 export function appendTradeLog(path, event) {
   mkdirSync(dirname(path), { recursive: true });
-  appendFileSync(path, JSON.stringify(event) + '\n');
+  // A torn previous line (crash mid-append) must not glue the next event onto
+  // it and lose both: start on a fresh line whenever the file does not end in
+  // a newline.
+  let prefix = '';
+  try {
+    if (existsSync(path)) {
+      const fd = openSync(path, 'r');
+      try { const size = fstatSync(fd).size; if (size > 0) { const b = Buffer.alloc(1); readSync(fd, b, 0, 1, size - 1); if (b[0] !== 0x0a) prefix = '\n'; } } finally { closeSync(fd); }
+    }
+  } catch { prefix = ''; }
+  appendFileSync(path, prefix + JSON.stringify(event) + '\n');
 }
 
 export function readTradeLog(path) {
@@ -92,7 +114,20 @@ export function readKillSwitch(path) {
   return { active: true, close: /close/i.test(raw), raw };
 }
 
-const AMBIGUOUS_CODES = new Set(['TRADE_REQUEST_TIMEOUT', 'BRIDGE_DOWN', 'BRIDGE_TIMEOUT', 'BRIDGE_WRITE_FAILED', 'ORDER_SEND_NONE']);
+// Every code after which the order MAY exist at the broker. Never a resend: halt + reconcile from history.
+// ORDER_STATE_AMBIGUOUS = bridge saw retcode 10008/10012; POST_SEND_EXCEPTION = order accepted, post-send read failed.
+const AMBIGUOUS_CODES = new Set(['TRADE_REQUEST_TIMEOUT', 'BRIDGE_DOWN', 'BRIDGE_TIMEOUT', 'BRIDGE_WRITE_FAILED', 'ORDER_SEND_NONE', 'ORDER_STATE_AMBIGUOUS', 'POST_SEND_EXCEPTION']);
+
+/**
+ * Audit events that are ALSO surfaced as operational (never trade-signal)
+ * notifications through the injected `onOps` hook. `once` kinds fire once per
+ * (type, reason) per process to avoid notification spam; the rest are rare
+ * by construction (a fill, a close, a halt, an emergency).
+ */
+export const OPS_ALERT_EVENTS = Object.freeze({
+  always: ['HALTED', 'ORDER_AMBIGUOUS', 'OPENED', 'CLOSED', 'EMERGENCY_CLOSE', 'EMERGENCY_CLOSE_FAILED', 'EMERGENCY_SL_RESTORE_FAILED', 'HALT_CLEARED_BY_RESTART', 'RESUMED_POSITION', 'ADOPTED_EXISTING_POSITION', 'INTENT_RESOLVED'],
+  once: ['REJECTED', 'ANOMALY', 'CLOSE_FAILED', 'STOPS_REALIGN_FAILED', 'AUDIT_WRITE_FAILED', 'DAILY_REBUILD_FAILED'],
+});
 
 function round2(n) { return n === null || n === undefined ? null : Math.round(Number(n) * 100) / 100; }
 
@@ -153,10 +188,23 @@ export function createMt5Executor({ config, bridge, statePath = DEFAULT_MT5_STAT
     account_server: broker?.account?.server ?? null,
   });
 
+  // Operational notification hook (injected by the CLI as notifyOps; tests
+  // inject a collector). Failure-isolated: a throwing hook only logs.
+  const onOps = typeof _deps.onOps === 'function' ? _deps.onOps : null;
+  const opsOnceSeen = new Set();
+  const emitOps = (event) => {
+    if (!onOps) return;
+    const isAlways = OPS_ALERT_EVENTS.always.includes(event.type);
+    const isOnce = OPS_ALERT_EVENTS.once.includes(event.type);
+    if (!isAlways && !isOnce) return;
+    if (isOnce) { const key = `${event.type}:${event.reason ?? ''}`; if (opsOnceSeen.has(key)) return; opsOnceSeen.add(key); }
+    try { onOps({ kind: `MT5_${config.mode === 'real' ? 'REAL' : 'DEMO'}_${event.type}`, message: `${event.type}${event.reason ? ` / ${event.reason}` : ''}${event.ticket ? ` ticket ${event.ticket}` : ''}${event.signal_id ? ` signal ${event.signal_id}` : ''}${event.detail ? ` -- ${String(event.detail).slice(0, 160)}` : ''}`, at: event.timestamp, event_type: event.type, reason: event.reason ?? null }); } catch (err) { log(`[mt5-executor] ops notification failed (non-fatal): ${err.message}`); }
+  };
   const record = (type, fields = {}) => {
     const event = { timestamp: nowIso(), type, ...budgetFields(), ...fields };
-    try { deps.appendLog(logPath, event); } catch (err) { log(`[mt5-executor] audit log write failed: ${err.message}`); }
+    try { deps.appendLog(logPath, event); } catch (err) { log(`[mt5-executor] audit log write failed: ${err.message}`); emitOps({ timestamp: event.timestamp, type: 'AUDIT_WRITE_FAILED', reason: err.code ?? 'WRITE_ERROR', detail: err.message }); }
     log(`[mt5-executor] ${type}${fields.reason ? ` / ${fields.reason}` : ''}${fields.signal_id ? ` signal ${fields.signal_id}` : ''}${fields.ticket ? ` ticket ${fields.ticket}` : ''}`);
+    emitOps(event);
     return event;
   };
 
@@ -334,7 +382,12 @@ export function createMt5Executor({ config, bridge, statePath = DEFAULT_MT5_STAT
   }
 
   async function reconcile() {
-    state.halted = null; // every start re-evaluates; a persisted halt from a prior run is re-derived below if still true
+    // Every start re-evaluates; a persisted halt from a prior run is re-derived
+    // below if still true. The restart IS the operator acknowledgement, so the
+    // cleared halt is audited (and surfaced) rather than silently forgotten.
+    const priorHalt = state.halted;
+    state.halted = null;
+    if (priorHalt?.reason) record('HALT_CLEARED_BY_RESTART', { reason: priorHalt.reason, prior_halt_at: priorHalt.at ?? null, prior_halt: priorHalt });
     const positions = await brokerPositions();
     if (!Array.isArray(positions)) { halt('RECONCILE_FAILED', { detail: 'broker positions unreadable' }); return; }
 
@@ -693,7 +746,10 @@ export function createMt5Executor({ config, bridge, statePath = DEFAULT_MT5_STAT
         let deals = [];
         try { deals = await dealsForPosition(pos.position_id); } catch (err) { log(`[mt5-executor] deals unavailable after broker-side close: ${err.message}`); }
         if (!deals.some((d) => Number(d.entry) === 1)) {
-          record('ANOMALY', { reason: 'POSITION_GONE_NO_EXIT_DEAL_YET', ticket: pos.ticket, signal_id: pos.signal_id });
+          // Audited ONCE per position (the monitor runs every 3 s; the broker
+          // may take a moment to publish the exit deal). Still fail-closed:
+          // POSITION_ALREADY_OPEN keeps blocking new entries until finalized.
+          if (pos.anomaly_no_exit_deal_at == null) { pos.anomaly_no_exit_deal_at = nowIso(); persist(); record('ANOMALY', { reason: 'POSITION_GONE_NO_EXIT_DEAL_YET', ticket: pos.ticket, signal_id: pos.signal_id }); }
           return { action: 'AWAITING_EXIT_DEAL' };
         }
         const brokerReason = DEAL_REASON[Number(realizedFromDeals(deals).exitDeal?.reason)] ?? 'UNKNOWN';

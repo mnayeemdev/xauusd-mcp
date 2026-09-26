@@ -1,0 +1,214 @@
+{
+ "schema_version": "strategy-fingerprint-1.0",
+ "version": "PROD_STRATEGY_2026-09-26_PREMARKET_FREEZE",
+ "frozen_at": "2026-09-26T11:51:20.836Z",
+ "commit": "post-2933ab2 weekend hardening (FINAL_HEAD recorded in docs/XAUUSD_PRE_MARKET_FREEZE.md)",
+ "note": "intraday_5m REAL profile; lot 0.01 USER_FIXED; breaker 2/UTC day; RR>=1.7; News V2 BLOCK, extension 0; scaling OFF",
+ "engine_profile": "intraday_5m",
+ "strategy_fingerprint": "356e41898259af88e459c4d5287f346992ad5c308c9f7aee1ee141671f1e46ed",
+ "code_fingerprint": "6876808dd9e4cfe46bda1b9b5fff83aefa187a82a551ec40e940b96d6937f752",
+ "config_fingerprint": "9f938cba368bf00d77ba28d0c16aea3bb2067041b8fa2f493179004c4b079332",
+ "file_count": 50,
+ "files": [
+  {
+   "path": "mt5/mt5_bridge_real.py",
+   "sha256": "b305e803635b51afccd631400f96aa4c64ae090e48c3145e7f76b2a76d33047f"
+  },
+  {
+   "path": "src/core/master_contract.js",
+   "sha256": "378c19db98c17270096575ed2158c94b6facbad26d9791f05005dad669a4014a"
+  },
+  {
+   "path": "src/core/xauusd_analyze_market.js",
+   "sha256": "86cd76a11a70db8fd8b9912fc2652acb3349069997e00f2778adfa8ee61abead"
+  },
+  {
+   "path": "src/core/xauusd_calculate.js",
+   "sha256": "54fd691051d07f22ef75d33fe068f8d8e4000744ce06e12531bb8bed8998dc76"
+  },
+  {
+   "path": "src/engine/anticipation.js",
+   "sha256": "de9e734460f186aa154e0174aeaaaea34c56957f5a3579034ee4fad18aebf0aa"
+  },
+  {
+   "path": "src/engine/anticipationStore.js",
+   "sha256": "bb218847a96fa3c12a11e66edaddbc268fe5cb67593439f7dfd5618cb8875b6d"
+  },
+  {
+   "path": "src/engine/breakout.js",
+   "sha256": "4e813c14b7ddefe94a4e2d5407464be16c7401cf4574ff2297f05ce4cbfcd2d2"
+  },
+  {
+   "path": "src/engine/candlesticks.js",
+   "sha256": "7e6db4edf510782420d1168a8a8e2a63743930e108fa228dc8cabc53f6ff54a0"
+  },
+  {
+   "path": "src/engine/cdpLock.js",
+   "sha256": "08fedf676e1e5be2219de5f7a3dfe05c21e8c1beacf4ee249bd61e8e4ba11aa7"
+  },
+  {
+   "path": "src/engine/confluence.js",
+   "sha256": "04223c9878d1e91099b2235421d9c19b01ba245e7d81c5f0967b10a571db5d5a"
+  },
+  {
+   "path": "src/engine/correction.js",
+   "sha256": "811191f2970a0d9ae788d71a00eec508d560310291d9838347d70bddab9b8002"
+  },
+  {
+   "path": "src/engine/engineProfile.js",
+   "sha256": "a4271ca5217a9d60c18ff419a0af6d57ff9d6222de16a828d2d83d54b5cc8e06"
+  },
+  {
+   "path": "src/engine/freshData.js",
+   "sha256": "b884da42878774afec048e64d9b119686bcc5760ee41a5ebecde38a1fba1fc2c"
+  },
+  {
+   "path": "src/engine/htf.js",
+   "sha256": "dc9cbec5dc1444f67f395c7d2c709c9dc7aea79d159a670d2cd85029c0a2320b"
+  },
+  {
+   "path": "src/engine/intraday/bias.js",
+   "sha256": "05e5bea872c0e20fc5de58951120f233aaff6233fd2ca6bf7a0741a8992a1c71"
+  },
+  {
+   "path": "src/engine/intraday/models5m.js",
+   "sha256": "0cbfbf3bca79f13995ca524bf4cf67066a8ae61e1887eba023b24524d48ba0c9"
+  },
+  {
+   "path": "src/engine/intraday/params.js",
+   "sha256": "10a46c63280ed5b1e4df64e6936a9c637647ec3c2788f4f8cb424bd8523b2504"
+  },
+  {
+   "path": "src/engine/intraday/pipeline5m.js",
+   "sha256": "b427d517e113acd518b66ab2f1c62ce51dfa19b46d228b05a1552ed7cd9767f0"
+  },
+  {
+   "path": "src/engine/intraday/risk5m.js",
+   "sha256": "c5c6d5b710bc6e11a2730cae99c9d03543d535eae7bcffdfac07f2ead4c3f157"
+  },
+  {
+   "path": "src/engine/levels.js",
+   "sha256": "28596cde40b8165888b8a7145c9edb08a76c0af72e4afff9761465515222bd33"
+  },
+  {
+   "path": "src/engine/liquidity.js",
+   "sha256": "10f755c33716e471c2d705bd09e25683b27076990c8aadb35512111c58731443"
+  },
+  {
+   "path": "src/engine/marketEvidence.js",
+   "sha256": "633bb86f153e288da7a391835c21bc5ffe92445cee198dc077aa558a4429c41f"
+  },
+  {
+   "path": "src/engine/marketShock.js",
+   "sha256": "4c3acad2929e5cf19a65359b4a83ff2b807034e9f71f4bcf6943ef059fc857f6"
+  },
+  {
+   "path": "src/engine/math.js",
+   "sha256": "3dcf75c99b4fd65cabc6efe2542da12d6dd019da5fa5fde1eeddd016cb0fb207"
+  },
+  {
+   "path": "src/engine/models.js",
+   "sha256": "14984080f906c44df54cafb96d2dbb532c230230cadd2568ed755fe22633c85d"
+  },
+  {
+   "path": "src/engine/mt5Bridge.js",
+   "sha256": "6f53418aac4c74b05136df1e12e1490fb4c1b72a20ab9f1647b6b40d653ab352"
+  },
+  {
+   "path": "src/engine/mt5CapitalPolicy.js",
+   "sha256": "27d13dc8d1093b19064ae0f5f3e7ec7568d5d31f45c37732d34a4a9c9098553a"
+  },
+  {
+   "path": "src/engine/mt5Executor.js",
+   "sha256": "091ce57c0b2d04dc8032a3a633c281596885853a19ba28fb60509e3bfa61adb7"
+  },
+  {
+   "path": "src/engine/mt5Policy.js",
+   "sha256": "b3b3511126d603099e39ad9b7d4eaa0902750a051efbc7020ff12adabe415a07"
+  },
+  {
+   "path": "src/engine/mt5RealPolicy.js",
+   "sha256": "1710e250c1519131211f335770471311eb8f364ae4fa0d9a31f64298b9dbbcf3"
+  },
+  {
+   "path": "src/engine/mt5RealScaling.js",
+   "sha256": "3c72684706be50840aa551af72cb4c2fb97e491927a229ba53c0caf3cb4c48b0"
+  },
+  {
+   "path": "src/engine/mt5TradeManagement.js",
+   "sha256": "01eb776b328cabf0139fee3164c312b5ebdd43d2a77aebec7e807f184c26211b"
+  },
+  {
+   "path": "src/engine/mtf.js",
+   "sha256": "e971d5d3420e89c77864bf233a2ab164de6f6a7e435924896b64c82037bac123"
+  },
+  {
+   "path": "src/engine/newsCalendar.js",
+   "sha256": "e6a9524a40cdd7cae9286946d767ed565e80e750c1119867e6684d63e8660c39"
+  },
+  {
+   "path": "src/engine/newsMonitor.js",
+   "sha256": "8f18b2fcdd8c16f83c743de57217131a2c4e6b707be2dd2fdf062af523489ac8"
+  },
+  {
+   "path": "src/engine/newsRisk.js",
+   "sha256": "0af03c094cd622b02e971da6cf0780fae47613ce5498ad34e09005bbf38aa524"
+  },
+  {
+   "path": "src/engine/opportunityPlanner.js",
+   "sha256": "d4903bba66fb2434bb6d9f4d15c4db99f8de865751c1a3084b9707a2e81dcc3d"
+  },
+  {
+   "path": "src/engine/patterns.js",
+   "sha256": "f51e3c603a1658dd31e7a9b92c57966485b780288d5d69a502d53ff5382ea013"
+  },
+  {
+   "path": "src/engine/pipeline.js",
+   "sha256": "c001f3698301033df4b3e23bdddd6c18163aef43a4bd1a80e42d0af12ed005c8"
+  },
+  {
+   "path": "src/engine/protectionGuards.js",
+   "sha256": "2e0024f3b54920369cdcf30e7da15bf0c10a9931321de835bb0f2cfd37319f26"
+  },
+  {
+   "path": "src/engine/quality.js",
+   "sha256": "4bb739bff0d335c2b9556b9ae5323e516a55819f8fca25a42c36192044c8f574"
+  },
+  {
+   "path": "src/engine/regime.js",
+   "sha256": "fa65cd473ee1ba4dc7a0be2b50f4ecbf2f958eb3ff37aaa29815faa4b341fffd"
+  },
+  {
+   "path": "src/engine/risk.js",
+   "sha256": "d4de8f6d2db5dcbade8ba40d0a9d4320f40f1b47003cf43883cf820213b23fee"
+  },
+  {
+   "path": "src/engine/session.js",
+   "sha256": "d56328b4e220beb32cf76dfb6b68f7e51202f2f6df4255db15ef56b3c0d5f246"
+  },
+  {
+   "path": "src/engine/signalStore.js",
+   "sha256": "2ba4f0ebf9874801cca1029630a4e128bb63e0e097408e6f7e130f16550266b3"
+  },
+  {
+   "path": "src/engine/strategies/eligibility.js",
+   "sha256": "46b2b49223c10c8332beda367c8ec639d54193cfc836b24ea569d4d7e8d23701"
+  },
+  {
+   "path": "src/engine/structure.js",
+   "sha256": "1db67c2616946240c8cd66168d1d8e2f40547e9e8b0c561cac3d07b688432fa1"
+  },
+  {
+   "path": "src/engine/volatility.js",
+   "sha256": "24fda239599dbb917555446185a4f7daeeb4705670a828fb09e4114f701a8499"
+  },
+  {
+   "path": "src/engine/watcher.js",
+   "sha256": "7b4e16bd27ac6a188a071e6a09a922b7016c8fb3a5829e0fc93cce67bde356a6"
+  },
+  {
+   "path": "src/engine/watcherState.js",
+   "sha256": "6b401501f10e0debf97b84e7e5619fbc494ef137b2701fc8efbf8dd74d994006"
+  }
+ ]
+}

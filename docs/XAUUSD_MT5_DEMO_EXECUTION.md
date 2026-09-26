@@ -1,7 +1,6 @@
 # XAUUSD MT5 DEMO Execution (TradeBudget exit overlay)
 
-Status: implemented, tests green, **no demo order has been sent yet**. Terminal
-Algo Trading is OFF and the executor refuses to send while it is OFF.
+Status (2026-09-26): **LEGACY / RETIRED route** (magic 88051501; `state/xauusd_mt5_kill_switch` present). Superseded by the Stage 12 DEMO forward validator (`src/demo/validator.js`, docs `XAUUSD_STAGE12_DEMO_*.md`). Historical text follows.
 
 ## 1. What this is, and what it is not
 

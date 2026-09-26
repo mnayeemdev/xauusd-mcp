@@ -468,8 +468,9 @@ describe('watcher: single-instance lock', () => {
     const lockPath = join(dir, 'watcher.lock');
     const first = acquireLock(lockPath, { isAlive: () => true });
     assert.equal(first.acquired, true);
-    const second = acquireLock(lockPath, { isAlive: () => true });
+    const second = acquireLock(lockPath, { isAlive: () => true, pid: process.pid + 1 }); // a different process
     assert.equal(second.acquired, false);
+    assert.equal(acquireLock(lockPath, { isAlive: () => true }).reentrant, true, 'the same process may re-acquire its own lock');
     assert.equal(second.holderPid, first.holderPid);
   });
 

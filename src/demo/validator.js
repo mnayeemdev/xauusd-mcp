@@ -86,6 +86,7 @@ if (isMain) {
   const log = (m) => { const line = `[${new Date().toISOString()}] ${m}`; console.log(line); try { appendFileSync(DEMO_PATHS.log, line + '\n'); } catch { /* ignore */ } };
   const writeStatus = (s) => { try { writeFileSync(DEMO_PATHS.status, JSON.stringify({ ...s, schema_version: DEMO_SCHEMA_VERSION, identity: DEMO_IDENTITY, updated_at: new Date().toISOString() }, null, 1)); } catch { /* ignore */ } };
   (async () => {
+    if (check && existsSync(DEMO_PATHS.lock)) { const pid = Number(readFileSync(DEMO_PATHS.lock, 'utf8').trim()); let alive = false; try { process.kill(pid, 0); alive = true; } catch { alive = false; } if (alive && pid !== process.pid) { console.error(`demo validator is running (pid ${pid}); --check would start a second DEMO executor on its state -- refusing. Read state/demo_forward/validator_status.json instead.`); process.exit(2); } }
     if (!check) { if (existsSync(DEMO_PATHS.lock)) { const pid = Number(readFileSync(DEMO_PATHS.lock, 'utf8').trim()); let alive = false; try { process.kill(pid, 0); alive = true; } catch { alive = false; } if (alive && pid !== process.pid) { console.error(`demo validator already running (pid ${pid}); refusing to start a duplicate`); process.exit(2); } } writeFileSync(DEMO_PATHS.lock, String(process.pid)); }
     const feed = createFeedReader({ log }); const fh = await feed.start(); log(`[demo-feed] hello read_only=${fh.read_only} terminal=${fh.terminal_path} (market data only)`);
     const parts = buildDemoValidator({ log, feed }); parts.rawBridge.start?.();

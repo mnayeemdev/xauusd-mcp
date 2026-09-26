@@ -24,7 +24,11 @@ export function registerXauusdTools(gate, { profile } = {}) {
   });
 
   gate.tool('xauusd_calculate_entry', 'MUTATING (switches chart timeframe internally for every required timeframe, restores it afterward even on partial failure): the independent MCP calculation engine (src/core/xauusd_calculate.js). Fetches raw OHLCV directly from TradingView for 5m/15m/30m (entry) plus 1H/2H/4H/8H/1D/1W/1M (higher-timeframe context/filtering, src/engine/htf.js) and computes regime/structure/correction/setup-model/quality/risk from scratch — it does NOT require or read the Pine indicator ACTION to produce a decision. 5m/15m/30m remain the sole decision-critical timeframes (unchanged); higher timeframes are read-only context except a single 1H conflict gate (mirrors the existing 30m->15m rule one tier higher, never majority voting; 1M/1W never gate or generate an entry). Returns WAIT with null trade geometry, or BUY/SELL with entry/sl/tp1/tp2/rr computed by this engine. If the Pine indicator is present, its state is attached read-only as `pine_reference` for comparison only; a materially opposing actionable disagreement between the two engines fails closed to WAIT. Never places broker orders.', {}, async () => {
-    try { return jsonResult(await calculateEntry()); }
+    // EPHEMERAL signal store: an on-demand MCP read must never register a
+    // signal in the production store (validation/mcp_engine_signals.json) --
+    // that would make the live watcher see is_new_event:false and SKIP the
+    // real signal (hidden entry-blocking authority). Same rule as analyzeMarket().
+    try { return jsonResult(await calculateEntry({ _deps: { loadStore: () => ({ signals: [] }), saveStore: () => {} } })); }
     catch (err) { return jsonResult({ success: false, error: err.message }, true); }
   });
 

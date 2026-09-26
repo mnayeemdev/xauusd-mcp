@@ -1,5 +1,7 @@
 # XAUUSD MCP — Stage 6: Live Adaptive Runtime
 
+> HISTORICAL (Stage 6, 2026-09-21). For the processes that run today (REAL watcher, Stage 11C observer, Stage 12 validator), the authority map and the pre-market procedure see `docs/XAUUSD_SYSTEM_CURRENT_STATE.md`, `docs/XAUUSD_AUTHORITY_MAP.md`, `docs/XAUUSD_PRE_MARKET_CHECKLIST.md`.
+
 This document covers Stage 6's additions on top of the frozen Stage 1-5 stack
 (anticipation engine, opportunity observability, safe drawing infrastructure,
 market visualization). It does not restate Stage 1-5 — see

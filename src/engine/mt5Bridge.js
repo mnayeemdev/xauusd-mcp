@@ -35,7 +35,7 @@ export class Mt5BridgeError extends Error {
 }
 
 export class Mt5Bridge {
-  constructor({ scriptPath = DEFAULT_BRIDGE_SCRIPT, python, env = process.env, spawnImpl = _spawn, log = () => {}, requestTimeoutMs = DEFAULT_REQUEST_TIMEOUT_MS, tradeTimeoutMs = DEFAULT_TRADE_TIMEOUT_MS } = {}) {
+  constructor({ scriptPath = DEFAULT_BRIDGE_SCRIPT, python, env = process.env, spawnImpl = _spawn, log = () => {}, requestTimeoutMs = DEFAULT_REQUEST_TIMEOUT_MS, tradeTimeoutMs = DEFAULT_TRADE_TIMEOUT_MS, onDown = null } = {}) {
     this.scriptPath = scriptPath;
     this.python = python ?? resolvePythonCommand(env);
     this.env = env;
@@ -49,9 +49,31 @@ export class Mt5Bridge {
     this.ready = null;
     this.restarts = 0;
     this.stopped = false;
+    this.onDown = typeof onDown === 'function' ? onDown : null; // operational hook: (reason, detail) on every sidecar death
+    this.lastDown = null;
   }
 
   get alive() { return !!this.child && this.child.exitCode === null && !this.child.killed; }
+
+  /** Health snapshot for read-only reporting. */
+  status() { return { alive: this.alive, restarts: this.restarts, pending: this.pending.size, stopped: this.stopped, last_down: this.lastDown }; }
+
+  /**
+   * Declares the sidecar dead and kills it so a HUNG python process can never
+   * pin the bridge forever (every later command would queue behind the stuck
+   * call). In-flight requests fail with BRIDGE_DOWN (ambiguous for trades =>
+   * the executor halts and reconciles from broker history, never resends).
+   * The next request lazily respawns a fresh sidecar.
+   */
+  _declareDown(reason, detail) {
+    this.lastDown = { reason, detail: String(detail ?? '').slice(0, 300), at: new Date().toISOString() };
+    this.log(`[mt5-bridge] sidecar declared down (${reason}): ${detail ?? ''}`);
+    const child = this.child;
+    this.child = null;
+    this._failAll(new Mt5BridgeError('BRIDGE_DOWN', `python bridge declared down (${reason}) while requests were in flight`));
+    if (child) { try { child.kill(); } catch { /* ignore */ } }
+    if (this.onDown) { try { this.onDown(reason, detail); } catch { /* never let a hook break the bridge */ } }
+  }
 
   start() {
     if (this.alive) return this.ready;
@@ -65,8 +87,17 @@ export class Mt5Bridge {
     this.restarts += 1;
     let resolveReady, rejectReady;
     this.ready = new Promise((res, rej) => { resolveReady = res; rejectReady = rej; });
-    const readyTimer = setTimeout(() => rejectReady(new Mt5BridgeError('BRIDGE_START_TIMEOUT', 'python bridge did not report ready in time')), this.requestTimeoutMs);
+    const readyTimer = setTimeout(() => {
+      rejectReady(new Mt5BridgeError('BRIDGE_START_TIMEOUT', 'python bridge did not report ready in time'));
+      // A sidecar that never reports ready is killed so `alive` cannot stay
+      // true forever with every request awaiting the same rejected promise.
+      if (this.child === child) this._declareDown('START_TIMEOUT', `no ready event within ${this.requestTimeoutMs}ms`);
+    }, this.requestTimeoutMs);
     this.ready.catch(() => {});
+    // An async EPIPE on stdin (python died between our liveness check and the
+    // write) is an 'error' EVENT, not a synchronous throw: without a listener
+    // it would crash the whole watcher process.
+    if (child.stdin) child.stdin.on('error', (err) => { if (this.child === child) this._declareDown('STDIN_ERROR', err.message); else this.log(`[mt5-bridge] stdin error on a retired sidecar ignored: ${err.message}`); });
 
     const rl = createInterface({ input: child.stdout });
     rl.on('line', (line) => {
@@ -92,8 +123,10 @@ export class Mt5Bridge {
     child.on('exit', (code, signal) => {
       clearTimeout(readyTimer);
       rejectReady(new Mt5BridgeError('BRIDGE_EXITED', `python bridge exited (code ${code}, signal ${signal})`));
-      this._failAll(new Mt5BridgeError('BRIDGE_DOWN', `python bridge exited (code ${code}, signal ${signal}) while requests were in flight`));
-      this.child = null;
+      if (this.child === child) {
+        if (!this.stopped) this._declareDown('EXITED', `code ${code}, signal ${signal}`);
+        else { this._failAll(new Mt5BridgeError('BRIDGE_DOWN', `python bridge exited (code ${code}, signal ${signal}) while requests were in flight`)); this.child = null; }
+      }
     });
     return this.ready;
   }
@@ -120,13 +153,19 @@ export class Mt5Bridge {
     const isTrade = cmd === 'open' || cmd === 'close';
     const ms = timeoutMs ?? (isTrade ? this.tradeTimeoutMs : this.requestTimeoutMs);
     return new Promise((resolve, reject) => {
+      const child = this.child;
       const timer = setTimeout(() => {
         this.pending.delete(id);
         reject(new Mt5BridgeError(isTrade ? 'TRADE_REQUEST_TIMEOUT' : 'BRIDGE_TIMEOUT', `bridge command "${cmd}" timed out after ${ms}ms`));
+        // A timed-out sidecar is hung (mt5 IPC stalls block the python loop):
+        // retire it so nothing queues behind the stuck call. A late reply from
+        // a retired sidecar is ignored by construction (the child is gone).
+        if (this.child === child) this._declareDown('REQUEST_TIMEOUT', `command "${cmd}" (id ${id}) exceeded ${ms}ms`);
       }, ms);
       this.pending.set(id, { resolve, reject, timer, cmd });
       try {
-        this.child.stdin.write(JSON.stringify({ id, cmd, ...params }) + '\n');
+        if (!child?.stdin) throw new Error('bridge sidecar is not running');
+        child.stdin.write(JSON.stringify({ id, cmd, ...params }) + '\n');
       } catch (err) {
         clearTimeout(timer);
         this.pending.delete(id);

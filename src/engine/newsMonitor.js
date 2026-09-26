@@ -119,6 +119,17 @@ export function createNewsMonitor({ provider, params = NEWS_RISK_PARAMS, relevan
       return;
     }
     const norm = normalizeCalendar(res.raw, { source: res.source, sourceTimestamp: res.source_timestamp, now: nowDate() });
+    // FAIL CLOSED on an empty or entirely unusable calendar: a provider format
+    // change (every row unschedulable / impact renamed) or an empty payload
+    // must never replace a good cache with "no events" (= NORMAL = entries
+    // allowed). Treated exactly like a failed fetch: last good snapshot kept,
+    // freshness still enforced, DATA_UNAVAILABLE once it goes stale.
+    if (!Array.isArray(norm.events) || norm.events.length === 0 || (norm.counts?.received ?? 0) === 0) {
+      const why = (norm.counts?.received ?? 0) === 0 ? 'CALENDAR_EMPTY' : 'CALENDAR_UNUSABLE';
+      cache.calendar = { ...cache.calendar, status: cache.events.length ? cache.calendar.status : 'ERROR', error: why, consecutive_failures: (cache.calendar.consecutive_failures ?? 0) + 1, last_error: why, last_error_at: res.fetched_at, last_rejected_counts: norm.counts ?? null };
+      log(`[news-monitor] calendar refresh rejected (${why}: received=${norm.counts?.received ?? 0} usable=${norm.counts?.usable ?? 0}); ${cache.events.length ? 'keeping the last good snapshot (freshness still enforced)' : 'no calendar data'}`);
+      return;
+    }
     cache.events = norm.events; cache.counts = norm.counts; cache.dropped = norm.dropped;
     cache.calendar = { ...cache.calendar, status: 'OK', source: res.source, source_timestamp: res.source_timestamp, last_success_at: res.fetched_at, error: null, consecutive_failures: 0, restored_from_snapshot: false, http_last_modified: res.http_last_modified ?? null };
     try { deps.saveSnapshot(snapshotPath, { source: res.source, source_timestamp: res.source_timestamp, fetched_at: res.fetched_at, counts: norm.counts, events: norm.events }); } catch (err) { log(`[news-monitor] snapshot write failed: ${err.message}`); }

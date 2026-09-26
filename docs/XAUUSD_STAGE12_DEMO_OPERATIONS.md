@@ -7,7 +7,7 @@ The validator's DEMO bridge attaches to a MetaTrader 5 terminal by path (`XAUUSD
 ## Start / check
 
 ```
-# verify the DEMO connection and identity (no order, no watcher):
+# verify the DEMO connection and identity (no order, no watcher; refused while a validator is running):
 node src/demo/validator.js --check
 # start exactly one validator (own lock: state/demo_forward/validator.lock):
 $env:XAUUSD_MT5_DEMO_TERMINAL_PATH='C:\MT5-DEMO\terminal64.exe'

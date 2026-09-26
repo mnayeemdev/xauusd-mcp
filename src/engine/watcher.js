@@ -357,10 +357,10 @@ async function evaluateEngineResult({ result, state, deps, log, stamp }) {
   if (typeof deps.executeSignal === 'function') {
     try {
       alerted.execution = await deps.executeSignal({ alert, signalId, result });
-      log(`[${stamp()}] MT5 demo execution for ${signalId}: ${alerted.execution?.executed ? 'OPENED' : `not executed (${alerted.execution?.reason ?? 'unknown'})`}`);
+      log(`[${stamp()}] MT5 execution for ${signalId}: ${alerted.execution?.executed ? 'OPENED' : `not executed (${alerted.execution?.reason ?? 'unknown'})`}`);
     } catch (err) {
       alerted.execution = { executed: false, reason: 'EXECUTOR_THREW', detail: err.message };
-      log(`[${stamp()}] MT5 demo execution failed (non-fatal, alert/decision unaffected): ${err.message}`);
+      log(`[${stamp()}] MT5 execution failed (non-fatal, alert/decision unaffected): ${err.message}`);
     }
   }
   return alerted;
@@ -420,6 +420,37 @@ export function trackFeedHealth({ outcome, deps, log = () => {}, stamp = () => f
   }
   if (!state.feed_failure_streak && !state.feed_failure_since && !state.feed_stall_alerted_at) return outcome;
   return { ...outcome, state: { ...state, feed_failure_streak: 0, feed_failure_since: null, feed_stall_alerted_at: null } };
+}
+
+export const DEFAULT_CYCLE_ERROR_ALERT_AFTER = 3;
+
+/**
+ * Consecutive "Unexpected watcher error" tracking (pure on `state`). One
+ * operational alert (WATCHER_CYCLE_ERRORS) when the streak first reaches the
+ * threshold, one (WATCHER_CYCLE_RECOVERED) when a cycle completes again.
+ * Observability only: never touches candle gating, dedup or decisions.
+ */
+export function trackCycleErrors({ state, error, deps, log = () => {}, stamp = () => formatTimestamp(new Date()) }) {
+  const s = state ?? {};
+  const nowIso = (deps?.now ? deps.now() : new Date()).toISOString();
+  const threshold = Number.isInteger(deps?.cycleErrorAlertAfter) && deps.cycleErrorAlertAfter > 0 ? deps.cycleErrorAlertAfter : DEFAULT_CYCLE_ERROR_ALERT_AFTER;
+  const notifyOps = (payload) => {
+    const fn = deps?.cycleDeps?.notifyOps ?? deps?.notifyOps;
+    if (typeof fn !== 'function') return;
+    try { fn(payload); } catch (err) { log(`[${stamp()}] Operational notification failed (non-fatal): ${err.message}`); }
+  };
+  if (error) {
+    const streak = (Number.isInteger(s.cycle_error_streak) ? s.cycle_error_streak : 0) + 1;
+    let alertedAt = s.cycle_error_alerted_at ?? null;
+    if (streak >= threshold && !alertedAt) {
+      alertedAt = nowIso;
+      notifyOps({ kind: 'WATCHER_CYCLE_ERRORS', message: `${streak} consecutive watcher cycle error(s); last: ${error.message}`, consecutive_failures: streak, last_error: error.message, at: nowIso });
+    }
+    return { ...s, cycle_error_streak: streak, cycle_error_alerted_at: alertedAt, last_cycle_error: String(error.message ?? error).slice(0, 300) };
+  }
+  if (!s.cycle_error_streak && !s.cycle_error_alerted_at) return s;
+  if (s.cycle_error_alerted_at) notifyOps({ kind: 'WATCHER_CYCLE_RECOVERED', message: `watcher cycles succeed again after ${s.cycle_error_streak ?? '?'} consecutive error(s)`, consecutive_failures: s.cycle_error_streak ?? null, at: nowIso });
+  return { ...s, cycle_error_streak: 0, cycle_error_alerted_at: null };
 }
 
 async function runWatcherCycleCore({ state, deps, log, stamp }) {
@@ -671,9 +702,15 @@ export function startWatcher({ pollIntervalMs = DEFAULT_POLL_INTERVAL_MS, _deps 
       try {
         const { state: nextState } = await deps.runCycle({ state, deps: deps.cycleDeps, log: deps.log });
         state = nextState;
+        state = trackCycleErrors({ state, error: null, deps, log: deps.log });
         deps.saveState(deps.statePath, state);
       } catch (err) {
         deps.log(`Unexpected watcher error: ${err.message}`);
+        // A cycle that keeps throwing (e.g. a corrupt signal store) is a silent
+        // no-trade condition: surface ONE operational alert after a short
+        // streak and ONE when cycles succeed again. Never changes any decision.
+        state = trackCycleErrors({ state, error: err, deps, log: deps.log });
+        try { deps.saveState(deps.statePath, state); } catch { /* best-effort */ }
       }
 
       // Stage 6, Part 16: chart-visualization cadence, same tick, fully

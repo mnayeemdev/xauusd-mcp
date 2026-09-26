@@ -48,7 +48,9 @@ EXPECTED_SERVER = os.environ.get("XAUUSD_MT5_SERVER", "Exness-MT5Trial11")
 EXPECTED_SYMBOL = os.environ.get("XAUUSD_MT5_SYMBOL", "XAUUSDm")
 HARD_MAX_VOLUME = float(os.environ.get("XAUUSD_MT5_BRIDGE_HARD_MAX_VOLUME", "0.01"))
 
-SUCCESS_RETCODES = {10008, 10009}  # TRADE_RETCODE_PLACED, TRADE_RETCODE_DONE
+SUCCESS_RETCODES = {10009}  # TRADE_RETCODE_DONE only: a market order is either confirmed filled or its state is AMBIGUOUS
+AMBIGUOUS_RETCODES = {10008, 10012}  # TRADE_RETCODE_PLACED (no deal confirmed), TRADE_RETCODE_TIMEOUT: the order MAY exist -- never reported as a rejection
+ALLOWED_MAGICS = {int(m) for m in os.environ.get("XAUUSD_MT5_ALLOWED_MAGICS", "88051501,88051512").split(",") if m.strip()}  # legacy DEMO watcher + Stage 12 validator
 
 _initialized = False
 
@@ -58,6 +60,24 @@ class BridgeError(Exception):
         super().__init__(message)
         self.code = code
         self.extra = extra
+
+
+def require_magic(magic):
+    """Defence in depth: only the MCP magic(s) of this profile may ever be traded through this bridge."""
+    if magic is None or int(magic) not in ALLOWED_MAGICS:
+        raise BridgeError("MAGIC_NOT_ALLOWED", "magic %s is not an allowed MCP magic %s" % (magic, sorted(ALLOWED_MAGICS)))
+    return int(magic)
+
+
+def _reinitialize():
+    """The terminal handle is dead (terminal restarted/closed): re-attach once instead of reporting None forever."""
+    global _initialized
+    try:
+        mt5.shutdown()
+    except Exception:
+        pass
+    _initialized = False
+    ensure_initialized()
 
 
 def _nt(obj, fields):
@@ -97,8 +117,11 @@ def guard_snapshot(params=None):
     nothing by itself so 'hello' can report a failing state without exiting."""
     params = params or {}
     ensure_initialized()
-    ai = mt5.account_info()
     ti = mt5.terminal_info()
+    if ti is None:  # IPC lost: re-attach once, then report whatever the terminal really says
+        _reinitialize()
+        ti = mt5.terminal_info()
+    ai = mt5.account_info()
     si = mt5.symbol_info(EXPECTED_SYMBOL)
     checks = {}
     if ai is None:
@@ -194,7 +217,7 @@ def cmd_positions(params):
     magic = params.get("magic")
     pos = mt5.positions_get(symbol=symbol)
     if pos is None:
-        pos = ()
+        raise BridgeError("POSITIONS_UNAVAILABLE", "positions_get returned None (%s) -- UNKNOWN is never reported as EMPTY" % (mt5.last_error(),))
     out = []
     for p in pos:
         if magic is not None and int(p.magic) != int(magic):
@@ -209,7 +232,7 @@ def cmd_deals(params):
     position_id = int(params["position_id"])
     deals = mt5.history_deals_get(position=position_id)
     if deals is None:
-        deals = ()
+        raise BridgeError("HISTORY_UNAVAILABLE", "history_deals_get returned None (%s) -- UNKNOWN is never reported as EMPTY" % (mt5.last_error(),))
     return {"deals": [_nt(d, DEAL_FIELDS) for d in deals]}
 
 
@@ -223,7 +246,7 @@ def cmd_history(params):
     import datetime as _dt
     deals = mt5.history_deals_get(_dt.datetime.fromtimestamp(from_ts, _dt.timezone.utc), _dt.datetime.fromtimestamp(to_ts, _dt.timezone.utc))
     if deals is None:
-        deals = ()
+        raise BridgeError("HISTORY_UNAVAILABLE", "history_deals_get returned None (%s) -- UNKNOWN is never reported as EMPTY" % (mt5.last_error(),))
     out = []
     for d in deals:
         if magic is not None and int(d.magic) != int(magic):
@@ -257,7 +280,7 @@ def cmd_open(params):
     steps = volume / si.volume_step
     if abs(steps - round(steps)) > 1e-6:
         raise BridgeError("VOLUME_STEP_INVALID", "volume %s is not a multiple of step %s" % (volume, si.volume_step))
-    magic = int(params.get("magic"))
+    magic = require_magic(params.get("magic"))
     comment = str(params.get("comment", "MCP"))[:31]
     deviation = int(params.get("deviation", 300))
     sl = params.get("sl")
@@ -290,12 +313,17 @@ def cmd_open(params):
     if result is None:
         raise BridgeError("ORDER_SEND_NONE", "order_send returned None: %s" % (mt5.last_error(),), request=request)
     rd = _nt(result, RESULT_FIELDS)
+    if int(result.retcode) in AMBIGUOUS_RETCODES:
+        raise BridgeError("ORDER_STATE_AMBIGUOUS", "order_send retcode %s (%s): the order MAY exist -- reconcile against broker history, never resend" % (result.retcode, result.comment), result=rd, request=request)
     if int(result.retcode) not in SUCCESS_RETCODES:
         raise BridgeError("ORDER_REJECTED", "order_send retcode %s: %s" % (result.retcode, result.comment), result=rd, request=request)
-    entry_deal = _position_id_for_deal(result.deal) if result.deal else None
-    position_id = entry_deal["position_id"] if entry_deal else int(result.order)
-    positions = mt5.positions_get(ticket=int(position_id))
-    pos = _nt(positions[0], POSITION_FIELDS) if positions else None
+    try:
+        entry_deal = _position_id_for_deal(result.deal) if result.deal else None
+        position_id = entry_deal["position_id"] if entry_deal else int(result.order)
+        positions = mt5.positions_get(ticket=int(position_id))
+        pos = _nt(positions[0], POSITION_FIELDS) if positions else None
+    except Exception as exc:  # the order WAS accepted: this must never surface as a rejection
+        raise BridgeError("POST_SEND_EXCEPTION", "order accepted (retcode %s, deal %s, order %s) but the post-send read failed: %s: %s" % (result.retcode, result.deal, result.order, type(exc).__name__, exc), result=rd, request=request)
     return {
         "result": rd, "request": {k: (v if isinstance(v, (int, float, str)) else str(v)) for k, v in request.items()},
         "order_check": check_d, "entry_deal": entry_deal, "position_id": position_id, "position": pos,
@@ -306,9 +334,11 @@ def cmd_open(params):
 def cmd_close(params):
     snap = require_trade_guard(params)
     ticket = int(params["ticket"])
-    magic = int(params["magic"])
+    magic = require_magic(params["magic"])
     deviation = int(params.get("deviation", 300))
     positions = mt5.positions_get(ticket=ticket)
+    if positions is None:
+        raise BridgeError("POSITIONS_UNAVAILABLE", "positions_get(ticket=%s) returned None (%s) -- UNKNOWN is never reported as CLOSED" % (ticket, mt5.last_error()))
     if not positions:
         return {"already_closed": True, "ticket": ticket}
     p = positions[0]
@@ -338,6 +368,8 @@ def cmd_close(params):
     if result is None:
         raise BridgeError("ORDER_SEND_NONE", "order_send returned None: %s" % (mt5.last_error(),), request=request)
     rd = _nt(result, RESULT_FIELDS)
+    if int(result.retcode) in AMBIGUOUS_RETCODES:
+        raise BridgeError("CLOSE_STATE_AMBIGUOUS", "close order_send retcode %s (%s): the close MAY have executed -- verify against broker deals before any retry" % (result.retcode, result.comment), result=rd)
     if int(result.retcode) not in SUCCESS_RETCODES:
         raise BridgeError("CLOSE_REJECTED", "close order_send retcode %s: %s" % (result.retcode, result.comment), result=rd)
     exit_deal = _position_id_for_deal(result.deal) if result.deal else None
@@ -348,8 +380,10 @@ def cmd_modify(params):
     """Re-align broker-side SL/TP on OUR position only (TRADE_ACTION_SLTP)."""
     snap = require_trade_guard(params)
     ticket = int(params["ticket"])
-    magic = int(params["magic"])
+    magic = require_magic(params["magic"])
     positions = mt5.positions_get(ticket=ticket)
+    if positions is None:
+        raise BridgeError("POSITIONS_UNAVAILABLE", "positions_get(ticket=%s) returned None (%s)" % (ticket, mt5.last_error()))
     if not positions:
         raise BridgeError("POSITION_NOT_FOUND", "position %s not found" % ticket)
     p = positions[0]
@@ -359,10 +393,18 @@ def cmd_modify(params):
         raise BridgeError("POSITION_SYMBOL_MISMATCH", "position %s is on %s, not %s" % (ticket, p.symbol, EXPECTED_SYMBOL))
     si = mt5.symbol_info(EXPECTED_SYMBOL)
     request = {"action": mt5.TRADE_ACTION_SLTP, "symbol": EXPECTED_SYMBOL, "position": ticket, "magic": magic}
+    if params.get("sl") is None and params.get("tp") is None:
+        raise BridgeError("MODIFY_NOOP", "modify requires sl and/or tp")
     if params.get("sl") is not None:
-        request["sl"] = round(float(params["sl"]), si.digits)
+        sl = float(params["sl"])
+        if not (sl > 0):
+            raise BridgeError("MODIFY_INVALID_SL", "sl %r rejected: a protective stop may be moved, never removed" % (params["sl"],))
+        request["sl"] = round(sl, si.digits)
     if params.get("tp") is not None:
-        request["tp"] = round(float(params["tp"]), si.digits)
+        tp = float(params["tp"])
+        if tp < 0:
+            raise BridgeError("MODIFY_INVALID_TP", "tp %r rejected" % (params["tp"],))
+        request["tp"] = round(tp, si.digits)
     result = mt5.order_send(request)
     if result is None:
         raise BridgeError("ORDER_SEND_NONE", "order_send returned None: %s" % (mt5.last_error(),), request=request)

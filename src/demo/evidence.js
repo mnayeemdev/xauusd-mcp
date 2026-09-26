@@ -42,6 +42,11 @@ export function buildSignalRecord({ nowSec, signalId, result, alert, exec, ctx =
     entry: alert?.entry ?? null, structural_stop: alert?.sl ?? null, tp1: alert?.tp1 ?? null, tp2: alert?.tp2 ?? null, effective_rr: alert?.rr ?? null,
     spread_usd: ctx.spread_usd ?? null, feed_age_sec: ctx.feed_age_sec ?? null, feed_state: ctx.feed_state ?? null, news: ctx.news ?? null, news_tier: ctx.news_tier ?? null, shock_state: ctx.shock_state ?? null, breaker: ctx.breaker ?? null,
     account_class: identity.account_class, expected_login: identity.login, expected_server: identity.server, lot: identity.lot,
+    // Pine-reference parity flag: production can veto an actionable signal on an
+    // OPPOSING Pine reference (ENGINE_DISAGREEMENT); the validator has no chart
+    // access, so its reference is always NOT_FOUND and such a veto cannot fire.
+    pine_reference_status: result?.pine_reference?.status ?? null,
+    pine_parity: result?.pine_reference?.status === 'OK' ? 'REFERENCE_READ' : 'REFERENCE_UNAVAILABLE_PRODUCTION_MAY_VETO',
     execution_eligibility: exec?.executed ? 'EXECUTED' : 'BLOCKED', execution_status: exec?.executed ? 'EXECUTED' : `BLOCKED:${exec?.reason ?? 'UNKNOWN'}`, block_reason: exec?.executed ? null : (exec?.reason ?? 'UNKNOWN'), block_guard: exec?.details?.guard ?? exec?.guard ?? null, executor_details: exec?.details ?? null,
   };
 }

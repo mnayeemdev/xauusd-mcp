@@ -67,17 +67,31 @@ function defaultIsAlive(pid) {
  * a live process is a stale lock left by a crashed/killed prior run, and is
  * safely reclaimed rather than blocking the watcher forever.
  */
-export function acquireLock(path, { isAlive = defaultIsAlive } = {}) {
+export function acquireLock(path, { isAlive = defaultIsAlive, pid = process.pid } = {}) {
   mkdirSync(dirname(path), { recursive: true });
   if (existsSync(path)) {
     const raw = readFileSync(path, 'utf8').trim();
     const holderPid = Number(raw);
+    // Re-entrant for the SAME process: the CLI takes the lock BEFORE it starts
+    // any broker executor, and startWatcher() then re-acquires it (no second
+    // instance ever runs an executor, even for the moment before it exits).
+    if (Number.isInteger(holderPid) && holderPid > 0 && holderPid === pid) return { acquired: true, holderPid: pid, reentrant: true };
     if (Number.isInteger(holderPid) && holderPid > 0 && isAlive(holderPid)) {
       return { acquired: false, holderPid };
     }
   }
-  writeFileSync(path, String(process.pid));
-  return { acquired: true, holderPid: process.pid };
+  writeFileSync(path, String(pid));
+  return { acquired: true, holderPid: pid };
+}
+
+/** READ-ONLY: is the lock held by a live process other than `pid`? Never writes or reclaims. */
+export function lockHeldByLiveProcess(path, { isAlive = defaultIsAlive, pid = process.pid } = {}) {
+  try {
+    if (!existsSync(path)) return { held: false, holderPid: null };
+    const holderPid = Number(readFileSync(path, 'utf8').trim());
+    if (!Number.isInteger(holderPid) || holderPid <= 0 || holderPid === pid) return { held: false, holderPid: holderPid || null };
+    return { held: isAlive(holderPid), holderPid };
+  } catch { return { held: false, holderPid: null }; }
 }
 
 export function releaseLock(path) {

@@ -9,7 +9,7 @@
  * Persisted as JSON so identity/dedup/entry-freeze survive across
  * separate CLI/MCP process invocations (this process is not long-lived).
  */
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, renameSync, existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
@@ -31,7 +31,12 @@ export function loadStore(path) {
 }
 
 export function saveStore(path, store) {
-  writeFileSync(path, JSON.stringify(store, null, 2) + '\n');
+  // Atomic replace (temp + rename): a crash mid-write can no longer leave a
+  // truncated store that would make every later loadStore()/calculateEntry()
+  // throw (fail-closed but unrecoverable without operator action).
+  const tmp = `${path}.tmp-${process.pid}`;
+  writeFileSync(tmp, JSON.stringify(store, null, 2) + '\n');
+  renameSync(tmp, path);
 }
 
 /**

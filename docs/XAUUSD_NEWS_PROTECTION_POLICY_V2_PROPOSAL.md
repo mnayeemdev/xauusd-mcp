@@ -1,6 +1,6 @@
 # XAUUSD NEWS PROTECTION POLICY V2 — PROPOSAL (DESIGN ONLY)
 
-Status: PROPOSED, NOT IMPLEMENTED, NOT ACTIVE (2026-09-26). Requires owner review. Production runs V1 unchanged (`docs/XAUUSD_NEWS_SHOCK_PROTECTION.md`). Evidence: `docs/XAUUSD_V5_NEWS_BEHAVIOUR_STUDY.md`, `docs/XAUUSD_V5_NEWS_EDGE_MATRIX.md`, review in `docs/XAUUSD_V5_1_NEWS_PROTECTION_REVIEW.md`. News stays a SAFETY layer: V2 contains no BUY/SELL authority, no direction, no surprise logic. NFP/CPI/FOMC are RISK INFORMATION only.
+Status: HISTORICAL PROPOSAL — IMPLEMENTED as News Protection V2 (commit e46b3be, active on the REAL watcher since 2026-09-26 09:05 UTC; see `docs/XAUUSD_NEWS_PROTECTION_V2.md`). Evidence: `docs/XAUUSD_V5_NEWS_BEHAVIOUR_STUDY.md`, `docs/XAUUSD_V5_NEWS_EDGE_MATRIX.md`, review in `docs/XAUUSD_V5_1_NEWS_PROTECTION_REVIEW.md`. News stays a SAFETY layer: V2 contains no BUY/SELL authority, no direction, no surprise logic. NFP/CPI/FOMC are RISK INFORMATION only.
 
 ## 1. Current production (V1) vs proposed V2
 

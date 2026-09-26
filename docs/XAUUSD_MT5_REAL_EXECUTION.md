@@ -10,15 +10,16 @@ The DEMO watcher/executor keeps running independently; nothing in the DEMO path 
 | Account | login **460149329**, server **Exness-MT5Real51**, trade mode REAL (2) | `src/engine/mt5RealPolicy.js`, `mt5/mt5_bridge_real.py` |
 | Symbol | XAUUSDm only | both |
 | Magic | **88052001** (DEMO is 88051501) | both |
-| Lot | approved default 0.01; absolute stage-1 ceiling **0.02** (bridge refuses more) | both |
+| Lot | **EXACTLY 0.01** (USER_FIXED, 2026-09-25): config, executor and bridge (`REQUIRED_EXACT_VOLUME`) each refuse any other volume; no ceiling above it exists | both |
 | Exits | close at ACTUAL position P&L **>= +30 USD**, **<= -50 USD** (monitor is primary) | policy fixed values, executor monitor |
 | Broker fail-safe | SL at 50 USD P&L distance from fill, TP at +30, placed on the order and re-aligned to the real fill | `computeBrokerStops()` |
 | One position, fresh signal after close, dedup, write-ahead intent, restart reconciliation, manual-position isolation, kill switch | same executor logic as DEMO | `src/engine/mt5Executor.js` (mode `real`) |
-| Daily ceiling 10 (never a target), daily loss limit 50, 2 consecutive losses | REAL defaults | `mt5RealPolicy.js` |
+| Daily ceiling 10 (never a target), daily loss limit DISABLED (null), 2 consecutive losses (counted per UTC day) | REAL defaults | `mt5RealPolicy.js` |
 | State / log / kill switch | `state/xauusd_mt5_real_executor_state.json`, `state/xauusd_mt5_real_trade_log.jsonl`, `state/xauusd_mt5_real_kill_switch` | separate from DEMO |
 
-Env may only tune lot (<= 0.02), daily ceiling, consecutive losses, spread/drift limits and
-commission estimate, each inside a hard range; identity, magic, +30/-50 and the cap are refused.
+Env may only tune the monetary targets, daily ceiling, consecutive losses, spread/drift limits and
+commission estimate, each inside a hard range; identity, magic and ANY lot other than 0.01 are refused
+(`XAUUSD_MT5_REAL_LOT_SIZE=0.02` throws).
 
 ## Terminal requirement
 
@@ -38,7 +39,11 @@ fails closed (`REAL_VERIFICATION_FAILED`), which is the intended behaviour.
 
 Tests: `tests/mt5_real_policy.test.js`, `tests/mt5_real_executor.test.js`.
 
-## Dynamic capital scaling (replaces fixed stage-1 sizing)
+## Dynamic capital scaling — DORMANT, NOT WIRED (historical design)
+
+> RECONCILIATION NOTE (2026-09-26): this section describes a design that is NOT active. The REAL config has no
+> `computeSizing` hook (test-enforced), `src/engine/mt5RealScaling.js` is imported only by the reporting-only
+> `mt5CapitalPolicy.js`, and the executed lot is always exactly 0.01. Kept for history; do not read it as behaviour.
 
 Before EVERY new trade the executor calls `config.computeSizing()` (`src/engine/mt5RealScaling.js`)
 with the CURRENT broker facts (equity, free margin, leverage, margin-call/stop-out levels, price,
