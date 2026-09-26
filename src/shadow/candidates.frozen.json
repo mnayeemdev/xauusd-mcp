@@ -1,0 +1,9 @@
+{
+ "frozen_at": "2026-09-26T09:56:05.554Z",
+ "schema": "shadow-1.0",
+ "note": "SHA-256 of each candidate definition (JSON.stringify of the frozen object). Any change to a definition must be a NEW candidate id/version; verifyFrozenRegistry() and the test suite refuse a modified definition.",
+ "hashes": {
+  "SC1_SILVER_LEAD_v1": "e5216ec3501a0b8bc019185bfa33083a35a586ed4282e1f8f1cb2ef1530a05c0",
+  "SC2_PRODUCTION_SIGNAL_v1": "4414f8142ebe64425fccfdb60182bd79442de2b0652ecfc76668a6ebc6486afd"
+ }
+}
