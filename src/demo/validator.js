@@ -21,6 +21,8 @@ import { Mt5Bridge, DEFAULT_BRIDGE_SCRIPT } from '../engine/mt5Bridge.js';
 import { createCalendarProvider, createNewsMonitor } from '../engine/newsMonitor.js';
 import { notifyOps } from '../engine/notifier.js';
 import { createFeedReader, createEngineFeedDeps, FEED_SYMBOL } from './feed.js';
+import { computeStrategyFingerprint } from '../engine/strategyFingerprint.js';
+import { execFileSync } from 'node:child_process';
 import { buildDemoParityConfig } from './config.js';
 import { DEMO_IDENTITY, createGuardedBridge, verifyDemoIdentity } from './identityGuard.js';
 import { createDemoEvidenceStore, buildSignalRecord, buildExecutionRecord, labelSignalOutcome, provenanceFor, OUTCOME_HORIZONS, DEMO_SCHEMA_VERSION } from './evidence.js';
@@ -40,7 +42,14 @@ export function buildDemoValidator({ paths = DEMO_PATHS, env = process.env, log 
   const executor = createMt5Executor({ config, bridge: guarded, statePath: paths.executorState, logPath: paths.executorLog, killSwitchPath: paths.killSwitch, log: (m) => log(`[demo-executor] ${m}`), now, newsMonitor: monitor });
   const store = evidenceStore ?? createDemoEvidenceStore({ dir: paths.dir });
   const feedDeps = createEngineFeedDeps({ feed, symbol: FEED_SYMBOL, storePath: paths.signalStore, now, env });
-  return { config, executor, bridge: guarded, rawBridge, monitor, store, feedDeps, alerts, feed };
+  const cohort = evidenceCohort();
+  return { config, executor, bridge: guarded, rawBridge, monitor, store, feedDeps, alerts, feed, cohort };
+}
+/** Strategy/evidence version links stamped on every evidence record (read-only; a fingerprint change = a new cohort). */
+export function evidenceCohort() {
+  let strategy_fingerprint = null; try { strategy_fingerprint = computeStrategyFingerprint().strategy_fingerprint; } catch { strategy_fingerprint = null; }
+  let git_commit = null; try { git_commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: fileURLToPath(new URL('../../', import.meta.url)), encoding: 'utf8', windowsHide: true, timeout: 10_000 }).trim(); } catch { git_commit = null; }
+  return { strategy_fingerprint, git_commit, evaluation_rule_version: 'stage12-def-1.0' };
 }
 function stripReal(env) { const o = {}; for (const [k, v] of Object.entries(env)) if (!/^XAUUSD_MT5_REAL_/.test(k)) o[k] = v; return o; }
 
@@ -66,12 +75,12 @@ export function createValidatorCycle({ parts, paths = DEMO_PATHS, log = () => {}
     const { alert, signalId, result } = ev; log(`[demo-validator] ${TAG} signal_id=${signalId} action=${alert?.action} model=${alert?.setup} quality=${alert?.quality} rr=${alert?.rr} -> executor`);
     let exec; try { exec = await executor.executeSignal(ev); } catch (err) { exec = { executed: false, reason: 'EXECUTOR_THREW', details: { error: err.message } }; }
     const decisionSec = Date.parse(result?.calculated_at ?? '') / 1000; const prov = provenanceFor({ decisionSec: Number.isFinite(decisionSec) ? decisionSec : nowSec(), nowSec: nowSec(), mode });
-    if (prov) { const rec = buildSignalRecord({ nowSec: Math.floor(nowSec()), signalId, result, alert, exec, ctx: ctxFrom(result), provenance: prov, identity: DEMO_IDENTITY }); const r = store.append(rec); if (!r.ok && r.reason !== 'DUPLICATE') log(`[demo-validator] evidence SIGNAL rejected: ${r.reason} ${r.errors?.join(',') ?? ''}`); }
+    if (prov) { const rec = buildSignalRecord({ nowSec: Math.floor(nowSec()), signalId, result, alert, exec, ctx: ctxFrom(result), provenance: prov, identity: DEMO_IDENTITY, cohort: parts.cohort ?? null }); const r = store.append(rec); if (!r.ok && r.reason !== 'DUPLICATE') log(`[demo-validator] evidence SIGNAL rejected: ${r.reason} ${r.errors?.join(',') ?? ''}`); }
     log(`[demo-validator] ${TAG} signal_id=${signalId} RESULT=${exec.executed ? 'DEMO ORDER EXECUTED' : `BLOCKED:${exec.reason}`}`);
     if (exec.executed) alerts.send('ORDER_FILLED', { detail: `signal_id=${signalId} ${alert?.action}` }); else if (/DUPLICATE/.test(exec.reason ?? '')) alerts.once('DUPLICATE_BLOCKED', { detail: `signal_id=${signalId}`, reasons: signalId });
     return exec;
   }
-  function mirrorAudit() { if (!existsSync(paths.executorLog)) return; const rows = readFileSync(paths.executorLog, 'utf8').split(/\r?\n/).filter(Boolean); for (let i = mirroredLines; i < rows.length; i++) { let a; try { a = JSON.parse(rows[i]); } catch { continue; } const t = Date.parse(a.timestamp) / 1000; const prov = provenanceFor({ decisionSec: t, nowSec: nowSec(), mode }) ?? 'BACKFILL'; const r = store.append(buildExecutionRecord({ nowSec: Math.floor(nowSec()), auditRecord: a, provenance: prov, lineIndex: i })); if (r.ok) { if (a.type === 'CLOSED') alerts.send('TRADE_CLOSED', { detail: `signal_id=${a.signal_id} reason=${a.reason ?? a.exit_reason ?? ''} net=${a.net_pnl ?? a.realized_net_usd ?? ''}` }); if (a.type === 'INTENT') alerts.send('ORDER_INTENT', { detail: `signal_id=${a.signal_id} ${a.side ?? ''}` }); if (a.type === 'SKIPPED' && /BROKER|REJECT|RETCODE|ORDER_FAILED/.test(a.reason ?? '')) alerts.once('ORDER_REJECTED', { detail: a.reason, reasons: a.reason }); if (/RECONCIL|RESUMED_POSITION|INTENT_RESOLVED|ANOMALY/.test(a.type)) alerts.once('POSITION_RECONCILED', { detail: a.type, reasons: a.type }); } } mirroredLines = rows.length; }
+  function mirrorAudit() { if (!existsSync(paths.executorLog)) return; const rows = readFileSync(paths.executorLog, 'utf8').split(/\r?\n/).filter(Boolean); for (let i = mirroredLines; i < rows.length; i++) { let a; try { a = JSON.parse(rows[i]); } catch { continue; } const t = Date.parse(a.timestamp) / 1000; const prov = provenanceFor({ decisionSec: t, nowSec: nowSec(), mode }) ?? 'BACKFILL'; const r = store.append(buildExecutionRecord({ nowSec: Math.floor(nowSec()), auditRecord: a, provenance: prov, lineIndex: i, cohort: parts.cohort ?? null })); if (r.ok) { if (a.type === 'CLOSED') alerts.send('TRADE_CLOSED', { detail: `signal_id=${a.signal_id} reason=${a.reason ?? a.exit_reason ?? ''} net=${a.net_pnl ?? a.realized_net_usd ?? ''}` }); if (a.type === 'INTENT') alerts.send('ORDER_INTENT', { detail: `signal_id=${a.signal_id} ${a.side ?? ''}` }); if (a.type === 'SKIPPED' && /BROKER|REJECT|RETCODE|ORDER_FAILED/.test(a.reason ?? '')) alerts.once('ORDER_REJECTED', { detail: a.reason, reasons: a.reason }); if (/RECONCIL|RESUMED_POSITION|INTENT_RESOLVED|ANOMALY/.test(a.type)) alerts.once('POSITION_RECONCILED', { detail: a.type, reasons: a.type }); } } mirroredLines = rows.length; }
   function labelOutcomes() { const bars5 = feedDeps.bars()['5'] ?? []; const recs = store.readAll(); const signals = recs.filter((r) => r.kind === 'SIGNAL' && Number.isFinite(r.signal_candle_time)); for (const s of signals) for (const h of Object.keys(OUTCOME_HORIZONS)) { const o = labelSignalOutcome({ signal: s, horizonKey: h, bars5, nowSec: nowSec(), provenance: s.provenance }); if (!o) continue; if (o.status === 'LABELED' || nowSec() - o.horizon_end_time > 48 * 3600) store.append(o); } }
   const analyze = async (opts) => { await feedDeps.sweep(); const result = await analyzeMarket({ ...opts, persistSignals: true, engineProfile: 'intraday_5m', _deps: feedDeps.deps }); lastResult = result; return result; };
   const noop = () => null;

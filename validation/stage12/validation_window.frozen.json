@@ -1,0 +1,10 @@
+{
+ "schema": "stage12-validation-window-1.0",
+ "status": "NOT_DECLARED",
+ "validation_start_utc": null,
+ "declared_at_utc": null,
+ "declared_by": null,
+ "declared_after_12d_status": null,
+ "last_primary_trade_utc_at_declaration": null,
+ "note": "Declared ONCE by the owner only after Stage 12D reaches EVIDENCE_COMPLETE_* on the primary FORWARD_LIVE_DEMO dataset. validation_start_utc must be strictly later than the last primary trade and is never moved. Until declared, Stage 12E = NOT_ELIGIBLE_YET."
+}

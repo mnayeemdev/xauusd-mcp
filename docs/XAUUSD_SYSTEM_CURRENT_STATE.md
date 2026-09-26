@@ -20,6 +20,12 @@ Single source of truth for WHAT IS RUNNING, WHAT IS BUILT BUT DORMANT, and WHAT 
 |---|---|
 | Stage 11C forward shadow observer | RUNNING (`state/shadow/observer.lock`), `node src/shadow/observer.js`, candidates SC1_SILVER_LEAD_v1 / SC2_PRODUCTION_SIGNAL_v1, store `state/shadow/*.jsonl`; docs: `XAUUSD_FORWARD_SHADOW_EVIDENCE_PROTOCOL.md`, `XAUUSD_FORWARD_SHADOW_CANDIDATES.md` |
 
+## EVALUATION MACHINERY (Stage 12 D/E/F, frozen 2026-09-26, read-only, zero execution authority)
+
+| Component | State |
+|---|---|
+| `validation/stage12/*` (rules `stage12-def-1.0`, evidence integrity, 12D edge evaluator, 12E independence gate, 12F capital readiness, report CLI `npm run xauusd:stage12:report`) | ENGINEERING COMPLETE; genuine evidence: 12D WAITING_FOR_FORWARD_EVIDENCE, 12E NOT_ELIGIBLE_YET, 12F CAPITAL_SCALING_NOT_READY. Docs: `XAUUSD_STAGE12_FORWARD_EDGE_EVALUATION.md`, `_INDEPENDENT_VALIDATION.md`, `_CAPITAL_READINESS.md`, `_FINAL_GATE.md` |
+
 ## DEMO BUILT / NOT ACTIVE
 
 | Component | State |
