@@ -1,0 +1,71 @@
+loading ...
+candidates 23934 consistency {"prod_signal_and_chain_pass":9617,"prod_signal_but_chain_fail":0,"chain_pass_but_prod_wait":0}
+controls {"leak":0.638,"null":-0.084,"cost":{"diff":0.069,"expected":0.069,"pass":true},"cluster":true}
+{
+ "funnel": {
+  "completed_candles": 99381,
+  "model_eligible": 99310,
+  "chop_or_no_models": 71,
+  "candidates_setup_trigger": 23934,
+  "after_vol": 21801,
+  "after_over": 19322,
+  "after_geo": 19322,
+  "after_rr": 12894,
+  "after_q": 10718,
+  "after_fresh": 10625,
+  "after_two": 10226,
+  "after_htf": 9617,
+  "production_signals": 9617,
+  "safety_and_execution_gates": "not in replay (News V2, shock, spread, drift, breaker, identity); identical for all architectures"
+ },
+ "arch_summary": {
+  "A0": {
+   "indep": 2169,
+   "mean_r": -0.036,
+   "pf": 0.951,
+   "hold_mean_r": -0.05,
+   "hold_pf": 0.932,
+   "hold_trades": 1393,
+   "med_tps": 6,
+   "zero_rate": 0.119,
+   "dd": 85.34,
+   "status": "CONTROL"
+  },
+  "A1": {
+   "indep": 2385,
+   "mean_r": -0.057,
+   "pf": 0.923,
+   "hold_mean_r": -0.079,
+   "hold_pf": 0.893,
+   "hold_trades": 1509,
+   "med_tps": 6,
+   "zero_rate": 0.112,
+   "dd": 109.632,
+   "status": "REJECTED"
+  },
+  "A2": {
+   "indep": 2241,
+   "mean_r": -0.032,
+   "pf": 0.956,
+   "hold_mean_r": -0.047,
+   "hold_pf": 0.935,
+   "hold_trades": 1431,
+   "med_tps": 6,
+   "zero_rate": 0.117,
+   "dd": 87.156,
+   "status": "NO_IMPROVEMENT"
+  },
+  "A3": {
+   "indep": 2169,
+   "mean_r": -0.036,
+   "pf": 0.951,
+   "hold_mean_r": -0.05,
+   "hold_pf": 0.932,
+   "hold_trades": 1393,
+   "med_tps": 6,
+   "zero_rate": 0.119,
+   "dd": 85.34,
+   "status": "REJECTED"
+  }
+ }
+}
