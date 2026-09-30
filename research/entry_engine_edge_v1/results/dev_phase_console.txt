@@ -1,0 +1,8 @@
+phase DEV; candidates 23934 (DEV 11341 HOLD 12593); signals 9617; rows DEV 46593 HOLD 52788
+simulating EXIT_F ...
+done
+controls {"leak_mean_r":0.531,"leak_n":1930,"null_mean_r":-0.089,"null_n":1930,"cost_test":{"diff":0.1,"expected":0.1,"pass":true},"confirmed_candle_first_exit_after_entry":true,"flags_reproduce_production_signals":true,"timestamp_misaligned":0,"non_monotone_bars":0}
+diagnostics DEV ...
+DERIVED {"derived_from":"DEV","supported_models":["PB"],"c2_regimes":{"PB":["BEAR_TREND","BULL_TREND"]},"c3_components":["qStructure"],"c3_threshold":15,"c4_X":null,"c4_scan":[{"X":0.5,"dev_expectancy_r":-0.112},{"X":0.75,"dev_expectancy_r":-0.058},{"X":1,"dev_expectancy_r":-0.022},{"X":1.25,"dev_expectancy_r":-0.042},{"X":1.5,"dev_expectancy_r":-0.048}],"c1_dev_expectancy_r":0.072,"c5_window_bars":3}
+candidate_definitions.json sha256 b0004359acfbee439855d4cb70549e3f563426cc8d0779c8afafe50d0aec4a84
+written DEV

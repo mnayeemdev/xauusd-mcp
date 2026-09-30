@@ -1,0 +1,119 @@
+phase FULL; candidates 23934 (DEV 11341 HOLD 12593); signals 9617; rows DEV 46593 HOLD 52788
+simulating EXIT_F ...
+done
+controls {"leak_mean_r":0.531,"leak_n":1930,"null_mean_r":-0.089,"null_n":1930,"cost_test":{"diff":0.1,"expected":0.1,"pass":true},"confirmed_candle_first_exit_after_entry":true,"flags_reproduce_production_signals":true,"timestamp_misaligned":0,"non_monotone_bars":0}
+diagnostics DEV ...
+diagnostics HOLD ...
+diagnostics ALL ...
+DECISIONS {
+ "candidates": {
+  "C1": {
+   "status": "FAILS_FINALIST_REQUIREMENTS",
+   "reasons": [
+    "expectancy<=0",
+    "trade CI includes 0",
+    "session-block CI includes 0",
+    "PF<=1.10",
+    "quarters positive <60%",
+    "stress<=0",
+    "drift<=0",
+    "DEV<=0"
+   ],
+   "hold_expectancy_r": -0.084,
+   "hold_pf": 0.9,
+   "hold_n": 321,
+   "session_block_ci95_r": [
+    -0.267,
+    0.093
+   ]
+  },
+  "C2": {
+   "status": "FAILS_FINALIST_REQUIREMENTS",
+   "reasons": [
+    "N<200",
+    "expectancy<=0",
+    "trade CI includes 0",
+    "session-block CI includes 0",
+    "PF<=1.10",
+    "quarters positive <60%",
+    "stress<=0",
+    "drift<=0",
+    "DEV<=0"
+   ],
+   "hold_expectancy_r": -0.23,
+   "hold_pf": 0.75,
+   "hold_n": 153,
+   "session_block_ci95_r": [
+    -0.505,
+    0.03
+   ]
+  },
+  "C3": {
+   "status": "FAILS_FINALIST_REQUIREMENTS",
+   "reasons": [
+    "expectancy<=0",
+    "trade CI includes 0",
+    "session-block CI includes 0",
+    "PF<=1.10",
+    "quarters positive <60%",
+    "stress<=0",
+    "drift<=0",
+    "DEV<=0",
+    "C3 neighbours not all positive"
+   ],
+   "hold_expectancy_r": -0.123,
+   "hold_pf": 0.86,
+   "hold_n": 278,
+   "session_block_ci95_r": [
+    -0.327,
+    0.086
+   ]
+  },
+  "C4": {
+   "status": "FAILS_FINALIST_REQUIREMENTS",
+   "reasons": [
+    "expectancy<=0",
+    "trade CI includes 0",
+    "session-block CI includes 0",
+    "PF<=1.10",
+    "quarters positive <60%",
+    "stress<=0",
+    "drift<=0",
+    "DEV<=0"
+   ],
+   "hold_expectancy_r": -0.084,
+   "hold_pf": 0.9,
+   "hold_n": 321,
+   "session_block_ci95_r": [
+    -0.267,
+    0.093
+   ]
+  },
+  "C5": {
+   "status": "FAILS_FINALIST_REQUIREMENTS",
+   "reasons": [
+    "N<200",
+    "expectancy<=0",
+    "trade CI includes 0",
+    "session-block CI includes 0",
+    "PF<=1.10",
+    "quarters positive <60%",
+    "stress<=0",
+    "drift<=0",
+    "DEV<=0"
+   ],
+   "hold_expectancy_r": -0.135,
+   "hold_pf": 0.85,
+   "hold_n": 108,
+   "session_block_ci95_r": [
+    -0.474,
+    0.213
+   ]
+  }
+ },
+ "finalist": null,
+ "edge_demonstrated": "NO",
+ "finalist_beats_control": "NO",
+ "demo_eligible": "NO"
+}
+written FULL
