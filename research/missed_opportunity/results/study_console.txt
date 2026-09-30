@@ -1,0 +1,8 @@
+loading replay rows ...
+rows 99490, excluded 2026-09-30 rows 103, H1 rows 399, H2 pre-geometry candidates 883
+controls: {"leak_mean_r":0.76,"leak_win":0.604,"null_mean_r":0.016}
+H1 done {"raw":399,"indep":152,"mean_r":-0.237,"status":"NEGATIVE"}
+H2: computing production geometry for 883 candidate candles ...
+  500/883
+H2 done {"H2a":{"raw":232,"indep":88,"mean_r":-0.016,"status":"NO_EDGE"},"H2b":{"raw":503,"indep":192,"mean_r":-0.004,"status":"NO_EDGE"}}
+written to C:\Users\Techn\tradingview-mcp-main\research\missed_opportunity\results in 3s
