@@ -1,0 +1,6079 @@
+{
+ "meta": {
+  "generated_utc": "2026-09-30T15:24:30.085Z",
+  "prereg_sha256": "fe534411c0cc08293c586de3df54646c4b107d92b13e8cc2900a3333f6c22f00",
+  "signals": 9617,
+  "independent_signals": 2186,
+  "sessions": 437,
+  "sessions_dev": 205,
+  "sessions_hold": 232,
+  "controls": {
+   "control_geometry": "symmetric: stop 1 ATR, fixed target 1 ATR (see PREREGISTRATION correction log)",
+   "leak_mean_usd": 1.995,
+   "leak_n": 2179,
+   "null_mean_usd": -0.257,
+   "null_n": 2178,
+   "cost_test": {
+    "no_slip_minus_normal_usd": 0.1,
+    "expected": 0.1,
+    "pass": true,
+    "note": "slippage is pure accounting on identical paths; spread application (BUY fill = close + spread) is asserted by unit tests"
+   }
+  },
+  "dedup_ratchet_checks": {
+   "same_candle_violations": 0,
+   "ratchet_violations": 0,
+   "revenge_violations": 0
+  },
+  "variants": [
+   "H1_$2",
+   "H1_$3",
+   "H1_$5",
+   "H1_0.5R",
+   "H1_1.0R",
+   "H2a_bankrun_$3",
+   "H2b_alwaysrun_$3",
+   "H3a_0.5ATR",
+   "H3b_0.75ATR",
+   "H4a_tp1_trail",
+   "H4b_0.5R_trail"
+  ],
+  "bonferroni_alpha": 0.004545454545454546,
+  "costs": {
+   "normal": {
+    "spread": 0.24,
+    "slip": 0.1
+   },
+   "stress": {
+    "spread": 0.6,
+    "slip": 0.2
+   }
+  },
+  "equity_ref": 62.07
+ },
+ "capital": {
+  "equity_ref": 62.07,
+  "margin_0_01_lot": 20.81,
+  "margin_burden_pct": 0.335,
+  "stop_distance_usd": {
+   "p10": 2.48,
+   "p25": 3.8,
+   "median": 6.31,
+   "p75": 10.42,
+   "p90": 16.08
+  },
+  "expected_loss_usd_median": 6.65,
+  "band_counts": {
+   "<=1%": 0,
+   "1-2%": 0,
+   "2-3%": 184,
+   "3-5%": 1096,
+   "5-8%": 1966,
+   ">8%": 6371
+  },
+  "band_share": {
+   "<=1%": 0,
+   "1-2%": 0,
+   "2-3%": 0.019,
+   "3-5%": 0.114,
+   "5-8%": 0.204,
+   ">8%": 0.662
+  },
+  "minimum_lot_constraint": {
+   "share_above_2pct": 1,
+   "share_above_3pct": 0.981,
+   "share_above_5pct": 0.867,
+   "share_above_8pct": 0.662,
+   "note": "at 0.01 lot the position cannot be made smaller; the only lever is candidate rejection (CAPITAL_RISK_TOO_HIGH)"
+  },
+  "by_model_median_stop": {
+   "MC": 12.69,
+   "PB": 7.6,
+   "BO": 5.87,
+   "SR": 4.12,
+   "MR": 5.37
+  },
+  "account_scale": [
+   {
+    "equity": 60,
+    "risk_pct_median_stop": 0.111,
+    "risk_pct_p75_stop": 0.179,
+    "harvest_pct": {
+     "2usd": 0.033,
+     "3usd": 0.05,
+     "5usd": 0.083
+    },
+    "margin_burden_pct": 0.347,
+    "min_lot_constraint": "binding: 0.01 lot is the only size; median structural risk is > 5% of equity"
+   },
+   {
+    "equity": 100,
+    "risk_pct_median_stop": 0.067,
+    "risk_pct_p75_stop": 0.108,
+    "harvest_pct": {
+     "2usd": 0.02,
+     "3usd": 0.03,
+     "5usd": 0.05
+    },
+    "margin_burden_pct": 0.208,
+    "min_lot_constraint": "binding for tight risk budgets (<= 3%)"
+   },
+   {
+    "equity": 500,
+    "risk_pct_median_stop": 0.013,
+    "risk_pct_p75_stop": 0.022,
+    "harvest_pct": {
+     "2usd": 0.004,
+     "3usd": 0.006,
+     "5usd": 0.01
+    },
+    "margin_burden_pct": 0.042,
+    "min_lot_constraint": "not binding at <= 1% for median stops (0.02-0.05 lot would be the natural size)"
+   },
+   {
+    "equity": 1000,
+    "risk_pct_median_stop": 0.007,
+    "risk_pct_p75_stop": 0.011,
+    "harvest_pct": {
+     "2usd": 0.002,
+     "3usd": 0.003,
+     "5usd": 0.005
+    },
+    "margin_burden_pct": 0.021,
+    "min_lot_constraint": "not binding at <= 1% for median stops (0.02-0.05 lot would be the natural size)"
+   }
+  ],
+  "examples_61": {
+   "gains": {
+    "+1": 0.016,
+    "+2": 0.033,
+    "+3": 0.049,
+    "+5": 0.082,
+    "+10": 0.164
+   },
+   "losses": {
+    "-1": -0.016,
+    "-2": -0.033,
+    "-3": -0.049,
+    "-5": -0.082,
+    "-10": -0.164,
+    "-20": -0.328,
+    "-50": -0.82
+   }
+  }
+ },
+ "milestones": {
+  "$1": {
+   "independent_signals": 2186,
+   "reached_before_stop": 0.762,
+   "reached_before_stop_and_opposite_signal": 0.762,
+   "median_bars_to_reach": 1,
+   "dev_rate": 0.739,
+   "hold_rate": 0.779
+  },
+  "$2": {
+   "independent_signals": 2186,
+   "reached_before_stop": 0.668,
+   "reached_before_stop_and_opposite_signal": 0.668,
+   "median_bars_to_reach": 1,
+   "dev_rate": 0.632,
+   "hold_rate": 0.695
+  },
+  "$3": {
+   "independent_signals": 2186,
+   "reached_before_stop": 0.61,
+   "reached_before_stop_and_opposite_signal": 0.608,
+   "median_bars_to_reach": 2,
+   "dev_rate": 0.568,
+   "hold_rate": 0.641
+  },
+  "$5": {
+   "independent_signals": 2186,
+   "reached_before_stop": 0.52,
+   "reached_before_stop_and_opposite_signal": 0.515,
+   "median_bars_to_reach": 3,
+   "dev_rate": 0.47,
+   "hold_rate": 0.556
+  },
+  "$7.5": {
+   "independent_signals": 2186,
+   "reached_before_stop": 0.428,
+   "reached_before_stop_and_opposite_signal": 0.422,
+   "median_bars_to_reach": 4,
+   "dev_rate": 0.369,
+   "hold_rate": 0.471
+  },
+  "$10": {
+   "independent_signals": 2186,
+   "reached_before_stop": 0.368,
+   "reached_before_stop_and_opposite_signal": 0.36,
+   "median_bars_to_reach": 6,
+   "dev_rate": 0.323,
+   "hold_rate": 0.401
+  },
+  "0.25R": {
+   "independent_signals": 2186,
+   "reached_before_stop": 0.731,
+   "reached_before_stop_and_opposite_signal": 0.728,
+   "median_bars_to_reach": 1,
+   "dev_rate": 0.726,
+   "hold_rate": 0.734
+  },
+  "0.5R": {
+   "independent_signals": 2186,
+   "reached_before_stop": 0.633,
+   "reached_before_stop_and_opposite_signal": 0.629,
+   "median_bars_to_reach": 2,
+   "dev_rate": 0.629,
+   "hold_rate": 0.637
+  },
+  "0.75R": {
+   "independent_signals": 2186,
+   "reached_before_stop": 0.565,
+   "reached_before_stop_and_opposite_signal": 0.559,
+   "median_bars_to_reach": 2,
+   "dev_rate": 0.565,
+   "hold_rate": 0.564
+  },
+  "1R": {
+   "independent_signals": 2186,
+   "reached_before_stop": 0.504,
+   "reached_before_stop_and_opposite_signal": 0.499,
+   "median_bars_to_reach": 3,
+   "dev_rate": 0.501,
+   "hold_rate": 0.506
+  },
+  "_stop_first_share": 0.222,
+  "_mfe_usd_distribution": {
+   "p25": 1.09,
+   "median": 5.38,
+   "p75": 19.78,
+   "p90": 61.16
+  },
+  "_structural_risk_usd_median": 5.13
+ },
+ "architectures": {
+  "H0_current": {
+   "note": "Edge Lab production-stack simulation (broker structural/monetary stops, +30 USD TP, adaptive management) on the same signals, minus 0.10 USD slippage; entries and management as production, NOT structural exits",
+   "ALL": {
+    "trades": 2882,
+    "win_rate": 0.495,
+    "avg_win_usd": 8.71,
+    "avg_loss_usd": 8.24,
+    "win_loss_ratio": 1.06,
+    "wins_erased_by_one_loss": 0.95,
+    "expectancy_usd": 0.151,
+    "expectancy_r": -0.005,
+    "pf": 1.04,
+    "ci95_usd": [
+     -0.305,
+     0.606
+    ],
+    "gross_profit_usd": 12427.52,
+    "gross_loss_usd": 11992.94,
+    "costs_usd": 979.88,
+    "net_usd": 434.58,
+    "cost_pct_of_gross_harvest": 0.073,
+    "net_per_active_day_usd": 1.123,
+    "active_days": 387,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 3,
+     "median": 7,
+     "p75": 9,
+     "p90": 12,
+     "mean": 6.59
+    },
+    "zero_trade_session_rate": 0.114,
+    "avg_hold_bars": 9.91,
+    "median_hold_bars": 6,
+    "time_in_market_share": 0.227,
+    "top5_share_of_gross_profit": 0.012,
+    "months": 17,
+    "months_positive_share": 0.471,
+    "milestone_hit_rate": 0.655,
+    "protected_run_rate": 0,
+    "profit_given_back_after_m1_usd": 10.26,
+    "exit_mix": {
+     "PROFIT_PROTECT_CLOSE": 1190,
+     "BROKER_SL_STRUCTURAL": 533,
+     "THESIS_INVALIDATION_CLOSE": 758,
+     "THESIS_DETERIORATION_CLOSE": 131,
+     "BROKER_TP": 260,
+     "BROKER_SL_MONETARY": 10
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 9.54,
+    "mae_mean_usd": 6.87,
+    "path": {
+     "final_balance": 496.65,
+     "min_balance": 28.41,
+     "max_drawdown_usd": 498.48,
+     "median_drawdown_usd": 120.04,
+     "max_loss_streak": 11,
+     "median_trades_to_recover_peak": 4,
+     "unrecovered_trades_at_end": 1525
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 0.924,
+     "share_touching_margin_21usd": 0.894
+    },
+    "by_model": {
+     "MC": {
+      "n": 248,
+      "exp_usd": 0.526
+     },
+     "PB": {
+      "n": 459,
+      "exp_usd": 0.337
+     },
+     "BO": {
+      "n": 1799,
+      "exp_usd": 0.012
+     },
+     "SR": {
+      "n": 222,
+      "exp_usd": 0.322
+     },
+     "MR": {
+      "n": 154,
+      "exp_usd": 0.373
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 1343,
+      "exp_usd": -0.049
+     },
+     "SELL": {
+      "n": 1539,
+      "exp_usd": 0.325
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 1041,
+      "exp_usd": 0.343
+     },
+     "LONDON": {
+      "n": 674,
+      "exp_usd": -0.229
+     },
+     "NEW_YORK": {
+      "n": 992,
+      "exp_usd": 0.146
+     },
+     "OTHER": {
+      "n": 175,
+      "exp_usd": 0.495
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 77,
+      "exp_usd": 0.15,
+      "avg_loss": 2.04
+     },
+     "3-5%": {
+      "n": 400,
+      "exp_usd": -0.08,
+      "avg_loss": 3.06
+     },
+     "5-8%": {
+      "n": 645,
+      "exp_usd": -0.279,
+      "avg_loss": 4.72
+     },
+     ">8%": {
+      "n": 1760,
+      "exp_usd": 0.361,
+      "avg_loss": 11.13
+     }
+    }
+   },
+   "DEV": {
+    "trades": 1168,
+    "win_rate": 0.485,
+    "avg_win_usd": 6.65,
+    "avg_loss_usd": 5.98,
+    "win_loss_ratio": 1.11,
+    "wins_erased_by_one_loss": 0.9,
+    "expectancy_usd": 0.142,
+    "expectancy_r": -0.008,
+    "pf": 1.05,
+    "ci95_usd": [
+     -0.397,
+     0.689
+    ],
+    "gross_profit_usd": 3765.02,
+    "gross_loss_usd": 3598.65,
+    "costs_usd": 397.12,
+    "net_usd": 166.37,
+    "cost_pct_of_gross_harvest": 0.095,
+    "net_per_active_day_usd": 0.909,
+    "active_days": 183,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 2,
+     "median": 6,
+     "p75": 9,
+     "p90": 10,
+     "mean": 5.7
+    },
+    "zero_trade_session_rate": 0.107,
+    "avg_hold_bars": 11.08,
+    "median_hold_bars": 6,
+    "time_in_market_share": 0.219,
+    "top5_share_of_gross_profit": 0.04,
+    "months": 8,
+    "months_positive_share": 0.625,
+    "milestone_hit_rate": 0.589,
+    "protected_run_rate": 0,
+    "profit_given_back_after_m1_usd": 7.89,
+    "exit_mix": {
+     "PROFIT_PROTECT_CLOSE": 513,
+     "BROKER_SL_STRUCTURAL": 196,
+     "THESIS_INVALIDATION_CLOSE": 332,
+     "THESIS_DETERIORATION_CLOSE": 63,
+     "BROKER_TP": 64
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 7.35,
+    "mae_mean_usd": 5.07,
+    "path": {
+     "final_balance": 228.44,
+     "min_balance": 28.41,
+     "max_drawdown_usd": 182.35,
+     "median_drawdown_usd": 63.02,
+     "max_loss_streak": 9,
+     "median_trades_to_recover_peak": 4.5,
+     "unrecovered_trades_at_end": 257
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 0.924,
+     "share_touching_margin_21usd": 0.888
+    },
+    "by_model": {
+     "MC": {
+      "n": 104,
+      "exp_usd": -0.035
+     },
+     "PB": {
+      "n": 193,
+      "exp_usd": 0.258
+     },
+     "BO": {
+      "n": 722,
+      "exp_usd": 0.228
+     },
+     "SR": {
+      "n": 81,
+      "exp_usd": -0.119
+     },
+     "MR": {
+      "n": 68,
+      "exp_usd": -0.512
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 606,
+      "exp_usd": 0.274
+     },
+     "SELL": {
+      "n": 562,
+      "exp_usd": 0
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 403,
+      "exp_usd": 0.217
+     },
+     "LONDON": {
+      "n": 298,
+      "exp_usd": -0.461
+     },
+     "NEW_YORK": {
+      "n": 403,
+      "exp_usd": 0.565
+     },
+     "OTHER": {
+      "n": 64,
+      "exp_usd": -0.178
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 68,
+      "exp_usd": 0.186,
+      "avg_loss": 2
+     },
+     "3-5%": {
+      "n": 217,
+      "exp_usd": -0.198,
+      "avg_loss": 3.02
+     },
+     "5-8%": {
+      "n": 315,
+      "exp_usd": -0.304,
+      "avg_loss": 4.4
+     },
+     ">8%": {
+      "n": 568,
+      "exp_usd": 0.515,
+      "avg_loss": 8.68
+     }
+    }
+   },
+   "HOLD": {
+    "trades": 1714,
+    "win_rate": 0.502,
+    "avg_win_usd": 10.06,
+    "avg_loss_usd": 9.84,
+    "win_loss_ratio": 1.02,
+    "wins_erased_by_one_loss": 0.98,
+    "expectancy_usd": 0.156,
+    "expectancy_r": -0.004,
+    "pf": 1.03,
+    "ci95_usd": [
+     -0.479,
+     0.857
+    ],
+    "gross_profit_usd": 8662.5,
+    "gross_loss_usd": 8394.29,
+    "costs_usd": 582.76,
+    "net_usd": 268.21,
+    "cost_pct_of_gross_harvest": 0.063,
+    "net_per_active_day_usd": 1.315,
+    "active_days": 204,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 5,
+     "median": 8,
+     "p75": 11,
+     "p90": 12,
+     "mean": 7.39
+    },
+    "zero_trade_session_rate": 0.121,
+    "avg_hold_bars": 9.11,
+    "median_hold_bars": 5,
+    "time_in_market_share": 0.234,
+    "top5_share_of_gross_profit": 0.017,
+    "months": 9,
+    "months_positive_share": 0.333,
+    "milestone_hit_rate": 0.7,
+    "protected_run_rate": 0,
+    "profit_given_back_after_m1_usd": 11.63,
+    "exit_mix": {
+     "PROFIT_PROTECT_CLOSE": 677,
+     "BROKER_SL_STRUCTURAL": 337,
+     "THESIS_INVALIDATION_CLOSE": 426,
+     "THESIS_DETERIORATION_CLOSE": 68,
+     "BROKER_TP": 196,
+     "BROKER_SL_MONETARY": 10
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 11.04,
+    "mae_mean_usd": 8.1,
+    "path": {
+     "final_balance": 330.28,
+     "min_balance": -109.76,
+     "max_drawdown_usd": 498.48,
+     "median_drawdown_usd": 210.9,
+     "max_loss_streak": 11,
+     "median_trades_to_recover_peak": 3,
+     "unrecovered_trades_at_end": 1525
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 0.906,
+     "share_touching_margin_21usd": 0.89
+    },
+    "by_model": {
+     "MC": {
+      "n": 144,
+      "exp_usd": 0.932
+     },
+     "PB": {
+      "n": 266,
+      "exp_usd": 0.394
+     },
+     "BO": {
+      "n": 1077,
+      "exp_usd": -0.134
+     },
+     "SR": {
+      "n": 141,
+      "exp_usd": 0.575
+     },
+     "MR": {
+      "n": 86,
+      "exp_usd": 1.073
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 737,
+      "exp_usd": -0.315
+     },
+     "SELL": {
+      "n": 977,
+      "exp_usd": 0.512
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 638,
+      "exp_usd": 0.423
+     },
+     "LONDON": {
+      "n": 376,
+      "exp_usd": -0.046
+     },
+     "NEW_YORK": {
+      "n": 589,
+      "exp_usd": -0.14
+     },
+     "OTHER": {
+      "n": 111,
+      "exp_usd": 0.884
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 9,
+      "exp_usd": -0.123,
+      "avg_loss": 2.42
+     },
+     "3-5%": {
+      "n": 183,
+      "exp_usd": 0.06,
+      "avg_loss": 3.12
+     },
+     "5-8%": {
+      "n": 330,
+      "exp_usd": -0.256,
+      "avg_loss": 5.02
+     },
+     ">8%": {
+      "n": 1192,
+      "exp_usd": 0.287,
+      "avg_loss": 12.3
+     }
+    }
+   }
+  },
+  "H1_$2": {
+   "variant": {
+    "kind": "FIXED",
+    "m1": {
+     "usd": 2
+    }
+   },
+   "skipped_reentries": {
+    "SAME_OR_EARLIER_CANDLE": 2912,
+    "STALE_SAME_SETUP": 3182,
+    "REVENGE_GUARD": 95
+   },
+   "ALL": {
+    "trades": 3428,
+    "win_rate": 0.679,
+    "avg_win_usd": 1.9,
+    "avg_loss_usd": 5.53,
+    "win_loss_ratio": 0.34,
+    "wins_erased_by_one_loss": 2.91,
+    "expectancy_usd": -0.487,
+    "expectancy_r": -0.096,
+    "pf": 0.73,
+    "ci95_usd": [
+     -0.638,
+     -0.345
+    ],
+    "gross_profit_usd": 4416.26,
+    "gross_loss_usd": 6084.1,
+    "costs_usd": 1173.92,
+    "net_usd": -1667.84,
+    "cost_pct_of_gross_harvest": 0.21,
+    "net_per_active_day_usd": -4.266,
+    "active_days": 391,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 5,
+     "median": 8,
+     "p75": 11,
+     "p90": 13,
+     "mean": 7.84
+    },
+    "zero_trade_session_rate": 0.105,
+    "avg_hold_bars": 2.7,
+    "median_hold_bars": 1,
+    "time_in_market_share": 0.073,
+    "top5_share_of_gross_profit": 0.002,
+    "months": 17,
+    "months_positive_share": 0,
+    "milestone_hit_rate": 0.679,
+    "protected_run_rate": 0,
+    "profit_given_back_after_m1_usd": 3.24,
+    "exit_mix": {
+     "MILESTONE_BANK": 2327,
+     "STRUCTURAL_STOP": 1083,
+     "OPPOSITE_SIGNAL": 18
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 3.67,
+    "mae_mean_usd": 2.77,
+    "path": {
+     "final_balance": -1605.77,
+     "min_balance": -1617.47,
+     "max_drawdown_usd": 1685.24,
+     "median_drawdown_usd": 937.03,
+     "max_loss_streak": 9,
+     "median_trades_to_recover_peak": null,
+     "unrecovered_trades_at_end": 3425
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 1,
+     "share_touching_margin_21usd": 1
+    },
+    "by_model": {
+     "MC": {
+      "n": 472,
+      "exp_usd": -0.79
+     },
+     "PB": {
+      "n": 638,
+      "exp_usd": -0.467
+     },
+     "BO": {
+      "n": 1872,
+      "exp_usd": -0.511
+     },
+     "SR": {
+      "n": 279,
+      "exp_usd": -0.184
+     },
+     "MR": {
+      "n": 167,
+      "exp_usd": 0.059
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 1677,
+      "exp_usd": -0.572
+     },
+     "SELL": {
+      "n": 1751,
+      "exp_usd": -0.404
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 1199,
+      "exp_usd": -0.314
+     },
+     "LONDON": {
+      "n": 789,
+      "exp_usd": -0.656
+     },
+     "NEW_YORK": {
+      "n": 1241,
+      "exp_usd": -0.548
+     },
+     "OTHER": {
+      "n": 199,
+      "exp_usd": -0.47
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 100,
+      "exp_usd": -0.416,
+      "avg_loss": 1.51
+     },
+     "3-5%": {
+      "n": 496,
+      "exp_usd": -0.316,
+      "avg_loss": 2.4
+     },
+     "5-8%": {
+      "n": 775,
+      "exp_usd": -0.51,
+      "avg_loss": 3.83
+     },
+     ">8%": {
+      "n": 2057,
+      "exp_usd": -0.522,
+      "avg_loss": 9.12
+     }
+    }
+   },
+   "DEV": {
+    "trades": 1416,
+    "win_rate": 0.631,
+    "avg_win_usd": 1.9,
+    "avg_loss_usd": 4.54,
+    "win_loss_ratio": 0.42,
+    "wins_erased_by_one_loss": 2.39,
+    "expectancy_usd": -0.481,
+    "expectancy_r": -0.116,
+    "pf": 0.71,
+    "ci95_usd": [
+     -0.68,
+     -0.299
+    ],
+    "gross_profit_usd": 1693.9,
+    "gross_loss_usd": 2374.72,
+    "costs_usd": 485.36,
+    "net_usd": -680.82,
+    "cost_pct_of_gross_harvest": 0.223,
+    "net_per_active_day_usd": -3.68,
+    "active_days": 185,
+    "trades_per_session": {
+     "p10": 1,
+     "p25": 3,
+     "median": 8,
+     "p75": 10,
+     "p90": 12,
+     "mean": 6.91
+    },
+    "zero_trade_session_rate": 0.098,
+    "avg_hold_bars": 3.54,
+    "median_hold_bars": 2,
+    "time_in_market_share": 0.085,
+    "top5_share_of_gross_profit": 0.006,
+    "months": 8,
+    "months_positive_share": 0,
+    "milestone_hit_rate": 0.631,
+    "protected_run_rate": 0,
+    "profit_given_back_after_m1_usd": 2.13,
+    "exit_mix": {
+     "MILESTONE_BANK": 893,
+     "STRUCTURAL_STOP": 517,
+     "OPPOSITE_SIGNAL": 6
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 2.75,
+    "mae_mean_usd": 2.27,
+    "path": {
+     "final_balance": -618.75,
+     "min_balance": -624.55,
+     "max_drawdown_usd": 692.32,
+     "median_drawdown_usd": 267.05,
+     "max_loss_streak": 9,
+     "median_trades_to_recover_peak": null,
+     "unrecovered_trades_at_end": 1413
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 1,
+     "share_touching_margin_21usd": 1
+    },
+    "by_model": {
+     "MC": {
+      "n": 211,
+      "exp_usd": -0.789
+     },
+     "PB": {
+      "n": 255,
+      "exp_usd": -0.542
+     },
+     "BO": {
+      "n": 783,
+      "exp_usd": -0.462
+     },
+     "SR": {
+      "n": 95,
+      "exp_usd": -0.201
+     },
+     "MR": {
+      "n": 72,
+      "exp_usd": 0.06
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 773,
+      "exp_usd": -0.391
+     },
+     "SELL": {
+      "n": 643,
+      "exp_usd": -0.589
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 476,
+      "exp_usd": -0.33
+     },
+     "LONDON": {
+      "n": 357,
+      "exp_usd": -0.652
+     },
+     "NEW_YORK": {
+      "n": 516,
+      "exp_usd": -0.43
+     },
+     "OTHER": {
+      "n": 67,
+      "exp_usd": -1.031
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 88,
+      "exp_usd": -0.37,
+      "avg_loss": 1.49
+     },
+     "3-5%": {
+      "n": 274,
+      "exp_usd": -0.389,
+      "avg_loss": 2.42
+     },
+     "5-8%": {
+      "n": 366,
+      "exp_usd": -0.45,
+      "avg_loss": 3.83
+     },
+     ">8%": {
+      "n": 688,
+      "exp_usd": -0.548,
+      "avg_loss": 8.06
+     }
+    }
+   },
+   "HOLD": {
+    "trades": 2012,
+    "win_rate": 0.713,
+    "avg_win_usd": 1.9,
+    "avg_loss_usd": 6.42,
+    "win_loss_ratio": 0.3,
+    "wins_erased_by_one_loss": 3.38,
+    "expectancy_usd": -0.491,
+    "expectancy_r": -0.082,
+    "pf": 0.73,
+    "ci95_usd": [
+     -0.69,
+     -0.284
+    ],
+    "gross_profit_usd": 2722.36,
+    "gross_loss_usd": 3709.38,
+    "costs_usd": 688.56,
+    "net_usd": -987.02,
+    "cost_pct_of_gross_harvest": 0.202,
+    "net_per_active_day_usd": -4.791,
+    "active_days": 206,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 6,
+     "median": 9,
+     "p75": 12,
+     "p90": 14,
+     "mean": 8.67
+    },
+    "zero_trade_session_rate": 0.112,
+    "avg_hold_bars": 2.1,
+    "median_hold_bars": 1,
+    "time_in_market_share": 0.063,
+    "top5_share_of_gross_profit": 0.003,
+    "months": 9,
+    "months_positive_share": 0,
+    "milestone_hit_rate": 0.713,
+    "protected_run_rate": 0,
+    "profit_given_back_after_m1_usd": 3.94,
+    "exit_mix": {
+     "MILESTONE_BANK": 1434,
+     "STRUCTURAL_STOP": 566,
+     "OPPOSITE_SIGNAL": 12
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 4.31,
+    "mae_mean_usd": 3.11,
+    "path": {
+     "final_balance": -924.95,
+     "min_balance": -936.65,
+     "max_drawdown_usd": 1004.42,
+     "median_drawdown_usd": 528.95,
+     "max_loss_streak": 5,
+     "median_trades_to_recover_peak": null,
+     "unrecovered_trades_at_end": 2009
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 1,
+     "share_touching_margin_21usd": 1
+    },
+    "by_model": {
+     "MC": {
+      "n": 261,
+      "exp_usd": -0.791
+     },
+     "PB": {
+      "n": 383,
+      "exp_usd": -0.416
+     },
+     "BO": {
+      "n": 1089,
+      "exp_usd": -0.546
+     },
+     "SR": {
+      "n": 184,
+      "exp_usd": -0.176
+     },
+     "MR": {
+      "n": 95,
+      "exp_usd": 0.059
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 904,
+      "exp_usd": -0.727
+     },
+     "SELL": {
+      "n": 1108,
+      "exp_usd": -0.297
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 723,
+      "exp_usd": -0.303
+     },
+     "LONDON": {
+      "n": 432,
+      "exp_usd": -0.66
+     },
+     "NEW_YORK": {
+      "n": 725,
+      "exp_usd": -0.632
+     },
+     "OTHER": {
+      "n": 132,
+      "exp_usd": -0.185
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 12,
+      "exp_usd": -0.752,
+      "avg_loss": 1.64
+     },
+     "3-5%": {
+      "n": 222,
+      "exp_usd": -0.226,
+      "avg_loss": 2.38
+     },
+     "5-8%": {
+      "n": 409,
+      "exp_usd": -0.564,
+      "avg_loss": 3.82
+     },
+     ">8%": {
+      "n": 1369,
+      "exp_usd": -0.509,
+      "avg_loss": 9.75
+     }
+    }
+   },
+   "HOLD_stress": {
+    "expectancy_usd": -0.93,
+    "pf": 0.57,
+    "net_usd": -1857.92
+   },
+   "HOLD_drift": {
+    "expectancy_usd": -1.15,
+    "pf": 0.52,
+    "net_usd": -2222.85
+   },
+   "decision": {
+    "status": "REJECTED",
+    "reject_reasons": [
+     "expectancy<=0",
+     "PF<1",
+     "maxDD>31USD",
+     "margin-floor risk>5%"
+    ],
+    "vs_h0": {
+     "exp_usd": -0.491,
+     "h0_exp_usd": 0.156,
+     "net_per_day": -4.791,
+     "h0_net_per_day": 1.315,
+     "trades": 2012,
+     "h0_trades": 1714,
+     "dd": 1004.42,
+     "h0_dd": 498.48
+    }
+   }
+  },
+  "H1_$3": {
+   "variant": {
+    "kind": "FIXED",
+    "m1": {
+     "usd": 3
+    }
+   },
+   "skipped_reentries": {
+    "SAME_OR_EARLIER_CANDLE": 3499,
+    "STALE_SAME_SETUP": 2698,
+    "REVENGE_GUARD": 96
+   },
+   "ALL": {
+    "trades": 3324,
+    "win_rate": 0.62,
+    "avg_win_usd": 2.89,
+    "avg_loss_usd": 5.74,
+    "win_loss_ratio": 0.5,
+    "wins_erased_by_one_loss": 1.98,
+    "expectancy_usd": -0.387,
+    "expectancy_r": -0.074,
+    "pf": 0.82,
+    "ci95_usd": [
+     -0.566,
+     -0.206
+    ],
+    "gross_profit_usd": 5963.89,
+    "gross_loss_usd": 7249.91,
+    "costs_usd": 1141.36,
+    "net_usd": -1286.02,
+    "cost_pct_of_gross_harvest": 0.161,
+    "net_per_active_day_usd": -3.289,
+    "active_days": 391,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 4,
+     "median": 8,
+     "p75": 11,
+     "p90": 13,
+     "mean": 7.61
+    },
+    "zero_trade_session_rate": 0.105,
+    "avg_hold_bars": 3.68,
+    "median_hold_bars": 2,
+    "time_in_market_share": 0.097,
+    "top5_share_of_gross_profit": 0.002,
+    "months": 17,
+    "months_positive_share": 0.059,
+    "milestone_hit_rate": 0.619,
+    "protected_run_rate": 0,
+    "profit_given_back_after_m1_usd": 3.22,
+    "exit_mix": {
+     "MILESTONE_BANK": 2058,
+     "STRUCTURAL_STOP": 1240,
+     "OPPOSITE_SIGNAL": 26
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 4.12,
+    "mae_mean_usd": 3.06,
+    "path": {
+     "final_balance": -1223.95,
+     "min_balance": -1238.12,
+     "max_drawdown_usd": 1308.89,
+     "median_drawdown_usd": 780.14,
+     "max_loss_streak": 9,
+     "median_trades_to_recover_peak": null,
+     "unrecovered_trades_at_end": 3321
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 1,
+     "share_touching_margin_21usd": 1
+    },
+    "by_model": {
+     "MC": {
+      "n": 460,
+      "exp_usd": -0.837
+     },
+     "PB": {
+      "n": 612,
+      "exp_usd": -0.322
+     },
+     "BO": {
+      "n": 1824,
+      "exp_usd": -0.375
+     },
+     "SR": {
+      "n": 263,
+      "exp_usd": -0.372
+     },
+     "MR": {
+      "n": 165,
+      "exp_usd": 0.477
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 1628,
+      "exp_usd": -0.465
+     },
+     "SELL": {
+      "n": 1696,
+      "exp_usd": -0.312
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 1164,
+      "exp_usd": -0.258
+     },
+     "LONDON": {
+      "n": 774,
+      "exp_usd": -0.464
+     },
+     "NEW_YORK": {
+      "n": 1190,
+      "exp_usd": -0.471
+     },
+     "OTHER": {
+      "n": 196,
+      "exp_usd": -0.335
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 91,
+      "exp_usd": -0.291,
+      "avg_loss": 1.5
+     },
+     "3-5%": {
+      "n": 474,
+      "exp_usd": -0.225,
+      "avg_loss": 2.42
+     },
+     "5-8%": {
+      "n": 739,
+      "exp_usd": -0.371,
+      "avg_loss": 3.82
+     },
+     ">8%": {
+      "n": 2020,
+      "exp_usd": -0.435,
+      "avg_loss": 9.12
+     }
+    }
+   },
+   "DEV": {
+    "trades": 1356,
+    "win_rate": 0.566,
+    "avg_win_usd": 2.89,
+    "avg_loss_usd": 4.81,
+    "win_loss_ratio": 0.6,
+    "wins_erased_by_one_loss": 1.66,
+    "expectancy_usd": -0.453,
+    "expectancy_r": -0.092,
+    "pf": 0.78,
+    "ci95_usd": [
+     -0.711,
+     -0.218
+    ],
+    "gross_profit_usd": 2216.82,
+    "gross_loss_usd": 2831.19,
+    "costs_usd": 466.64,
+    "net_usd": -614.37,
+    "cost_pct_of_gross_harvest": 0.174,
+    "net_per_active_day_usd": -3.321,
+    "active_days": 185,
+    "trades_per_session": {
+     "p10": 1,
+     "p25": 3,
+     "median": 7,
+     "p75": 10,
+     "p90": 12,
+     "mean": 6.61
+    },
+    "zero_trade_session_rate": 0.098,
+    "avg_hold_bars": 4.97,
+    "median_hold_bars": 2,
+    "time_in_market_share": 0.114,
+    "top5_share_of_gross_profit": 0.007,
+    "months": 8,
+    "months_positive_share": 0,
+    "milestone_hit_rate": 0.564,
+    "protected_run_rate": 0,
+    "profit_given_back_after_m1_usd": 2.05,
+    "exit_mix": {
+     "MILESTONE_BANK": 765,
+     "STRUCTURAL_STOP": 581,
+     "OPPOSITE_SIGNAL": 10
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 3.18,
+    "mae_mean_usd": 2.55,
+    "path": {
+     "final_balance": -552.3,
+     "min_balance": -563.1,
+     "max_drawdown_usd": 633.87,
+     "median_drawdown_usd": 337.51,
+     "max_loss_streak": 9,
+     "median_trades_to_recover_peak": null,
+     "unrecovered_trades_at_end": 1353
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 1,
+     "share_touching_margin_21usd": 1
+    },
+    "by_model": {
+     "MC": {
+      "n": 205,
+      "exp_usd": -0.897
+     },
+     "PB": {
+      "n": 243,
+      "exp_usd": -0.536
+     },
+     "BO": {
+      "n": 745,
+      "exp_usd": -0.381
+     },
+     "SR": {
+      "n": 92,
+      "exp_usd": -0.295
+     },
+     "MR": {
+      "n": 71,
+      "exp_usd": 0.151
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 746,
+      "exp_usd": -0.213
+     },
+     "SELL": {
+      "n": 610,
+      "exp_usd": -0.747
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 458,
+      "exp_usd": -0.482
+     },
+     "LONDON": {
+      "n": 348,
+      "exp_usd": -0.589
+     },
+     "NEW_YORK": {
+      "n": 485,
+      "exp_usd": -0.262
+     },
+     "OTHER": {
+      "n": 65,
+      "exp_usd": -0.942
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 79,
+      "exp_usd": -0.259,
+      "avg_loss": 1.48
+     },
+     "3-5%": {
+      "n": 259,
+      "exp_usd": -0.301,
+      "avg_loss": 2.43
+     },
+     "5-8%": {
+      "n": 345,
+      "exp_usd": -0.306,
+      "avg_loss": 3.84
+     },
+     ">8%": {
+      "n": 673,
+      "exp_usd": -0.61,
+      "avg_loss": 8.17
+     }
+    }
+   },
+   "HOLD": {
+    "trades": 1968,
+    "win_rate": 0.658,
+    "avg_win_usd": 2.9,
+    "avg_loss_usd": 6.56,
+    "win_loss_ratio": 0.44,
+    "wins_erased_by_one_loss": 2.26,
+    "expectancy_usd": -0.341,
+    "expectancy_r": -0.062,
+    "pf": 0.85,
+    "ci95_usd": [
+     -0.589,
+     -0.108
+    ],
+    "gross_profit_usd": 3747.07,
+    "gross_loss_usd": 4418.71,
+    "costs_usd": 674.72,
+    "net_usd": -671.64,
+    "cost_pct_of_gross_harvest": 0.153,
+    "net_per_active_day_usd": -3.26,
+    "active_days": 206,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 6,
+     "median": 9,
+     "p75": 12,
+     "p90": 14,
+     "mean": 8.48
+    },
+    "zero_trade_session_rate": 0.112,
+    "avg_hold_bars": 2.8,
+    "median_hold_bars": 1,
+    "time_in_market_share": 0.082,
+    "top5_share_of_gross_profit": 0.004,
+    "months": 9,
+    "months_positive_share": 0.111,
+    "milestone_hit_rate": 0.657,
+    "protected_run_rate": 0,
+    "profit_given_back_after_m1_usd": 3.92,
+    "exit_mix": {
+     "MILESTONE_BANK": 1293,
+     "STRUCTURAL_STOP": 659,
+     "OPPOSITE_SIGNAL": 16
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 4.77,
+    "mae_mean_usd": 3.41,
+    "path": {
+     "final_balance": -609.58,
+     "min_balance": -623.75,
+     "max_drawdown_usd": 691.62,
+     "median_drawdown_usd": 365.2,
+     "max_loss_streak": 6,
+     "median_trades_to_recover_peak": null,
+     "unrecovered_trades_at_end": 1966
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 1,
+     "share_touching_margin_21usd": 1
+    },
+    "by_model": {
+     "MC": {
+      "n": 255,
+      "exp_usd": -0.789
+     },
+     "PB": {
+      "n": 369,
+      "exp_usd": -0.181
+     },
+     "BO": {
+      "n": 1079,
+      "exp_usd": -0.371
+     },
+     "SR": {
+      "n": 171,
+      "exp_usd": -0.414
+     },
+     "MR": {
+      "n": 94,
+      "exp_usd": 0.723
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 882,
+      "exp_usd": -0.678
+     },
+     "SELL": {
+      "n": 1086,
+      "exp_usd": -0.068
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 706,
+      "exp_usd": -0.113
+     },
+     "LONDON": {
+      "n": 426,
+      "exp_usd": -0.362
+     },
+     "NEW_YORK": {
+      "n": 705,
+      "exp_usd": -0.614
+     },
+     "OTHER": {
+      "n": 131,
+      "exp_usd": -0.034
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 12,
+      "exp_usd": -0.502,
+      "avg_loss": 1.64
+     },
+     "3-5%": {
+      "n": 215,
+      "exp_usd": -0.133,
+      "avg_loss": 2.39
+     },
+     "5-8%": {
+      "n": 394,
+      "exp_usd": -0.428,
+      "avg_loss": 3.81
+     },
+     ">8%": {
+      "n": 1347,
+      "exp_usd": -0.348,
+      "avg_loss": 9.7
+     }
+    }
+   },
+   "HOLD_stress": {
+    "expectancy_usd": -0.775,
+    "pf": 0.69,
+    "net_usd": -1504.9
+   },
+   "HOLD_drift": {
+    "expectancy_usd": -0.844,
+    "pf": 0.68,
+    "net_usd": -1604.53
+   },
+   "decision": {
+    "status": "REJECTED",
+    "reject_reasons": [
+     "expectancy<=0",
+     "PF<1",
+     "maxDD>31USD",
+     "margin-floor risk>5%"
+    ],
+    "vs_h0": {
+     "exp_usd": -0.341,
+     "h0_exp_usd": 0.156,
+     "net_per_day": -3.26,
+     "h0_net_per_day": 1.315,
+     "trades": 1968,
+     "h0_trades": 1714,
+     "dd": 691.62,
+     "h0_dd": 498.48
+    }
+   }
+  },
+  "H1_$5": {
+   "variant": {
+    "kind": "FIXED",
+    "m1": {
+     "usd": 5
+    }
+   },
+   "skipped_reentries": {
+    "SAME_OR_EARLIER_CANDLE": 4378,
+    "STALE_SAME_SETUP": 1984,
+    "REVENGE_GUARD": 121
+   },
+   "ALL": {
+    "trades": 3134,
+    "win_rate": 0.524,
+    "avg_win_usd": 4.88,
+    "avg_loss_usd": 5.95,
+    "win_loss_ratio": 0.82,
+    "wins_erased_by_one_loss": 1.22,
+    "expectancy_usd": -0.282,
+    "expectancy_r": -0.055,
+    "pf": 0.9,
+    "ci95_usd": [
+     -0.503,
+     -0.046
+    ],
+    "gross_profit_usd": 8006.3,
+    "gross_loss_usd": 8889.49,
+    "costs_usd": 1083.48,
+    "net_usd": -883.2,
+    "cost_pct_of_gross_harvest": 0.119,
+    "net_per_active_day_usd": -2.27,
+    "active_days": 389,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 4,
+     "median": 8,
+     "p75": 11,
+     "p90": 12,
+     "mean": 7.17
+    },
+    "zero_trade_session_rate": 0.11,
+    "avg_hold_bars": 5.28,
+    "median_hold_bars": 3,
+    "time_in_market_share": 0.132,
+    "top5_share_of_gross_profit": 0.003,
+    "months": 17,
+    "months_positive_share": 0.118,
+    "milestone_hit_rate": 0.522,
+    "protected_run_rate": 0,
+    "profit_given_back_after_m1_usd": 3.37,
+    "exit_mix": {
+     "MILESTONE_BANK": 1635,
+     "STRUCTURAL_STOP": 1465,
+     "OPPOSITE_SIGNAL": 34
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 5.02,
+    "mae_mean_usd": 3.46,
+    "path": {
+     "final_balance": -821.13,
+     "min_balance": -833.88,
+     "max_drawdown_usd": 904.41,
+     "median_drawdown_usd": 585.11,
+     "max_loss_streak": 15,
+     "median_trades_to_recover_peak": 28,
+     "unrecovered_trades_at_end": 3075
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 1,
+     "share_touching_margin_21usd": 1
+    },
+    "by_model": {
+     "MC": {
+      "n": 411,
+      "exp_usd": -1.383
+     },
+     "PB": {
+      "n": 572,
+      "exp_usd": -0.055
+     },
+     "BO": {
+      "n": 1749,
+      "exp_usd": -0.138
+     },
+     "SR": {
+      "n": 244,
+      "exp_usd": -0.376
+     },
+     "MR": {
+      "n": 158,
+      "exp_usd": 0.313
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 1527,
+      "exp_usd": -0.403
+     },
+     "SELL": {
+      "n": 1607,
+      "exp_usd": -0.167
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 1099,
+      "exp_usd": -0.283
+     },
+     "LONDON": {
+      "n": 727,
+      "exp_usd": -0.462
+     },
+     "NEW_YORK": {
+      "n": 1121,
+      "exp_usd": -0.204
+     },
+     "OTHER": {
+      "n": 187,
+      "exp_usd": -0.042
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 86,
+      "exp_usd": -0.022,
+      "avg_loss": 1.51
+     },
+     "3-5%": {
+      "n": 448,
+      "exp_usd": -0.067,
+      "avg_loss": 2.42
+     },
+     "5-8%": {
+      "n": 694,
+      "exp_usd": -0.363,
+      "avg_loss": 3.8
+     },
+     ">8%": {
+      "n": 1906,
+      "exp_usd": -0.314,
+      "avg_loss": 9.17
+     }
+    }
+   },
+   "DEV": {
+    "trades": 1264,
+    "win_rate": 0.46,
+    "avg_win_usd": 4.86,
+    "avg_loss_usd": 4.98,
+    "win_loss_ratio": 0.98,
+    "wins_erased_by_one_loss": 1.02,
+    "expectancy_usd": -0.448,
+    "expectancy_r": -0.081,
+    "pf": 0.83,
+    "ci95_usd": [
+     -0.739,
+     -0.16
+    ],
+    "gross_profit_usd": 2827.53,
+    "gross_loss_usd": 3393.37,
+    "costs_usd": 439.28,
+    "net_usd": -565.84,
+    "cost_pct_of_gross_harvest": 0.134,
+    "net_per_active_day_usd": -3.092,
+    "active_days": 183,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 3,
+     "median": 7,
+     "p75": 9,
+     "p90": 11,
+     "mean": 6.17
+    },
+    "zero_trade_session_rate": 0.107,
+    "avg_hold_bars": 7.15,
+    "median_hold_bars": 4,
+    "time_in_market_share": 0.153,
+    "top5_share_of_gross_profit": 0.009,
+    "months": 8,
+    "months_positive_share": 0,
+    "milestone_hit_rate": 0.456,
+    "protected_run_rate": 0,
+    "profit_given_back_after_m1_usd": 2.13,
+    "exit_mix": {
+     "MILESTONE_BANK": 577,
+     "STRUCTURAL_STOP": 672,
+     "OPPOSITE_SIGNAL": 15
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 4.02,
+    "mae_mean_usd": 2.88,
+    "path": {
+     "final_balance": -503.77,
+     "min_balance": -514.55,
+     "max_drawdown_usd": 585.08,
+     "median_drawdown_usd": 320.28,
+     "max_loss_streak": 15,
+     "median_trades_to_recover_peak": 28,
+     "unrecovered_trades_at_end": 1205
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 1,
+     "share_touching_margin_21usd": 1
+    },
+    "by_model": {
+     "MC": {
+      "n": 182,
+      "exp_usd": -1.701
+     },
+     "PB": {
+      "n": 227,
+      "exp_usd": -0.113
+     },
+     "BO": {
+      "n": 700,
+      "exp_usd": -0.255
+     },
+     "SR": {
+      "n": 86,
+      "exp_usd": -0.446
+     },
+     "MR": {
+      "n": 69,
+      "exp_usd": -0.203
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 689,
+      "exp_usd": -0.276
+     },
+     "SELL": {
+      "n": 575,
+      "exp_usd": -0.654
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 427,
+      "exp_usd": -0.421
+     },
+     "LONDON": {
+      "n": 325,
+      "exp_usd": -0.821
+     },
+     "NEW_YORK": {
+      "n": 450,
+      "exp_usd": -0.137
+     },
+     "OTHER": {
+      "n": 62,
+      "exp_usd": -0.925
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 74,
+      "exp_usd": -0.025,
+      "avg_loss": 1.49
+     },
+     "3-5%": {
+      "n": 244,
+      "exp_usd": -0.113,
+      "avg_loss": 2.44
+     },
+     "5-8%": {
+      "n": 319,
+      "exp_usd": -0.44,
+      "avg_loss": 3.79
+     },
+     ">8%": {
+      "n": 627,
+      "exp_usd": -0.632,
+      "avg_loss": 8.22
+     }
+    }
+   },
+   "HOLD": {
+    "trades": 1870,
+    "win_rate": 0.566,
+    "avg_win_usd": 4.89,
+    "avg_loss_usd": 6.78,
+    "win_loss_ratio": 0.72,
+    "wins_erased_by_one_loss": 1.39,
+    "expectancy_usd": -0.17,
+    "expectancy_r": -0.038,
+    "pf": 0.94,
+    "ci95_usd": [
+     -0.473,
+     0.125
+    ],
+    "gross_profit_usd": 5178.77,
+    "gross_loss_usd": 5496.12,
+    "costs_usd": 644.2,
+    "net_usd": -317.36,
+    "cost_pct_of_gross_harvest": 0.111,
+    "net_per_active_day_usd": -1.541,
+    "active_days": 206,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 6,
+     "median": 9,
+     "p75": 11,
+     "p90": 13,
+     "mean": 8.06
+    },
+    "zero_trade_session_rate": 0.112,
+    "avg_hold_bars": 4.02,
+    "median_hold_bars": 2,
+    "time_in_market_share": 0.112,
+    "top5_share_of_gross_profit": 0.005,
+    "months": 9,
+    "months_positive_share": 0.222,
+    "milestone_hit_rate": 0.566,
+    "protected_run_rate": 0,
+    "profit_given_back_after_m1_usd": 4.04,
+    "exit_mix": {
+     "MILESTONE_BANK": 1058,
+     "STRUCTURAL_STOP": 793,
+     "OPPOSITE_SIGNAL": 19
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 5.69,
+    "mae_mean_usd": 3.85,
+    "path": {
+     "final_balance": -255.28,
+     "min_balance": -268.03,
+     "max_drawdown_usd": 401.13,
+     "median_drawdown_usd": 193.94,
+     "max_loss_streak": 9,
+     "median_trades_to_recover_peak": 2,
+     "unrecovered_trades_at_end": 1654
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 1,
+     "share_touching_margin_21usd": 1
+    },
+    "by_model": {
+     "MC": {
+      "n": 229,
+      "exp_usd": -1.131
+     },
+     "PB": {
+      "n": 345,
+      "exp_usd": -0.017
+     },
+     "BO": {
+      "n": 1049,
+      "exp_usd": -0.06
+     },
+     "SR": {
+      "n": 158,
+      "exp_usd": -0.338
+     },
+     "MR": {
+      "n": 89,
+      "exp_usd": 0.713
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 838,
+      "exp_usd": -0.507
+     },
+     "SELL": {
+      "n": 1032,
+      "exp_usd": 0.104
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 672,
+      "exp_usd": -0.195
+     },
+     "LONDON": {
+      "n": 402,
+      "exp_usd": -0.172
+     },
+     "NEW_YORK": {
+      "n": 671,
+      "exp_usd": -0.249
+     },
+     "OTHER": {
+      "n": 125,
+      "exp_usd": 0.396
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 12,
+      "exp_usd": -0.002,
+      "avg_loss": 1.64
+     },
+     "3-5%": {
+      "n": 204,
+      "exp_usd": -0.013,
+      "avg_loss": 2.4
+     },
+     "5-8%": {
+      "n": 375,
+      "exp_usd": -0.298,
+      "avg_loss": 3.82
+     },
+     ">8%": {
+      "n": 1279,
+      "exp_usd": -0.159,
+      "avg_loss": 9.73
+     }
+    }
+   },
+   "HOLD_stress": {
+    "expectancy_usd": -0.641,
+    "pf": 0.8,
+    "net_usd": -1193.29
+   },
+   "HOLD_drift": {
+    "expectancy_usd": -0.49,
+    "pf": 0.85,
+    "net_usd": -898.21
+   },
+   "decision": {
+    "status": "REJECTED",
+    "reject_reasons": [
+     "expectancy<=0",
+     "PF<1",
+     "maxDD>31USD",
+     "margin-floor risk>5%"
+    ],
+    "vs_h0": {
+     "exp_usd": -0.17,
+     "h0_exp_usd": 0.156,
+     "net_per_day": -1.541,
+     "h0_net_per_day": 1.315,
+     "trades": 1870,
+     "h0_trades": 1714,
+     "dd": 401.13,
+     "h0_dd": 498.48
+    }
+   }
+  },
+  "H1_0.5R": {
+   "variant": {
+    "kind": "FIXED",
+    "m1": {
+     "r": 0.5
+    }
+   },
+   "skipped_reentries": {
+    "SAME_OR_EARLIER_CANDLE": 3796,
+    "STALE_SAME_SETUP": 2574,
+    "REVENGE_GUARD": 101
+   },
+   "ALL": {
+    "trades": 3146,
+    "win_rate": 0.621,
+    "avg_win_usd": 3.99,
+    "avg_loss_usd": 7.5,
+    "win_loss_ratio": 0.53,
+    "wins_erased_by_one_loss": 1.88,
+    "expectancy_usd": -0.361,
+    "expectancy_r": -0.098,
+    "pf": 0.87,
+    "ci95_usd": [
+     -0.646,
+     -0.075
+    ],
+    "gross_profit_usd": 7800.71,
+    "gross_loss_usd": 8937.27,
+    "costs_usd": 1080.28,
+    "net_usd": -1136.57,
+    "cost_pct_of_gross_harvest": 0.122,
+    "net_per_active_day_usd": -2.907,
+    "active_days": 391,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 4,
+     "median": 8,
+     "p75": 10,
+     "p90": 12,
+     "mean": 7.2
+    },
+    "zero_trade_session_rate": 0.105,
+    "avg_hold_bars": 4.71,
+    "median_hold_bars": 2,
+    "time_in_market_share": 0.118,
+    "top5_share_of_gross_profit": 0.036,
+    "months": 17,
+    "months_positive_share": 0.176,
+    "milestone_hit_rate": 0.621,
+    "protected_run_rate": 0,
+    "profit_given_back_after_m1_usd": 2.8,
+    "exit_mix": {
+     "MILESTONE_BANK": 1953,
+     "STRUCTURAL_STOP": 1164,
+     "OPPOSITE_SIGNAL": 29
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 4.72,
+    "mae_mean_usd": 3.64,
+    "path": {
+     "final_balance": -1074.5,
+     "min_balance": -1100.67,
+     "max_drawdown_usd": 1184.66,
+     "median_drawdown_usd": 599.75,
+     "max_loss_streak": 9,
+     "median_trades_to_recover_peak": 22,
+     "unrecovered_trades_at_end": 3088
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 1,
+     "share_touching_margin_21usd": 1
+    },
+    "by_model": {
+     "MC": {
+      "n": 428,
+      "exp_usd": -0.408
+     },
+     "PB": {
+      "n": 567,
+      "exp_usd": -0.082
+     },
+     "BO": {
+      "n": 1736,
+      "exp_usd": -0.5
+     },
+     "SR": {
+      "n": 252,
+      "exp_usd": -0.531
+     },
+     "MR": {
+      "n": 163,
+      "exp_usd": 0.527
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 1561,
+      "exp_usd": -0.463
+     },
+     "SELL": {
+      "n": 1585,
+      "exp_usd": -0.261
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 1100,
+      "exp_usd": -0.294
+     },
+     "LONDON": {
+      "n": 735,
+      "exp_usd": -0.531
+     },
+     "NEW_YORK": {
+      "n": 1120,
+      "exp_usd": -0.214
+     },
+     "OTHER": {
+      "n": 191,
+      "exp_usd": -0.962
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 92,
+      "exp_usd": -0.369,
+      "avg_loss": 1.48
+     },
+     "3-5%": {
+      "n": 466,
+      "exp_usd": -0.521,
+      "avg_loss": 2.42
+     },
+     "5-8%": {
+      "n": 713,
+      "exp_usd": -0.512,
+      "avg_loss": 3.83
+     },
+     ">8%": {
+      "n": 1875,
+      "exp_usd": -0.264,
+      "avg_loss": 11.1
+     }
+    }
+   },
+   "DEV": {
+    "trades": 1328,
+    "win_rate": 0.614,
+    "avg_win_usd": 2.87,
+    "avg_loss_usd": 5.7,
+    "win_loss_ratio": 0.5,
+    "wins_erased_by_one_loss": 1.99,
+    "expectancy_usd": -0.441,
+    "expectancy_r": -0.119,
+    "pf": 0.8,
+    "ci95_usd": [
+     -0.733,
+     -0.153
+    ],
+    "gross_profit_usd": 2340.11,
+    "gross_loss_usd": 2925.89,
+    "costs_usd": 455.44,
+    "net_usd": -585.78,
+    "cost_pct_of_gross_harvest": 0.163,
+    "net_per_active_day_usd": -3.166,
+    "active_days": 185,
+    "trades_per_session": {
+     "p10": 1,
+     "p25": 3,
+     "median": 7,
+     "p75": 9,
+     "p90": 11,
+     "mean": 6.48
+    },
+    "zero_trade_session_rate": 0.098,
+    "avg_hold_bars": 5.23,
+    "median_hold_bars": 2,
+    "time_in_market_share": 0.118,
+    "top5_share_of_gross_profit": 0.03,
+    "months": 8,
+    "months_positive_share": 0.125,
+    "milestone_hit_rate": 0.613,
+    "protected_run_rate": 0,
+    "profit_given_back_after_m1_usd": 2.02,
+    "exit_mix": {
+     "MILESTONE_BANK": 814,
+     "STRUCTURAL_STOP": 506,
+     "OPPOSITE_SIGNAL": 8
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 3.35,
+    "mae_mean_usd": 2.71,
+    "path": {
+     "final_balance": -523.71,
+     "min_balance": -538.04,
+     "max_drawdown_usd": 622.02,
+     "median_drawdown_usd": 264.73,
+     "max_loss_streak": 8,
+     "median_trades_to_recover_peak": 22,
+     "unrecovered_trades_at_end": 1270
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 1,
+     "share_touching_margin_21usd": 1
+    },
+    "by_model": {
+     "MC": {
+      "n": 200,
+      "exp_usd": -0.664
+     },
+     "PB": {
+      "n": 241,
+      "exp_usd": -0.278
+     },
+     "BO": {
+      "n": 728,
+      "exp_usd": -0.523
+     },
+     "SR": {
+      "n": 88,
+      "exp_usd": -0.32
+     },
+     "MR": {
+      "n": 71,
+      "exp_usd": 0.326
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 738,
+      "exp_usd": -0.326
+     },
+     "SELL": {
+      "n": 590,
+      "exp_usd": -0.585
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 449,
+      "exp_usd": -0.57
+     },
+     "LONDON": {
+      "n": 339,
+      "exp_usd": -0.592
+     },
+     "NEW_YORK": {
+      "n": 476,
+      "exp_usd": -0.193
+     },
+     "OTHER": {
+      "n": 64,
+      "exp_usd": -0.584
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 81,
+      "exp_usd": -0.278,
+      "avg_loss": 1.44
+     },
+     "3-5%": {
+      "n": 260,
+      "exp_usd": -0.539,
+      "avg_loss": 2.44
+     },
+     "5-8%": {
+      "n": 339,
+      "exp_usd": -0.522,
+      "avg_loss": 3.85
+     },
+     ">8%": {
+      "n": 648,
+      "exp_usd": -0.38,
+      "avg_loss": 9.15
+     }
+    }
+   },
+   "HOLD": {
+    "trades": 1818,
+    "win_rate": 0.627,
+    "avg_win_usd": 4.79,
+    "avg_loss_usd": 8.85,
+    "win_loss_ratio": 0.54,
+    "wins_erased_by_one_loss": 1.85,
+    "expectancy_usd": -0.303,
+    "expectancy_r": -0.082,
+    "pf": 0.91,
+    "ci95_usd": [
+     -0.709,
+     0.141
+    ],
+    "gross_profit_usd": 5460.6,
+    "gross_loss_usd": 6011.38,
+    "costs_usd": 624.84,
+    "net_usd": -550.79,
+    "cost_pct_of_gross_harvest": 0.103,
+    "net_per_active_day_usd": -2.674,
+    "active_days": 206,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 5,
+     "median": 8,
+     "p75": 11,
+     "p90": 13,
+     "mean": 7.84
+    },
+    "zero_trade_session_rate": 0.112,
+    "avg_hold_bars": 4.33,
+    "median_hold_bars": 2,
+    "time_in_market_share": 0.118,
+    "top5_share_of_gross_profit": 0.052,
+    "months": 9,
+    "months_positive_share": 0.222,
+    "milestone_hit_rate": 0.627,
+    "protected_run_rate": 0,
+    "profit_given_back_after_m1_usd": 3.36,
+    "exit_mix": {
+     "MILESTONE_BANK": 1139,
+     "STRUCTURAL_STOP": 658,
+     "OPPOSITE_SIGNAL": 21
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 5.72,
+    "mae_mean_usd": 4.33,
+    "path": {
+     "final_balance": -488.72,
+     "min_balance": -514.89,
+     "max_drawdown_usd": 762.47,
+     "median_drawdown_usd": 402.94,
+     "max_loss_streak": 9,
+     "median_trades_to_recover_peak": 4.5,
+     "unrecovered_trades_at_end": 1586
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 1,
+     "share_touching_margin_21usd": 1
+    },
+    "by_model": {
+     "MC": {
+      "n": 228,
+      "exp_usd": -0.183
+     },
+     "PB": {
+      "n": 326,
+      "exp_usd": 0.064
+     },
+     "BO": {
+      "n": 1008,
+      "exp_usd": -0.483
+     },
+     "SR": {
+      "n": 164,
+      "exp_usd": -0.645
+     },
+     "MR": {
+      "n": 92,
+      "exp_usd": 0.683
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 823,
+      "exp_usd": -0.587
+     },
+     "SELL": {
+      "n": 995,
+      "exp_usd": -0.068
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 651,
+      "exp_usd": -0.103
+     },
+     "LONDON": {
+      "n": 396,
+      "exp_usd": -0.478
+     },
+     "NEW_YORK": {
+      "n": 644,
+      "exp_usd": -0.23
+     },
+     "OTHER": {
+      "n": 127,
+      "exp_usd": -1.153
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 11,
+      "exp_usd": -1.038,
+      "avg_loss": 1.64
+     },
+     "3-5%": {
+      "n": 206,
+      "exp_usd": -0.499,
+      "avg_loss": 2.41
+     },
+     "5-8%": {
+      "n": 374,
+      "exp_usd": -0.504,
+      "avg_loss": 3.81
+     },
+     ">8%": {
+      "n": 1227,
+      "exp_usd": -0.202,
+      "avg_loss": 12.13
+     }
+    }
+   },
+   "HOLD_stress": {
+    "expectancy_usd": -0.78,
+    "pf": 0.79,
+    "net_usd": -1407.97
+   },
+   "HOLD_drift": {
+    "expectancy_usd": -0.58,
+    "pf": 0.83,
+    "net_usd": -1040.57
+   },
+   "decision": {
+    "status": "REJECTED",
+    "reject_reasons": [
+     "expectancy<=0",
+     "PF<1",
+     "maxDD>31USD",
+     "margin-floor risk>5%"
+    ],
+    "vs_h0": {
+     "exp_usd": -0.303,
+     "h0_exp_usd": 0.156,
+     "net_per_day": -2.674,
+     "h0_net_per_day": 1.315,
+     "trades": 1818,
+     "h0_trades": 1714,
+     "dd": 762.47,
+     "h0_dd": 498.48
+    }
+   }
+  },
+  "H1_1.0R": {
+   "variant": {
+    "kind": "FIXED",
+    "m1": {
+     "r": 1
+    }
+   },
+   "skipped_reentries": {
+    "SAME_OR_EARLIER_CANDLE": 5032,
+    "STALE_SAME_SETUP": 1705,
+    "REVENGE_GUARD": 107
+   },
+   "ALL": {
+    "trades": 2773,
+    "win_rate": 0.486,
+    "avg_win_usd": 7.81,
+    "avg_loss_usd": 7.83,
+    "win_loss_ratio": 1,
+    "wins_erased_by_one_loss": 1,
+    "expectancy_usd": -0.223,
+    "expectancy_r": -0.059,
+    "pf": 0.94,
+    "ci95_usd": [
+     -0.652,
+     0.202
+    ],
+    "gross_profit_usd": 10533.54,
+    "gross_loss_usd": 11152.49,
+    "costs_usd": 967.46,
+    "net_usd": -618.95,
+    "cost_pct_of_gross_harvest": 0.084,
+    "net_per_active_day_usd": -1.591,
+    "active_days": 389,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 4,
+     "median": 7,
+     "p75": 9,
+     "p90": 11,
+     "mean": 6.35
+    },
+    "zero_trade_session_rate": 0.11,
+    "avg_hold_bars": 8.32,
+    "median_hold_bars": 3,
+    "time_in_market_share": 0.183,
+    "top5_share_of_gross_profit": 0.046,
+    "months": 17,
+    "months_positive_share": 0.294,
+    "milestone_hit_rate": 0.484,
+    "protected_run_rate": 0,
+    "profit_given_back_after_m1_usd": 2.88,
+    "exit_mix": {
+     "MILESTONE_BANK": 1342,
+     "STRUCTURAL_STOP": 1383,
+     "OPPOSITE_SIGNAL": 48
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 6.58,
+    "mae_mean_usd": 4.3,
+    "path": {
+     "final_balance": -556.88,
+     "min_balance": -749.08,
+     "max_drawdown_usd": 897.45,
+     "median_drawdown_usd": 411.72,
+     "max_loss_streak": 10,
+     "median_trades_to_recover_peak": 5.5,
+     "unrecovered_trades_at_end": 2717
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 1,
+     "share_touching_margin_21usd": 1
+    },
+    "by_model": {
+     "MC": {
+      "n": 356,
+      "exp_usd": -0.683
+     },
+     "PB": {
+      "n": 478,
+      "exp_usd": 0.249
+     },
+     "BO": {
+      "n": 1567,
+      "exp_usd": -0.312
+     },
+     "SR": {
+      "n": 218,
+      "exp_usd": -0.433
+     },
+     "MR": {
+      "n": 154,
+      "exp_usd": 0.57
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 1369,
+      "exp_usd": -0.278
+     },
+     "SELL": {
+      "n": 1404,
+      "exp_usd": -0.17
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 974,
+      "exp_usd": -0.001
+     },
+     "LONDON": {
+      "n": 664,
+      "exp_usd": -0.303
+     },
+     "NEW_YORK": {
+      "n": 964,
+      "exp_usd": -0.239
+     },
+     "OTHER": {
+      "n": 171,
+      "exp_usd": -1.088
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 81,
+      "exp_usd": -0.277,
+      "avg_loss": 1.48
+     },
+     "3-5%": {
+      "n": 423,
+      "exp_usd": -0.331,
+      "avg_loss": 2.43
+     },
+     "5-8%": {
+      "n": 631,
+      "exp_usd": -0.269,
+      "avg_loss": 3.85
+     },
+     ">8%": {
+      "n": 1638,
+      "exp_usd": -0.175,
+      "avg_loss": 11.22
+     }
+    }
+   },
+   "DEV": {
+    "trades": 1168,
+    "win_rate": 0.481,
+    "avg_win_usd": 5.78,
+    "avg_loss_usd": 5.78,
+    "win_loss_ratio": 1,
+    "wins_erased_by_one_loss": 1,
+    "expectancy_usd": -0.218,
+    "expectancy_r": -0.082,
+    "pf": 0.93,
+    "ci95_usd": [
+     -0.635,
+     0.193
+    ],
+    "gross_profit_usd": 3246.56,
+    "gross_loss_usd": 3501.44,
+    "costs_usd": 410,
+    "net_usd": -254.89,
+    "cost_pct_of_gross_harvest": 0.112,
+    "net_per_active_day_usd": -1.385,
+    "active_days": 184,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 3,
+     "median": 6,
+     "p75": 8,
+     "p90": 10,
+     "mean": 5.7
+    },
+    "zero_trade_session_rate": 0.102,
+    "avg_hold_bars": 8.88,
+    "median_hold_bars": 3,
+    "time_in_market_share": 0.176,
+    "top5_share_of_gross_profit": 0.039,
+    "months": 8,
+    "months_positive_share": 0.125,
+    "milestone_hit_rate": 0.477,
+    "protected_run_rate": 0,
+    "profit_given_back_after_m1_usd": 2.14,
+    "exit_mix": {
+     "MILESTONE_BANK": 557,
+     "STRUCTURAL_STOP": 593,
+     "OPPOSITE_SIGNAL": 18
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 4.81,
+    "mae_mean_usd": 3.17,
+    "path": {
+     "final_balance": -192.82,
+     "min_balance": -237.79,
+     "max_drawdown_usd": 386.16,
+     "median_drawdown_usd": 212.94,
+     "max_loss_streak": 8,
+     "median_trades_to_recover_peak": 5.5,
+     "unrecovered_trades_at_end": 1112
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 1,
+     "share_touching_margin_21usd": 1
+    },
+    "by_model": {
+     "MC": {
+      "n": 165,
+      "exp_usd": -1.532
+     },
+     "PB": {
+      "n": 212,
+      "exp_usd": 0.278
+     },
+     "BO": {
+      "n": 644,
+      "exp_usd": 0.004
+     },
+     "SR": {
+      "n": 79,
+      "exp_usd": -0.636
+     },
+     "MR": {
+      "n": 68,
+      "exp_usd": -0.198
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 640,
+      "exp_usd": -0.108
+     },
+     "SELL": {
+      "n": 528,
+      "exp_usd": -0.352
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 401,
+      "exp_usd": -0.184
+     },
+     "LONDON": {
+      "n": 299,
+      "exp_usd": -0.575
+     },
+     "NEW_YORK": {
+      "n": 409,
+      "exp_usd": -0.028
+     },
+     "OTHER": {
+      "n": 59,
+      "exp_usd": 0.04
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 70,
+      "exp_usd": -0.215,
+      "avg_loss": 1.44
+     },
+     "3-5%": {
+      "n": 239,
+      "exp_usd": -0.453,
+      "avg_loss": 2.44
+     },
+     "5-8%": {
+      "n": 293,
+      "exp_usd": -0.214,
+      "avg_loss": 3.87
+     },
+     ">8%": {
+      "n": 566,
+      "exp_usd": -0.122,
+      "avg_loss": 8.9
+     }
+    }
+   },
+   "HOLD": {
+    "trades": 1605,
+    "win_rate": 0.49,
+    "avg_win_usd": 9.26,
+    "avg_loss_usd": 9.35,
+    "win_loss_ratio": 0.99,
+    "wins_erased_by_one_loss": 1.01,
+    "expectancy_usd": -0.227,
+    "expectancy_r": -0.043,
+    "pf": 0.95,
+    "ci95_usd": [
+     -0.866,
+     0.437
+    ],
+    "gross_profit_usd": 7286.99,
+    "gross_loss_usd": 7651.05,
+    "costs_usd": 557.46,
+    "net_usd": -364.06,
+    "cost_pct_of_gross_harvest": 0.071,
+    "net_per_active_day_usd": -1.776,
+    "active_days": 205,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 5,
+     "median": 7,
+     "p75": 10,
+     "p90": 11,
+     "mean": 6.92
+    },
+    "zero_trade_session_rate": 0.116,
+    "avg_hold_bars": 7.91,
+    "median_hold_bars": 3,
+    "time_in_market_share": 0.19,
+    "top5_share_of_gross_profit": 0.066,
+    "months": 9,
+    "months_positive_share": 0.444,
+    "milestone_hit_rate": 0.489,
+    "protected_run_rate": 0,
+    "profit_given_back_after_m1_usd": 3.4,
+    "exit_mix": {
+     "MILESTONE_BANK": 785,
+     "STRUCTURAL_STOP": 790,
+     "OPPOSITE_SIGNAL": 30
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 7.86,
+    "mae_mean_usd": 5.12,
+    "path": {
+     "final_balance": -301.99,
+     "min_balance": -494.19,
+     "max_drawdown_usd": 862.95,
+     "median_drawdown_usd": 640.65,
+     "max_loss_streak": 10,
+     "median_trades_to_recover_peak": 1,
+     "unrecovered_trades_at_end": 1433
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 1,
+     "share_touching_margin_21usd": 1
+    },
+    "by_model": {
+     "MC": {
+      "n": 191,
+      "exp_usd": 0.051
+     },
+     "PB": {
+      "n": 266,
+      "exp_usd": 0.226
+     },
+     "BO": {
+      "n": 923,
+      "exp_usd": -0.532
+     },
+     "SR": {
+      "n": 139,
+      "exp_usd": -0.317
+     },
+     "MR": {
+      "n": 86,
+      "exp_usd": 1.178
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 729,
+      "exp_usd": -0.427
+     },
+     "SELL": {
+      "n": 876,
+      "exp_usd": -0.06
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 573,
+      "exp_usd": 0.127
+     },
+     "LONDON": {
+      "n": 365,
+      "exp_usd": -0.081
+     },
+     "NEW_YORK": {
+      "n": 555,
+      "exp_usd": -0.395
+     },
+     "OTHER": {
+      "n": 112,
+      "exp_usd": -1.683
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 11,
+      "exp_usd": -0.672,
+      "avg_loss": 1.64
+     },
+     "3-5%": {
+      "n": 184,
+      "exp_usd": -0.173,
+      "avg_loss": 2.41
+     },
+     "5-8%": {
+      "n": 338,
+      "exp_usd": -0.316,
+      "avg_loss": 3.84
+     },
+     ">8%": {
+      "n": 1072,
+      "exp_usd": -0.203,
+      "avg_loss": 12.45
+     }
+    }
+   },
+   "HOLD_stress": {
+    "expectancy_usd": -0.662,
+    "pf": 0.87,
+    "net_usd": -1058.02
+   },
+   "HOLD_drift": {
+    "expectancy_usd": -0.391,
+    "pf": 0.92,
+    "net_usd": -625.86
+   },
+   "decision": {
+    "status": "REJECTED",
+    "reject_reasons": [
+     "expectancy<=0",
+     "PF<1",
+     "maxDD>31USD",
+     "margin-floor risk>5%"
+    ],
+    "vs_h0": {
+     "exp_usd": -0.227,
+     "h0_exp_usd": 0.156,
+     "net_per_day": -1.776,
+     "h0_net_per_day": 1.315,
+     "trades": 1605,
+     "h0_trades": 1714,
+     "dd": 862.95,
+     "h0_dd": 498.48
+    }
+   }
+  },
+  "H2a_bankrun_$3": {
+   "variant": {
+    "kind": "RUN",
+    "m1": {
+     "usd": 3
+    },
+    "buffer": {
+     "usd": 1
+    },
+    "bankRun": true
+   },
+   "skipped_reentries": {
+    "SAME_OR_EARLIER_CANDLE": 4017,
+    "STALE_SAME_SETUP": 2267,
+    "REVENGE_GUARD": 107
+   },
+   "ALL": {
+    "trades": 3226,
+    "win_rate": 0.612,
+    "avg_win_usd": 4.19,
+    "avg_loss_usd": 5.57,
+    "win_loss_ratio": 0.75,
+    "wins_erased_by_one_loss": 1.33,
+    "expectancy_usd": 0.401,
+    "expectancy_r": 0.021,
+    "pf": 1.19,
+    "ci95_usd": [
+     0.191,
+     0.614
+    ],
+    "gross_profit_usd": 8271.65,
+    "gross_loss_usd": 6979.18,
+    "costs_usd": 1109.16,
+    "net_usd": 1292.48,
+    "cost_pct_of_gross_harvest": 0.118,
+    "net_per_active_day_usd": 3.306,
+    "active_days": 391,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 4,
+     "median": 8,
+     "p75": 11,
+     "p90": 13,
+     "mean": 7.38
+    },
+    "zero_trade_session_rate": 0.105,
+    "avg_hold_bars": 4.18,
+    "median_hold_bars": 2,
+    "time_in_market_share": 0.107,
+    "top5_share_of_gross_profit": 0.029,
+    "months": 17,
+    "months_positive_share": 0.588,
+    "milestone_hit_rate": 0.619,
+    "protected_run_rate": 0.475,
+    "profit_given_back_after_m1_usd": 2.25,
+    "exit_mix": {
+     "MILESTONE_BANK": 463,
+     "PROTECTED_BANK": 606,
+     "RATCHET_BANK": 880,
+     "STRUCTURAL_STOP": 1205,
+     "PROTECTED_BANK_AT_CLOSE": 43,
+     "OPPOSITE_SIGNAL": 29
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 4.27,
+    "mae_mean_usd": 3.02,
+    "path": {
+     "final_balance": 1354.55,
+     "min_balance": -143.62,
+     "max_drawdown_usd": 243.05,
+     "median_drawdown_usd": 43.77,
+     "max_loss_streak": 9,
+     "median_trades_to_recover_peak": 5,
+     "unrecovered_trades_at_end": 80
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 0.69,
+     "share_touching_margin_21usd": 0.606
+    },
+    "by_model": {
+     "MC": {
+      "n": 401,
+      "exp_usd": 0.126
+     },
+     "PB": {
+      "n": 594,
+      "exp_usd": 0.298
+     },
+     "BO": {
+      "n": 1803,
+      "exp_usd": 0.478
+     },
+     "SR": {
+      "n": 264,
+      "exp_usd": 0.031
+     },
+     "MR": {
+      "n": 164,
+      "exp_usd": 1.187
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 1575,
+      "exp_usd": 0.196
+     },
+     "SELL": {
+      "n": 1651,
+      "exp_usd": 0.596
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 1127,
+      "exp_usd": 0.44
+     },
+     "LONDON": {
+      "n": 754,
+      "exp_usd": 0.073
+     },
+     "NEW_YORK": {
+      "n": 1153,
+      "exp_usd": 0.517
+     },
+     "OTHER": {
+      "n": 192,
+      "exp_usd": 0.755
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 89,
+      "exp_usd": -0.294,
+      "avg_loss": 1.5
+     },
+     "3-5%": {
+      "n": 469,
+      "exp_usd": 0.099,
+      "avg_loss": 2.4
+     },
+     "5-8%": {
+      "n": 733,
+      "exp_usd": -0.1,
+      "avg_loss": 3.81
+     },
+     ">8%": {
+      "n": 1935,
+      "exp_usd": 0.695,
+      "avg_loss": 8.81
+     }
+    }
+   },
+   "DEV": {
+    "trades": 1325,
+    "win_rate": 0.561,
+    "avg_win_usd": 3.72,
+    "avg_loss_usd": 4.66,
+    "win_loss_ratio": 0.8,
+    "wins_erased_by_one_loss": 1.25,
+    "expectancy_usd": 0.036,
+    "expectancy_r": -0.005,
+    "pf": 1.02,
+    "ci95_usd": [
+     -0.252,
+     0.305
+    ],
+    "gross_profit_usd": 2762.16,
+    "gross_loss_usd": 2713.96,
+    "costs_usd": 457.22,
+    "net_usd": 48.2,
+    "cost_pct_of_gross_harvest": 0.142,
+    "net_per_active_day_usd": 0.261,
+    "active_days": 185,
+    "trades_per_session": {
+     "p10": 1,
+     "p25": 3,
+     "median": 7,
+     "p75": 9,
+     "p90": 11,
+     "mean": 6.46
+    },
+    "zero_trade_session_rate": 0.098,
+    "avg_hold_bars": 5.48,
+    "median_hold_bars": 3,
+    "time_in_market_share": 0.123,
+    "top5_share_of_gross_profit": 0.038,
+    "months": 8,
+    "months_positive_share": 0.25,
+    "milestone_hit_rate": 0.565,
+    "protected_run_rate": 0.46,
+    "profit_given_back_after_m1_usd": 1.74,
+    "exit_mix": {
+     "MILESTONE_BANK": 140,
+     "PROTECTED_BANK": 282,
+     "RATCHET_BANK": 309,
+     "STRUCTURAL_STOP": 566,
+     "PROTECTED_BANK_AT_CLOSE": 14,
+     "OPPOSITE_SIGNAL": 14
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 3.44,
+    "mae_mean_usd": 2.49,
+    "path": {
+     "final_balance": 110.27,
+     "min_balance": -143.62,
+     "max_drawdown_usd": 243.05,
+     "median_drawdown_usd": 81.1,
+     "max_loss_streak": 9,
+     "median_trades_to_recover_peak": 6,
+     "unrecovered_trades_at_end": 396
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 0.916,
+     "share_touching_margin_21usd": 0.87
+    },
+    "by_model": {
+     "MC": {
+      "n": 179,
+      "exp_usd": -0.362
+     },
+     "PB": {
+      "n": 241,
+      "exp_usd": 0.091
+     },
+     "BO": {
+      "n": 743,
+      "exp_usd": 0.091
+     },
+     "SR": {
+      "n": 91,
+      "exp_usd": -0.079
+     },
+     "MR": {
+      "n": 71,
+      "exp_usd": 0.434
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 725,
+      "exp_usd": 0.212
+     },
+     "SELL": {
+      "n": 600,
+      "exp_usd": -0.176
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 447,
+      "exp_usd": -0.083
+     },
+     "LONDON": {
+      "n": 343,
+      "exp_usd": -0.076
+     },
+     "NEW_YORK": {
+      "n": 471,
+      "exp_usd": 0.294
+     },
+     "OTHER": {
+      "n": 64,
+      "exp_usd": -0.422
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 77,
+      "exp_usd": -0.311,
+      "avg_loss": 1.48
+     },
+     "3-5%": {
+      "n": 256,
+      "exp_usd": 0.122,
+      "avg_loss": 2.41
+     },
+     "5-8%": {
+      "n": 345,
+      "exp_usd": -0.158,
+      "avg_loss": 3.82
+     },
+     ">8%": {
+      "n": 647,
+      "exp_usd": 0.148,
+      "avg_loss": 7.96
+     }
+    }
+   },
+   "HOLD": {
+    "trades": 1901,
+    "win_rate": 0.648,
+    "avg_win_usd": 4.48,
+    "avg_loss_usd": 6.37,
+    "win_loss_ratio": 0.7,
+    "wins_erased_by_one_loss": 1.42,
+    "expectancy_usd": 0.655,
+    "expectancy_r": 0.039,
+    "pf": 1.29,
+    "ci95_usd": [
+     0.327,
+     0.956
+    ],
+    "gross_profit_usd": 5509.49,
+    "gross_loss_usd": 4265.21,
+    "costs_usd": 651.94,
+    "net_usd": 1244.28,
+    "cost_pct_of_gross_harvest": 0.106,
+    "net_per_active_day_usd": 6.04,
+    "active_days": 206,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 6,
+     "median": 9,
+     "p75": 12,
+     "p90": 13,
+     "mean": 8.19
+    },
+    "zero_trade_session_rate": 0.112,
+    "avg_hold_bars": 3.28,
+    "median_hold_bars": 2,
+    "time_in_market_share": 0.093,
+    "top5_share_of_gross_profit": 0.044,
+    "months": 9,
+    "months_positive_share": 0.889,
+    "milestone_hit_rate": 0.656,
+    "protected_run_rate": 0.486,
+    "profit_given_back_after_m1_usd": 2.56,
+    "exit_mix": {
+     "PROTECTED_BANK": 324,
+     "RATCHET_BANK": 571,
+     "STRUCTURAL_STOP": 639,
+     "MILESTONE_BANK": 323,
+     "PROTECTED_BANK_AT_CLOSE": 29,
+     "OPPOSITE_SIGNAL": 15
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 4.86,
+    "mae_mean_usd": 3.39,
+    "path": {
+     "final_balance": 1306.35,
+     "min_balance": 27.55,
+     "max_drawdown_usd": 129.77,
+     "median_drawdown_usd": 26.12,
+     "max_loss_streak": 6,
+     "median_trades_to_recover_peak": 5,
+     "unrecovered_trades_at_end": 80
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 0.426,
+     "share_touching_margin_21usd": 0.322
+    },
+    "by_model": {
+     "MC": {
+      "n": 222,
+      "exp_usd": 0.519
+     },
+     "PB": {
+      "n": 353,
+      "exp_usd": 0.439
+     },
+     "BO": {
+      "n": 1060,
+      "exp_usd": 0.75
+     },
+     "SR": {
+      "n": 173,
+      "exp_usd": 0.089
+     },
+     "MR": {
+      "n": 93,
+      "exp_usd": 1.762
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 850,
+      "exp_usd": 0.182
+     },
+     "SELL": {
+      "n": 1051,
+      "exp_usd": 1.036
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 680,
+      "exp_usd": 0.785
+     },
+     "LONDON": {
+      "n": 411,
+      "exp_usd": 0.198
+     },
+     "NEW_YORK": {
+      "n": 682,
+      "exp_usd": 0.671
+     },
+     "OTHER": {
+      "n": 128,
+      "exp_usd": 1.344
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 12,
+      "exp_usd": -0.185,
+      "avg_loss": 1.64
+     },
+     "3-5%": {
+      "n": 213,
+      "exp_usd": 0.073,
+      "avg_loss": 2.39
+     },
+     "5-8%": {
+      "n": 388,
+      "exp_usd": -0.048,
+      "avg_loss": 3.8
+     },
+     ">8%": {
+      "n": 1288,
+      "exp_usd": 0.97,
+      "avg_loss": 9.31
+     }
+    }
+   },
+   "HOLD_stress": {
+    "expectancy_usd": 0.115,
+    "pf": 1.04,
+    "net_usd": 215.75
+   },
+   "HOLD_drift": {
+    "expectancy_usd": 0.272,
+    "pf": 1.1,
+    "net_usd": 505.37
+   },
+   "bank_vs_run": {
+    "reached_m1": 1996,
+    "banked": 463,
+    "ran": 1533,
+    "banked_mean_usd": 2.9,
+    "ran_mean_usd": 4.499,
+    "counterfactual": {
+     "weak_evidence": {
+      "n": 463,
+      "bank_mean": 2.9,
+      "run_mean": -0.235
+     },
+     "strong_evidence": {
+      "n": 1533,
+      "bank_mean": 2.9,
+      "run_mean": 4.499
+     }
+    },
+    "run_floor_hit_within_3_bars_share": 0.999,
+    "run_exit_mix": {
+     "PROTECTED_BANK": 606,
+     "RATCHET_BANK": 880,
+     "PROTECTED_BANK_AT_CLOSE": 43,
+     "OPPOSITE_SIGNAL": 4
+    }
+   },
+   "decision": {
+    "status": "REJECTED",
+    "reject_reasons": [
+     "maxDD>31USD",
+     "margin-floor risk>5%"
+    ],
+    "vs_h0": {
+     "exp_usd": 0.655,
+     "h0_exp_usd": 0.156,
+     "net_per_day": 6.04,
+     "h0_net_per_day": 1.315,
+     "trades": 1901,
+     "h0_trades": 1714,
+     "dd": 129.77,
+     "h0_dd": 498.48
+    }
+   }
+  },
+  "H2b_alwaysrun_$3": {
+   "variant": {
+    "kind": "RUN",
+    "m1": {
+     "usd": 3
+    },
+    "buffer": {
+     "usd": 1
+    },
+    "bankRun": false
+   },
+   "skipped_reentries": {
+    "SAME_OR_EARLIER_CANDLE": 4078,
+    "STALE_SAME_SETUP": 2189,
+    "REVENGE_GUARD": 151
+   },
+   "ALL": {
+    "trades": 3199,
+    "win_rate": 0.55,
+    "avg_win_usd": 4.16,
+    "avg_loss_usd": 5.3,
+    "win_loss_ratio": 0.78,
+    "wins_erased_by_one_loss": 1.27,
+    "expectancy_usd": -0.099,
+    "expectancy_r": -0.035,
+    "pf": 0.96,
+    "ci95_usd": [
+     -0.324,
+     0.13
+    ],
+    "gross_profit_usd": 7314.91,
+    "gross_loss_usd": 7631.06,
+    "costs_usd": 1101.1,
+    "net_usd": -316.15,
+    "cost_pct_of_gross_harvest": 0.131,
+    "net_per_active_day_usd": -0.809,
+    "active_days": 391,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 4,
+     "median": 8,
+     "p75": 11,
+     "p90": 13,
+     "mean": 7.32
+    },
+    "zero_trade_session_rate": 0.105,
+    "avg_hold_bars": 4.26,
+    "median_hold_bars": 2,
+    "time_in_market_share": 0.108,
+    "top5_share_of_gross_profit": 0.033,
+    "months": 17,
+    "months_positive_share": 0.235,
+    "milestone_hit_rate": 0.617,
+    "protected_run_rate": 0.617,
+    "profit_given_back_after_m1_usd": 2.96,
+    "exit_mix": {
+     "RATCHET_BANK": 899,
+     "PROTECTED_BANK": 808,
+     "STRUCTURAL_STOP": 1200,
+     "PROTECTED_BANK_AT_CLOSE": 263,
+     "OPPOSITE_SIGNAL": 29
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 4.23,
+    "mae_mean_usd": 3.02,
+    "path": {
+     "final_balance": -254.08,
+     "min_balance": -280.58,
+     "max_drawdown_usd": 355.93,
+     "median_drawdown_usd": 169.95,
+     "max_loss_streak": 11,
+     "median_trades_to_recover_peak": 55,
+     "unrecovered_trades_at_end": 3139
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 1,
+     "share_touching_margin_21usd": 1
+    },
+    "by_model": {
+     "MC": {
+      "n": 391,
+      "exp_usd": -0.911
+     },
+     "PB": {
+      "n": 592,
+      "exp_usd": -0.12
+     },
+     "BO": {
+      "n": 1790,
+      "exp_usd": 0.032
+     },
+     "SR": {
+      "n": 262,
+      "exp_usd": -0.315
+     },
+     "MR": {
+      "n": 164,
+      "exp_usd": 0.831
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 1566,
+      "exp_usd": -0.191
+     },
+     "SELL": {
+      "n": 1633,
+      "exp_usd": -0.011
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 1118,
+      "exp_usd": -0.172
+     },
+     "LONDON": {
+      "n": 747,
+      "exp_usd": -0.215
+     },
+     "NEW_YORK": {
+      "n": 1143,
+      "exp_usd": -0.038
+     },
+     "OTHER": {
+      "n": 191,
+      "exp_usd": 0.423
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 89,
+      "exp_usd": -0.325,
+      "avg_loss": 1.49
+     },
+     "3-5%": {
+      "n": 469,
+      "exp_usd": -0.044,
+      "avg_loss": 2.38
+     },
+     "5-8%": {
+      "n": 726,
+      "exp_usd": -0.315,
+      "avg_loss": 3.67
+     },
+     ">8%": {
+      "n": 1915,
+      "exp_usd": -0.02,
+      "avg_loss": 7.67
+     }
+    }
+   },
+   "DEV": {
+    "trades": 1321,
+    "win_rate": 0.534,
+    "avg_win_usd": 3.59,
+    "avg_loss_usd": 4.49,
+    "win_loss_ratio": 0.8,
+    "wins_erased_by_one_loss": 1.25,
+    "expectancy_usd": -0.171,
+    "expectancy_r": -0.048,
+    "pf": 0.92,
+    "ci95_usd": [
+     -0.463,
+     0.111
+    ],
+    "gross_profit_usd": 2537.01,
+    "gross_loss_usd": 2762.34,
+    "costs_usd": 456.42,
+    "net_usd": -225.33,
+    "cost_pct_of_gross_harvest": 0.152,
+    "net_per_active_day_usd": -1.218,
+    "active_days": 185,
+    "trades_per_session": {
+     "p10": 1,
+     "p25": 3,
+     "median": 7,
+     "p75": 9,
+     "p90": 11,
+     "mean": 6.44
+    },
+    "zero_trade_session_rate": 0.098,
+    "avg_hold_bars": 5.56,
+    "median_hold_bars": 3,
+    "time_in_market_share": 0.124,
+    "top5_share_of_gross_profit": 0.043,
+    "months": 8,
+    "months_positive_share": 0.125,
+    "milestone_hit_rate": 0.565,
+    "protected_run_rate": 0.565,
+    "profit_given_back_after_m1_usd": 2.12,
+    "exit_mix": {
+     "RATCHET_BANK": 317,
+     "PROTECTED_BANK": 366,
+     "STRUCTURAL_STOP": 565,
+     "PROTECTED_BANK_AT_CLOSE": 59,
+     "OPPOSITE_SIGNAL": 14
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 3.45,
+    "mae_mean_usd": 2.49,
+    "path": {
+     "final_balance": -163.26,
+     "min_balance": -273.47,
+     "max_drawdown_usd": 348.81,
+     "median_drawdown_usd": 177.05,
+     "max_loss_streak": 11,
+     "median_trades_to_recover_peak": 55,
+     "unrecovered_trades_at_end": 1261
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 1,
+     "share_touching_margin_21usd": 1
+    },
+    "by_model": {
+     "MC": {
+      "n": 178,
+      "exp_usd": -0.669
+     },
+     "PB": {
+      "n": 241,
+      "exp_usd": -0.216
+     },
+     "BO": {
+      "n": 740,
+      "exp_usd": -0.073
+     },
+     "SR": {
+      "n": 91,
+      "exp_usd": -0.223
+     },
+     "MR": {
+      "n": 71,
+      "exp_usd": 0.287
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 724,
+      "exp_usd": -0.003
+     },
+     "SELL": {
+      "n": 597,
+      "exp_usd": -0.374
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 447,
+      "exp_usd": -0.3
+     },
+     "LONDON": {
+      "n": 341,
+      "exp_usd": -0.182
+     },
+     "NEW_YORK": {
+      "n": 469,
+      "exp_usd": 0.006
+     },
+     "OTHER": {
+      "n": 64,
+      "exp_usd": -0.5
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 77,
+      "exp_usd": -0.347,
+      "avg_loss": 1.47
+     },
+     "3-5%": {
+      "n": 256,
+      "exp_usd": -0.023,
+      "avg_loss": 2.39
+     },
+     "5-8%": {
+      "n": 342,
+      "exp_usd": -0.349,
+      "avg_loss": 3.73
+     },
+     ">8%": {
+      "n": 646,
+      "exp_usd": -0.113,
+      "avg_loss": 7.27
+     }
+    }
+   },
+   "HOLD": {
+    "trades": 1878,
+    "win_rate": 0.561,
+    "avg_win_usd": 4.54,
+    "avg_loss_usd": 5.9,
+    "win_loss_ratio": 0.77,
+    "wins_erased_by_one_loss": 1.3,
+    "expectancy_usd": -0.048,
+    "expectancy_r": -0.026,
+    "pf": 0.98,
+    "ci95_usd": [
+     -0.381,
+     0.284
+    ],
+    "gross_profit_usd": 4777.9,
+    "gross_loss_usd": 4868.72,
+    "costs_usd": 644.68,
+    "net_usd": -90.81,
+    "cost_pct_of_gross_harvest": 0.119,
+    "net_per_active_day_usd": -0.441,
+    "active_days": 206,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 6,
+     "median": 9,
+     "p75": 11,
+     "p90": 13,
+     "mean": 8.09
+    },
+    "zero_trade_session_rate": 0.112,
+    "avg_hold_bars": 3.34,
+    "median_hold_bars": 2,
+    "time_in_market_share": 0.094,
+    "top5_share_of_gross_profit": 0.051,
+    "months": 9,
+    "months_positive_share": 0.333,
+    "milestone_hit_rate": 0.654,
+    "protected_run_rate": 0.654,
+    "profit_given_back_after_m1_usd": 3.47,
+    "exit_mix": {
+     "PROTECTED_BANK": 442,
+     "RATCHET_BANK": 582,
+     "STRUCTURAL_STOP": 635,
+     "PROTECTED_BANK_AT_CLOSE": 204,
+     "OPPOSITE_SIGNAL": 15
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 4.77,
+    "mae_mean_usd": 3.39,
+    "path": {
+     "final_balance": -28.74,
+     "min_balance": -55.25,
+     "max_drawdown_usd": 331.71,
+     "median_drawdown_usd": 106.17,
+     "max_loss_streak": 7,
+     "median_trades_to_recover_peak": 5,
+     "unrecovered_trades_at_end": 1444
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 1,
+     "share_touching_margin_21usd": 1
+    },
+    "by_model": {
+     "MC": {
+      "n": 213,
+      "exp_usd": -1.113
+     },
+     "PB": {
+      "n": 351,
+      "exp_usd": -0.054
+     },
+     "BO": {
+      "n": 1050,
+      "exp_usd": 0.106
+     },
+     "SR": {
+      "n": 171,
+      "exp_usd": -0.364
+     },
+     "MR": {
+      "n": 93,
+      "exp_usd": 1.245
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 842,
+      "exp_usd": -0.352
+     },
+     "SELL": {
+      "n": 1036,
+      "exp_usd": 0.198
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 671,
+      "exp_usd": -0.087
+     },
+     "LONDON": {
+      "n": 406,
+      "exp_usd": -0.243
+     },
+     "NEW_YORK": {
+      "n": 674,
+      "exp_usd": -0.069
+     },
+     "OTHER": {
+      "n": 127,
+      "exp_usd": 0.888
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 12,
+      "exp_usd": -0.185,
+      "avg_loss": 1.64
+     },
+     "3-5%": {
+      "n": 213,
+      "exp_usd": -0.069,
+      "avg_loss": 2.35
+     },
+     "5-8%": {
+      "n": 384,
+      "exp_usd": -0.284,
+      "avg_loss": 3.61
+     },
+     ">8%": {
+      "n": 1269,
+      "exp_usd": 0.028,
+      "avg_loss": 7.85
+     }
+    }
+   },
+   "HOLD_stress": {
+    "expectancy_usd": -0.523,
+    "pf": 0.82,
+    "net_usd": -974.19
+   },
+   "HOLD_drift": {
+    "expectancy_usd": -0.04,
+    "pf": 0.99,
+    "net_usd": -73.68
+   },
+   "protected_run": {
+    "ran": 1974,
+    "mean_usd": 3.353,
+    "floor_hit_within_3_bars_share": 0.998,
+    "given_back_mean": 2.96,
+    "exit_mix": {
+     "RATCHET_BANK": 899,
+     "PROTECTED_BANK": 808,
+     "PROTECTED_BANK_AT_CLOSE": 263,
+     "OPPOSITE_SIGNAL": 4
+    }
+   },
+   "decision": {
+    "status": "REJECTED",
+    "reject_reasons": [
+     "expectancy<=0",
+     "PF<1",
+     "maxDD>31USD",
+     "margin-floor risk>5%"
+    ],
+    "vs_h0": {
+     "exp_usd": -0.048,
+     "h0_exp_usd": 0.156,
+     "net_per_day": -0.441,
+     "h0_net_per_day": 1.315,
+     "trades": 1878,
+     "h0_trades": 1714,
+     "dd": 331.71,
+     "h0_dd": 498.48
+    }
+   }
+  },
+  "H3a_0.5ATR": {
+   "variant": {
+    "kind": "RUN",
+    "m1": {
+     "atr": 0.5
+    },
+    "buffer": {
+     "atr": 0.25
+    },
+    "bankRun": true
+   },
+   "skipped_reentries": {
+    "SAME_OR_EARLIER_CANDLE": 3619,
+    "STALE_SAME_SETUP": 2586,
+    "REVENGE_GUARD": 111
+   },
+   "ALL": {
+    "trades": 3301,
+    "win_rate": 0.646,
+    "avg_win_usd": 3.86,
+    "avg_loss_usd": 6.01,
+    "win_loss_ratio": 0.64,
+    "wins_erased_by_one_loss": 1.56,
+    "expectancy_usd": 0.365,
+    "expectancy_r": 0.014,
+    "pf": 1.17,
+    "ci95_usd": [
+     0.136,
+     0.601
+    ],
+    "gross_profit_usd": 8235.72,
+    "gross_loss_usd": 7031.41,
+    "costs_usd": 1131.86,
+    "net_usd": 1204.31,
+    "cost_pct_of_gross_harvest": 0.121,
+    "net_per_active_day_usd": 3.08,
+    "active_days": 391,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 5,
+     "median": 8,
+     "p75": 11,
+     "p90": 13,
+     "mean": 7.55
+    },
+    "zero_trade_session_rate": 0.105,
+    "avg_hold_bars": 3.39,
+    "median_hold_bars": 2,
+    "time_in_market_share": 0.089,
+    "top5_share_of_gross_profit": 0.04,
+    "months": 17,
+    "months_positive_share": 0.588,
+    "milestone_hit_rate": 0.658,
+    "protected_run_rate": 0.5,
+    "profit_given_back_after_m1_usd": 2.13,
+    "exit_mix": {
+     "MILESTONE_BANK": 521,
+     "PROTECTED_BANK": 620,
+     "PROTECTED_BANK_AT_CLOSE": 95,
+     "STRUCTURAL_STOP": 1107,
+     "RATCHET_BANK": 932,
+     "OPPOSITE_SIGNAL": 26
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 4.15,
+    "mae_mean_usd": 2.96,
+    "path": {
+     "final_balance": 1266.38,
+     "min_balance": -16.71,
+     "max_drawdown_usd": 154.49,
+     "median_drawdown_usd": 33.87,
+     "max_loss_streak": 8,
+     "median_trades_to_recover_peak": 6,
+     "unrecovered_trades_at_end": 78
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 0.67,
+     "share_touching_margin_21usd": 0.58
+    },
+    "by_model": {
+     "MC": {
+      "n": 418,
+      "exp_usd": 0.722
+     },
+     "PB": {
+      "n": 607,
+      "exp_usd": 0.208
+     },
+     "BO": {
+      "n": 1838,
+      "exp_usd": 0.387
+     },
+     "SR": {
+      "n": 274,
+      "exp_usd": -0.268
+     },
+     "MR": {
+      "n": 164,
+      "exp_usd": 0.848
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 1611,
+      "exp_usd": 0.127
+     },
+     "SELL": {
+      "n": 1690,
+      "exp_usd": 0.591
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 1152,
+      "exp_usd": 0.5
+     },
+     "LONDON": {
+      "n": 781,
+      "exp_usd": 0.173
+     },
+     "NEW_YORK": {
+      "n": 1176,
+      "exp_usd": 0.286
+     },
+     "OTHER": {
+      "n": 192,
+      "exp_usd": 0.817
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 102,
+      "exp_usd": -0.341,
+      "avg_loss": 1.5
+     },
+     "3-5%": {
+      "n": 497,
+      "exp_usd": 0.036,
+      "avg_loss": 2.39
+     },
+     "5-8%": {
+      "n": 759,
+      "exp_usd": -0.113,
+      "avg_loss": 3.72
+     },
+     ">8%": {
+      "n": 1943,
+      "exp_usd": 0.672,
+      "avg_loss": 9.48
+     }
+    }
+   },
+   "DEV": {
+    "trades": 1395,
+    "win_rate": 0.639,
+    "avg_win_usd": 2.78,
+    "avg_loss_usd": 4.58,
+    "win_loss_ratio": 0.61,
+    "wins_erased_by_one_loss": 1.64,
+    "expectancy_usd": 0.131,
+    "expectancy_r": -0.002,
+    "pf": 1.08,
+    "ci95_usd": [
+     -0.138,
+     0.391
+    ],
+    "gross_profit_usd": 2483.92,
+    "gross_loss_usd": 2301.5,
+    "costs_usd": 478.78,
+    "net_usd": 182.42,
+    "cost_pct_of_gross_harvest": 0.162,
+    "net_per_active_day_usd": 0.986,
+    "active_days": 185,
+    "trades_per_session": {
+     "p10": 1,
+     "p25": 3,
+     "median": 8,
+     "p75": 10,
+     "p90": 12,
+     "mean": 6.8
+    },
+    "zero_trade_session_rate": 0.098,
+    "avg_hold_bars": 3.65,
+    "median_hold_bars": 2,
+    "time_in_market_share": 0.086,
+    "top5_share_of_gross_profit": 0.054,
+    "months": 8,
+    "months_positive_share": 0.5,
+    "milestone_hit_rate": 0.652,
+    "protected_run_rate": 0.49,
+    "profit_given_back_after_m1_usd": 1.49,
+    "exit_mix": {
+     "MILESTONE_BANK": 226,
+     "PROTECTED_BANK": 250,
+     "PROTECTED_BANK_AT_CLOSE": 52,
+     "STRUCTURAL_STOP": 478,
+     "RATCHET_BANK": 379,
+     "OPPOSITE_SIGNAL": 10
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 2.93,
+    "mae_mean_usd": 2.21,
+    "path": {
+     "final_balance": 244.49,
+     "min_balance": -16.71,
+     "max_drawdown_usd": 136.18,
+     "median_drawdown_usd": 40.61,
+     "max_loss_streak": 8,
+     "median_trades_to_recover_peak": 6,
+     "unrecovered_trades_at_end": 407
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 0.77,
+     "share_touching_margin_21usd": 0.674
+    },
+    "by_model": {
+     "MC": {
+      "n": 194,
+      "exp_usd": 0.011
+     },
+     "PB": {
+      "n": 251,
+      "exp_usd": 0.182
+     },
+     "BO": {
+      "n": 780,
+      "exp_usd": 0.131
+     },
+     "SR": {
+      "n": 98,
+      "exp_usd": -0.142
+     },
+     "MR": {
+      "n": 72,
+      "exp_usd": 0.638
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 759,
+      "exp_usd": 0.214
+     },
+     "SELL": {
+      "n": 636,
+      "exp_usd": 0.032
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 469,
+      "exp_usd": 0.107
+     },
+     "LONDON": {
+      "n": 361,
+      "exp_usd": 0.135
+     },
+     "NEW_YORK": {
+      "n": 499,
+      "exp_usd": 0.25
+     },
+     "OTHER": {
+      "n": 66,
+      "exp_usd": -0.627
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 90,
+      "exp_usd": -0.255,
+      "avg_loss": 1.47
+     },
+     "3-5%": {
+      "n": 277,
+      "exp_usd": -0.01,
+      "avg_loss": 2.38
+     },
+     "5-8%": {
+      "n": 366,
+      "exp_usd": -0.092,
+      "avg_loss": 3.69
+     },
+     ">8%": {
+      "n": 662,
+      "exp_usd": 0.365,
+      "avg_loss": 7.92
+     }
+    }
+   },
+   "HOLD": {
+    "trades": 1906,
+    "win_rate": 0.65,
+    "avg_win_usd": 4.64,
+    "avg_loss_usd": 7.09,
+    "win_loss_ratio": 0.65,
+    "wins_erased_by_one_loss": 1.53,
+    "expectancy_usd": 0.536,
+    "expectancy_r": 0.026,
+    "pf": 1.22,
+    "ci95_usd": [
+     0.155,
+     0.934
+    ],
+    "gross_profit_usd": 5751.8,
+    "gross_loss_usd": 4729.91,
+    "costs_usd": 653.08,
+    "net_usd": 1021.89,
+    "cost_pct_of_gross_harvest": 0.102,
+    "net_per_active_day_usd": 4.961,
+    "active_days": 206,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 6,
+     "median": 9,
+     "p75": 12,
+     "p90": 13,
+     "mean": 8.22
+    },
+    "zero_trade_session_rate": 0.112,
+    "avg_hold_bars": 3.2,
+    "median_hold_bars": 2,
+    "time_in_market_share": 0.091,
+    "top5_share_of_gross_profit": 0.057,
+    "months": 9,
+    "months_positive_share": 0.667,
+    "milestone_hit_rate": 0.662,
+    "protected_run_rate": 0.507,
+    "profit_given_back_after_m1_usd": 2.59,
+    "exit_mix": {
+     "RATCHET_BANK": 553,
+     "PROTECTED_BANK": 370,
+     "STRUCTURAL_STOP": 629,
+     "MILESTONE_BANK": 295,
+     "PROTECTED_BANK_AT_CLOSE": 43,
+     "OPPOSITE_SIGNAL": 16
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 5.03,
+    "mae_mean_usd": 3.51,
+    "path": {
+     "final_balance": 1083.96,
+     "min_balance": 49.69,
+     "max_drawdown_usd": 154.49,
+     "median_drawdown_usd": 27.89,
+     "max_loss_streak": 6,
+     "median_trades_to_recover_peak": 6,
+     "unrecovered_trades_at_end": 78
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 0.498,
+     "share_touching_margin_21usd": 0.43
+    },
+    "by_model": {
+     "MC": {
+      "n": 224,
+      "exp_usd": 1.337
+     },
+     "PB": {
+      "n": 356,
+      "exp_usd": 0.226
+     },
+     "BO": {
+      "n": 1058,
+      "exp_usd": 0.575
+     },
+     "SR": {
+      "n": 176,
+      "exp_usd": -0.338
+     },
+     "MR": {
+      "n": 92,
+      "exp_usd": 1.012
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 852,
+      "exp_usd": 0.05
+     },
+     "SELL": {
+      "n": 1054,
+      "exp_usd": 0.929
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 683,
+      "exp_usd": 0.77
+     },
+     "LONDON": {
+      "n": 420,
+      "exp_usd": 0.206
+     },
+     "NEW_YORK": {
+      "n": 677,
+      "exp_usd": 0.312
+     },
+     "OTHER": {
+      "n": 126,
+      "exp_usd": 1.574
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 12,
+      "exp_usd": -0.989,
+      "avg_loss": 1.64
+     },
+     "3-5%": {
+      "n": 220,
+      "exp_usd": 0.094,
+      "avg_loss": 2.41
+     },
+     "5-8%": {
+      "n": 393,
+      "exp_usd": -0.132,
+      "avg_loss": 3.74
+     },
+     ">8%": {
+      "n": 1281,
+      "exp_usd": 0.831,
+      "avg_loss": 10.22
+     }
+    }
+   },
+   "HOLD_stress": {
+    "expectancy_usd": 0.034,
+    "pf": 1.01,
+    "net_usd": 64.44
+   },
+   "HOLD_drift": {
+    "expectancy_usd": 0.34,
+    "pf": 1.12,
+    "net_usd": 632.71
+   },
+   "bank_vs_run": {
+    "reached_m1": 2171,
+    "banked": 521,
+    "ran": 1650,
+    "banked_mean_usd": 2.696,
+    "ran_mean_usd": 4.122,
+    "counterfactual": {
+     "weak_evidence": {
+      "n": 521,
+      "bank_mean": 2.697,
+      "run_mean": 0.022
+     },
+     "strong_evidence": {
+      "n": 1650,
+      "bank_mean": 2.705,
+      "run_mean": 4.122
+     }
+    },
+    "run_floor_hit_within_3_bars_share": 0.998,
+    "run_exit_mix": {
+     "PROTECTED_BANK": 620,
+     "PROTECTED_BANK_AT_CLOSE": 95,
+     "RATCHET_BANK": 932,
+     "OPPOSITE_SIGNAL": 3
+    }
+   },
+   "decision": {
+    "status": "REJECTED",
+    "reject_reasons": [
+     "maxDD>31USD",
+     "margin-floor risk>5%"
+    ],
+    "vs_h0": {
+     "exp_usd": 0.536,
+     "h0_exp_usd": 0.156,
+     "net_per_day": 4.961,
+     "h0_net_per_day": 1.315,
+     "trades": 1906,
+     "h0_trades": 1714,
+     "dd": 154.49,
+     "h0_dd": 498.48
+    }
+   }
+  },
+  "H3b_0.75ATR": {
+   "variant": {
+    "kind": "RUN",
+    "m1": {
+     "atr": 0.75
+    },
+    "buffer": {
+     "atr": 0.25
+    },
+    "bankRun": true
+   },
+   "skipped_reentries": {
+    "SAME_OR_EARLIER_CANDLE": 4256,
+    "STALE_SAME_SETUP": 2072,
+    "REVENGE_GUARD": 113
+   },
+   "ALL": {
+    "trades": 3176,
+    "win_rate": 0.583,
+    "avg_win_usd": 4.98,
+    "avg_loss_usd": 6.42,
+    "win_loss_ratio": 0.78,
+    "wins_erased_by_one_loss": 1.29,
+    "expectancy_usd": 0.226,
+    "expectancy_r": 0.005,
+    "pf": 1.08,
+    "ci95_usd": [
+     -0.055,
+     0.506
+    ],
+    "gross_profit_usd": 9223.53,
+    "gross_loss_usd": 8504.75,
+    "costs_usd": 1091.6,
+    "net_usd": 718.78,
+    "cost_pct_of_gross_harvest": 0.106,
+    "net_per_active_day_usd": 1.838,
+    "active_days": 391,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 4,
+     "median": 8,
+     "p75": 10,
+     "p90": 13,
+     "mean": 7.27
+    },
+    "zero_trade_session_rate": 0.105,
+    "avg_hold_bars": 4.44,
+    "median_hold_bars": 3,
+    "time_in_market_share": 0.112,
+    "top5_share_of_gross_profit": 0.036,
+    "months": 17,
+    "months_positive_share": 0.529,
+    "milestone_hit_rate": 0.587,
+    "protected_run_rate": 0.485,
+    "profit_given_back_after_m1_usd": 2.3,
+    "exit_mix": {
+     "MILESTONE_BANK": 325,
+     "STRUCTURAL_STOP": 1284,
+     "RATCHET_BANK": 805,
+     "PROTECTED_BANK": 697,
+     "PROTECTED_BANK_AT_CLOSE": 33,
+     "OPPOSITE_SIGNAL": 32
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 4.77,
+    "mae_mean_usd": 3.36,
+    "path": {
+     "final_balance": 780.85,
+     "min_balance": -47.62,
+     "max_drawdown_usd": 219.86,
+     "median_drawdown_usd": 69.21,
+     "max_loss_streak": 11,
+     "median_trades_to_recover_peak": 6,
+     "unrecovered_trades_at_end": 80
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 0.848,
+     "share_touching_margin_21usd": 0.82
+    },
+    "by_model": {
+     "MC": {
+      "n": 386,
+      "exp_usd": 0.179
+     },
+     "PB": {
+      "n": 582,
+      "exp_usd": 0.261
+     },
+     "BO": {
+      "n": 1794,
+      "exp_usd": 0.28
+     },
+     "SR": {
+      "n": 254,
+      "exp_usd": -0.339
+     },
+     "MR": {
+      "n": 160,
+      "exp_usd": 0.512
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 1550,
+      "exp_usd": 0.099
+     },
+     "SELL": {
+      "n": 1626,
+      "exp_usd": 0.348
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 1119,
+      "exp_usd": 0.159
+     },
+     "LONDON": {
+      "n": 751,
+      "exp_usd": 0.056
+     },
+     "NEW_YORK": {
+      "n": 1118,
+      "exp_usd": 0.305
+     },
+     "OTHER": {
+      "n": 188,
+      "exp_usd": 0.839
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 97,
+      "exp_usd": -0.286,
+      "avg_loss": 1.49
+     },
+     "3-5%": {
+      "n": 476,
+      "exp_usd": 0.072,
+      "avg_loss": 2.4
+     },
+     "5-8%": {
+      "n": 729,
+      "exp_usd": -0.152,
+      "avg_loss": 3.82
+     },
+     ">8%": {
+      "n": 1874,
+      "exp_usd": 0.439,
+      "avg_loss": 10.04
+     }
+    }
+   },
+   "DEV": {
+    "trades": 1338,
+    "win_rate": 0.577,
+    "avg_win_usd": 3.58,
+    "avg_loss_usd": 4.87,
+    "win_loss_ratio": 0.74,
+    "wins_erased_by_one_loss": 1.36,
+    "expectancy_usd": 0.006,
+    "expectancy_r": -0.009,
+    "pf": 1,
+    "ci95_usd": [
+     -0.296,
+     0.293
+    ],
+    "gross_profit_usd": 2764.18,
+    "gross_loss_usd": 2756.69,
+    "costs_usd": 459.96,
+    "net_usd": 7.49,
+    "cost_pct_of_gross_harvest": 0.143,
+    "net_per_active_day_usd": 0.04,
+    "active_days": 185,
+    "trades_per_session": {
+     "p10": 1,
+     "p25": 3,
+     "median": 7,
+     "p75": 9,
+     "p90": 11,
+     "mean": 6.53
+    },
+    "zero_trade_session_rate": 0.098,
+    "avg_hold_bars": 4.89,
+    "median_hold_bars": 3,
+    "time_in_market_share": 0.111,
+    "top5_share_of_gross_profit": 0.046,
+    "months": 8,
+    "months_positive_share": 0.375,
+    "milestone_hit_rate": 0.582,
+    "protected_run_rate": 0.487,
+    "profit_given_back_after_m1_usd": 1.62,
+    "exit_mix": {
+     "MILESTONE_BANK": 127,
+     "STRUCTURAL_STOP": 551,
+     "RATCHET_BANK": 339,
+     "PROTECTED_BANK": 292,
+     "PROTECTED_BANK_AT_CLOSE": 17,
+     "OPPOSITE_SIGNAL": 12
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 3.39,
+    "mae_mean_usd": 2.49,
+    "path": {
+     "final_balance": 69.56,
+     "min_balance": -47.62,
+     "max_drawdown_usd": 150.01,
+     "median_drawdown_usd": 79.59,
+     "max_loss_streak": 8,
+     "median_trades_to_recover_peak": 5.5,
+     "unrecovered_trades_at_end": 423
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 0.942,
+     "share_touching_margin_21usd": 0.896
+    },
+    "by_model": {
+     "MC": {
+      "n": 178,
+      "exp_usd": -0.443
+     },
+     "PB": {
+      "n": 243,
+      "exp_usd": 0.197
+     },
+     "BO": {
+      "n": 753,
+      "exp_usd": 0.077
+     },
+     "SR": {
+      "n": 93,
+      "exp_usd": -0.25
+     },
+     "MR": {
+      "n": 71,
+      "exp_usd": 0.055
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 732,
+      "exp_usd": 0.201
+     },
+     "SELL": {
+      "n": 606,
+      "exp_usd": -0.23
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 456,
+      "exp_usd": -0.117
+     },
+     "LONDON": {
+      "n": 350,
+      "exp_usd": -0.186
+     },
+     "NEW_YORK": {
+      "n": 467,
+      "exp_usd": 0.347
+     },
+     "OTHER": {
+      "n": 65,
+      "exp_usd": -0.558
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 85,
+      "exp_usd": -0.2,
+      "avg_loss": 1.46
+     },
+     "3-5%": {
+      "n": 267,
+      "exp_usd": 0.03,
+      "avg_loss": 2.41
+     },
+     "5-8%": {
+      "n": 350,
+      "exp_usd": -0.157,
+      "avg_loss": 3.82
+     },
+     ">8%": {
+      "n": 636,
+      "exp_usd": 0.112,
+      "avg_loss": 8.4
+     }
+    }
+   },
+   "HOLD": {
+    "trades": 1838,
+    "win_rate": 0.587,
+    "avg_win_usd": 5.99,
+    "avg_loss_usd": 7.57,
+    "win_loss_ratio": 0.79,
+    "wins_erased_by_one_loss": 1.27,
+    "expectancy_usd": 0.387,
+    "expectancy_r": 0.015,
+    "pf": 1.12,
+    "ci95_usd": [
+     -0.049,
+     0.83
+    ],
+    "gross_profit_usd": 6459.35,
+    "gross_loss_usd": 5748.06,
+    "costs_usd": 631.64,
+    "net_usd": 711.29,
+    "cost_pct_of_gross_harvest": 0.089,
+    "net_per_active_day_usd": 3.453,
+    "active_days": 206,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 6,
+     "median": 8,
+     "p75": 11,
+     "p90": 13,
+     "mean": 7.92
+    },
+    "zero_trade_session_rate": 0.112,
+    "avg_hold_bars": 4.12,
+    "median_hold_bars": 3,
+    "time_in_market_share": 0.113,
+    "top5_share_of_gross_profit": 0.051,
+    "months": 9,
+    "months_positive_share": 0.667,
+    "milestone_hit_rate": 0.591,
+    "protected_run_rate": 0.483,
+    "profit_given_back_after_m1_usd": 2.79,
+    "exit_mix": {
+     "PROTECTED_BANK": 405,
+     "RATCHET_BANK": 466,
+     "STRUCTURAL_STOP": 733,
+     "MILESTONE_BANK": 198,
+     "PROTECTED_BANK_AT_CLOSE": 16,
+     "OPPOSITE_SIGNAL": 20
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 5.77,
+    "mae_mean_usd": 3.99,
+    "path": {
+     "final_balance": 773.36,
+     "min_balance": 54.18,
+     "max_drawdown_usd": 219.86,
+     "median_drawdown_usd": 52.54,
+     "max_loss_streak": 11,
+     "median_trades_to_recover_peak": 6,
+     "unrecovered_trades_at_end": 80
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 0.626,
+     "share_touching_margin_21usd": 0.554
+    },
+    "by_model": {
+     "MC": {
+      "n": 208,
+      "exp_usd": 0.71
+     },
+     "PB": {
+      "n": 339,
+      "exp_usd": 0.307
+     },
+     "BO": {
+      "n": 1041,
+      "exp_usd": 0.427
+     },
+     "SR": {
+      "n": 161,
+      "exp_usd": -0.39
+     },
+     "MR": {
+      "n": 89,
+      "exp_usd": 0.876
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 818,
+      "exp_usd": 0.008
+     },
+     "SELL": {
+      "n": 1020,
+      "exp_usd": 0.691
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 663,
+      "exp_usd": 0.348
+     },
+     "LONDON": {
+      "n": 401,
+      "exp_usd": 0.267
+     },
+     "NEW_YORK": {
+      "n": 651,
+      "exp_usd": 0.275
+     },
+     "OTHER": {
+      "n": 123,
+      "exp_usd": 1.577
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 12,
+      "exp_usd": -0.9,
+      "avg_loss": 1.64
+     },
+     "3-5%": {
+      "n": 209,
+      "exp_usd": 0.125,
+      "avg_loss": 2.39
+     },
+     "5-8%": {
+      "n": 379,
+      "exp_usd": -0.147,
+      "avg_loss": 3.81
+     },
+     ">8%": {
+      "n": 1238,
+      "exp_usd": 0.607,
+      "avg_loss": 10.8
+     }
+    }
+   },
+   "HOLD_stress": {
+    "expectancy_usd": -0.052,
+    "pf": 0.98,
+    "net_usd": -94.42
+   },
+   "HOLD_drift": {
+    "expectancy_usd": 0.378,
+    "pf": 1.11,
+    "net_usd": 684.59
+   },
+   "bank_vs_run": {
+    "reached_m1": 1865,
+    "banked": 325,
+    "ran": 1540,
+    "banked_mean_usd": 4.193,
+    "ran_mean_usd": 5.096,
+    "counterfactual": {
+     "weak_evidence": {
+      "n": 325,
+      "bank_mean": 4.195,
+      "run_mean": 1.098
+     },
+     "strong_evidence": {
+      "n": 1540,
+      "bank_mean": 4.085,
+      "run_mean": 5.096
+     }
+    },
+    "run_floor_hit_within_3_bars_share": 1,
+    "run_exit_mix": {
+     "RATCHET_BANK": 805,
+     "PROTECTED_BANK": 697,
+     "PROTECTED_BANK_AT_CLOSE": 33,
+     "OPPOSITE_SIGNAL": 5
+    }
+   },
+   "decision": {
+    "status": "REJECTED",
+    "reject_reasons": [
+     "maxDD>31USD",
+     "margin-floor risk>5%"
+    ],
+    "vs_h0": {
+     "exp_usd": 0.387,
+     "h0_exp_usd": 0.156,
+     "net_per_day": 3.453,
+     "h0_net_per_day": 1.315,
+     "trades": 1838,
+     "h0_trades": 1714,
+     "dd": 219.86,
+     "h0_dd": 498.48
+    }
+   }
+  },
+  "H4a_tp1_trail": {
+   "variant": {
+    "kind": "TRAIL",
+    "m1": {
+     "tp1": true
+    }
+   },
+   "skipped_reentries": {
+    "SAME_OR_EARLIER_CANDLE": 5696,
+    "STALE_SAME_SETUP": 1170,
+    "REVENGE_GUARD": 103
+   },
+   "ALL": {
+    "trades": 2648,
+    "win_rate": 0.481,
+    "avg_win_usd": 8.58,
+    "avg_loss_usd": 7.29,
+    "win_loss_ratio": 1.18,
+    "wins_erased_by_one_loss": 0.85,
+    "expectancy_usd": 0.346,
+    "expectancy_r": -0.002,
+    "pf": 1.09,
+    "ci95_usd": [
+     -0.176,
+     0.818
+    ],
+    "gross_profit_usd": 10931.99,
+    "gross_loss_usd": 10016.98,
+    "costs_usd": 928.32,
+    "net_usd": 915.01,
+    "cost_pct_of_gross_harvest": 0.078,
+    "net_per_active_day_usd": 2.352,
+    "active_days": 389,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 4,
+     "median": 7,
+     "p75": 9,
+     "p90": 10,
+     "mean": 6.06
+    },
+    "zero_trade_session_rate": 0.11,
+    "avg_hold_bars": 9.58,
+    "median_hold_bars": 5,
+    "time_in_market_share": 0.202,
+    "top5_share_of_gross_profit": 0.057,
+    "months": 17,
+    "months_positive_share": 0.588,
+    "milestone_hit_rate": 0.491,
+    "protected_run_rate": 0.491,
+    "profit_given_back_after_m1_usd": 7.74,
+    "exit_mix": {
+     "PROTECTED_BANK": 802,
+     "STRUCTURAL_STOP": 1301,
+     "RATCHET_BANK": 446,
+     "PROTECTED_BANK_AT_CLOSE": 47,
+     "OPPOSITE_SIGNAL": 52
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 9.18,
+    "mae_mean_usd": 4.1,
+    "path": {
+     "final_balance": 977.08,
+     "min_balance": -125.31,
+     "max_drawdown_usd": 392.96,
+     "median_drawdown_usd": 118.32,
+     "max_loss_streak": 10,
+     "median_trades_to_recover_peak": 7,
+     "unrecovered_trades_at_end": 65
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 0.902,
+     "share_touching_margin_21usd": 0.876
+    },
+    "by_model": {
+     "MC": {
+      "n": 289,
+      "exp_usd": 0.113
+     },
+     "PB": {
+      "n": 485,
+      "exp_usd": 0.802
+     },
+     "BO": {
+      "n": 1500,
+      "exp_usd": 0.304
+     },
+     "SR": {
+      "n": 223,
+      "exp_usd": -0.883
+     },
+     "MR": {
+      "n": 151,
+      "exp_usd": 1.554
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 1317,
+      "exp_usd": 0.357
+     },
+     "SELL": {
+      "n": 1331,
+      "exp_usd": 0.334
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 931,
+      "exp_usd": 0.216
+     },
+     "LONDON": {
+      "n": 630,
+      "exp_usd": 0.097
+     },
+     "NEW_YORK": {
+      "n": 926,
+      "exp_usd": 0.634
+     },
+     "OTHER": {
+      "n": 161,
+      "exp_usd": 0.407
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 79,
+      "exp_usd": -0.299,
+      "avg_loss": 1.38
+     },
+     "3-5%": {
+      "n": 403,
+      "exp_usd": -0.25,
+      "avg_loss": 2.37
+     },
+     "5-8%": {
+      "n": 623,
+      "exp_usd": -0.186,
+      "avg_loss": 3.74
+     },
+     ">8%": {
+      "n": 1543,
+      "exp_usd": 0.749,
+      "avg_loss": 10.63
+     }
+    }
+   },
+   "DEV": {
+    "trades": 1117,
+    "win_rate": 0.473,
+    "avg_win_usd": 6.1,
+    "avg_loss_usd": 5.48,
+    "win_loss_ratio": 1.11,
+    "wins_erased_by_one_loss": 0.9,
+    "expectancy_usd": -0.006,
+    "expectancy_r": -0.042,
+    "pf": 1,
+    "ci95_usd": [
+     -0.506,
+     0.483
+    ],
+    "gross_profit_usd": 3218.39,
+    "gross_loss_usd": 3225.05,
+    "costs_usd": 392.66,
+    "net_usd": -6.66,
+    "cost_pct_of_gross_harvest": 0.109,
+    "net_per_active_day_usd": -0.036,
+    "active_days": 183,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 3,
+     "median": 6,
+     "p75": 8,
+     "p90": 10,
+     "mean": 5.45
+    },
+    "zero_trade_session_rate": 0.107,
+    "avg_hold_bars": 10.07,
+    "median_hold_bars": 5,
+    "time_in_market_share": 0.191,
+    "top5_share_of_gross_profit": 0.078,
+    "months": 8,
+    "months_positive_share": 0.5,
+    "milestone_hit_rate": 0.481,
+    "protected_run_rate": 0.481,
+    "profit_given_back_after_m1_usd": 5.39,
+    "exit_mix": {
+     "PROTECTED_BANK": 333,
+     "STRUCTURAL_STOP": 563,
+     "RATCHET_BANK": 181,
+     "PROTECTED_BANK_AT_CLOSE": 22,
+     "OPPOSITE_SIGNAL": 18
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 6.42,
+    "mae_mean_usd": 3,
+    "path": {
+     "final_balance": 55.41,
+     "min_balance": -125.31,
+     "max_drawdown_usd": 249.21,
+     "median_drawdown_usd": 141.55,
+     "max_loss_streak": 8,
+     "median_trades_to_recover_peak": 7,
+     "unrecovered_trades_at_end": 226
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 0.974,
+     "share_touching_margin_21usd": 0.962
+    },
+    "by_model": {
+     "MC": {
+      "n": 133,
+      "exp_usd": -1.703
+     },
+     "PB": {
+      "n": 211,
+      "exp_usd": 1.17
+     },
+     "BO": {
+      "n": 626,
+      "exp_usd": 0.054
+     },
+     "SR": {
+      "n": 79,
+      "exp_usd": -0.69
+     },
+     "MR": {
+      "n": 68,
+      "exp_usd": -0.092
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 618,
+      "exp_usd": 0.418
+     },
+     "SELL": {
+      "n": 499,
+      "exp_usd": -0.531
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 382,
+      "exp_usd": -0.235
+     },
+     "LONDON": {
+      "n": 286,
+      "exp_usd": -0.549
+     },
+     "NEW_YORK": {
+      "n": 390,
+      "exp_usd": 0.702
+     },
+     "OTHER": {
+      "n": 59,
+      "exp_usd": -0.568
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 68,
+      "exp_usd": -0.284,
+      "avg_loss": 1.35
+     },
+     "3-5%": {
+      "n": 225,
+      "exp_usd": -0.356,
+      "avg_loss": 2.42
+     },
+     "5-8%": {
+      "n": 299,
+      "exp_usd": -0.184,
+      "avg_loss": 3.78
+     },
+     ">8%": {
+      "n": 525,
+      "exp_usd": 0.281,
+      "avg_loss": 8.64
+     }
+    }
+   },
+   "HOLD": {
+    "trades": 1531,
+    "win_rate": 0.487,
+    "avg_win_usd": 10.34,
+    "avg_loss_usd": 8.65,
+    "win_loss_ratio": 1.2,
+    "wins_erased_by_one_loss": 0.84,
+    "expectancy_usd": 0.602,
+    "expectancy_r": 0.027,
+    "pf": 1.14,
+    "ci95_usd": [
+     -0.214,
+     1.402
+    ],
+    "gross_profit_usd": 7713.6,
+    "gross_loss_usd": 6791.93,
+    "costs_usd": 535.66,
+    "net_usd": 921.67,
+    "cost_pct_of_gross_harvest": 0.065,
+    "net_per_active_day_usd": 4.474,
+    "active_days": 206,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 5,
+     "median": 7,
+     "p75": 9,
+     "p90": 11,
+     "mean": 6.6
+    },
+    "zero_trade_session_rate": 0.112,
+    "avg_hold_bars": 9.22,
+    "median_hold_bars": 5,
+    "time_in_market_share": 0.211,
+    "top5_share_of_gross_profit": 0.081,
+    "months": 9,
+    "months_positive_share": 0.667,
+    "milestone_hit_rate": 0.499,
+    "protected_run_rate": 0.499,
+    "profit_given_back_after_m1_usd": 9.39,
+    "exit_mix": {
+     "RATCHET_BANK": 265,
+     "STRUCTURAL_STOP": 738,
+     "PROTECTED_BANK": 469,
+     "PROTECTED_BANK_AT_CLOSE": 25,
+     "OPPOSITE_SIGNAL": 34
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 11.19,
+    "mae_mean_usd": 4.9,
+    "path": {
+     "final_balance": 983.74,
+     "min_balance": -86.74,
+     "max_drawdown_usd": 358.56,
+     "median_drawdown_usd": 85.79,
+     "max_loss_streak": 10,
+     "median_trades_to_recover_peak": 7,
+     "unrecovered_trades_at_end": 65
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 0.808,
+     "share_touching_margin_21usd": 0.778
+    },
+    "by_model": {
+     "MC": {
+      "n": 156,
+      "exp_usd": 1.661
+     },
+     "PB": {
+      "n": 274,
+      "exp_usd": 0.518
+     },
+     "BO": {
+      "n": 874,
+      "exp_usd": 0.483
+     },
+     "SR": {
+      "n": 144,
+      "exp_usd": -0.99
+     },
+     "MR": {
+      "n": 83,
+      "exp_usd": 2.902
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 699,
+      "exp_usd": 0.303
+     },
+     "SELL": {
+      "n": 832,
+      "exp_usd": 0.853
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 549,
+      "exp_usd": 0.529
+     },
+     "LONDON": {
+      "n": 344,
+      "exp_usd": 0.635
+     },
+     "NEW_YORK": {
+      "n": 536,
+      "exp_usd": 0.585
+     },
+     "OTHER": {
+      "n": 102,
+      "exp_usd": 0.971
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 11,
+      "exp_usd": -0.393,
+      "avg_loss": 1.56
+     },
+     "3-5%": {
+      "n": 178,
+      "exp_usd": -0.116,
+      "avg_loss": 2.3
+     },
+     "5-8%": {
+      "n": 324,
+      "exp_usd": -0.188,
+      "avg_loss": 3.71
+     },
+     ">8%": {
+      "n": 1018,
+      "exp_usd": 0.99,
+      "avg_loss": 11.66
+     }
+    }
+   },
+   "HOLD_stress": {
+    "expectancy_usd": 0.049,
+    "pf": 1.01,
+    "net_usd": 74.04
+   },
+   "HOLD_drift": {
+    "expectancy_usd": 0.613,
+    "pf": 1.13,
+    "net_usd": 926.99
+   },
+   "protected_run": {
+    "ran": 1301,
+    "mean_usd": 8.376,
+    "floor_hit_within_3_bars_share": 0.603,
+    "given_back_mean": 7.74,
+    "exit_mix": {
+     "PROTECTED_BANK": 802,
+     "RATCHET_BANK": 446,
+     "PROTECTED_BANK_AT_CLOSE": 47,
+     "OPPOSITE_SIGNAL": 6
+    }
+   },
+   "decision": {
+    "status": "REJECTED",
+    "reject_reasons": [
+     "maxDD>31USD",
+     "margin-floor risk>5%"
+    ],
+    "vs_h0": {
+     "exp_usd": 0.602,
+     "h0_exp_usd": 0.156,
+     "net_per_day": 4.474,
+     "h0_net_per_day": 1.315,
+     "trades": 1531,
+     "h0_trades": 1714,
+     "dd": 358.56,
+     "h0_dd": 498.48
+    }
+   }
+  },
+  "H4b_0.5R_trail": {
+   "variant": {
+    "kind": "TRAIL",
+    "m1": {
+     "r": 0.5
+    }
+   },
+   "skipped_reentries": {
+    "SAME_OR_EARLIER_CANDLE": 4853,
+    "STALE_SAME_SETUP": 1708,
+    "REVENGE_GUARD": 118
+   },
+   "ALL": {
+    "trades": 2938,
+    "win_rate": 0.561,
+    "avg_win_usd": 5.1,
+    "avg_loss_usd": 6.41,
+    "win_loss_ratio": 0.8,
+    "wins_erased_by_one_loss": 1.26,
+    "expectancy_usd": 0.047,
+    "expectancy_r": -0.032,
+    "pf": 1.02,
+    "ci95_usd": [
+     -0.304,
+     0.431
+    ],
+    "gross_profit_usd": 8403.31,
+    "gross_loss_usd": 8266.1,
+    "costs_usd": 1016.28,
+    "net_usd": 137.21,
+    "cost_pct_of_gross_harvest": 0.108,
+    "net_per_active_day_usd": 0.352,
+    "active_days": 390,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 4,
+     "median": 7,
+     "p75": 9,
+     "p90": 12,
+     "mean": 6.72
+    },
+    "zero_trade_session_rate": 0.108,
+    "avg_hold_bars": 6.38,
+    "median_hold_bars": 4,
+    "time_in_market_share": 0.149,
+    "top5_share_of_gross_profit": 0.059,
+    "months": 17,
+    "months_positive_share": 0.471,
+    "milestone_hit_rate": 0.621,
+    "protected_run_rate": 0.621,
+    "profit_given_back_after_m1_usd": 6.61,
+    "exit_mix": {
+     "PROTECTED_BANK": 1026,
+     "PROTECTED_BANK_AT_CLOSE": 251,
+     "STRUCTURAL_STOP": 1088,
+     "RATCHET_BANK": 540,
+     "OPPOSITE_SIGNAL": 33
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 7.34,
+    "mae_mean_usd": 3.51,
+    "path": {
+     "final_balance": 199.28,
+     "min_balance": -164.98,
+     "max_drawdown_usd": 366.84,
+     "median_drawdown_usd": 152.62,
+     "max_loss_streak": 10,
+     "median_trades_to_recover_peak": 6,
+     "unrecovered_trades_at_end": 1159
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 0.982,
+     "share_touching_margin_21usd": 0.966
+    },
+    "by_model": {
+     "MC": {
+      "n": 333,
+      "exp_usd": -0.805
+     },
+     "PB": {
+      "n": 545,
+      "exp_usd": 0.41
+     },
+     "BO": {
+      "n": 1650,
+      "exp_usd": 0.083
+     },
+     "SR": {
+      "n": 250,
+      "exp_usd": -0.597
+     },
+     "MR": {
+      "n": 160,
+      "exp_usd": 1.219
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 1452,
+      "exp_usd": -0.01
+     },
+     "SELL": {
+      "n": 1486,
+      "exp_usd": 0.103
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 1032,
+      "exp_usd": -0.035
+     },
+     "LONDON": {
+      "n": 705,
+      "exp_usd": -0.616
+     },
+     "NEW_YORK": {
+      "n": 1025,
+      "exp_usd": 0.336
+     },
+     "OTHER": {
+      "n": 176,
+      "exp_usd": 1.49
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 89,
+      "exp_usd": -0.253,
+      "avg_loss": 1.3
+     },
+     "3-5%": {
+      "n": 449,
+      "exp_usd": -0.276,
+      "avg_loss": 2.11
+     },
+     "5-8%": {
+      "n": 690,
+      "exp_usd": -0.35,
+      "avg_loss": 3.41
+     },
+     ">8%": {
+      "n": 1710,
+      "exp_usd": 0.307,
+      "avg_loss": 9.8
+     }
+    }
+   },
+   "DEV": {
+    "trades": 1236,
+    "win_rate": 0.558,
+    "avg_win_usd": 3.86,
+    "avg_loss_usd": 4.85,
+    "win_loss_ratio": 0.8,
+    "wins_erased_by_one_loss": 1.26,
+    "expectancy_usd": 0.013,
+    "expectancy_r": -0.049,
+    "pf": 1.01,
+    "ci95_usd": [
+     -0.363,
+     0.43
+    ],
+    "gross_profit_usd": 2663.11,
+    "gross_loss_usd": 2647.4,
+    "costs_usd": 426.96,
+    "net_usd": 15.71,
+    "cost_pct_of_gross_harvest": 0.138,
+    "net_per_active_day_usd": 0.085,
+    "active_days": 184,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 3,
+     "median": 7,
+     "p75": 9,
+     "p90": 11,
+     "mean": 6.03
+    },
+    "zero_trade_session_rate": 0.102,
+    "avg_hold_bars": 6.86,
+    "median_hold_bars": 4,
+    "time_in_market_share": 0.144,
+    "top5_share_of_gross_profit": 0.095,
+    "months": 8,
+    "months_positive_share": 0.5,
+    "milestone_hit_rate": 0.612,
+    "protected_run_rate": 0.612,
+    "profit_given_back_after_m1_usd": 4.58,
+    "exit_mix": {
+     "PROTECTED_BANK": 422,
+     "PROTECTED_BANK_AT_CLOSE": 101,
+     "STRUCTURAL_STOP": 472,
+     "RATCHET_BANK": 230,
+     "OPPOSITE_SIGNAL": 11
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 5.23,
+    "mae_mean_usd": 2.55,
+    "path": {
+     "final_balance": 77.78,
+     "min_balance": -164.98,
+     "max_drawdown_usd": 255.73,
+     "median_drawdown_usd": 121.29,
+     "max_loss_streak": 10,
+     "median_trades_to_recover_peak": 4,
+     "unrecovered_trades_at_end": 300
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 0.968,
+     "share_touching_margin_21usd": 0.944
+    },
+    "by_model": {
+     "MC": {
+      "n": 151,
+      "exp_usd": -0.772
+     },
+     "PB": {
+      "n": 231,
+      "exp_usd": 0.772
+     },
+     "BO": {
+      "n": 695,
+      "exp_usd": -0.054
+     },
+     "SR": {
+      "n": 89,
+      "exp_usd": -0.268
+     },
+     "MR": {
+      "n": 70,
+      "exp_usd": 0.216
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 684,
+      "exp_usd": 0.289
+     },
+     "SELL": {
+      "n": 552,
+      "exp_usd": -0.329
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 422,
+      "exp_usd": -0.364
+     },
+     "LONDON": {
+      "n": 323,
+      "exp_usd": -0.368
+     },
+     "NEW_YORK": {
+      "n": 429,
+      "exp_usd": 0.713
+     },
+     "OTHER": {
+      "n": 62,
+      "exp_usd": -0.286
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 78,
+      "exp_usd": -0.158,
+      "avg_loss": 1.24
+     },
+     "3-5%": {
+      "n": 252,
+      "exp_usd": -0.331,
+      "avg_loss": 2.11
+     },
+     "5-8%": {
+      "n": 329,
+      "exp_usd": -0.286,
+      "avg_loss": 3.48
+     },
+     ">8%": {
+      "n": 577,
+      "exp_usd": 0.356,
+      "avg_loss": 8.2
+     }
+    }
+   },
+   "HOLD": {
+    "trades": 1702,
+    "win_rate": 0.563,
+    "avg_win_usd": 5.99,
+    "avg_loss_usd": 7.55,
+    "win_loss_ratio": 0.79,
+    "wins_erased_by_one_loss": 1.26,
+    "expectancy_usd": 0.071,
+    "expectancy_r": -0.019,
+    "pf": 1.02,
+    "ci95_usd": [
+     -0.541,
+     0.671
+    ],
+    "gross_profit_usd": 5740.2,
+    "gross_loss_usd": 5618.71,
+    "costs_usd": 589.32,
+    "net_usd": 121.5,
+    "cost_pct_of_gross_harvest": 0.093,
+    "net_per_active_day_usd": 0.59,
+    "active_days": 206,
+    "trades_per_session": {
+     "p10": 0,
+     "p25": 5,
+     "median": 8,
+     "p75": 10,
+     "p90": 12,
+     "mean": 7.34
+    },
+    "zero_trade_session_rate": 0.112,
+    "avg_hold_bars": 6.03,
+    "median_hold_bars": 4,
+    "time_in_market_share": 0.154,
+    "top5_share_of_gross_profit": 0.086,
+    "months": 9,
+    "months_positive_share": 0.444,
+    "milestone_hit_rate": 0.627,
+    "protected_run_rate": 0.627,
+    "profit_given_back_after_m1_usd": 8.05,
+    "exit_mix": {
+     "RATCHET_BANK": 310,
+     "PROTECTED_BANK": 604,
+     "STRUCTURAL_STOP": 616,
+     "PROTECTED_BANK_AT_CLOSE": 150,
+     "OPPOSITE_SIGNAL": 22
+    },
+    "open_at_horizon": 0,
+    "mfe_mean_usd": 8.87,
+    "mae_mean_usd": 4.21,
+    "path": {
+     "final_balance": 183.57,
+     "min_balance": -6.17,
+     "max_drawdown_usd": 366.84,
+     "median_drawdown_usd": 160.99,
+     "max_loss_streak": 8,
+     "median_trades_to_recover_peak": 12,
+     "unrecovered_trades_at_end": 1159
+    },
+    "depletion": {
+     "draws": 500,
+     "share_touching_31usd": 0.948,
+     "share_touching_margin_21usd": 0.922
+    },
+    "by_model": {
+     "MC": {
+      "n": 182,
+      "exp_usd": -0.833
+     },
+     "PB": {
+      "n": 314,
+      "exp_usd": 0.142
+     },
+     "BO": {
+      "n": 955,
+      "exp_usd": 0.182
+     },
+     "SR": {
+      "n": 161,
+      "exp_usd": -0.779
+     },
+     "MR": {
+      "n": 90,
+      "exp_usd": 1.998
+     }
+    },
+    "by_side": {
+     "BUY": {
+      "n": 768,
+      "exp_usd": -0.277
+     },
+     "SELL": {
+      "n": 934,
+      "exp_usd": 0.358
+     }
+    },
+    "by_session": {
+     "ASIA": {
+      "n": 610,
+      "exp_usd": 0.193
+     },
+     "LONDON": {
+      "n": 382,
+      "exp_usd": -0.825
+     },
+     "NEW_YORK": {
+      "n": 596,
+      "exp_usd": 0.065
+     },
+     "OTHER": {
+      "n": 114,
+      "exp_usd": 2.456
+     }
+    },
+    "by_risk_band": {
+     "<=1%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "1-2%": {
+      "n": 0,
+      "exp_usd": null,
+      "avg_loss": null
+     },
+     "2-3%": {
+      "n": 11,
+      "exp_usd": -0.925,
+      "avg_loss": 1.64
+     },
+     "3-5%": {
+      "n": 197,
+      "exp_usd": -0.205,
+      "avg_loss": 2.11
+     },
+     "5-8%": {
+      "n": 361,
+      "exp_usd": -0.407,
+      "avg_loss": 3.35
+     },
+     ">8%": {
+      "n": 1133,
+      "exp_usd": 0.282,
+      "avg_loss": 10.56
+     }
+    }
+   },
+   "HOLD_stress": {
+    "expectancy_usd": -0.552,
+    "pf": 0.85,
+    "net_usd": -938.06
+   },
+   "HOLD_drift": {
+    "expectancy_usd": 0.299,
+    "pf": 1.09,
+    "net_usd": 501.02
+   },
+   "protected_run": {
+    "ran": 1824,
+    "mean_usd": 4.467,
+    "floor_hit_within_3_bars_share": 0.7,
+    "given_back_mean": 6.61,
+    "exit_mix": {
+     "PROTECTED_BANK": 1026,
+     "PROTECTED_BANK_AT_CLOSE": 251,
+     "RATCHET_BANK": 540,
+     "OPPOSITE_SIGNAL": 7
+    }
+   },
+   "decision": {
+    "status": "REJECTED",
+    "reject_reasons": [
+     "maxDD>31USD",
+     "margin-floor risk>5%"
+    ],
+    "vs_h0": {
+     "exp_usd": 0.071,
+     "h0_exp_usd": 0.156,
+     "net_per_day": 0.59,
+     "h0_net_per_day": 1.315,
+     "trades": 1702,
+     "h0_trades": 1714,
+     "dd": 366.84,
+     "h0_dd": 498.48
+    }
+   }
+  }
+ }
+}

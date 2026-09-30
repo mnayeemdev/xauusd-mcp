@@ -1,0 +1,16 @@
+signals 9617 (DEV 4098, HOLD 5519); sessions 437
+controls ...
+{"control_geometry":"symmetric: stop 1 ATR, fixed target 1 ATR (see PREREGISTRATION correction log)","leak_mean_usd":1.995,"leak_n":2179,"null_mean_usd":-0.257,"null_n":2178,"cost_test":{"no_slip_minus_normal_usd":0.1,"expected":0.1,"pass":true,"note":"slippage is pure accounting on identical paths; spread application (BUY fill = close + spread) is asserted by unit tests"}}
+H1_$2 {"hold":{"n":2012,"exp":-0.491,"pf":0.73,"win":0.713,"aw":1.9,"al":6.42,"dd":1004.42,"tpd":9}}
+H1_$3 {"hold":{"n":1968,"exp":-0.341,"pf":0.85,"win":0.658,"aw":2.9,"al":6.56,"dd":691.62,"tpd":9}}
+H1_$5 {"hold":{"n":1870,"exp":-0.17,"pf":0.94,"win":0.566,"aw":4.89,"al":6.78,"dd":401.13,"tpd":9}}
+H1_0.5R {"hold":{"n":1818,"exp":-0.303,"pf":0.91,"win":0.627,"aw":4.79,"al":8.85,"dd":762.47,"tpd":8}}
+H1_1.0R {"hold":{"n":1605,"exp":-0.227,"pf":0.95,"win":0.49,"aw":9.26,"al":9.35,"dd":862.95,"tpd":7}}
+H2a_bankrun_$3 {"hold":{"n":1901,"exp":0.655,"pf":1.29,"win":0.648,"aw":4.48,"al":6.37,"dd":129.77,"tpd":9}}
+H2b_alwaysrun_$3 {"hold":{"n":1878,"exp":-0.048,"pf":0.98,"win":0.561,"aw":4.54,"al":5.9,"dd":331.71,"tpd":9}}
+H3a_0.5ATR {"hold":{"n":1906,"exp":0.536,"pf":1.22,"win":0.65,"aw":4.64,"al":7.09,"dd":154.49,"tpd":9}}
+H3b_0.75ATR {"hold":{"n":1838,"exp":0.387,"pf":1.12,"win":0.587,"aw":5.99,"al":7.57,"dd":219.86,"tpd":8}}
+H4a_tp1_trail {"hold":{"n":1531,"exp":0.602,"pf":1.14,"win":0.487,"aw":10.34,"al":8.65,"dd":358.56,"tpd":7}}
+H4b_0.5R_trail {"hold":{"n":1702,"exp":0.071,"pf":1.02,"win":0.563,"aw":5.99,"al":7.55,"dd":366.84,"tpd":8}}
+{"decisions":{"H1_$2":"REJECTED","H1_$3":"REJECTED","H1_$5":"REJECTED","H1_0.5R":"REJECTED","H1_1.0R":"REJECTED","H2a_bankrun_$3":"REJECTED","H2b_alwaysrun_$3":"REJECTED","H3a_0.5ATR":"REJECTED","H3b_0.75ATR":"REJECTED","H4a_tp1_trail":"REJECTED","H4b_0.5R_trail":"REJECTED"}}
+written C:\Users\Techn\tradingview-mcp-main\research\capital_harvest_v1\results\study_results.json
