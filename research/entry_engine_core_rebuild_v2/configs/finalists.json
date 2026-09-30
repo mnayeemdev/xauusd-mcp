@@ -1,0 +1,148 @@
+{
+ "derived_from": "DEV",
+ "supported_variant_per_model": {
+  "MC": null,
+  "PB": "PB3b",
+  "BO": "BO2",
+  "SR": null,
+  "MR": null
+ },
+ "supported_new_triggers": [
+  "NT1_COMPRESSION_EXPANSION"
+ ],
+ "quality_v2": {
+  "keep": [
+   "qStructure",
+   "qTrigger",
+   "qMomentum",
+   "qVolatility",
+   "qMtf",
+   "qRr"
+  ],
+  "threshold": 61,
+  "top_cuts": {
+   "qStructure": 15,
+   "qTrigger": 15,
+   "qMomentum": 10,
+   "qVolatility": 10,
+   "qMtf": 15,
+   "qRr": 8
+  }
+ },
+ "vetoes_attached": [],
+ "finalists": {
+  "F1": {
+   "def": "CONTROL_NO_BO_NO_SR",
+   "models": [
+    "MC",
+    "PB",
+    "MR"
+   ]
+  },
+  "F2": {
+   "def": "best structural combination on DEV: MC_PB",
+   "structural": "MC_PB"
+  },
+  "F3": {
+   "def": "union of supported rebuilt subsets",
+   "subsets": [
+    "PB3b",
+    "BO2"
+   ]
+  },
+  "F4": {
+   "def": "F3 plus supported new triggers",
+   "subsets": [
+    "PB3b",
+    "BO2"
+   ],
+   "nt": [
+    "NT1_COMPRESSION_EXPANSION"
+   ]
+  },
+  "F5": {
+   "def": "supported new triggers only",
+   "nt": [
+    "NT1_COMPRESSION_EXPANSION"
+   ]
+  },
+  "F6": {
+   "def": "F3 with QV2A replacing the quality gate",
+   "subsets": [
+    "PB3b",
+    "BO2"
+   ],
+   "qv2a": true
+  },
+  "F7": {
+   "def": "SIMPLE_A: single best supported subset",
+   "subsets": [
+    "PB3b"
+   ]
+  },
+  "F8": {
+   "def": "SIMPLE_B: two best supported subsets",
+   "subsets": [
+    "PB3b",
+    "BO2"
+   ]
+  }
+ },
+ "nt_params": {
+  "nt1_rngA": 1.5,
+  "nt1_body": 0.6,
+  "nt2_body": 0.4,
+  "nt3_imp6": 0.6,
+  "nt3_rngA": 1.2,
+  "nt5_body": 0.5
+ },
+ "variant_params": {
+  "BO1": {
+   "age": 3,
+   "body": 0.5
+  },
+  "BO2": {
+   "rngA": 1,
+   "atrR": 1
+  },
+  "BO3": {},
+  "BO4": {},
+  "SR1": {
+   "wick": 0.6,
+   "d": 0.3,
+   "age": 30
+  },
+  "SR2": {
+   "wick": 0.6,
+   "d": 0.3,
+   "age": 30
+  },
+  "SR3": {
+   "age": 3
+  },
+  "MC1": {
+   "run": 4
+  },
+  "MC2": {
+   "age": 3
+  },
+  "MC3": {
+   "e20": 1
+  },
+  "PB1": {},
+  "PB2": {
+   "sw": 1,
+   "body": 0.5
+  },
+  "PB3a": {},
+  "PB3b": {},
+  "MR1": {},
+  "MR2": {
+   "atrR": 1
+  },
+  "MR3": {
+   "age": 3
+  },
+  "MR4": {}
+ }
+}

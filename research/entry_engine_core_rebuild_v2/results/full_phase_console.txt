@@ -1,0 +1,168 @@
+phase FULL; rows 99381; candidates 23934; signals 9617
+simulating candidates ...
+building new triggers ...
+NT entries 7199 gated {"TWO_FACTOR_30M":981,"BIAS_OPPOSED":2849,"OVEREXTENDED":1244,"ATR_FLOOR":955} [
+  [ 'NT2_SWEEP_RECLAIM', 3134 ],
+  [ 'NT4_STRUCTURAL_FLIP', 1404 ],
+  [ 'NT1_COMPRESSION_EXPANSION', 695 ],
+  [ 'NT5_BREAK_RETEST_V2', 1948 ],
+  [ 'NT3_MOMENTUM_IGNITION', 18 ]
+]
+controls {"leak_mean_r":0.531,"leak_n":1930,"null_mean_r":-0.089,"null_n":1930,"cost_test":{"diff":0.1,"expected":0.1,"pass":true},"nt_geometry_ok":true,"nt_first_exit_after_entry":true,"flags_reproduce_production_signals":true}
+diagnostics DEV ...
+diagnostics HOLD ...
+DECISIONS {
+ "candidates": {
+  "F1": {
+   "status": "FAILS_FINALIST_REQUIREMENTS",
+   "reasons": [
+    "trade CI includes 0",
+    "session-block CI includes 0",
+    "PF<=1.10",
+    "quarters positive <60%",
+    "stress<=0",
+    "DEV<=0"
+   ],
+   "hold_n": 479,
+   "hold_expectancy_r": 0.044,
+   "hold_pf": 1.05,
+   "hold_dd_r": 35.53,
+   "block_ci95_r": [
+    -0.111,
+    0.195
+   ]
+  },
+  "F2": {
+   "status": "FAILS_FINALIST_REQUIREMENTS",
+   "reasons": [
+    "trade CI includes 0",
+    "session-block CI includes 0",
+    "PF<=1.10",
+    "quarters positive <60%",
+    "stress<=0",
+    "DEV<=0"
+   ],
+   "hold_n": 406,
+   "hold_expectancy_r": 0.029,
+   "hold_pf": 1.04,
+   "hold_dd_r": 28.57,
+   "block_ci95_r": [
+    -0.141,
+    0.19
+   ]
+  },
+  "F3": {
+   "status": "FAILS_FINALIST_REQUIREMENTS",
+   "reasons": [
+    "trade CI includes 0",
+    "session-block CI includes 0"
+   ],
+   "hold_n": 509,
+   "hold_expectancy_r": 0.099,
+   "hold_pf": 1.13,
+   "hold_dd_r": 23.48,
+   "block_ci95_r": [
+    -0.059,
+    0.251
+   ]
+  },
+  "F4": {
+   "status": "FAILS_FINALIST_REQUIREMENTS",
+   "reasons": [
+    "trade CI includes 0",
+    "session-block CI includes 0",
+    "PF<=1.10",
+    "stress<=0"
+   ],
+   "hold_n": 693,
+   "hold_expectancy_r": 0.046,
+   "hold_pf": 1.06,
+   "hold_dd_r": 29.3,
+   "block_ci95_r": [
+    -0.081,
+    0.171
+   ]
+  },
+  "F5": {
+   "status": "FAILS_FINALIST_REQUIREMENTS",
+   "reasons": [
+    "expectancy<=0",
+    "trade CI includes 0",
+    "session-block CI includes 0",
+    "PF<=1.10",
+    "stress<=0",
+    "drift<=0",
+    "thresholds not ROBUST (NT.nt1_rngA:NEGATIVE_CENTRE, NT.nt1_body:NEGATIVE_CENTRE)"
+   ],
+   "hold_n": 295,
+   "hold_expectancy_r": -0.036,
+   "hold_pf": 0.96,
+   "hold_dd_r": 31.97,
+   "block_ci95_r": [
+    -0.226,
+    0.137
+   ]
+  },
+  "F6": {
+   "status": "FAILS_FINALIST_REQUIREMENTS",
+   "reasons": [
+    "expectancy<=0",
+    "trade CI includes 0",
+    "session-block CI includes 0",
+    "PF<=1.10",
+    "quarters positive <60%",
+    "stress<=0",
+    "drift<=0",
+    "DEV<=0",
+    "thresholds not ROBUST (BO2.rngA:NEGATIVE_CENTRE, BO2.atrR:NEGATIVE_CENTRE, QV2A.threshold:FRAGILE)"
+   ],
+   "hold_n": 285,
+   "hold_expectancy_r": -0.092,
+   "hold_pf": 0.89,
+   "hold_dd_r": 50.92,
+   "block_ci95_r": [
+    -0.285,
+    0.093
+   ]
+  },
+  "F7": {
+   "status": "FAILS_FINALIST_REQUIREMENTS",
+   "reasons": [
+    "N<200",
+    "trade CI includes 0",
+    "session-block CI includes 0",
+    "PF<=1.10",
+    "quarters positive <60%",
+    "stress<=0"
+   ],
+   "hold_n": 178,
+   "hold_expectancy_r": 0.048,
+   "hold_pf": 1.06,
+   "hold_dd_r": 19.25,
+   "block_ci95_r": [
+    -0.212,
+    0.319
+   ]
+  },
+  "F8": {
+   "status": "FAILS_FINALIST_REQUIREMENTS",
+   "reasons": [
+    "trade CI includes 0",
+    "session-block CI includes 0"
+   ],
+   "hold_n": 509,
+   "hold_expectancy_r": 0.099,
+   "hold_pf": 1.13,
+   "hold_dd_r": 23.48,
+   "block_ci95_r": [
+    -0.059,
+    0.251
+   ]
+  }
+ },
+ "finalist": null,
+ "edge_demonstrated": "INCONCLUSIVE",
+ "v2_beats_v1_control": "INCONCLUSIVE (higher point estimate, no qualifying finalist)",
+ "demo_eligible": "NO"
+}
+written FULL
