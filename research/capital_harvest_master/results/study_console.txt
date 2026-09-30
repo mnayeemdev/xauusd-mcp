@@ -1,0 +1,49 @@
+signals 9617 (DEV 4098, HOLD 5519); sessions 437; misaligned 0; non-monotone bars 0
+simulating ...
+  RUN_TO_END done
+  CH_A done
+  CH_B done
+  CH_C done
+  CH_D1 done
+  CH_D2 done
+  CH_D3 done
+controls ...
+{"leak_mean_usd":3.356,"leak_n":1371,"null_mean_usd":0.206,"null_n":1371,"cost_test":{"no_slip_minus_normal":0.1,"expected":0.1,"pass":true},"ratchet_violations":0,"stop_widened":0,"timestamp_misaligned":0,"non_monotone_bars":0}
+  CONTROL paths done
+  CH_A paths done
+  CH_B paths done
+  CH_C paths done
+  CH_D1 paths done
+  CH_D2 paths done
+  CH_D3 paths done
+CONTROL pol null 62.07: n1421 e0.328 pf1.07 dd413.92 | 75: n1421 e0.328 pf1.07 dd413.92 | 100: n1421 e0.328 pf1.07 dd413.92 | 250: n1421 e0.328 pf1.07 dd413.92 | 500: n1421 e0.328 pf1.07 dd413.92 | 1000: n1421 e0.328 pf1.07 dd413.92
+CONTROL pol 3    62.07: n0 eundefined pfundefined dd0 | 75: n3 e-0.591 pf0.19 dd2.19 | 100: n2 e0.207 pf99 dd15.71 | 250: n107 e-0.384 pf0.77 dd141.16 | 500: n762 e-0.074 pf0.97 dd249.45 | 1000: n1347 e0.305 pf1.07 dd443.01
+CONTROL pol 5    62.07: n0 eundefined pfundefined dd15.71 | 75: n1 e0.158 pf99 dd27.83 | 100: n2 e0.207 pf99 dd58.89 | 250: n51 e-0.604 pf0.58 dd156.44 | 500: n1159 e0.154 pf1.04 dd276.36 | 1000: n1400 e0.292 pf1.06 dd382.9
+CONTROL pol 10   62.07: n0 eundefined pfundefined dd52.6 | 75: n0 eundefined pfundefined dd53.81 | 100: n0 eundefined pfundefined dd61.86 | 250: n1209 e0.236 pf1.06 dd259.2 | 500: n1407 e0.248 pf1.05 dd278.7 | 1000: n1417 e0.301 pf1.06 dd413.92
+CH_A   pol null 62.07: n1515 e0.183 pf1.04 dd505.79! | 75: n1515 e0.183 pf1.04 dd505.79! | 100: n1515 e0.183 pf1.04 dd505.79! | 250: n1515 e0.183 pf1.04 dd505.79! | 500: n1515 e0.183 pf1.04 dd505.79 | 1000: n1515 e0.183 pf1.04 dd505.79
+CH_A   pol 3    62.07: n0 eundefined pfundefined dd0 | 75: n0 eundefined pfundefined dd2.19 | 100: n0 eundefined pfundefined dd13.34 | 250: n34 e-1.254 pf0.32 dd163.66 | 500: n212 e-0.82 pf0.6 dd320.95 | 1000: n1466 e0.238 pf1.06 dd440.64
+CH_A   pol 5    62.07: n0 eundefined pfundefined dd17.45 | 75: n0 eundefined pfundefined dd29.62 | 100: n3 e0.164 pf99 dd98.56 | 250: n2 e-1.053 pf0.04 dd207.76 | 500: n1366 e0.17 pf1.05 dd338.78 | 1000: n1488 e0.189 pf1.04 dd359.31
+CH_A   pol 10   62.07: n0 eundefined pfundefined dd63.63 | 75: n0 eundefined pfundefined dd40.39 | 100: n0 eundefined pfundefined dd66.9 | 250: n120 e-1.075 pf0.67 dd259.74 | 500: n1460 e0.186 pf1.04 dd443.77 | 1000: n1508 e0.181 pf1.04 dd484.74
+CH_B   pol null 62.07: n1625 e0.105 pf1.02 dd559.33! | 75: n1625 e0.105 pf1.02 dd559.33! | 100: n1625 e0.105 pf1.02 dd559.33! | 250: n1625 e0.105 pf1.02 dd559.33! | 500: n1625 e0.105 pf1.02 dd559.33 | 1000: n1625 e0.105 pf1.02 dd559.33
+CH_B   pol 3    62.07: n0 eundefined pfundefined dd0 | 75: n0 eundefined pfundefined dd5.29 | 100: n4 e1.064 pf2.95 dd23.9 | 250: n10 e-0.445 pf0.64 dd170.42 | 500: n83 e-0.523 pf0.65 dd236.98 | 1000: n1523 e0.06 pf1.02 dd435.39
+CH_B   pol 5    62.07: n0 eundefined pfundefined dd20.41 | 75: n0 eundefined pfundefined dd29.43 | 100: n4 e-0.617 pf0.51 dd85.5 | 250: n4 e-0.617 pf0.51 dd207.47 | 500: n477 e-0.314 pf0.85 dd294.03 | 1000: n1603 e0.065 pf1.02 dd512.55
+CH_B   pol 10   62.07: n0 eundefined pfundefined dd55.67 | 75: n0 eundefined pfundefined dd72.68 | 100: n0 eundefined pfundefined dd67.22 | 250: n0 eundefined pfundefined dd303.26 | 500: n1238 e-0.242 pf0.93 dd486.65 | 1000: n1629 e0.182 pf1.04 dd419.28
+CH_C   pol null 62.07: n1583 e0.115 pf1.02 dd461.61! | 75: n1583 e0.115 pf1.02 dd461.61! | 100: n1583 e0.115 pf1.02 dd461.61! | 250: n1583 e0.115 pf1.02 dd461.61! | 500: n1583 e0.115 pf1.02 dd461.61 | 1000: n1583 e0.115 pf1.02 dd461.61
+CH_C   pol 3    62.07: n0 eundefined pfundefined dd0 | 75: n0 eundefined pfundefined dd5.26 | 100: n6 e0.683 pf1.81 dd25.02 | 250: n14 e-0.301 pf0.79 dd169.93 | 500: n132 e-0.395 pf0.75 dd263.71 | 1000: n1540 e0.104 pf1.03 dd448.93
+CH_C   pol 5    62.07: n0 eundefined pfundefined dd20.02 | 75: n0 eundefined pfundefined dd24.25 | 100: n0 eundefined pfundefined dd68.23 | 250: n14 e-0.325 pf0.78 dd201.39 | 500: n1423 e0.114 pf1.03 dd375.88 | 1000: n1545 e0.024 pf1.01 dd533.32
+CH_C   pol 10   62.07: n0 eundefined pfundefined dd71.94 | 75: n0 eundefined pfundefined dd61.49 | 100: n0 eundefined pfundefined dd71.94 | 250: n317 e-0.46 pf0.85 dd328.38 | 500: n1402 e-0.022 pf0.99 dd502.55 | 1000: n1584 e0.13 pf1.03 dd415.21
+CH_D1  pol null 62.07: n1674 e0.032 pf1.01 dd426.1! | 75: n1674 e0.032 pf1.01 dd426.1! | 100: n1674 e0.032 pf1.01 dd426.1! | 250: n1674 e0.032 pf1.01 dd426.1! | 500: n1674 e0.032 pf1.01 dd426.1 | 1000: n1674 e0.032 pf1.01 dd426.1
+CH_D1  pol 3    62.07: n0 eundefined pfundefined dd0 | 75: n0 eundefined pfundefined dd5.26 | 100: n5 e1.395 pf4.19 dd31.89 | 250: n96 e-0.374 pf0.73 dd158.84 | 500: n294 e-0.405 pf0.74 dd295.52 | 1000: n1608 e0.184 pf1.06 dd379.13
+CH_D1  pol 5    62.07: n0 eundefined pfundefined dd26.2 | 75: n0 eundefined pfundefined dd29.89 | 100: n15 e-0.396 pf0.74 dd65.53 | 250: n43 e-0.356 pf0.74 dd199.2 | 500: n858 e-0.386 pf0.85 dd271.16 | 1000: n1634 e0.042 pf1.01 dd542.77
+CH_D1  pol 10   62.07: n0 eundefined pfundefined dd32.71 | 75: n0 eundefined pfundefined dd43.73 | 100: n0 eundefined pfundefined dd66.72 | 250: n3 e-1.31 pf0.24 dd232.9 | 500: n735 e-0.576 pf0.83 dd474.71 | 1000: n1672 e0.1 pf1.02 dd333.9
+CH_D2  pol null 62.07: n1598 e0.088 pf1.02 dd481.96! | 75: n1598 e0.088 pf1.02 dd481.96! | 100: n1598 e0.088 pf1.02 dd481.96! | 250: n1598 e0.088 pf1.02 dd481.96! | 500: n1598 e0.088 pf1.02 dd481.96 | 1000: n1598 e0.088 pf1.02 dd481.96
+CH_D2  pol 3    62.07: n0 eundefined pfundefined dd0 | 75: n0 eundefined pfundefined dd5.26 | 100: n6 e0.683 pf1.81 dd30.08 | 250: n19 e-0.528 pf0.65 dd168.31 | 500: n98 e-0.477 pf0.69 dd357.41 | 1000: n1550 e0.13 pf1.03 dd438.26
+CH_D2  pol 5    62.07: n0 eundefined pfundefined dd24.43 | 75: n0 eundefined pfundefined dd24.82 | 100: n4 e-0.174 pf0.76 dd69.73 | 250: n4 e-0.174 pf0.76 dd204.65 | 500: n1348 e-0.012 pf1 dd323.34 | 1000: n1554 e0.05 pf1.01 dd564.58
+CH_D2  pol 10   62.07: n0 eundefined pfundefined dd61.31 | 75: n0 eundefined pfundefined dd64.86 | 100: n0 eundefined pfundefined dd65.75 | 250: n253 e-0.338 pf0.86 dd299.9 | 500: n866 e-0.344 pf0.9 dd500.56 | 1000: n1599 e0.074 pf1.02 dd435.55
+CH_D3  pol null 62.07: n1666 e0.095 pf1.02 dd333.16! | 75: n1666 e0.095 pf1.02 dd333.16! | 100: n1666 e0.095 pf1.02 dd333.16! | 250: n1666 e0.095 pf1.02 dd333.16 | 500: n1666 e0.095 pf1.02 dd333.16 | 1000: n1666 e0.095 pf1.02 dd333.16
+CH_D3  pol 3    62.07: n0 eundefined pfundefined dd0 | 75: n0 eundefined pfundefined dd5.64 | 100: n6 e0.62 pf1.74 dd29.89 | 250: n19 e-0.681 pf0.5 dd154.05 | 500: n290 e-0.418 pf0.74 dd263.04 | 1000: n1616 e0.124 pf1.04 dd388.77
+CH_D3  pol 5    62.07: n0 eundefined pfundefined dd31.1 | 75: n0 eundefined pfundefined dd28.39 | 100: n0 eundefined pfundefined dd59.84 | 250: n12 e-0.351 pf0.72 dd203.34 | 500: n1225 e-0.318 pf0.88 dd305.41 | 1000: n1652 e0.123 pf1.03 dd401.44
+CH_D3  pol 10   62.07: n0 eundefined pfundefined dd44.65 | 75: n0 eundefined pfundefined dd47.21 | 100: n0 eundefined pfundefined dd67.22 | 250: n180 e-0.737 pf0.7 dd239.47 | 500: n1602 e-0.006 pf1 dd372.74 | 1000: n1666 e0.227 pf1.05 dd333.1
+SUPPORTED []
+written C:\Users\Techn\tradingview-mcp-main\research\capital_harvest_master\results\study_results.json
+exit=0
