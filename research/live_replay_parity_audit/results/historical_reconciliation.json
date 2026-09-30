@@ -1,0 +1,168 @@
+{
+ "v2_metric": {
+  "definition": "V2 \"trades/session\" = SEQUENTIAL H2a-managed hypothetical trades on every production BUY/SELL replay candle (one position at a time; re-entry after exit on any later signal candle not on the same (model,side,anchor) within 12 bars; 3.3-bar average hold; no News V2/shock/spread/drift/breaker gates; no production thesis folding; session = UTC day with >= 1 replay candle; holdout 2026-01 -> 09-29)",
+  "median_trades_per_session": 9,
+  "mean": 8.19,
+  "zero_rate": 0.112,
+  "trades": 1901
+ },
+ "apples_to_apples": {
+  "sessions_total": 438,
+  "sessions_full_ge_60_candles": 362,
+  "signal_candles": {
+   "n": 362,
+   "mean": 26.29,
+   "p10": 12,
+   "p25": 18,
+   "median": 25,
+   "p75": 34,
+   "p90": 41,
+   "zero": 0.003,
+   "one": 0.006,
+   "two": 0.003,
+   "three": 0.003,
+   "four_six": 0.019,
+   "seven_ten": 0.044,
+   "over_ten": 0.923
+  },
+  "new_theses_production_dedup": {
+   "n": 362,
+   "mean": 10.56,
+   "p10": 5,
+   "p25": 8,
+   "median": 11,
+   "p75": 13,
+   "p90": 16,
+   "zero": 0.003,
+   "one": 0.017,
+   "two": 0.008,
+   "three": 0.03,
+   "four_six": 0.113,
+   "seven_ten": 0.32,
+   "over_ten": 0.508
+  },
+  "executed_trades_production_stack_cap10": {
+   "n": 362,
+   "mean": 6.97,
+   "p10": 4,
+   "p25": 5,
+   "median": 7,
+   "p75": 9,
+   "p90": 10,
+   "zero": 0.003,
+   "one": 0.025,
+   "two": 0.028,
+   "three": 0.044,
+   "four_six": 0.298,
+   "seven_ten": 0.602,
+   "over_ten": 0
+  },
+  "folded_same_thesis_total": 5694,
+  "skipped_position_open_total": 1164,
+  "skipped_cap_total": 135,
+  "longest_zero_streak": {
+   "signal_candles": 1,
+   "new_theses": 1,
+   "executed": 1
+  }
+ },
+ "today": {
+  "signal_candles_today": 1,
+  "signal_candles_percentile_vs_full_sessions": 0.008,
+  "new_theses_today": 1,
+  "new_theses_percentile": 0.019,
+  "executed_today": 0,
+  "executed_zero_rate_hist": 0.003,
+  "note": "today has 110 expected candles (frozen ledger 07:30-16:40Z) of a normal ~288; percentiles compare raw counts, so today is disadvantaged by session length; rate-based context percentiles above are length-neutral"
+ },
+ "market_context": {
+  "atr_mean_usd": {
+   "today": 5.36,
+   "hist_p10": 2.31,
+   "hist_median": 4.68,
+   "hist_p90": 8.09,
+   "today_percentile": 0.66
+  },
+  "atr_ratio_mean": {
+   "today": 1.24,
+   "hist_p10": 0.93,
+   "hist_median": 1.02,
+   "hist_p90": 1.1,
+   "today_percentile": 0.994
+  },
+  "share_5m_trend_regime": {
+   "today": 0.491,
+   "hist_p10": 0.29,
+   "hist_median": 0.42,
+   "hist_p90": 0.56,
+   "today_percentile": 0.754
+  },
+  "share_5m_compression_or_range": {
+   "today": 0.155,
+   "hist_p10": 0.24,
+   "hist_median": 0.36,
+   "hist_p90": 0.47,
+   "today_percentile": 0.003
+  },
+  "share_15m_directional_bias": {
+   "today": 0.355,
+   "hist_p10": 0.21,
+   "hist_median": 0.47,
+   "hist_p90": 0.72,
+   "today_percentile": 0.29
+  },
+  "structural_breaks_per_100_candles": {
+   "today": 3.64,
+   "hist_p10": 3.79,
+   "hist_median": 4.71,
+   "hist_p90": 5.8,
+   "today_percentile": 0.099
+  },
+  "candidates_per_100_candles": {
+   "today": 20,
+   "hist_p10": 17.39,
+   "hist_median": 24.24,
+   "hist_p90": 30.8,
+   "today_percentile": 0.221
+  },
+  "no_eligible_share": {
+   "today": 0.8,
+   "hist_p10": 0.69,
+   "hist_median": 0.76,
+   "hist_p90": 0.83,
+   "today_percentile": 0.785
+  },
+  "signal_candles_per_100_candles": {
+   "today": 0.91,
+   "hist_p10": 4.35,
+   "hist_median": 9.06,
+   "hist_p90": 15.22,
+   "today_percentile": 0.011
+  },
+  "sessions_with_15m_directional_share_le_today": 0.29,
+  "regimes_today": {
+   "r15": {
+    "TRANSITION": 41,
+    "BULL_TREND": 24,
+    "RANGE": 30,
+    "BEAR_TREND": 15
+   },
+   "r30": {
+    "COMPRESSION": 17,
+    "BULL_TREND": 42,
+    "RANGE": 30,
+    "TRANSITION": 21
+   },
+   "b1h": {
+    "BULLISH": 101,
+    "BEARISH": 9
+   }
+  },
+  "news_blocked_candles_today": 13
+ },
+ "method_notes": [
+  "Production dedup approximated with computeSetupId semantics (direction + round2(candidate anchor); regime only used when no anchor) and resolveOpenSignals (SL/TP2 first touch on 5m bars strictly after the signal bar).",
+  "Executor approximated with one position, daily cap 10, production exit stack from the Edge Lab production simulation (broker structural/monetary stops, +30 TP, adaptive management); News V2/shock/spread/drift/breaker are not in the replay so these counts are an UPPER bound on live executions.",
+  "Sessions with fewer than 60 replay candles (holidays, partial days) excluded from distributions."
+ ]
+}

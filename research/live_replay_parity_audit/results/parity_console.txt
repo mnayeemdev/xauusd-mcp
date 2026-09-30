@@ -1,0 +1,240 @@
+
+=== DECISION/CONTEXT MISMATCH ROWS ===
+07:40 {"cmp":{"action":"MATCH","reason":"MATCH","regime5":"MATCH","structure5":"MATCH","event_type":"MATCH","regime15":"MISMATCH","regime30":"MATCH","level_diff_usd":0.17,"location_vs_event_level_diff":0.18},"live":{"a":"WAIT","r":"NO_ELIGIBLE_STRATEGY","rg5":"BULL_TREND","st5":"BULLISH","ev":"BOS","rg15":"BULL_TREND","rg30":"COMPRESSION","st30":"OK","delay":82},"replay":{"a":"WAIT","r":"NO_ELIGIBLE_STRATEGY","rg5":"BULL_TREND","atrR":1.313,"st5":"BULLISH","ev":"BOS/BULLISH","rg15":"TRANSITION","rg30":"COMPRESSION","T":"observed_at"}}
+07:45 {"cmp":{"action":"MATCH","reason":"MATCH","regime5":"MATCH","structure5":"MATCH","event_type":"MATCH","regime15":"MISMATCH","regime30":"MATCH","level_diff_usd":0.17,"location_vs_event_level_diff":0.18},"live":{"a":"WAIT","r":"NO_ELIGIBLE_STRATEGY","rg5":"BULL_TREND","st5":"BULLISH","ev":"BOS","rg15":"BULL_TREND","rg30":"COMPRESSION","st30":"OK","delay":82},"replay":{"a":"WAIT","r":"NO_ELIGIBLE_STRATEGY","rg5":"BULL_TREND","atrR":1.3,"st5":"BULLISH","ev":"BOS/BULLISH","rg15":"TRANSITION","rg30":"COMPRESSION","T":"observed_at"}}
+07:50 {"cmp":{"action":"MATCH","reason":"MATCH","regime5":"MATCH","structure5":"MATCH","event_type":"MATCH","regime15":"MISMATCH","regime30":"MATCH","level_diff_usd":0.17,"location_vs_event_level_diff":0.18},"live":{"a":"WAIT","r":"NO_ELIGIBLE_STRATEGY","rg5":"BULL_TREND","st5":"BULLISH","ev":"BOS","rg15":"BULL_TREND","rg30":"COMPRESSION","st30":"OK","delay":83},"replay":{"a":"WAIT","r":"NO_ELIGIBLE_STRATEGY","rg5":"BULL_TREND","atrR":1.256,"st5":"BULLISH","ev":"BOS/BULLISH","rg15":"TRANSITION","rg30":"COMPRESSION","T":"observed_at"}}
+10:10 {"cmp":{"action":"MATCH","reason":"MATCH","regime5":"MISMATCH","structure5":"MATCH","event_type":"MATCH","regime15":"MATCH","regime30":"MATCH","level_diff_usd":0.09,"location_vs_event_level_diff":0.04},"live":{"a":"WAIT","r":"NO_ELIGIBLE_STRATEGY","rg5":"TRANSITION","st5":"BEARISH","ev":"CHOCH","rg15":"RANGE","rg30":"BULL_TREND","st30":"OK","delay":83},"replay":{"a":"WAIT","r":"NO_ELIGIBLE_STRATEGY","rg5":"RANGE","atrR":0.915,"st5":"BEARISH","ev":"CHOCH/BEARISH","rg15":"RANGE","rg30":"BULL_TREND","T":"observed_at"}}
+10:20 {"cmp":{"action":"MATCH","reason":"MATCH","regime5":"MISMATCH","structure5":"MATCH","event_type":"MATCH","regime15":"MATCH","regime30":"MATCH","level_diff_usd":0.09,"location_vs_event_level_diff":0.04},"live":{"a":"WAIT","r":"NO_ELIGIBLE_STRATEGY","rg5":"TRANSITION","st5":"BEARISH","ev":"CHOCH","rg15":"RANGE","rg30":"BULL_TREND","st30":"OK","delay":83},"replay":{"a":"WAIT","r":"NO_ELIGIBLE_STRATEGY","rg5":"RANGE","atrR":0.925,"st5":"BEARISH","ev":"CHOCH/BEARISH","rg15":"RANGE","rg30":"BULL_TREND","T":"observed_at"}}
+11:05 {"cmp":{"action":"MATCH","reason":"MATCH","regime5":"MISMATCH","structure5":"MATCH","event_type":"MATCH","regime15":"MATCH","regime30":"MATCH","level_diff_usd":0.09,"location_vs_event_level_diff":0.12},"live":{"a":"WAIT","r":"NO_ELIGIBLE_STRATEGY","rg5":"BEAR_TREND","st5":"BEARISH","ev":"BOS","rg15":"RANGE","rg30":"BULL_TREND","st30":"OK","delay":84},"replay":{"a":"WAIT","r":"NO_ELIGIBLE_STRATEGY","rg5":"COMPRESSION","atrR":0.933,"st5":"BEARISH","ev":"BOS/BEARISH","rg15":"RANGE","rg30":"BULL_TREND","T":"observed_at"}}
+11:30 {"cmp":{"action":"MATCH","reason":"MATCH","regime5":"MATCH","structure5":"MATCH","event_type":"MATCH","regime15":"MATCH","regime30":"MISMATCH","level_diff_usd":0.09,"location_vs_event_level_diff":0.12},"live":{"a":"WAIT","r":"NO_ELIGIBLE_STRATEGY","rg5":"BEAR_TREND","st5":"BEARISH","ev":"BOS","rg15":"TRANSITION","rg30":"TRANSITION","st30":"OK","delay":194},"replay":{"a":"WAIT","r":"NO_ELIGIBLE_STRATEGY","rg5":"BEAR_TREND","atrR":0.945,"st5":"BEARISH","ev":"BOS/BEARISH","rg15":"TRANSITION","rg30":"RANGE","T":"observed_at"}}
+12:20 {"cmp":{"action":"MATCH","reason":"MATCH","regime5":"MISMATCH","structure5":"MATCH","event_type":"MATCH","regime15":"MATCH","regime30":"MATCH","level_diff_usd":0.06,"location_vs_event_level_diff":0.02},"live":{"a":"WAIT","r":"RR_NOT_ACCEPTABLE","rg5":"BULL_TREND","st5":"BULLISH","ev":"BOS","rg15":"TRANSITION","rg30":"RANGE","st30":"OK","delay":84},"replay":{"a":"WAIT","r":"RR_NOT_ACCEPTABLE","rg5":"RANGE","atrR":1.121,"st5":"BULLISH","ev":"BOS/BULLISH","rg15":"TRANSITION","rg30":"RANGE","T":"observed_at"}}
+14:25 {"cmp":{"action":"MATCH","reason":"LIVE_DATA_UNAVAILABLE","regime5":"MATCH","structure5":"MATCH","event_type":"MATCH","regime15":"MATCH","regime30":"LIVE_UNAVAILABLE","level_diff_usd":null,"location_vs_event_level_diff":null},"live":{"a":"WAIT","r":"insufficient/invalid market data","rg5":"BEAR_TREND","st5":"BEARISH","ev":"CHOCH","rg15":"TRANSITION","rg30":null,"st30":"UNAVAILABLE","delay":113},"replay":{"a":"WAIT","r":"NO_GOOD_ENTRY","rg5":"BEAR_TREND","atrR":1.486,"st5":"BEARISH","ev":"CHOCH/BEARISH","rg15":"TRANSITION","rg30":"RANGE","T":"observed_at"}}
+14:35 {"cmp":{"action":"MATCH","reason":"MISMATCH","regime5":"MATCH","structure5":"MATCH","event_type":"MATCH","regime15":"MATCH","regime30":"MATCH","level_diff_usd":0.09,"location_vs_event_level_diff":0.11},"live":{"a":"WAIT","r":"RR_NOT_ACCEPTABLE","rg5":"BEAR_TREND","st5":"BEARISH","ev":"CHOCH","rg15":"TRANSITION","rg30":"RANGE","st30":"OK","delay":97},"replay":{"a":"WAIT","r":"NO_GOOD_ENTRY","rg5":"BEAR_TREND","atrR":1.498,"st5":"BEARISH","ev":"CHOCH/BEARISH","rg15":"TRANSITION","rg30":"RANGE","T":"observed_at"}}
+14:50 {"cmp":{"action":"MATCH","reason":"LIVE_DATA_UNAVAILABLE","regime5":"MATCH","structure5":"MATCH","event_type":"MATCH","regime15":"MISMATCH","regime30":"MATCH","level_diff_usd":null,"location_vs_event_level_diff":null},"live":{"a":"WAIT","r":"insufficient/invalid market data","rg5":"BEAR_TREND","st5":"BEARISH","ev":"CHOCH","rg15":null,"rg30":"RANGE","st30":"OK","delay":104},"replay":{"a":"WAIT","r":"NO_ELIGIBLE_STRATEGY","rg5":"BEAR_TREND","atrR":1.46,"st5":"BEARISH","ev":"CHOCH/BEARISH","rg15":"TRANSITION","rg30":"RANGE","T":"observed_at"}}
+
+=== RR-REACHED CANDIDATES (replay) ===
+09:55 {"cand":"BO SELL","rr":1.27,"gate":"RR_NOT_ACCEPTABLE","q":null,"th":null,"qpass":null,"mtf":null,"action":"WAIT","reason":"RR_NOT_ACCEPTABLE","live":"RR_NOT_ACCEPTABLE","news_block":null,"processed":true}
+10:00 {"cand":"BO SELL","rr":2.87,"gate":"OK","q":79,"th":70,"qpass":true,"mtf":"30m regime BULL_TREND AND 30m structure BULLISH both oppose a SELL (two-factor conflict)","action":"WAIT","reason":"ENTRY_CONFLICT","live":"ENTRY_CONFLICT","news_block":null,"processed":true}
+11:20 {"cand":"BO SELL","rr":1.8,"gate":"OK","q":74,"th":70,"qpass":true,"mtf":"30m regime BULL_TREND AND 30m structure BULLISH both oppose a SELL (two-factor conflict)","action":"WAIT","reason":"ENTRY_CONFLICT","live":"ENTRY_CONFLICT","news_block":null,"processed":true}
+12:20 {"cand":"SR BUY","rr":1.31,"gate":"RR_NOT_ACCEPTABLE","q":null,"th":null,"qpass":null,"mtf":null,"action":"WAIT","reason":"RR_NOT_ACCEPTABLE","live":"RR_NOT_ACCEPTABLE","news_block":"NEWS:PRE_NEWS","processed":true}
+12:25 {"cand":"BO BUY","rr":2,"gate":"OK","q":82,"th":70,"qpass":true,"mtf":null,"action":"BUY","reason":null,"live":"BUY","news_block":"NEWS:PRE_NEWS|VOLATILITY_SHOCK","processed":true}
+12:35 {"cand":"BO BUY","rr":2,"gate":"OK","q":66,"th":70,"qpass":false,"mtf":null,"action":"WAIT","reason":"NO_GOOD_ENTRY","live":"NO_GOOD_ENTRY","news_block":"NEWS:NEWS_ACTIVE|VOLATILITY_SHOCK","processed":true}
+12:45 {"cand":"BO BUY","rr":2,"gate":"OK","q":61,"th":70,"qpass":false,"mtf":null,"action":"WAIT","reason":"NO_GOOD_ENTRY","live":"NO_GOOD_ENTRY","news_block":"NEWS:NEWS_ACTIVE|VOLATILITY_SHOCK","processed":true}
+12:55 {"cand":"BO BUY","rr":2,"gate":"OK","q":63,"th":65,"qpass":false,"mtf":null,"action":"WAIT","reason":"NO_GOOD_ENTRY","live":"NO_GOOD_ENTRY","news_block":"NEWS:POST_NEWS_COOLDOWN|VOLATILITY_SHOCK","processed":true}
+13:00 {"cand":"BO BUY","rr":2,"gate":"OK","q":63,"th":65,"qpass":false,"mtf":null,"action":"WAIT","reason":"NO_GOOD_ENTRY","live":"NO_GOOD_ENTRY","news_block":null,"processed":true}
+13:50 {"cand":"BO SELL","rr":1.62,"gate":"RR_NOT_ACCEPTABLE","q":null,"th":null,"qpass":null,"mtf":null,"action":"WAIT","reason":"RR_NOT_ACCEPTABLE","live":"RR_NOT_ACCEPTABLE","news_block":null,"processed":true}
+14:15 {"cand":"BO SELL","rr":1.43,"gate":"RR_NOT_ACCEPTABLE","q":null,"th":null,"qpass":null,"mtf":null,"action":"WAIT","reason":"RR_NOT_ACCEPTABLE","live":"RR_NOT_ACCEPTABLE","news_block":null,"processed":true}
+14:20 {"cand":"BO SELL","rr":2,"gate":"OK","q":54,"th":70,"qpass":false,"mtf":null,"action":"WAIT","reason":"NO_GOOD_ENTRY","live":"NO_GOOD_ENTRY","news_block":null,"processed":true}
+14:25 {"cand":"BO SELL","rr":2,"gate":"OK","q":60,"th":70,"qpass":false,"mtf":null,"action":"WAIT","reason":"NO_GOOD_ENTRY","live":"insufficient/invalid market data","news_block":null,"processed":true}
+14:30 {"cand":"BO SELL","rr":2,"gate":"OK","q":59,"th":70,"qpass":false,"mtf":null,"action":"WAIT","reason":"NO_GOOD_ENTRY","live":"NO_GOOD_ENTRY","news_block":null,"processed":true}
+14:35 {"cand":"BO SELL","rr":2,"gate":"OK","q":57,"th":70,"qpass":false,"mtf":null,"action":"WAIT","reason":"NO_GOOD_ENTRY","live":"RR_NOT_ACCEPTABLE","news_block":null,"processed":true}
+
+=== NEAR MISSES (top 25) ===
+{"t":"09:55","candidate":"BO SELL","first_failed_gate":"RR_NOT_ACCEPTABLE","rr":1.27,"rr_margin":-0.43,"quality":null,"q_margin":null,"mtf":null,"news_block":null,"models":{"PB":"bias NEUTRAL","MC":"bias NEUTRAL","BO":"would trigger","SR":"15m_low 5.8ATR;15m_high 3.63ATR;5m_low 0.98ATR;5m_high 3.63ATR","MR":"sweep 4 bars old"},"bias15":"NEUTRAL/RANGE","regime30":"BULL_TREND/BULLISH"}
+{"t":"10:00","candidate":"BO SELL","first_failed_gate":"MTF","rr":2.87,"rr_margin":1.17,"quality":79,"q_margin":9,"mtf":"30m regime BULL_TREND AND 30m structure BULLISH both oppose a SELL (two-factor conflict)","news_block":null,"models":{"PB":"bias NEUTRAL","MC":"bias NEUTRAL","BO":"would trigger","SR":"15m_low 5.83ATR;15m_high 3.41ATR;5m_low 0.98ATR;5m_high 3.41ATR","MR":"sweep 5 bars old"},"bias15":"NEUTRAL/RANGE","regime30":"BULL_TREND/BULLISH"}
+{"t":"11:20","candidate":"BO SELL","first_failed_gate":"MTF","rr":1.8,"rr_margin":0.1,"quality":74,"q_margin":4,"mtf":"30m regime BULL_TREND AND 30m structure BULLISH both oppose a SELL (two-factor conflict)","news_block":null,"models":{"PB":"bias NEUTRAL","MC":"bias NEUTRAL","BO":"would trigger","SR":"15m_low -1.81ATR;15m_high 5.46ATR;5m_low -1.81ATR;5m_high 2.25ATR","MR":"not eligible"},"bias15":"NEUTRAL/TRANSITION","regime30":"BULL_TREND/BULLISH"}
+{"t":"12:20","candidate":"SR BUY","first_failed_gate":"RR_NOT_ACCEPTABLE","rr":1.31,"rr_margin":-0.39,"quality":null,"q_margin":null,"mtf":null,"news_block":"NEWS:PRE_NEWS","models":{"PB":"bias NEUTRAL","MC":"bias NEUTRAL","BO":"retested not reclaimed","SR":"15m_low -0.05ATR;15m_high 2.53ATR;5m_low 1.45ATR;5m_high 0.28ATR","MR":"not eligible"},"bias15":"NEUTRAL/TRANSITION","regime30":"RANGE/BULLISH"}
+{"t":"12:25","candidate":"BO BUY","first_failed_gate":"EXECUTOR:ENTRY_DRIFT","rr":2,"rr_margin":0.3,"quality":82,"q_margin":12,"mtf":null,"news_block":"NEWS:PRE_NEWS|VOLATILITY_SHOCK","models":{"PB":"bias NEUTRAL","MC":"bias NEUTRAL","BO":"would trigger","SR":"15m_low 1.09ATR;15m_high 2.01ATR;5m_low 2.57ATR;5m_high -0.2ATR","MR":"sweep fresh (other MR conditions)"},"bias15":"NEUTRAL/RANGE","regime30":"RANGE/BULLISH"}
+{"t":"12:30","candidate":"BO BUY","first_failed_gate":"OVEREXTENDED","rr":null,"rr_margin":null,"quality":null,"q_margin":null,"mtf":null,"news_block":"NEWS:NEWS_ACTIVE|VOLATILITY_SHOCK","models":{"PB":"bias NEUTRAL","MC":"bias NEUTRAL","BO":"would trigger","SR":"15m_low 1.56ATR;15m_high -2.77ATR;5m_low 2.65ATR;5m_high -4.4ATR","MR":"sweep fresh (other MR conditions)"},"bias15":"NEUTRAL/RANGE","regime30":"RANGE/BULLISH"}
+{"t":"12:35","candidate":"BO BUY","first_failed_gate":"QUALITY","rr":2,"rr_margin":0.3,"quality":66,"q_margin":-4,"mtf":null,"news_block":"NEWS:NEWS_ACTIVE|VOLATILITY_SHOCK","models":{"PB":"bias NEUTRAL","MC":"bias NEUTRAL","BO":"would trigger","SR":"15m_low 3.24ATR;15m_high -2.55ATR;5m_low 4.23ATR;5m_high -4.03ATR","MR":"sweep 4 bars old"},"bias15":"NEUTRAL/RANGE","regime30":"RANGE/BULLISH"}
+{"t":"12:40","candidate":"BO BUY","first_failed_gate":"OVEREXTENDED","rr":null,"rr_margin":null,"quality":null,"q_margin":null,"mtf":null,"news_block":"NEWS:NEWS_ACTIVE|VOLATILITY_SHOCK","models":{"PB":"bias NEUTRAL","MC":"bias NEUTRAL","BO":"would trigger","SR":"15m_low 4.14ATR;15m_high -2.02ATR;5m_low 4.14ATR;5m_high -3.43ATR","MR":"not eligible"},"bias15":"NEUTRAL/TRANSITION","regime30":"RANGE/BULLISH"}
+{"t":"12:45","candidate":"BO BUY","first_failed_gate":"QUALITY","rr":2,"rr_margin":0.3,"quality":61,"q_margin":-9,"mtf":null,"news_block":"NEWS:NEWS_ACTIVE|VOLATILITY_SHOCK","models":{"PB":"bias NEUTRAL","MC":"bias NEUTRAL","BO":"would trigger","SR":"15m_low 4.17ATR;15m_high -2.26ATR;5m_low 3.3ATR;5m_high -3.61ATR","MR":"not eligible"},"bias15":"NEUTRAL/TRANSITION","regime30":"RANGE/BULLISH"}
+{"t":"12:50","candidate":"BO BUY","first_failed_gate":"OVEREXTENDED","rr":null,"rr_margin":null,"quality":null,"q_margin":null,"mtf":null,"news_block":"NEWS:POST_NEWS_COOLDOWN|VOLATILITY_SHOCK","models":{"PB":"bias NEUTRAL","MC":"bias NEUTRAL","BO":"would trigger","SR":"15m_low 4.09ATR;15m_high -1.55ATR;5m_low 3.22ATR;5m_high -2.9ATR","MR":"not eligible"},"bias15":"NEUTRAL/TRANSITION","regime30":"RANGE/BULLISH"}
+{"t":"12:55","candidate":"BO BUY","first_failed_gate":"QUALITY","rr":2,"rr_margin":0.3,"quality":63,"q_margin":-2,"mtf":null,"news_block":"NEWS:POST_NEWS_COOLDOWN|VOLATILITY_SHOCK","models":{"PB":"bias NEUTRAL","MC":"bias NEUTRAL","BO":"would trigger","SR":"15m_low 3.95ATR;15m_high -1.86ATR;5m_low 3.1ATR;5m_high -3.17ATR","MR":"not eligible"},"bias15":"NEUTRAL/TRANSITION","regime30":"TRANSITION/undefined"}
+{"t":"13:00","candidate":"BO BUY","first_failed_gate":"QUALITY","rr":2,"rr_margin":0.3,"quality":63,"q_margin":-2,"mtf":null,"news_block":null,"models":{"PB":"bias NEUTRAL","MC":"bias NEUTRAL","BO":"would trigger","SR":"15m_low 4.02ATR;15m_high -1.62ATR;5m_low 3.18ATR;5m_high 0.63ATR","MR":"not eligible"},"bias15":"NEUTRAL/TRANSITION","regime30":"TRANSITION/undefined"}
+{"t":"13:50","candidate":"BO SELL","first_failed_gate":"RR_NOT_ACCEPTABLE","rr":1.62,"rr_margin":-0.08,"quality":null,"q_margin":null,"mtf":null,"news_block":null,"models":{"PB":"bias NEUTRAL","MC":"bias NEUTRAL","BO":"would trigger","SR":"15m_low 0.01ATR;15m_high 2.6ATR;5m_low -0.85ATR;5m_high 4.9ATR","MR":"sweep fresh (other MR conditions)"},"bias15":"NEUTRAL/RANGE","regime30":"BULL_TREND/BULLISH"}
+{"t":"14:15","candidate":"BO SELL","first_failed_gate":"RR_NOT_ACCEPTABLE","rr":1.43,"rr_margin":-0.27,"quality":null,"q_margin":null,"mtf":null,"news_block":null,"models":{"PB":"bias NEUTRAL","MC":"bias NEUTRAL","BO":"would trigger","SR":"15m_low -0.4ATR;15m_high 4.99ATR;5m_low -1.28ATR;5m_high 4.99ATR","MR":"not eligible"},"bias15":"NEUTRAL/TRANSITION","regime30":"BULL_TREND/BULLISH"}
+{"t":"14:20","candidate":"BO SELL","first_failed_gate":"QUALITY","rr":2,"rr_margin":0.3,"quality":54,"q_margin":-16,"mtf":null,"news_block":null,"models":{"PB":"bias NEUTRAL","MC":"bias NEUTRAL","BO":"would trigger","SR":"15m_low -0.55ATR;15m_high 5.35ATR;5m_low -1.42ATR;5m_high 5.35ATR","MR":"not eligible"},"bias15":"NEUTRAL/TRANSITION","regime30":"BULL_TREND/BULLISH"}
+{"t":"14:25","candidate":"BO SELL","first_failed_gate":"QUALITY","rr":2,"rr_margin":0.3,"quality":60,"q_margin":-10,"mtf":null,"news_block":null,"models":{"PB":"bias NEUTRAL","MC":"bias NEUTRAL","BO":"would trigger","SR":"15m_low -0.92ATR;15m_high 6.34ATR;5m_low -1.82ATR;5m_high 6.34ATR","MR":"not eligible"},"bias15":"NEUTRAL/TRANSITION","regime30":"RANGE/BEARISH"}
+{"t":"14:30","candidate":"BO SELL","first_failed_gate":"QUALITY","rr":2,"rr_margin":0.3,"quality":59,"q_margin":-11,"mtf":null,"news_block":null,"models":{"PB":"bias NEUTRAL","MC":"bias NEUTRAL","BO":"would trigger","SR":"15m_low -1.37ATR;15m_high 6.13ATR;5m_low -2.26ATR;5m_high 6.13ATR","MR":"not eligible"},"bias15":"NEUTRAL/TRANSITION","regime30":"RANGE/BEARISH"}
+{"t":"14:35","candidate":"BO SELL","first_failed_gate":"QUALITY","rr":2,"rr_margin":0.3,"quality":57,"q_margin":-13,"mtf":null,"news_block":null,"models":{"PB":"bias NEUTRAL","MC":"bias NEUTRAL","BO":"would trigger","SR":"15m_low -1.7ATR;15m_high 6.56ATR;5m_low -2.58ATR;5m_high 6.56ATR","MR":"not eligible"},"bias15":"NEUTRAL/TRANSITION","regime30":"RANGE/BEARISH"}
+{"t":"07:55","candidate":null,"first_failed_gate":"NO_TRIGGER","rr":null,"rr_margin":null,"quality":null,"q_margin":null,"mtf":null,"news_block":null,"models":{"MC":"closes not progressing","PB":"resolved 23 bars ago (late)","BO":"BOS 13 bars old (>10)","SR":"15m_low 5.89ATR;5m_low 2.95ATR","MR":"not eligible"},"bias15":"BULLISH/BULL_TREND","regime30":"COMPRESSION/BULLISH"}
+{"t":"08:00","candidate":null,"first_failed_gate":"NO_TRIGGER","rr":null,"rr_margin":null,"quality":null,"q_margin":null,"mtf":null,"news_block":null,"models":{"MC":"closes not progressing","PB":"resolved 24 bars ago (late)","BO":"BOS 14 bars old (>10)","SR":"15m_low 6.07ATR;5m_low 3.12ATR","MR":"not eligible"},"bias15":"BULLISH/BULL_TREND","regime30":"COMPRESSION/BULLISH"}
+{"t":"08:05","candidate":null,"first_failed_gate":"NO_TRIGGER","rr":null,"rr_margin":null,"quality":null,"q_margin":null,"mtf":null,"news_block":null,"models":{"MC":"close 4195.913 vs swing 4201.4 (short by 5.48)","PB":"resolved 25 bars ago (late)","BO":"BOS 15 bars old (>10)","SR":"15m_low 6.28ATR;5m_low 3.27ATR","MR":"not eligible"},"bias15":"BULLISH/BULL_TREND","regime30":"COMPRESSION/BULLISH"}
+{"t":"08:10","candidate":null,"first_failed_gate":"NO_TRIGGER","rr":null,"rr_margin":null,"quality":null,"q_margin":null,"mtf":null,"news_block":null,"models":{"MC":"closes not progressing","PB":"resolved 26 bars ago (late)","BO":"BOS 16 bars old (>10)","SR":"15m_low 6.57ATR;5m_low 0.54ATR","MR":"not eligible"},"bias15":"BULLISH/BULL_TREND","regime30":"COMPRESSION/BULLISH"}
+{"t":"08:20","candidate":null,"first_failed_gate":"NO_TRIGGER","rr":null,"rr_margin":null,"quality":null,"q_margin":null,"mtf":null,"news_block":null,"models":{"MC":"close 4200.374 vs swing 4201.4 (short by 1.02)","PB":"correction NONE","BO":"BOS 18 bars old (>10)","SR":"15m_low 7.28ATR;5m_low 1.42ATR","MR":"not eligible"},"bias15":"BULLISH/BULL_TREND","regime30":"COMPRESSION/BULLISH"}
+{"t":"08:35","candidate":null,"first_failed_gate":"NO_TRIGGER","rr":null,"rr_margin":null,"quality":null,"q_margin":null,"mtf":null,"news_block":null,"models":{"MC":"close 4201.319 vs swing 4201.4 (short by 0.08)","PB":"correction NONE","BO":"BOS 21 bars old (>10)","SR":"15m_low 8.19ATR;5m_low 2ATR","MR":"not eligible"},"bias15":"BULLISH/BULL_TREND","regime30":"COMPRESSION/BULLISH"}
+{"t":"08:40","candidate":null,"first_failed_gate":"NO_TRIGGER","rr":null,"rr_margin":null,"quality":null,"q_margin":null,"mtf":null,"news_block":null,"models":{"MC":"closes not progressing","PB":"resolved 32 bars ago (late)","BO":"BOS 22 bars old (>10)","SR":"15m_low 7.71ATR;5m_low 1.51ATR","MR":"not eligible"},"bias15":"BULLISH/BULL_TREND","regime30":"COMPRESSION/BULLISH"}
+
+=== REPLAY_T_USED fallbacks === [ '14:15 353s', '16:05 333s' ]
+{
+ "window": {
+  "start_utc": "2026-09-30T07:30:00.000Z",
+  "end_utc": "2026-09-30T16:40:00.000Z",
+  "duration_h": 9.17,
+  "expected_candles": 110,
+  "processed_candles": 106,
+  "missing": [
+   "13:55",
+   "14:00",
+   "14:05",
+   "14:10"
+  ],
+  "complete": false,
+  "note": "PARTIAL CURRENT WINDOW: v9 started 07:30:29Z today; the session is still open at audit time. No earlier complete v9 day exists (v8 was blind and was stopped 07:16Z)."
+ },
+ "parity": {
+  "compared": 106,
+  "replay_errors": 0,
+  "decision_match": 103,
+  "live_data_unavailable": 2,
+  "decision_mismatch": 1,
+  "context_mismatch_rows": 9,
+  "live_final_signals": 1,
+  "replay_final_signals": [
+   "12:25 BO BUY"
+  ]
+ },
+ "funnel_live": {
+  "expected": 110,
+  "processed": 106,
+  "not_processed": 4,
+  "reasons": {
+   "NO_ELIGIBLE_STRATEGY": 87,
+   "RR_NOT_ACCEPTABLE": 5,
+   "ENTRY_CONFLICT": 2,
+   "BUY": 1,
+   "OVEREXTENDED": 3,
+   "NO_GOOD_ENTRY": 6,
+   "insufficient/invalid market data": 2
+  },
+  "candidate_reached_risk_or_later": 17,
+  "final_signals": 1,
+  "executor_reached": 1,
+  "broker_orders": 0
+ },
+ "funnel_replay": {
+  "processed": 110,
+  "model_eligible": 110,
+  "candidate_trigger": 22,
+  "after_overextension": 19,
+  "rr_reached": 19,
+  "after_rr": 13,
+  "after_quality": 3,
+  "after_mtf": 1,
+  "final_signals": 1
+ },
+ "funnel_missing": {
+  "processed": 4,
+  "model_eligible": 4,
+  "candidate_trigger": 4,
+  "after_overextension": 4,
+  "rr_reached": 4,
+  "after_rr": 2,
+  "after_quality": 0,
+  "after_mtf": 0,
+  "final_signals": 0
+ },
+ "rr": {
+  "reached": 15,
+  "buckets": {
+   "<1.00": 0,
+   "1.00-1.25": 0,
+   "1.25-1.50": 3,
+   "1.50-1.70": 1,
+   ">=1.70": 11
+  },
+  "would_create": {
+   "1": [],
+   "1.5": [],
+   "1.25": []
+  }
+ },
+ "quality": {
+  "n": 11,
+  "bands": {
+   "<65": 7,
+   "65-69": 1,
+   "70-74": 1,
+   "75+": 2
+  },
+  "failed": 8
+ },
+ "mtf": {
+  "fresh_choch_veto": 0,
+  "two_factor_30m": 2,
+  "htf_1h": 0,
+  "side_not_allowed_by_15m_bias": 9,
+  "bias_neutral_candles": 67,
+  "bias_directional_candles": 39
+ },
+ "news_blocked_candles": 13,
+ "data_parity": {
+  "mean_abs": {
+   "o": 0.172,
+   "h": 0.107,
+   "l": 0.173,
+   "c": 0.168
+  },
+  "signed": {
+   "o": 0.123,
+   "h": 0.087,
+   "l": 0.167,
+   "c": 0.072
+  },
+  "max": 0.775,
+  "signal": [
+   {
+    "signal_bar": "12:25",
+    "live_entry_tv": 4193.22,
+    "replay_entry_mt5": 4193.31,
+    "diff": -0.09,
+    "live_sl": 4181.78,
+    "replay_sl": 4181.65,
+    "live_q": 83,
+    "replay_q": 82,
+    "live_rr": 2,
+    "replay_rr": 2
+   }
+  ],
+  "level_diff": {
+   "n": 103,
+   "median": 0.09,
+   "max": 0.17
+  }
+ },
+ "reliability": {
+  "poll_interval_s": 60,
+  "processed_candles": 106,
+  "expected_candles": 110,
+  "missing_candles": [
+   "13:55",
+   "14:00",
+   "14:05",
+   "14:10"
+  ],
+  "processing_delay_after_close_s": {
+   "min": 82,
+   "median": 85,
+   "p90": 96,
+   "max": 353
+  },
+  "late_over_150s": [
+   "11:30 +194s",
+   "14:15 +353s",
+   "14:20 +164s",
+   "16:05 +333s"
+  ],
+  "tick_skips": 23,
+  "read_failures": 33,
+  "read_failure_reasons": {
+   "WRONG_TIMEFRAME_SERIES": 1,
+   "OHLCV_NOT_EXTRACTABLE": 32
+  },
+  "stalls": 2,
+  "recoveries": 3,
+  "baselines": [
+   "[13:00:30] TradingView/CDP connection restored — re-baselining to the latest confirmed 5m candle (no historical replay)"
+  ],
+  "alerts": [
+   "[18:01:29] BUY signal 9aa04de4f8c13b5d — alert sent"
+  ],
+  "executions": [
+   "[18:01:29] MT5 execution for 9aa04de4f8c13b5d: not executed (real:ENTRY_DRIFT)"
+  ],
+  "data_unavailable_candles": [
+   "14:25",
+   "14:50"
+  ]
+ }
+}
