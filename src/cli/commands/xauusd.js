@@ -5,6 +5,7 @@ import { formatDecision, formatEngineDecision, formatMarketAnalysis } from '../.
 import { calculateEntry } from '../../core/xauusd_calculate.js';
 import { analyzeMarket } from '../../core/xauusd_analyze_market.js';
 import { startWatcher, DEFAULT_POLL_INTERVAL_MS } from '../../engine/watcher.js';
+import { createWatcherReliability } from '../../engine/watcherDataReliability.js';
 import { acquireLock, releaseLock, lockHeldByLiveProcess, DEFAULT_LOCK_PATH as WATCHER_LOCK_PATH } from '../../engine/watcherState.js';
 import { resolveExecutorConfig } from '../../engine/mt5Policy.js';
 import { Mt5Bridge } from '../../engine/mt5Bridge.js';
@@ -179,7 +180,16 @@ register('xauusd', {
           return formatEngineDecision(result);
         }
         const pollIntervalMs = opts.interval ? Math.max(1, Number(opts.interval)) * 1000 : undefined;
-        if (!opts['mt5-demo'] && !opts['mt5-real']) return startWatcher({ pollIntervalMs, _deps: { cycle: { engineProfile } } });
+        // P1 data-reliability layer (src/engine/watcherDataReliability.js): resting
+        // 5m timeframe, bounded readiness-verified reads, outer peek retry and
+        // per-day acquisition counters in the watcher state. Injected through the
+        // existing dependency seams only -- the frozen watcher/engine files and the
+        // strategy fingerprint are untouched. XAUUSD_WATCHER_DATA_RELIABILITY=off
+        // restores the legacy chart deps without a code change (rollback lever).
+        const reliability = /^(0|off|false)$/i.test(String(process.env.XAUUSD_WATCHER_DATA_RELIABILITY ?? '')) ? null : createWatcherReliability({ engineProfile, log: (m) => console.log(m) });
+        const reliabilityDeps = reliability ? { runCycle: reliability.runCycle, cycle: { peekLatest5mCandle: reliability.peekLatest5mCandle, analyzeMarket: reliability.analyzeMarket } } : { cycle: {} };
+        console.log(`Watcher data-reliability layer: ${reliability ? `ON (resting timeframe ${reliability.options.restingTimeframe}, readiness-verified reads, peek outer attempts ${reliability.options.peekOuterAttempts})` : 'OFF (XAUUSD_WATCHER_DATA_RELIABILITY=off)'}`);
+        if (!opts['mt5-demo'] && !opts['mt5-real']) return startWatcher({ pollIntervalMs, _deps: { ...reliabilityDeps, cycle: { ...reliabilityDeps.cycle, engineProfile } } });
 
         // REAL execution is validated, protected (News V2 15m aggregation,
         // shock thresholds, adaptive management tfSec) and frozen ONLY for the
@@ -233,7 +243,7 @@ register('xauusd', {
           return acted ?? { action: 'THESIS_HOLD', ...out };
         };
         try {
-          return await startWatcher({ pollIntervalMs, _deps: { cycle: { engineProfile, executeSignal, reviewOpenPosition } } });
+          return await startWatcher({ pollIntervalMs, _deps: { ...reliabilityDeps, cycle: { ...reliabilityDeps.cycle, engineProfile, executeSignal, reviewOpenPosition } } });
         } finally {
           for (const [, { executor, bridge }] of executors) { try { await executor.stop(); } catch (err) { console.log(`[shutdown] executor stop failed: ${err.message}`); } try { await bridge.stop(); } catch (err) { console.log(`[shutdown] bridge stop failed: ${err.message}`); } }
           releaseLock(WATCHER_LOCK_PATH);

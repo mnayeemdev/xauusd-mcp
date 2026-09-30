@@ -1,0 +1,27 @@
+
+== plan_price (price 4193.22) ==
+E=  62.07 margin=20.97 free_after=41.1 structLoss=11.44 (18.43%) brokerSL=17.42 (28.07%) mlvl@-50=57.57% gate=FAIL (MARGIN_SAFETY_VETO) MARGIN_LEVEL_58PCT_AT_MAX_LOSS_BELOW_100|MARGIN_CALL_BEFORE_MAX_LOSS broker=PASS drift=PASS geom=PASS (rr 2)
+E=     75 margin=20.97 free_after=54.03 structLoss=11.44 (15.25%) brokerSL=17.42 (23.23%) mlvl@-50=119.24% gate=PASS  broker=PASS drift=PASS geom=PASS (rr 2)
+E=     99 margin=20.97 free_after=78.03 structLoss=11.44 (11.56%) brokerSL=17.42 (17.6%) mlvl@-50=233.71% gate=PASS  broker=PASS drift=PASS geom=PASS (rr 2)
+E=    100 margin=20.97 free_after=79.03 structLoss=11.44 (11.44%) brokerSL=17.42 (17.42%) mlvl@-50=238.48% gate=PASS  broker=PASS drift=PASS geom=PASS (rr 2)
+E=    101 margin=20.97 free_after=80.03 structLoss=11.44 (11.33%) brokerSL=17.42 (17.25%) mlvl@-50=243.25% gate=PASS  broker=PASS drift=PASS geom=PASS (rr 2)
+E=    150 margin=20.97 free_after=129.03 structLoss=11.44 (7.63%) brokerSL=17.42 (11.61%) mlvl@-50=476.96% gate=PASS  broker=PASS drift=PASS geom=PASS (rr 2)
+E=    250 margin=20.97 free_after=229.03 structLoss=11.44 (4.58%) brokerSL=17.42 (6.97%) mlvl@-50=953.92% gate=PASS  broker=PASS drift=PASS geom=PASS (rr 2)
+E=    500 margin=20.97 free_after=479.03 structLoss=11.44 (2.29%) brokerSL=17.42 (3.48%) mlvl@-50=2146.32% gate=PASS  broker=PASS drift=PASS geom=PASS (rr 2)
+E=   1000 margin=20.97 free_after=979.03 structLoss=11.44 (1.14%) brokerSL=17.42 (1.74%) mlvl@-50=4531.12% gate=PASS  broker=PASS drift=PASS geom=PASS (rr 2)
+
+== live_ask_at_alert (price 4209.902) ==
+E=  62.07 margin=21.05 free_after=41.02 structLoss=11.44 (18.43%) brokerSL=17.42 (28.07%) mlvl@-50=57.34% gate=FAIL (MARGIN_SAFETY_VETO) MARGIN_LEVEL_57PCT_AT_MAX_LOSS_BELOW_100|MARGIN_CALL_BEFORE_MAX_LOSS broker=PASS drift=FAIL (16.68 > 2) geom=FAIL (EFFECTIVE_RR_BELOW_MINIMUM)
+E=     75 margin=21.05 free_after=53.95 structLoss=11.44 (15.25%) brokerSL=17.42 (23.23%) mlvl@-50=118.77% gate=PASS  broker=PASS drift=FAIL (16.68 > 2) geom=FAIL (EFFECTIVE_RR_BELOW_MINIMUM)
+E=     99 margin=21.05 free_after=77.95 structLoss=11.44 (11.56%) brokerSL=17.42 (17.6%) mlvl@-50=232.78% gate=PASS  broker=PASS drift=FAIL (16.68 > 2) geom=FAIL (EFFECTIVE_RR_BELOW_MINIMUM)
+E=    100 margin=21.05 free_after=78.95 structLoss=11.44 (11.44%) brokerSL=17.42 (17.42%) mlvl@-50=237.54% gate=PASS  broker=PASS drift=FAIL (16.68 > 2) geom=FAIL (EFFECTIVE_RR_BELOW_MINIMUM)
+E=    101 margin=21.05 free_after=79.95 structLoss=11.44 (11.33%) brokerSL=17.42 (17.25%) mlvl@-50=242.29% gate=PASS  broker=PASS drift=FAIL (16.68 > 2) geom=FAIL (EFFECTIVE_RR_BELOW_MINIMUM)
+E=    150 margin=21.05 free_after=128.95 structLoss=11.44 (7.63%) brokerSL=17.42 (11.61%) mlvl@-50=475.07% gate=PASS  broker=PASS drift=FAIL (16.68 > 2) geom=FAIL (EFFECTIVE_RR_BELOW_MINIMUM)
+E=    250 margin=21.05 free_after=228.95 structLoss=11.44 (4.58%) brokerSL=17.42 (6.97%) mlvl@-50=950.14% gate=PASS  broker=PASS drift=FAIL (16.68 > 2) geom=FAIL (EFFECTIVE_RR_BELOW_MINIMUM)
+E=    500 margin=21.05 free_after=478.95 structLoss=11.44 (2.29%) brokerSL=17.42 (3.48%) mlvl@-50=2137.82% gate=PASS  broker=PASS drift=FAIL (16.68 > 2) geom=FAIL (EFFECTIVE_RR_BELOW_MINIMUM)
+E=   1000 margin=21.05 free_after=978.95 structLoss=11.44 (1.14%) brokerSL=17.42 (1.74%) mlvl@-50=4513.17% gate=PASS  broker=PASS drift=FAIL (16.68 > 2) geom=FAIL (EFFECTIVE_RR_BELOW_MINIMUM)
+
+THRESHOLDS {"plan_price":{"margin_required_usd":20.97,"min_equity_for_margin_level_100":70.97,"min_equity_for_margin_call_buffer_70":64.68,"min_equity_for_margin_budget_50pct":41.93,"min_equity_positive_at_max_loss":50.01,"binding_minimum_equity":70.97},"live_ask_at_alert":{"margin_required_usd":21.05,"min_equity_for_margin_level_100":71.05,"min_equity_for_margin_call_buffer_70":64.73,"min_equity_for_margin_budget_50pct":42.1,"min_equity_positive_at_max_loss":50.01,"binding_minimum_equity":71.05}}
+REPRO 2026-09-30T17:36:37Z SKIPPED MARGIN_SAFETY_VETO a2422991 expect {"margin_required_usd":20.76,"margin_level_at_max_loss_pct":58.14} got {"margin_required_usd":20.76,"margin_level_at_max_loss_pct":58.14,"executable":false,"reasons":["MARGIN_LEVEL_58PCT_AT_MAX_LOSS_BELOW_100","MARGIN_CALL_BEFORE_MAX_LOSS"]}
+REPRO 2026-09-30T17:56:38Z SKIPPED MARGIN_SAFETY_VETO 3f6638f5 expect {"margin_required_usd":20.75,"margin_level_at_max_loss_pct":58.17} got {"margin_required_usd":20.75,"margin_level_at_max_loss_pct":58.17,"executable":false,"reasons":["MARGIN_LEVEL_58PCT_AT_MAX_LOSS_BELOW_100","MARGIN_CALL_BEFORE_MAX_LOSS"]}
+REPRO 2026-09-25T11:02:00Z INTENT/OPENED 0df32f7b (executed at equity 71.94) expect {"margin_required_usd":21.55,"margin_level_at_max_loss_pct":101.79,"executable":true} got {"margin_required_usd":21.55,"margin_level_at_max_loss_pct":101.79,"executable":true,"reasons":[]}
