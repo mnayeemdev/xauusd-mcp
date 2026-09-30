@@ -1,0 +1,66 @@
+populationA 15934 S sizes {
+  'R0_1.70': 9617,
+  'R1_1.50': 10635,
+  'R2_1.25': 12498,
+  'R3_1.00': 14926,
+  R4_NO_FIXED_RR: 12364
+} consistency {"production_signals":9617,"R0_signals":9617,"in_R0_not_prod":0,"in_prod_not_R0":0}
+controls {"leak_mean_usd":1.995,"leak_n":2179,"null_mean_usd":-0.257,"null_n":2178,"cost_test":{"no_slip_minus_normal":0.1,"expected":0.1,"pass":true}}
+{
+ "decisions": {
+  "R0_1.70": {
+   "signals": 9617,
+   "hold_trades": 1901,
+   "hold_exp": 0.655,
+   "hold_pf": 1.29,
+   "dd62": 129.77,
+   "incr_n": 0,
+   "status": "CONTROL"
+  },
+  "R1_1.50": {
+   "signals": 10635,
+   "hold_trades": 2031,
+   "hold_exp": 0.581,
+   "hold_pf": 1.25,
+   "dd62": 140.16,
+   "incr_n": 457,
+   "incr_exp": -0.295,
+   "incr_pf": 0.89,
+   "status": "REJECTED"
+  },
+  "R2_1.25": {
+   "signals": 12498,
+   "hold_trades": 2218,
+   "hold_exp": 0.46,
+   "hold_pf": 1.2,
+   "dd62": 136.95,
+   "incr_n": 861,
+   "incr_exp": 0.044,
+   "incr_pf": 1.02,
+   "status": "INCONCLUSIVE"
+  },
+  "R3_1.00": {
+   "signals": 14926,
+   "hold_trades": 2408,
+   "hold_exp": 0.418,
+   "hold_pf": 1.18,
+   "dd62": 147.46,
+   "incr_n": 1089,
+   "incr_exp": 0.078,
+   "incr_pf": 1.03,
+   "status": "INCONCLUSIVE"
+  },
+  "R4_NO_FIXED_RR": {
+   "signals": 12364,
+   "hold_trades": 2233,
+   "hold_exp": 0.367,
+   "hold_pf": 1.15,
+   "dd62": 145.01,
+   "incr_n": 925,
+   "incr_exp": 0.268,
+   "incr_pf": 1.12,
+   "status": "INCONCLUSIVE"
+  }
+ }
+}
+written C:\Users\Techn\tradingview-mcp-main\research\capital_harvest_v2\results\study_results.json

@@ -1,0 +1,7 @@
+# Capital Harvest V2 — RR & entry frequency study (2026-09-30) — RESEARCH ONLY
+
+Question: does production's minimum RR 1.70 suppress opportunities that become useful under V1's H2a harvest management? Pre-registered (`PREREGISTRATION.md`, one logged pre-outcome correction), run once on Population A (15,934 candidates passing every production gate except RR; the 1.70 control reproduces production's 9,617 signals exactly) and on the full funnel, 2025-05 → 2026-09-29, 2026-09-30 excluded.
+
+**Answer: no.** Every relaxation lowers expectancy: holdout +0.655 USD/trade (PF 1.29) at 1.70 → +0.581 (1.50) → +0.460 (1.25) → +0.418 (1.00) → +0.367 (no fixed RR). The 1.50–1.70 bucket that motivated the study is the worst bucket in the range (−0.17 holdout, −0.43 development, −0.76 stress): REJECTED. Deeper increments are coin flips with negative stress results: INCONCLUSIVE. RR is not the bottleneck (zero-signal sessions 10.5% → 8.0% with no RR gate at all). Capital survival at 62 USD fails at every threshold and cap; ≈ 220 / 330 / 665 USD are needed for 3% / 2% / 1% median risk at 0.01 lot.
+
+Files: `scripts/v2_study.mjs` (imports V1's `harvest_engine.mjs`), `scripts/today_illustrative.mjs` (illustration only), `results/study_results.json`, `results/today_illustrative.json`, `tests/v2_integrity.test.js` (9 tests). Handoff: `handoff/CAPITAL_HARVEST_V2/` (gitignored) + `CHATGPT_HANDOFF_CAPITAL_HARVEST_V2.zip`. Production untouched; fingerprint 356e4189… unchanged.

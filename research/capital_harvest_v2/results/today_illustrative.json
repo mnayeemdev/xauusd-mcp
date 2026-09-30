@@ -1,0 +1,204 @@
+{
+ "label": "ILLUSTRATIVE — NOT EVIDENCE (2026-09-30 is the motivating session and is excluded from all inference)",
+ "data_end": "2026-09-30T15:55:00.000Z",
+ "cases": [
+  {
+   "t": 1790762100,
+   "label": "09:55 BO SELL (live RR_NOT_ACCEPTABLE 1.27)",
+   "production_decision": "WAIT/RR_NOT_ACCEPTABLE",
+   "model": "BO",
+   "side": "SELL",
+   "entry": 4188.01,
+   "structural_stop": 4191.96,
+   "tp2": 4182.99,
+   "rr": 1.27,
+   "admitting_threshold": "1.25",
+   "expected_loss_usd": 4.29,
+   "pct_equity": 0.0691,
+   "h2a": {
+    "status": "RESOLVED",
+    "exit": "PROTECTED_BANK",
+    "bars": 5,
+    "pnl_usd": 1.989,
+    "mfe_usd": 3.089,
+    "mae_usd": 2.852,
+    "reached_3usd": true,
+    "reached_at_bar": 4,
+    "decision": "RUN",
+    "evidence": {
+     "e1": true,
+     "e2": true,
+     "e3": true
+    },
+    "final_floor": 2.089,
+    "given_back": 1.1
+   },
+   "bars_available_after_signal": 72
+  },
+  {
+   "t": 1790770800,
+   "label": "12:20 SR BUY (live RR_NOT_ACCEPTABLE 1.31; inside PRE_NEWS block)",
+   "production_decision": "WAIT/RR_NOT_ACCEPTABLE",
+   "model": "SR",
+   "side": "BUY",
+   "entry": 4190.22,
+   "structural_stop": 4181.67,
+   "tp2": 4201.4,
+   "rr": 1.31,
+   "admitting_threshold": "1.25",
+   "expected_loss_usd": 8.89,
+   "pct_equity": 0.1432,
+   "h2a": {
+    "status": "RESOLVED",
+    "exit": "RATCHET_BANK",
+    "bars": 3,
+    "pnl_usd": 24.158,
+    "mfe_usd": 28.617,
+    "mae_usd": 2.604,
+    "reached_3usd": true,
+    "reached_at_bar": 2,
+    "decision": "RUN",
+    "evidence": {
+     "e1": true,
+     "e2": true,
+     "e3": true
+    },
+    "final_floor": 24.258,
+    "given_back": 4.459
+   },
+   "bars_available_after_signal": 43
+  },
+  {
+   "t": 1790776200,
+   "label": "13:50 BO SELL (live RR_NOT_ACCEPTABLE 1.62)",
+   "production_decision": "WAIT/RR_NOT_ACCEPTABLE",
+   "model": "BO",
+   "side": "SELL",
+   "entry": 4182.38,
+   "structural_stop": 4186.08,
+   "tp2": 4176.39,
+   "rr": 1.62,
+   "admitting_threshold": "1.50",
+   "expected_loss_usd": 4.04,
+   "pct_equity": 0.0651,
+   "h2a": {
+    "status": "RESOLVED",
+    "exit": "MILESTONE_BANK",
+    "bars": 1,
+    "pnl_usd": 2.9,
+    "mfe_usd": 4.954,
+    "mae_usd": 1.784,
+    "reached_3usd": true,
+    "reached_at_bar": 1,
+    "decision": "BANK",
+    "evidence": {
+     "e1": true,
+     "e2": false,
+     "e3": false
+    },
+    "final_floor": null,
+    "given_back": 2.054
+   },
+   "bars_available_after_signal": 25
+  },
+  {
+   "t": 1790776500,
+   "label": "13:55 BO SELL (stall-suppressed; replay RR 1.42)",
+   "production_decision": "WAIT/RR_NOT_ACCEPTABLE",
+   "model": "BO",
+   "side": "SELL",
+   "entry": 4177.36,
+   "structural_stop": 4185.76,
+   "tp2": 4165.47,
+   "rr": 1.42,
+   "admitting_threshold": "1.25",
+   "expected_loss_usd": 8.74,
+   "pct_equity": 0.1408,
+   "h2a": {
+    "status": "RESOLVED",
+    "exit": "MILESTONE_BANK",
+    "bars": 1,
+    "pnl_usd": 2.9,
+    "mfe_usd": 3.085,
+    "mae_usd": 2.211,
+    "reached_3usd": true,
+    "reached_at_bar": 1,
+    "decision": "BANK",
+    "evidence": {
+     "e1": false,
+     "e2": false,
+     "e3": false
+    },
+    "final_floor": null,
+    "given_back": 0.185
+   },
+   "bars_available_after_signal": 24
+  },
+  {
+   "t": 1790777100,
+   "label": "14:05 BO SELL (stall-suppressed; replay RR 1.21)",
+   "production_decision": "WAIT/RR_NOT_ACCEPTABLE",
+   "model": "BO",
+   "side": "SELL",
+   "entry": 4181.5,
+   "structural_stop": 4185.73,
+   "tp2": 4176.39,
+   "rr": 1.21,
+   "admitting_threshold": "1.00",
+   "expected_loss_usd": 4.57,
+   "pct_equity": 0.0736,
+   "h2a": {
+    "status": "RESOLVED",
+    "exit": "RATCHET_BANK",
+    "bars": 3,
+    "pnl_usd": 3.75,
+    "mfe_usd": 7.784,
+    "mae_usd": 2.441,
+    "reached_3usd": true,
+    "reached_at_bar": 2,
+    "decision": "RUN",
+    "evidence": {
+     "e1": true,
+     "e2": true,
+     "e3": true
+    },
+    "final_floor": 3.85,
+    "given_back": 4.034
+   },
+   "bars_available_after_signal": 22
+  },
+  {
+   "t": 1790777700,
+   "label": "14:15 BO SELL (live RR_NOT_ACCEPTABLE 1.43)",
+   "production_decision": "WAIT/RR_NOT_ACCEPTABLE",
+   "model": "BO",
+   "side": "SELL",
+   "entry": 4177.41,
+   "structural_stop": 4185.74,
+   "tp2": 4165.47,
+   "rr": 1.43,
+   "admitting_threshold": "1.25",
+   "expected_loss_usd": 8.67,
+   "pct_equity": 0.1397,
+   "h2a": {
+    "status": "RESOLVED",
+    "exit": "RATCHET_BANK",
+    "bars": 2,
+    "pnl_usd": 3.392,
+    "mfe_usd": 4.792,
+    "mae_usd": 3.035,
+    "reached_3usd": true,
+    "reached_at_bar": 1,
+    "decision": "RUN",
+    "evidence": {
+     "e1": true,
+     "e2": false,
+     "e3": true
+    },
+    "final_floor": 3.492,
+    "given_back": 1.4
+   },
+   "bars_available_after_signal": 20
+  }
+ ]
+}
