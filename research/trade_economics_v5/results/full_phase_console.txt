@@ -1,0 +1,121 @@
+features ...
+events 1640 1842
+phase FULL; populations CONTROL:9617 S1:342 S2:3910 S3:4342 S4:3276 S5:50 S6:875 S7:67
+controls {"leak_mean_r":0.489,"leak_n":2674,"null_mean_r":-0.085,"null_n":2674,"cost_test":{"diff":0.1,"expected":0.1,"pass":true},"first_exit_after_entry":true,"raised_stop_no_lookahead":true}
+DEV diagnostics ...
+HOLD diagnostics ...
+finalists ...
+DECISIONS {
+ "passing": [],
+ "best": {
+  "pop": "CONTROL",
+  "family": "HARVEST",
+  "key": "HARVEST|a1|g0.5",
+  "hold_n": 1476,
+  "hold_expectancy_r": 0.077,
+  "hold_pf": 1.13,
+  "hold_dd_r": 40,
+  "ci95_r": [
+   0.008,
+   0.145
+  ],
+  "block_ci95_r": [
+   -0.006,
+   0.154
+  ],
+  "improvement_r": 0.141,
+  "right_tail": "INCONCLUSIVE"
+ },
+ "entry_economics_result": "NEGATIVE",
+ "exit_geometry_result": "INCONCLUSIVE",
+ "edge_demonstrated": "NO",
+ "control_vs_v5": "BETTER",
+ "demo_eligible": "NO",
+ "four_way": {
+  "CONTROL_ENTRY_WITH_CONTROL_EXIT": {
+   "key": "CTL|PROD_TP2",
+   "n": 1163,
+   "expectancy_r": -0.064,
+   "pf": 0.93,
+   "max_dd_r": 98.89,
+   "ci95_r": [
+    -0.167,
+    0.041
+   ],
+   "win_rate": 0.363,
+   "avg_win_r": 2.261,
+   "avg_loss_r": 1.388
+  },
+  "CONTROL_ENTRY_WITH_RESEARCH_EXIT": {
+   "key": "HARVEST|a1|g0.5",
+   "n": 1476,
+   "expectancy_r": 0.077,
+   "pf": 1.13,
+   "max_dd_r": 40,
+   "ci95_r": [
+    0.008,
+    0.145
+   ],
+   "win_rate": 0.573,
+   "avg_win_r": 1.159,
+   "avg_loss_r": 1.377
+  },
+  "V4_ENTRY_WITH_CONTROL_EXIT": {
+   "key": "FIXED|rr1.7",
+   "n": 912,
+   "expectancy_r": -0.034,
+   "pf": 0.95,
+   "max_dd_r": 69.69,
+   "ci95_r": [
+    -0.126,
+    0.061
+   ],
+   "win_rate": 0.416,
+   "avg_win_r": 1.675,
+   "avg_loss_r": 1.249
+  },
+  "V4_ENTRY_WITH_RESEARCH_EXIT": {
+   "key": "FIXED|rr3",
+   "n": 652,
+   "expectancy_r": 0.048,
+   "pf": 1.06,
+   "max_dd_r": 48.76,
+   "ci95_r": [
+    -0.091,
+    0.204
+   ],
+   "win_rate": 0.316,
+   "avg_win_r": 2.849,
+   "avg_loss_r": 1.246
+  }
+ }
+}
+CONTROL FIXED FIXED|rr3 FAILS_GATE n 1032 exp -0.067 ctl -0.064 pf 0.93 dd 112.05 tail YES 1.046 dev -0.015 (1) expectancy<=0; (2) PF<=1.10; (3) not a meaningful improvement over the control exit (-0.067 vs -0.064 R; DD 112.05 vs 98.89); (5) quarters positive <60%; (6) thresholds NEGATIVE_CENTRE; (10) stress expectancy<=0; (13) trade CI includes 0; (13) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+CONTROL BE BE|m1 FAILS_GATE n 1325 exp -0.049 ctl -0.064 pf 0.92 dd 87.15 tail INCONCLUSIVE 0.718 dev -0.027 (1) expectancy<=0; (2) PF<=1.10; (3) not a meaningful improvement over the control exit (-0.049 vs -0.064 R; DD 87.15 vs 98.89); (5) quarters positive <60%; (6) thresholds NEGATIVE_CENTRE; (8) right tail INCONCLUSIVE (ratio 0.718); (10) stress expectancy<=0; (13) trade CI includes 0; (13) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+CONTROL PARTIAL PARTIAL|m0.75 FAILS_GATE n 1276 exp -0.033 ctl -0.064 pf 0.95 dd 73.4 tail INCONCLUSIVE 0.747 dev -0.046 (1) expectancy<=0; (2) PF<=1.10; (3) not a meaningful improvement over the control exit (-0.033 vs -0.064 R; DD 73.4 vs 98.89); (5) quarters positive <60%; (6) thresholds NEGATIVE_CENTRE; (8) right tail INCONCLUSIVE (ratio 0.747); (10) stress expectancy<=0; (13) trade CI includes 0; (13) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+CONTROL FLOOR FLOOR|m1 FAILS_GATE n 1411 exp -0.009 ctl -0.064 pf 0.98 dd 73.29 tail INCONCLUSIVE 0.644 dev -0.035 (1) expectancy<=0; (2) PF<=1.10; (3) not a meaningful improvement over the control exit (-0.009 vs -0.064 R; DD 73.29 vs 98.89); (5) quarters positive <60%; (6) thresholds NEGATIVE_CENTRE; (8) right tail INCONCLUSIVE (ratio 0.644); (10) stress expectancy<=0; (13) trade CI includes 0; (13) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+CONTROL HARVEST HARVEST|a1|g0.5 FAILS_GATE n 1476 exp 0.077 ctl -0.064 pf 1.13 dd 40 tail INCONCLUSIVE 0.673 dev 0.041 (6) thresholds SENSITIVE; (8) right tail INCONCLUSIVE (ratio 0.673); (10) stress expectancy<=0; (13) session-block CI includes 0
+CONTROL STRUCT_TRAIL STRUCT_TRAIL FAILS_GATE n 1094 exp 0.022 ctl -0.064 pf 1.02 dd 101.15 tail YES 1.136 dev 0.113 (2) PF<=1.10; (3) not a meaningful improvement over the control exit (0.022 vs -0.064 R; DD 101.15 vs 98.89); (7) tiny-cell dependence; (10) stress expectancy<=0; (13) trade CI includes 0; (13) session-block CI includes 0
+CONTROL TIME TIME|b6 FAILS_GATE n 1200 exp -0.054 ctl -0.064 pf 0.94 dd 86.29 tail YES 0.953 dev -0.044 (1) expectancy<=0; (2) PF<=1.10; (3) not a meaningful improvement over the control exit (-0.054 vs -0.064 R; DD 86.29 vs 98.89); (5) quarters positive <60%; (6) thresholds NEGATIVE_CENTRE; (10) stress expectancy<=0; (13) trade CI includes 0; (13) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+S2 FIXED FIXED|rr1.25 FAILS_GATE n 1427 exp -0.035 ctl -0.035 pf 0.95 dd 89.86 tail INCONCLUSIVE 0.73 dev -0.033 (1) expectancy<=0; (2) PF<=1.10; (3) not a meaningful improvement over the control exit (-0.035 vs -0.035 R; DD 89.86 vs 79.09); (5) quarters positive <60%; (6) thresholds NEGATIVE_CENTRE; (8) right tail INCONCLUSIVE (ratio 0.73); (10) stress expectancy<=0; (13) trade CI includes 0; (13) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+S2 BE BE|m1 FAILS_GATE n 1393 exp 0.005 ctl -0.035 pf 1.01 dd 80.32 tail INCONCLUSIVE 0.791 dev -0.013 (2) PF<=1.10; (3) not a meaningful improvement over the control exit (0.005 vs -0.035 R; DD 80.32 vs 79.09); (8) right tail INCONCLUSIVE (ratio 0.791); (10) stress expectancy<=0; (13) trade CI includes 0; (13) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+S2 PARTIAL PARTIAL|m0.5 FAILS_GATE n 1426 exp -0.032 ctl -0.035 pf 0.95 dd 88.76 tail INCONCLUSIVE 0.704 dev -0.016 (1) expectancy<=0; (2) PF<=1.10; (3) not a meaningful improvement over the control exit (-0.032 vs -0.035 R; DD 88.76 vs 79.09); (5) quarters positive <60%; (6) thresholds NEGATIVE_CENTRE; (8) right tail INCONCLUSIVE (ratio 0.704); (10) stress expectancy<=0; (13) trade CI includes 0; (13) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+S2 FLOOR FLOOR|m1 FAILS_GATE n 1466 exp 0.013 ctl -0.035 pf 1.02 dd 67.74 tail INCONCLUSIVE 0.717 dev -0.009 (2) PF<=1.10; (3) not a meaningful improvement over the control exit (0.013 vs -0.035 R; DD 67.74 vs 79.09); (6) thresholds SENSITIVE; (8) right tail INCONCLUSIVE (ratio 0.717); (10) stress expectancy<=0; (13) trade CI includes 0; (13) session-block CI includes 0; DEV expectancy<=0
+S2 HARVEST HARVEST|a1|g0.5 FAILS_GATE n 1497 exp 0.061 ctl -0.035 pf 1.1 dd 42.8 tail INCONCLUSIVE 0.787 dev 0.031 (2) PF<=1.10; (3) not a meaningful improvement over the control exit (0.061 vs -0.035 R; DD 42.8 vs 79.09); (8) right tail INCONCLUSIVE (ratio 0.787); (10) stress expectancy<=0; (13) trade CI includes 0; (13) session-block CI includes 0
+S2 STRUCT_TRAIL STRUCT_TRAIL FAILS_GATE n 1128 exp 0.064 ctl -0.035 pf 1.08 dd 129.33 tail YES 1.125 dev -0.002 (2) PF<=1.10; (3) not a meaningful improvement over the control exit (0.064 vs -0.035 R; DD 129.33 vs 79.09); (10) stress expectancy<=0; (13) trade CI includes 0; (13) session-block CI includes 0; DEV expectancy<=0
+S2 TIME TIME|b6 FAILS_GATE n 1300 exp -0.054 ctl -0.035 pf 0.93 dd 98.14 tail YES 0.932 dev -0.046 (1) expectancy<=0; (2) PF<=1.10; (3) not a meaningful improvement over the control exit (-0.054 vs -0.035 R; DD 98.14 vs 79.09); (5) quarters positive <60%; (6) thresholds NEGATIVE_CENTRE; (10) stress expectancy<=0; (13) trade CI includes 0; (13) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+S3 FIXED FIXED|rr3 FAILS_GATE n 652 exp 0.048 ctl -0.034 pf 1.06 dd 48.76 tail YES 1.311 dev 0.026 (2) PF<=1.10; (3) not a meaningful improvement over the control exit (0.048 vs -0.034 R; DD 48.76 vs 69.69); (6) thresholds SENSITIVE; (13) trade CI includes 0; (13) session-block CI includes 0
+S3 BE BE|m1 FAILS_GATE n 1026 exp -0.008 ctl -0.034 pf 0.99 dd 62.79 tail YES 0.804 dev -0.063 (1) expectancy<=0; (2) PF<=1.10; (3) not a meaningful improvement over the control exit (-0.008 vs -0.034 R; DD 62.79 vs 69.69); (6) thresholds NEGATIVE_CENTRE; (10) stress expectancy<=0; (13) trade CI includes 0; (13) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+S3 PARTIAL PARTIAL|m1 FAILS_GATE n 970 exp -0.042 ctl -0.034 pf 0.94 dd 79.61 tail YES 0.88 dev -0.037 (1) expectancy<=0; (2) PF<=1.10; (3) not a meaningful improvement over the control exit (-0.042 vs -0.034 R; DD 79.61 vs 69.69); (6) thresholds NEGATIVE_CENTRE; (10) stress expectancy<=0; (13) trade CI includes 0; (13) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+S3 FLOOR FLOOR|m1.25 FAILS_GATE n 1037 exp -0.022 ctl -0.034 pf 0.97 dd 72.56 tail YES 0.809 dev -0.045 (1) expectancy<=0; (2) PF<=1.10; (3) not a meaningful improvement over the control exit (-0.022 vs -0.034 R; DD 72.56 vs 69.69); (6) thresholds NEGATIVE_CENTRE; (10) stress expectancy<=0; (13) trade CI includes 0; (13) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+S3 HARVEST HARVEST|a1|g0.75 FAILS_GATE n 1085 exp 0.029 ctl -0.034 pf 1.05 dd 39.03 tail YES 0.802 dev -0.025 (2) PF<=1.10; (3) not a meaningful improvement over the control exit (0.029 vs -0.034 R; DD 39.03 vs 69.69); (10) stress expectancy<=0; (13) trade CI includes 0; (13) session-block CI includes 0; DEV expectancy<=0
+S3 STRUCT_TRAIL STRUCT_TRAIL FAILS_GATE n 1009 exp 0.017 ctl -0.034 pf 1.03 dd 48.42 tail YES 0.971 dev 0.008 (2) PF<=1.10; (3) not a meaningful improvement over the control exit (0.017 vs -0.034 R; DD 48.42 vs 69.69); (10) stress expectancy<=0; (13) trade CI includes 0; (13) session-block CI includes 0
+S3 TIME TIME|b6 FAILS_GATE n 954 exp -0.018 ctl -0.034 pf 0.97 dd 56.42 tail YES 0.913 dev -0.049 (1) expectancy<=0; (2) PF<=1.10; (3) not a meaningful improvement over the control exit (-0.018 vs -0.034 R; DD 56.42 vs 69.69); (5) quarters positive <60%; (6) thresholds NEGATIVE_CENTRE; (10) stress expectancy<=0; (13) trade CI includes 0; (13) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+S4 FIXED FIXED|rr3 FAILS_GATE n 878 exp -0.085 ctl -0.123 pf 0.91 dd 97.37 tail YES 1.167 dev -0.017 (1) expectancy<=0; (2) PF<=1.10; (3) not a meaningful improvement over the control exit (-0.085 vs -0.123 R; DD 97.37 vs 129.92); (5) quarters positive <60%; (6) thresholds NEGATIVE_CENTRE; (10) stress expectancy<=0; (13) trade CI includes 0; (13) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+S4 BE BE|m1 FAILS_GATE n 1131 exp -0.112 ctl -0.123 pf 0.83 dd 129.68 tail INCONCLUSIVE 0.791 dev -0.06 (1) expectancy<=0; (2) PF<=1.10; (3) not a meaningful improvement over the control exit (-0.112 vs -0.123 R; DD 129.68 vs 129.92); (5) quarters positive <60%; (6) thresholds NEGATIVE_CENTRE; (8) right tail INCONCLUSIVE (ratio 0.791); (10) stress expectancy<=0; (13) trade CI includes 0; (13) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+S4 PARTIAL PARTIAL|m1 FAILS_GATE n 1077 exp -0.12 ctl -0.123 pf 0.83 dd 131.24 tail YES 0.861 dev -0.08 (1) expectancy<=0; (2) PF<=1.10; (3) not a meaningful improvement over the control exit (-0.12 vs -0.123 R; DD 131.24 vs 129.92); (5) quarters positive <60%; (6) thresholds NEGATIVE_CENTRE; (10) stress expectancy<=0; (13) trade CI includes 0; (13) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+S4 FLOOR FLOOR|m1 FAILS_GATE n 1167 exp -0.117 ctl -0.123 pf 0.82 dd 138.96 tail INCONCLUSIVE 0.709 dev -0.043 (1) expectancy<=0; (2) PF<=1.10; (3) not a meaningful improvement over the control exit (-0.117 vs -0.123 R; DD 138.96 vs 129.92); (5) quarters positive <60%; (6) thresholds NEGATIVE_CENTRE; (8) right tail INCONCLUSIVE (ratio 0.709); (10) stress expectancy<=0; (13) trade CI includes 0; (13) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+S4 HARVEST HARVEST|a1|g0.5 FAILS_GATE n 1177 exp -0.031 ctl -0.123 pf 0.95 dd 61.74 tail INCONCLUSIVE 0.76 dev 0.022 (1) expectancy<=0; (2) PF<=1.10; (3) not a meaningful improvement over the control exit (-0.031 vs -0.123 R; DD 61.74 vs 129.92); (5) quarters positive <60%; (6) thresholds NEGATIVE_CENTRE; (8) right tail INCONCLUSIVE (ratio 0.76); (10) stress expectancy<=0; (13) trade CI includes 0; (13) session-block CI includes 0; drift expectancy<=0
+S4 STRUCT_TRAIL STRUCT_TRAIL FAILS_GATE n 888 exp -0.06 ctl -0.123 pf 0.93 dd 81.62 tail YES 1.066 dev 0.088 (1) expectancy<=0; (2) PF<=1.10; (3) not a meaningful improvement over the control exit (-0.06 vs -0.123 R; DD 81.62 vs 129.92); (6) thresholds NEGATIVE_CENTRE; (10) stress expectancy<=0; (13) trade CI includes 0; (13) session-block CI includes 0; drift expectancy<=0
+S4 TIME TIME|b6 FAILS_GATE n 1054 exp -0.113 ctl -0.123 pf 0.85 dd 126.17 tail YES 0.941 dev -0.06 (1) expectancy<=0; (2) PF<=1.10; (3) not a meaningful improvement over the control exit (-0.113 vs -0.123 R; DD 126.17 vs 129.92); (5) quarters positive <60%; (6) thresholds NEGATIVE_CENTRE; (10) stress expectancy<=0; (13) trade CI includes 0; (13) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+written FULL

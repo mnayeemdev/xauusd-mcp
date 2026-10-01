@@ -1,0 +1,52 @@
+▶ R normalisation, SL and target geometry
+  ✔ 1R = planned structural distance; BUY fill includes the spread; target = entry +/- rr x R from the planned entry (0.5242ms)
+  ✔ an explicit target price (production TP2) overrides the R multiple (0.4502ms)
+✔ R normalisation, SL and target geometry (1.6922ms)
+▶ MFE / MAE / milestones / cost accounting
+  ✔ MFE, MAE and milestone bars are measured from the fill in R; milestones record the FIRST bar reaching each level (0.2311ms)
+  ✔ cost accounting: spread + slippage (+ swap for BUY nights) is charged exactly once; stress costs reduce R by the cost difference (0.156ms)
+  ✔ SL before TP on the same bar; broker fail-safe (1.5R + spread) is intrabar; thesis invalidation needs a CLOSE beyond the structural stop (0.2028ms)
+✔ MFE / MAE / milestones / cost accounting (0.7805ms)
+▶ exit policies (information-time)
+  ✔ break-even: once a completed bar reaches m R the stop moves to the fill (+spread) from the NEXT bar and exits intrabar (0.197ms)
+  ✔ partial protection and profit floor place the stop at fill - protect R / fill + floor R (0.1737ms)
+  ✔ adaptive harvest ratchets the stop to MFE - gap once armed; the ratchet is monotone and never acts on the bar that set it (0.1972ms)
+  ✔ structural trail uses only swings known at the completed bar and only once the swing is beyond the fill (0.1803ms)
+  ✔ time stop exits at the close of bar n only if the trade is at or below -level R at that close (0.1665ms)
+  ✔ no look-ahead: altering bars after the exit never changes the result; a raised stop never fires on its own bar (0.6457ms)
+  ✔ confirmed-candle entry: the first exit bar is always >= entry + 1 (study control) (0.0972ms)
+✔ exit policies (information-time) (1.9377ms)
+▶ right tail and give-back metrics
+  ✔ right-tail ratio = policy mean realized / control mean realized on trades whose OPEN MFE >= 2R; verdict thresholds 0.8 / 0.6 (0.2539ms)
+  ✔ give-back = MFE - realized for trades with MFE >= threshold (0.1639ms)
+✔ right tail and give-back metrics (0.5092ms)
+▶ pre-registration discipline and controls
+  ✔ pre-registration, control-baseline and finalists hashes match and are carried in the results; finalists derived from DEV (1.3116ms)
+  ✔ leak / null / cost / first-exit / no-lookahead controls pass; CONTROL and V4 S3 reproduce V4 exactly under the control exit (0.1346ms)
+  ✔ restart determinism: DEV diagnostics and grids are identical between the DEV phase and the FULL phase (2.1899ms)
+  ✔ populations are the frozen V4 finalists plus CONTROL; the policy grid is the pre-registered 27 + open path (0.1829ms)
+✔ pre-registration discipline and controls (3.9482ms)
+▶ finalist derivation and accounting invariants
+  ✔ per population x family: highest DEV sequential expectancy among policies with N >= 200 (0.5435ms)
+  ✔ DEV: one-position semantics (trades + skips = signals), exit mix sums to one, win/loss decomposition consistent (0.2884ms)
+  ✔ DEV: MFE/MAE buckets partition winners and losers; milestone reach rates are monotone non-increasing (0.1755ms)
+  ✔ HOLD: one-position semantics (trades + skips = signals), exit mix sums to one, win/loss decomposition consistent (0.0897ms)
+  ✔ HOLD: MFE/MAE buckets partition winners and losers; milestone reach rates are monotone non-increasing (0.058ms)
+  ✔ right tail: the control exit scores ratio 1.0 against itself; HARVEST policies truncate the tail (ratio < 1) (0.0578ms)
+✔ finalist derivation and accounting invariants (1.3767ms)
+▶ decision rules recompute from the persisted HOLDOUT statistics
+  ✔ each policy status follows the section-7 gate (0.3042ms)
+  ✔ aggregate: no pass; ENTRY NEGATIVE (every meaningful population <= 0 under its control exit); EXIT INCONCLUSIVE; EDGE NO; DEMO NO (0.1201ms)
+✔ decision rules recompute from the persisted HOLDOUT statistics (0.4869ms)
+▶ production preservation
+  ✔ the study and simulator import nothing from the executor, bridge, watcher or MT5; no V5 runtime module exists (1.0082ms)
+  ✔ CONTROL geometry unchanged: RR 1.70 reference, lot-neutral R economics with 0.01-lot USD reported separately; costs and split frozen (0.9809ms)
+✔ production preservation (2.0767ms)
+ℹ tests 28
+ℹ suites 8
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 132.9378
