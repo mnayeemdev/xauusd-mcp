@@ -1,0 +1,128 @@
+phase FULL; rows 99381; signals 9617
+simulating ...
+controls {"leak_mean_r":0.531,"leak_n":1930,"null_mean_r":-0.089,"null_n":1930,"cost_test":{"diff":0.1,"expected":0.1,"pass":true},"hysteresis_h1_equals_h0":true,"hysteresis_lookahead_violations":0,"control_reproduces_v2":true,"control_hold":{"n":1163,"expectancy_r":-0.064}}
+diagnostics DEV ...
+diagnostics HOLD ...
+DECISIONS {
+ "candidates": {
+  "V3-A": {
+   "status": "FAILS_GATE",
+   "reasons": [
+    "(2) stress expectancy<=0",
+    "(3) PF<=1.10",
+    "(7) tiny-cell dependence",
+    "(10) trade CI includes 0",
+    "(10) session-block CI includes 0"
+   ],
+   "hold_n": 206,
+   "hold_expectancy_r": 0.055,
+   "hold_pf": 1.07,
+   "hold_dd_r": 19.51,
+   "ci95_r": [
+    -0.195,
+    0.299
+   ],
+   "block_ci95_r": [
+    -0.183,
+    0.28
+   ],
+   "dev_expectancy_r": 0.01
+  },
+  "V3-B": {
+   "status": "FAILS_GATE",
+   "reasons": [
+    "(6) N<200",
+    "(7) tiny-cell dependence",
+    "DEV expectancy<=0"
+   ],
+   "hold_n": 54,
+   "hold_expectancy_r": 0.581,
+   "hold_pf": 1.89,
+   "hold_dd_r": 4.66,
+   "ci95_r": [
+    0.073,
+    1.079
+   ],
+   "block_ci95_r": [
+    0.077,
+    1.095
+   ],
+   "dev_expectancy_r": -0.284
+  },
+  "V3-C": {
+   "status": "FAILS_GATE",
+   "reasons": [
+    "(10) trade CI includes 0",
+    "(10) session-block CI includes 0",
+    "DEV expectancy<=0"
+   ],
+   "hold_n": 499,
+   "hold_expectancy_r": 0.085,
+   "hold_pf": 1.11,
+   "hold_dd_r": 25.87,
+   "ci95_r": [
+    -0.068,
+    0.235
+   ],
+   "block_ci95_r": [
+    -0.076,
+    0.231
+   ],
+   "dev_expectancy_r": -0.053
+  },
+  "V3-D": {
+   "status": "FAILS_GATE",
+   "reasons": [
+    "(3) PF<=1.10",
+    "(6) N<200",
+    "(7) tiny-cell dependence",
+    "(8) quarters positive <60%",
+    "(10) trade CI includes 0",
+    "(10) session-block CI includes 0",
+    "DEV expectancy<=0"
+   ],
+   "hold_n": 148,
+   "hold_expectancy_r": 0.071,
+   "hold_pf": 1.09,
+   "hold_dd_r": 13.6,
+   "ci95_r": [
+    -0.197,
+    0.371
+   ],
+   "block_ci95_r": [
+    -0.208,
+    0.338
+   ],
+   "dev_expectancy_r": -0.05
+  },
+  "V3-E": {
+   "status": "FAILS_GATE",
+   "reasons": [
+    "(10) trade CI includes 0",
+    "(10) session-block CI includes 0",
+    "DEV expectancy<=0"
+   ],
+   "hold_n": 469,
+   "hold_expectancy_r": 0.117,
+   "hold_pf": 1.15,
+   "hold_dd_r": 21.79,
+   "ci95_r": [
+    -0.043,
+    0.279
+   ],
+   "block_ci95_r": [
+    -0.051,
+    0.278
+   ],
+   "dev_expectancy_r": -0.013
+  }
+ },
+ "passing": [],
+ "best_candidate": "V3-E",
+ "v3_pass": false,
+ "edge_demonstrated": "INCONCLUSIVE",
+ "v3_beats_control": "YES",
+ "demo_eligible": "NO"
+}
+written FULL
+FULL exit=0

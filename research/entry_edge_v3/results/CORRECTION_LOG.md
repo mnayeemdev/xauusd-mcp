@@ -1,0 +1,5 @@
+# ENTRY EDGE V3 — correction log (kept outside V3_PREREGISTRATION.md so its frozen hash stays valid)
+
+| # | When (UTC) | What | Why | Effect on outcomes |
+|---|---|---|---|---|
+| 1 | 2026-10-01 ~04:50Z (after the first FULL run) | `tinyCellDependence` in `scripts/v3_study.mjs` implemented gate item (7) as the SUM of all positive cells with N < 30, which is stricter than the pre-registered rule ("no model × regime × direction cell with N < 30 contributes more than 30 % of net R" = per-cell maximum). Corrected to the per-cell maximum; the summed share is retained as a diagnostic field. | Implementation deviated from the frozen text. | Candidate definitions, hysteresis levels (`configs/finalists.json`, hash 4f3ac014…) and every statistic are unchanged; only the (7) PASS/FAIL flag can change. First run: all five failed (7) under the summed rule. Re-run with the frozen per-cell rule: see FINAL results. No candidate passes the gate under either rule because every candidate also fails item (10) and/or the DEV > 0 requirement. |

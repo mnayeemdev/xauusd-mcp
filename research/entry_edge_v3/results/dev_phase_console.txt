@@ -1,0 +1,7 @@
+phase DEV; rows 99381; signals 9617
+simulating ...
+controls {"leak_mean_r":0.531,"leak_n":1930,"null_mean_r":-0.089,"null_n":1930,"cost_test":{"diff":0.1,"expected":0.1,"pass":true},"hysteresis_h1_equals_h0":true,"hysteresis_lookahead_violations":0,"control_reproduces_v2":true,"control_hold":{"n":1163,"expectancy_r":-0.064}}
+diagnostics DEV ...
+DERIVED {"derived_from":"DEV","finalists":{"V3-A":{"hysteresis_k":0,"params":{"mr_atr":1,"bo_rng":1,"bo_atr":1,"bo_chase":1.5},"dev_trades":137,"dev_expectancy_r":0.01,"h0_expectancy_r":0.01,"h0_dd_r":19.41,"selected_dd_r":19.41},"V3-B":{"hysteresis_k":0,"params":{"mr_atr":1,"bo_rng":1,"bo_atr":1,"bo_chase":1.5},"dev_trades":40,"dev_expectancy_r":-0.284,"h0_expectancy_r":-0.284,"h0_dd_r":15.41,"selected_dd_r":15.41},"V3-C":{"hysteresis_k":3,"params":{"mr_atr":1,"bo_rng":1,"bo_atr":1,"bo_chase":1.5},"dev_trades":387,"dev_expectancy_r":-0.053,"h0_expectancy_r":-0.061,"h0_dd_r":34.84,"selected_dd_r":33.97},"V3-D":{"hysteresis_k":2,"params":{"mr_atr":1,"bo_rng":1,"bo_atr":1,"bo_chase":1.5},"dev_trades":110,"dev_expectancy_r":-0.05,"h0_expectancy_r":-0.082,"h0_dd_r":16.45,"selected_dd_r":15.42},"V3-E":{"hysteresis_k":2,"params":{"mr_atr":1,"bo_rng":1,"bo_atr":1,"bo_chase":1.5},"dev_trades":354,"dev_expectancy_r":-0.013,"h0_expectancy_r":-0.036,"h0_dd_r":32.43,"selected_dd_r":28.18}},"note":"hysteresis level chosen by the PREREGISTRATION section 5 rule; params fixed at the pre-registered values"}
+finalists.json sha256 4f3ac0145546fbeb6c00f11b254b7ebb3c55b6e34732b4d3d70511a52a7d2625
+written DEV

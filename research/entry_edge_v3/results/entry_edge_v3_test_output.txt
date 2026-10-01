@@ -1,0 +1,56 @@
+▶ pre-registration discipline
+  ✔ V3 pre-registration hash matches the frozen .sha256 and is carried in both result files (1.0809ms)
+  ✔ finalists were frozen from DEV before the FULL pass (hash matches; identical to the DEV-phase derivation) (1.1769ms)
+  ✔ parameters are the pre-registered centre values and the candidate set is V3-A..E + CONTROL (0.1628ms)
+  ✔ CONTROL reproduces the V2 (= V1) CONTROL exactly on both splits (0.1233ms)
+✔ pre-registration discipline (3.3602ms)
+▶ built-in controls
+  ✔ leak / null / cost / hysteresis determinism / no look-ahead controls pass (0.1473ms)
+  ✔ DEV diagnostics are identical between the DEV phase and the FULL phase (repeatability) (0.2772ms)
+✔ built-in controls (0.5405ms)
+▶ hysteresis state machine (reference implementation)
+  ✔ H1 is identical to H0 (raw) by construction (0.394ms)
+  ✔ H_k changes only after k identical raw labels and holds the previous label meanwhile (0.1413ms)
+  ✔ no look-ahead: the prefix of H_k never changes when later labels change (0.1069ms)
+  ✔ resets at a session boundary (first label of the new session is taken as is) (0.1124ms)
+  ✔ deterministic: two runs give identical sequences (0.0683ms)
+  ✔ flips per session decrease monotonically with k and H1 equals H0 in the study (0.0871ms)
+  ✔ H0 rows of the hysteresis effect table have zero removed / added / missed-valid by definition (0.1098ms)
+✔ hysteresis state machine (reference implementation) (1.2559ms)
+▶ subset, overlap and matrix accounting
+  ✔ DEV: overlaps exist only within a model and the union reconciles (0.1376ms)
+  ✔ DEV: regime x direction cells sum to the subset sizes (PB SELL, PB RANGE, MR LONG, BO2) (0.1645ms)
+  ✔ DEV: trend-fade exclusion holds (no MR BUY in BEAR_TREND, no MR SELL in BULL_TREND inside V3-B/V3-D cells) and V3-D admits nothing in BULL_TREND (0.1894ms)
+  ✔ DEV: candidates are subsets of CONTROL with the pre-registered model membership and direction rules (0.0974ms)
+  ✔ DEV: move-event accounting partitions every event (0.0649ms)
+  ✔ DEV: exit mix and sequential skips are consistent (0.0643ms)
+  ✔ HOLD: overlaps exist only within a model and the union reconciles (0.0272ms)
+  ✔ HOLD: regime x direction cells sum to the subset sizes (PB SELL, PB RANGE, MR LONG, BO2) (0.0302ms)
+  ✔ HOLD: trend-fade exclusion holds (no MR BUY in BEAR_TREND, no MR SELL in BULL_TREND inside V3-B/V3-D cells) and V3-D admits nothing in BULL_TREND (0.0354ms)
+  ✔ HOLD: candidates are subsets of CONTROL with the pre-registered model membership and direction rules (0.0592ms)
+  ✔ HOLD: move-event accounting partitions every event (0.0471ms)
+  ✔ HOLD: exit mix and sequential skips are consistent (0.0475ms)
+✔ subset, overlap and matrix accounting (1.624ms)
+▶ finalist derivation reproduces the pre-registered hysteresis-selection rule from DEV
+  ✔ selected level = highest DEV expectancy among H0..H3 with N >= 100, >= H0 expectancy and <= H0 DD; else H0 (0.0838ms)
+  ✔ finalist DEV statistics equal the hysteresis-table entry of the selected level (0.0548ms)
+✔ finalist derivation reproduces the pre-registered hysteresis-selection rule from DEV (0.1843ms)
+▶ decision rules recompute from the persisted HOLDOUT statistics
+  ✔ tiny-cell rule is the per-cell maximum share (<= 30 %) as pre-registered (0.1302ms)
+  ✔ each candidate status and reason list follows the section-9 gate (0.1298ms)
+  ✔ aggregate decisions: no pass, EDGE INCONCLUSIVE, DEMO NO, best candidate = highest HOLD expectancy with N >= 200 (0.0886ms)
+  ✔ no candidate with N >= 200 has a HOLDOUT CI lower bound above zero, and no candidate is positive on DEV except V3-A (0.058ms)
+✔ decision rules recompute from the persisted HOLDOUT statistics (0.4779ms)
+▶ production preservation
+  ✔ the study imports only the pure re-entry guard; no executor, bridge, watcher or MT5 module (0.4815ms)
+  ✔ no V3 runtime module exists under src and the frozen registry is untouched by this stage (0.9001ms)
+  ✔ costs, split, RR-independent R economics and 0.01-lot USD are reported separately (capital neutrality) (0.1051ms)
+✔ production preservation (1.5759ms)
+ℹ tests 34
+ℹ suites 7
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 93.0247
