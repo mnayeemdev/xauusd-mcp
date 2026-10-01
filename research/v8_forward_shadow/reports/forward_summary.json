@@ -1,0 +1,116 @@
+{
+ "generated_utc": "2026-10-01T12:02:02.877Z",
+ "V8": {
+  "decisions": 1,
+  "valid_setups": 1,
+  "signals": 1,
+  "labelled": 0,
+  "per_signal": {
+   "n": 0
+  },
+  "stress": {
+   "n": 0
+  },
+  "missed": {},
+  "wrong": {},
+  "regression": {
+   "D1": {
+    "OK": 1,
+    "VIOLATION": 0,
+    "VIOLATION_ON_SIGNALS": 0
+   },
+   "D2": {
+    "OK": 1,
+    "VIOLATION": 0,
+    "VIOLATION_ON_SIGNALS": 0
+   },
+   "D3": {
+    "OK": 0,
+    "VIOLATION": 0,
+    "VIOLATION_ON_SIGNALS": 0
+   },
+   "D4": {
+    "OK": 0,
+    "VIOLATION": 0,
+    "VIOLATION_ON_SIGNALS": 0
+   },
+   "D5": {
+    "OK": 1,
+    "VIOLATION": 0,
+    "VIOLATION_ON_SIGNALS": 0
+   },
+   "D6": {
+    "OK": 1,
+    "VIOLATION": 0,
+    "VIOLATION_ON_SIGNALS": 0
+   }
+  },
+  "parity": {
+   "checked": 1,
+   "inputs_equal": 1,
+   "match": 1,
+   "mismatch": 0,
+   "input_changed": 0
+  }
+ },
+ "CONTROL": {
+  "decisions": 1,
+  "valid_setups": 1,
+  "signals": 1,
+  "labelled": 0,
+  "per_signal": {
+   "n": 0
+  },
+  "stress": {
+   "n": 0
+  },
+  "missed": {},
+  "wrong": {},
+  "regression": {
+   "D1": {
+    "OK": 1,
+    "VIOLATION": 0,
+    "VIOLATION_ON_SIGNALS": 0
+   },
+   "D2": {
+    "OK": 0,
+    "VIOLATION": 1,
+    "VIOLATION_ON_SIGNALS": 1
+   },
+   "D3": {
+    "OK": 0,
+    "VIOLATION": 0,
+    "VIOLATION_ON_SIGNALS": 0
+   },
+   "D4": {
+    "OK": 0,
+    "VIOLATION": 0,
+    "VIOLATION_ON_SIGNALS": 0
+   },
+   "D5": {
+    "OK": 1,
+    "VIOLATION": 0,
+    "VIOLATION_ON_SIGNALS": 0
+   },
+   "D6": {
+    "OK": 1,
+    "VIOLATION": 0,
+    "VIOLATION_ON_SIGNALS": 0
+   }
+  },
+  "parity": {
+   "checked": 1,
+   "inputs_equal": 1,
+   "match": 1,
+   "mismatch": 0,
+   "input_changed": 0
+  }
+ },
+ "events": 0,
+ "flags": [],
+ "clean": true,
+ "conclusion": "INCONCLUSIVE",
+ "why": "collecting: 1 / 300 forward V8 signals",
+ "demo_eligible": "NO",
+ "final": false
+}
