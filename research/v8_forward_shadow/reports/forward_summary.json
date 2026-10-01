@@ -1,26 +1,89 @@
 {
- "generated_utc": "2026-10-01T12:02:02.877Z",
+ "generated_utc": "2026-10-01T12:47:29.411Z",
+ "observation": {
+  "start": "2026-10-01T11:58:45.000Z",
+  "end": "2026-10-01T12:45:00.000Z",
+  "elapsed_hours": 0.7708333333333334
+ },
+ "sample_size_gate": "NONE",
+ "trade_count_target": "NONE",
+ "evidence": {
+  "V8": {
+   "total_candidates": 4,
+   "valid_setups": 1,
+   "shadow_signals": 1,
+   "missed_valid_setups": 0,
+   "incorrect_blocks": 0,
+   "invalid_setups_accepted": 0,
+   "late_signals": 0,
+   "wrong_direction_decisions": 0,
+   "valid_losing_trades": 1,
+   "implementation_errors": 0,
+   "d1_d6_regressions": 0
+  },
+  "CONTROL": {
+   "total_candidates": 4,
+   "valid_setups": 1,
+   "shadow_signals": 1,
+   "missed_valid_setups": 0,
+   "incorrect_blocks": 0,
+   "invalid_setups_accepted": 1,
+   "late_signals": 0,
+   "wrong_direction_decisions": 0,
+   "valid_losing_trades": 0,
+   "implementation_errors": 1,
+   "d1_d6_regressions": 7
+  }
+ },
  "V8": {
-  "decisions": 1,
+  "decisions": 10,
   "valid_setups": 1,
   "signals": 1,
-  "labelled": 0,
+  "labelled": 1,
   "per_signal": {
-   "n": 0
+   "n": 1,
+   "win_rate": 0,
+   "avg_win": null,
+   "avg_loss": 1.28,
+   "expectancy": -1.28,
+   "pf": 0,
+   "max_dd": 1.28,
+   "loss_streak": 1,
+   "mfe": 0.612,
+   "mae": 1.35,
+   "reach170": 0,
+   "giveback": 1.892,
+   "duration": 2,
+   "wrong": 0
   },
   "stress": {
-   "n": 0
+   "n": 1,
+   "win_rate": 0,
+   "avg_win": null,
+   "avg_loss": 1.379,
+   "expectancy": -1.379,
+   "pf": 0,
+   "max_dd": 1.379,
+   "loss_streak": 1,
+   "mfe": 0.612,
+   "mae": 1.35,
+   "reach170": 0,
+   "giveback": 1.913,
+   "duration": 2,
+   "wrong": 0
   },
   "missed": {},
-  "wrong": {},
+  "wrong": {
+   "VALID_LOSING_TRADE": 1
+  },
   "regression": {
    "D1": {
-    "OK": 1,
+    "OK": 10,
     "VIOLATION": 0,
     "VIOLATION_ON_SIGNALS": 0
    },
    "D2": {
-    "OK": 1,
+    "OK": 10,
     "VIOLATION": 0,
     "VIOLATION_ON_SIGNALS": 0
    },
@@ -35,47 +98,75 @@
     "VIOLATION_ON_SIGNALS": 0
    },
    "D5": {
-    "OK": 1,
+    "OK": 3,
     "VIOLATION": 0,
     "VIOLATION_ON_SIGNALS": 0
    },
    "D6": {
-    "OK": 1,
+    "OK": 3,
     "VIOLATION": 0,
     "VIOLATION_ON_SIGNALS": 0
    }
   },
   "parity": {
-   "checked": 1,
-   "inputs_equal": 1,
-   "match": 1,
+   "checked": 3,
+   "inputs_equal": 3,
+   "match": 3,
    "mismatch": 0,
    "input_changed": 0
   }
  },
  "CONTROL": {
-  "decisions": 1,
+  "decisions": 10,
   "valid_setups": 1,
   "signals": 1,
-  "labelled": 0,
+  "labelled": 1,
   "per_signal": {
-   "n": 0
+   "n": 1,
+   "win_rate": 0,
+   "avg_win": null,
+   "avg_loss": 1.28,
+   "expectancy": -1.28,
+   "pf": 0,
+   "max_dd": 1.28,
+   "loss_streak": 1,
+   "mfe": 0.612,
+   "mae": 1.35,
+   "reach170": 0,
+   "giveback": 1.892,
+   "duration": 2,
+   "wrong": 0
   },
   "stress": {
-   "n": 0
+   "n": 1,
+   "win_rate": 0,
+   "avg_win": null,
+   "avg_loss": 1.379,
+   "expectancy": -1.379,
+   "pf": 0,
+   "max_dd": 1.379,
+   "loss_streak": 1,
+   "mfe": 0.612,
+   "mae": 1.35,
+   "reach170": 0,
+   "giveback": 1.913,
+   "duration": 2,
+   "wrong": 0
   },
   "missed": {},
-  "wrong": {},
+  "wrong": {
+   "PATTERN_ERROR": 1
+  },
   "regression": {
    "D1": {
-    "OK": 1,
+    "OK": 10,
     "VIOLATION": 0,
     "VIOLATION_ON_SIGNALS": 0
    },
    "D2": {
-    "OK": 0,
-    "VIOLATION": 1,
-    "VIOLATION_ON_SIGNALS": 1
+    "OK": 3,
+    "VIOLATION": 7,
+    "VIOLATION_ON_SIGNALS": 3
    },
    "D3": {
     "OK": 0,
@@ -88,20 +179,20 @@
     "VIOLATION_ON_SIGNALS": 0
    },
    "D5": {
-    "OK": 1,
+    "OK": 3,
     "VIOLATION": 0,
     "VIOLATION_ON_SIGNALS": 0
    },
    "D6": {
-    "OK": 1,
+    "OK": 3,
     "VIOLATION": 0,
     "VIOLATION_ON_SIGNALS": 0
    }
   },
   "parity": {
-   "checked": 1,
-   "inputs_equal": 1,
-   "match": 1,
+   "checked": 3,
+   "inputs_equal": 3,
+   "match": 3,
    "mismatch": 0,
    "input_changed": 0
   }
@@ -109,8 +200,6 @@
  "events": 0,
  "flags": [],
  "clean": true,
- "conclusion": "INCONCLUSIVE",
- "why": "collecting: 1 / 300 forward V8 signals",
- "demo_eligible": "NO",
- "final": false
+ "core_rule_correctness": "NO RULE VIOLATION OBSERVED SO FAR",
+ "demo_eligible": "NO"
 }

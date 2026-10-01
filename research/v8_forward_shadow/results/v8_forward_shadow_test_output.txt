@@ -1,35 +1,43 @@
 ▶ WAIT reason taxonomy
-  ✔ every production wait reason maps to one of the 15 allowed categories, with an exact detail (0.9067ms)
-  ✔ the quality gate is never a bare "low quality": score, threshold, basis and the weakest components are named (0.2337ms)
-  ✔ NO_ELIGIBLE_STRATEGY is resolved to MODEL_NOT_ELIGIBLE / NO_TRIGGER / NO_SETUP / NO_PATTERN from the stages (0.2436ms)
-✔ WAIT reason taxonomy (15.8293ms)
+  ✔ every production wait reason maps to one of the 15 allowed categories, with an exact detail (0.5947ms)
+  ✔ the quality gate is never a bare "low quality": score, threshold, basis and the weakest components are named (0.1508ms)
+  ✔ NO_ELIGIBLE_STRATEGY is resolved to MODEL_NOT_ELIGIBLE / NO_TRIGGER / NO_SETUP / NO_PATTERN from the stages (0.185ms)
+✔ WAIT reason taxonomy (26.7397ms)
 ▶ D1-D6 regression oracles
-  ✔ D1/D2 oracles: production structure on the D1 fixture is a VIOLATION, the corrected engine is OK (2.3854ms)
-  ✔ D3 / D4 / D5 / D6 checks on setups (0.1716ms)
-✔ D1-D6 regression oracles (2.7396ms)
+  ✔ D1/D2 oracles: production structure on the D1 fixture is a VIOLATION, the corrected engine is OK (1.6415ms)
+  ✔ D3 / D4 / D5 / D6 checks on setups (0.116ms)
+✔ D1-D6 regression oracles (1.8914ms)
 ▶ execution-safety stage (shadow, production limits)
-  ✔ spread, News V2, volatility shock, missing tick and margin (0.3225ms)
-✔ execution-safety stage (shadow, production limits) (0.4649ms)
+  ✔ spread, News V2, volatility shock, missing tick and margin (0.2741ms)
+✔ execution-safety stage (shadow, production limits) (0.3745ms)
 ▶ hypothetical outcome (HYPOTHETICAL_NOT_EXECUTED) and forensics
-  ✔ 1.70R target reached: labelled, not executed, stress worse than normal; unresolved paths are not labelled (1.0218ms)
-  ✔ wrong-direction classification: valid losing trade vs data / timing / setup errors (0.2645ms)
-✔ hypothetical outcome (HYPOTHETICAL_NOT_EXECUTED) and forensics (1.4516ms)
+  ✔ 1.70R target reached: labelled, not executed, stress worse than normal; unresolved paths are not labelled (0.843ms)
+  ✔ wrong-direction classification: valid losing trade vs data / timing / setup errors (0.2738ms)
+✔ hypothetical outcome (HYPOTHETICAL_NOT_EXECUTED) and forensics (1.2949ms)
 ▶ move events and missed-setup classes
-  ✔ a 3-ATR move is found; detection, late, governed block, incorrect block and uncertain are separated (0.5238ms)
-✔ move events and missed-setup classes (0.5941ms)
+  ✔ a 3-ATR move is found; detection, late, governed block, incorrect block and uncertain are separated (0.5306ms)
+✔ move events and missed-setup classes (0.6032ms)
 ▶ forward runner: shadow decisions, restart, integrity, stale data, replay parity (fake read-only reader)
-  ✔ records one decision per engine per completed bar, never executes, survives a restart without duplicates, fails closed on stale 15m (1084.4982ms)
-  ✔ a failed fetch records DATA_UNAVAILABLE for both engines (never guessed) (8.8573ms)
-✔ forward runner: shadow decisions, restart, integrity, stale data, replay parity (fake read-only reader) (1093.4946ms)
+  ✔ records one decision per engine per completed bar, never executes, survives a restart without duplicates, fails closed on stale 15m (944.8039ms)
+  ✔ a failed fetch records DATA_UNAVAILABLE for both engines (never guessed) (8.0336ms)
+✔ forward runner: shadow decisions, restart, integrity, stale data, replay parity (fake read-only reader) (952.97ms)
 ▶ frozen engine and shadow-only execution
-  ✔ the live runner refuses a modified V8 engine (manifest check) when the regenerable engines exist (1.5836ms)
-  ✔ no executor, bridge, watcher, policy or order code anywhere in the forward shadow; the reader protocol is read-only (0.7271ms)
-✔ frozen engine and shadow-only execution (2.4128ms)
-ℹ tests 13
-ℹ suites 7
-ℹ pass 13
+  ✔ the live runner refuses a modified V8 engine (manifest check) when the regenerable engines exist (2.0913ms)
+  ✔ no executor, bridge, watcher, policy or order code anywhere in the forward shadow; the reader protocol is read-only (0.7699ms)
+✔ frozen engine and shadow-only execution (2.9639ms)
+▶ owner amendment: no fixed sample-size gate, no trade target, any setup count is valid
+  ✔ no 300-signal gate exists anywhere in the forward-shadow code, pre-registration, README or rendered reports (12.4226ms)
+  ✔ no artificial trade target: no target constant exists and the runner status declares none (240.1668ms)
+  ✔ zero valid setups is a valid observation: recorded as 0, reports render, no error, DEMO not enabled (10.5504ms)
+  ✔ one valid setup is recorded and reported as exactly one (2.3128ms)
+  ✔ multiple genuine setups are recorded normally; a duplicate of the same setup is not double-counted (13.085ms)
+  ✔ execution remains completely disabled: every recorded decision is EXECUTED=FALSE with authority NONE, and the DEMO gate is owner-only (8.7213ms)
+✔ owner amendment: no fixed sample-size gate, no trade target, any setup count is valid (287.5463ms)
+ℹ tests 19
+ℹ suites 8
+ℹ pass 19
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 1233.8626
+ℹ duration_ms 1363.7337

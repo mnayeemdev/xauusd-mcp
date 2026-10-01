@@ -1,4 +1,4 @@
-# V8 FORWARD SHADOW VALIDATION — PRE-REGISTRATION (frozen 2026-10-01, before the first forward decision)
+# V8 FORWARD SHADOW VALIDATION — PRE-REGISTRATION (frozen 2026-10-01 before the first forward decision; owner amendment 1 the same day)
 
 Continues V8 (commits 0d15538, 8fbf470). **Shadow / measure-only.** EXECUTION_AUTHORITY = NONE; REAL and DEMO OFF; no order, position or broker-order action exists in this code path (read-only MT5 reader, no executor or bridge import). Production `src/` is not modified.
 
@@ -79,23 +79,27 @@ On every decision for both engines: independent oracles for D1 (time-ordered bre
 - **Integrity checks per decision:** window length, monotonic and aligned times, no forming bar, OHLC geometry, decision bar = last completed bar.
 - **Restart determinism:** decision id = hash(schema, engine, symbol, timeframe, bar time), and a bar is never decided twice.
 
-## 9. Over-correction flags (recorded only; active from 20 signals per engine)
+## 9. Over-correction flags (descriptive, recorded only)
+Flags are computed on whatever has been observed, and the sample size is shown next to each flag. Small samples are noisy, and no flag triggers a code change.
 1. V8 signals < 80 % of CONTROL.
 2. Any model's share shifts > 15 points.
 3. The BUY share differs by > 15 points.
 4. Mean bars from origin > CONTROL + 1.
-5. DETECTED_CORRECTLY share < CONTROL − 5 points (from 20 events).
+5. DETECTED_CORRECTLY share < CONTROL − 5 points.
 
-## 10. Checkpoints and the 300 gate
-- **Checkpoints** at 25 / 50 / 100 / 150 / 200 / 250 / 300 V8 signals record a snapshot with the id hash; no rule changes at a checkpoint.
-- **At 300:** the first 300 V8 forward signals are frozen and the final analysis waits until all are labelled.
-- **CORE_EXECUTION** at the frozen 300:
-  - **REGRESSED** if any V8 correctness check fails or an over-correction flag is active. Correctness checks: replay parity, D1–D6 regressions 0, stage parity, implementation errors 0, MISSED = 0, BLOCKED_INCORRECTLY = 0.
-  - **IMPROVED** if V8 is clean and CONTROL shows ≥ 1 specification violation per 100 setups that V8 removes.
-  - **UNCHANGED** if V8 is clean and CONTROL violations are below 1 per 100.
-  - **INCONCLUSIVE** before the frozen 300.
-- **DEMO_ELIGIBLE = YES** only if all hold: frozen and labelled 300, V8 clean, CORE_EXECUTION IMPROVED or UNCHANGED, V8 1.70 R expectancy > 0 with PF > 1.0 at NORMAL cost, and STRESS expectancy ≥ 0. Otherwise NO.
-- DEMO is never started automatically.
+## 10. Observation period, evidence and owner review
+- There is **no sample-size gate and no trade-count target** of any kind. The market decides how many setups occur. Zero valid setups in a period is recorded as zero and is a valid observation; one setup, or many, is recorded exactly as it happens.
+- Observation continues indefinitely until the owner stops the validation period. The validation context is the elapsed calendar time and the actual market observations.
+- Reports show the accumulated evidence: OBSERVATION_START, OBSERVATION_END, ELAPSED_TIME, TOTAL_CANDIDATES, VALID_SETUPS, MISSED_VALID_SETUPS, INCORRECT_BLOCKS, INVALID_SETUPS_INCORRECTLY_ACCEPTED, LATE_SIGNALS, WRONG_DIRECTION_DECISIONS, VALID_LOSING_TRADES, IMPLEMENTATION_ERRORS and D1–D6 REGRESSIONS, for V8 and CONTROL.
+- A daily evidence snapshot is written at each UTC day change, for calendar context only.
+- **Core rule correctness:**
+  - V8 is correct while its replay parity, D1–D6 regressions, stage parity, implementation errors, missed setups and incorrect blocks stay at zero.
+  - CONTROL violations show the defects V8 removes.
+  - No automatic verdict is drawn: a few profitable trades are not success, and a few losing trades are not failure.
+- **DEMO_ELIGIBLE = NO** unless the owner explicitly decides otherwise after reviewing core rule correctness, forward behaviour, risk control, cost realism and stability. DEMO is never enabled automatically.
 - REAL stays prohibited.
 - Capital Harvest, auto-scaling, martingale and averaging down stay OFF.
 - RR is 1.70 and the lot is 0.01.
+
+## Amendment log
+- **Amendment 1 (owner, 2026-10-01).** The fixed sample-size completion gate, the count-based milestones and the automatic DEMO rule were removed. They are replaced by continuous observation, time-based evidence snapshots and an owner review. Definitions in §1–§8 are unchanged.

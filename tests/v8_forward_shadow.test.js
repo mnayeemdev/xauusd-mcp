@@ -14,6 +14,7 @@ import { CORRECTIONS, ENGINE_FILES } from '../research/core_pattern_audit_v8/scr
 import { WAIT_CATEGORIES, waitCategory, oracleStructure, oracleSweep, regressionChecks, safetyStage, labelOutcome, wrongDirectionClass, moveEventAt, classifyMissed, loadEngine, CONTROL_ENGINE_DIR, decisionId, verifyFrozenV8Engine } from '../research/v8_forward_shadow/scripts/lib.mjs';
 import { createForwardShadow } from '../research/v8_forward_shadow/scripts/runner.mjs';
 import { analyse, renderReports } from '../research/v8_forward_shadow/scripts/report.mjs';
+import * as lib from '../research/v8_forward_shadow/scripts/lib.mjs';
 import { computeStructure, STRUCTURE_PARAMS } from '../src/engine/structure.js';
 
 const ROOT = fileURLToPath(new URL('../', import.meta.url));
@@ -130,8 +131,8 @@ describe('forward runner: shadow decisions, restart, integrity, stale data, repl
     assert.ok(D.filter((d) => d.engine === 'V8').every((d) => d.regression?.D6 !== 'VIOLATION'));
     const par = [...fs.parity().values()]; assert.ok(par.length > 0); assert.ok(par.every((p) => p.inputs_equal && p.match), JSON.stringify(par.filter((p) => !p.match).slice(0, 2)));
     assert.equal(decisionId('V8', startBar), D.find((d) => d.engine === 'V8' && d.bar_time === startBar).id);
-    const out = mkdtempSync(join(tmpdir(), 'v8f-rep-')); const r = renderReports({ dir, outDir: out }); assert.equal(r.reports, 16); assert.equal(r.demo, 'NO'); assert.ok(existsSync(join(out, 'DEMO_VALIDATION_GATE.md'))); assert.match(readFileSync(join(out, 'V8_FORWARD_SHADOW_REPORT.md'), 'utf8'), /INTERIM — NOT FINAL/);
-    const a = analyse(dir); assert.equal(a.conclusion, 'INCONCLUSIVE');
+    const out = mkdtempSync(join(tmpdir(), 'v8f-rep-')); const r = renderReports({ dir, outDir: out }); assert.equal(r.reports, 16); assert.equal(r.demo, 'NO'); assert.ok(existsSync(join(out, 'DEMO_VALIDATION_GATE.md'))); assert.match(readFileSync(join(out, 'V8_FORWARD_SHADOW_REPORT.md'), 'utf8'), /ACCUMULATED EVIDENCE/);
+    const a = analyse(dir); assert.equal(a.demo, 'NO'); assert.ok(a.obs.start && a.obs.end);
     rmSync(dir, { recursive: true, force: true }); rmSync(out, { recursive: true, force: true });
   });
   it('a failed fetch records DATA_UNAVAILABLE for both engines (never guessed)', async () => {
@@ -147,5 +148,58 @@ describe('frozen engine and shadow-only execution', () => {
   it('no executor, bridge, watcher, policy or order code anywhere in the forward shadow; the reader protocol is read-only', () => {
     for (const f of ['lib.mjs', 'runner.mjs', 'report.mjs']) { const s = readFileSync(join(ROOT, 'research', 'v8_forward_shadow', 'scripts', f), 'utf8'); for (const bad of ['mt5Executor', 'mt5Bridge', 'mt5RealPolicy', 'mt5Policy', 'watcher.js', 'order_send', "request('open'", "request('close'", "request('modify'", 'positions_close']) assert.ok(!s.includes(bad), `${f}: ${bad}`); }
     const r = readFileSync(join(ROOT, 'src', 'shadow', 'mt5Reader.js'), 'utf8'); assert.match(r, /READER_COMMANDS = Object.freeze\(\['rates', 'tick', 'select', 'ping', 'quit', 'book'\]\)/);
+  });
+});
+
+// ---------------- owner amendment 1: no fixed sample-size gate, no trade target ----------------
+const GATE_PATTERNS = /\b300\s*(genuine|forward|frozen|signals?)\b|\d\s*\/\s*300\b|of 300\b|frozen_300|checkpoint_|CHECKPOINTS|remaining.?to.?300|300.signal/i;
+const TARGET_PATTERNS = /trades?\s*\/\s*day|trades? per day|TRADE_TARGET|TARGET_TRADES|MIN_SIGNALS|MINIMUM_SIGNALS|minimum_signals|signals_target/i;
+function mkDecision({ engine = 'V8', k, setup = false, side = 'BUY', model = 'BO', anchor = 4000, duplicate = false }) {
+  const bar = T0 + 300 * k; const cand = setup ? { model, side, anchor, sl_anchor: anchor - 2, origin_bar_time: bar - 600, bars_from_origin: 2, entry: anchor + 1, stop_loss: anchor - 2.5, sl_source: 'candidate_anchor', risk_distance: 3.5, risk_atr: 1, tp1: anchor + 4.5, tp2_engine: anchor + 9, rr_engine: 2.29, rr_engine_unrounded: 2.286, objective: '5m_pivot', tp_170r: anchor + 1 + 5.95, reward_170r: 5.95, overextension_atr: 0.3, midpoint: null } : null;
+  return { schema: 'v8f-1', record: 'decision', id: `${engine}-${k}`, engine, symbol: 'XAUUSDm', timeframe: '5m', bar_time: bar, bar_close_utc: new Date((bar + 300) * 1000).toISOString(), decision_time_utc: new Date((bar + 310) * 1000).toISOString(), latency_sec: 10, provenance: 'FORWARD_LIVE', executed: false, execution_authority: 'NONE', action: setup ? side : 'WAIT', engine_action: setup ? side : 'WAIT', engine_wait_reason: setup ? null : 'NO_ELIGIBLE_STRATEGY', wait_category: setup ? null : 'NO_PATTERN', wait_detail: setup ? null : 'no eligible model shows its pattern', model: setup ? model : null, candidate_side: setup ? side : null, candidate: cand, stages: { BUY: setup && side === 'BUY' ? '00300' : '00000', SELL: setup && side === 'SELL' ? '00300' : '00000' }, stage_parity_mismatch: [], regression: { D1: 'OK', D2: 'OK', D3: 'NA', D4: 'NA', D5: setup ? 'OK' : 'NA', D6: setup ? 'OK' : 'NA' }, data_integrity: { '5m_length': 'PASS' }, bias: { direction: 'NEUTRAL', regime: 'TRANSITION', eligible: ['BO', 'SR'] }, m30: { regime: 'RANGE', structure: null }, h1: { regime: 'RANGE' }, regime5: 'TRANSITION', session: 'LONDON', spread_usd: 0.24, news_state: 'NORMAL', shock_state: 'NORMAL', atr14: 3.5, safety: setup ? { checks: {}, block: null } : null, valid_setup: setup, shadow_signal: setup, duplicate, counted_signal: setup && !duplicate };
+}
+function storeWith(decisions, outcomes = []) { const dir = mkdtempSync(join(tmpdir(), 'v8f-crafted-')); writeFileSync(join(dir, 'decisions.jsonl'), decisions.map((d) => JSON.stringify(d)).join('\n') + (decisions.length ? '\n' : '')); writeFileSync(join(dir, 'outcomes.jsonl'), outcomes.map((o) => JSON.stringify(o)).join('\n') + (outcomes.length ? '\n' : '')); writeFileSync(join(dir, 'status.json'), JSON.stringify({ observation_start: decisions[0]?.decision_time_utc ?? null })); return dir; }
+const allReportsText = (out) => ['V8_FORWARD_SHADOW_REPORT', 'V8_FORWARD_SIGNAL_LOG', 'V8_STRATEGY_FORWARD_BREAKDOWN', 'DEMO_VALIDATION_GATE', 'V8_CORE_EXECUTION_REVIEW', 'V8_OVER_CORRECTION_ANALYSIS'].map((n) => readFileSync(join(out, `${n}.md`), 'utf8')).join('\n');
+
+describe('owner amendment: no fixed sample-size gate, no trade target, any setup count is valid', () => {
+  it('no 300-signal gate exists anywhere in the forward-shadow code, pre-registration, README or rendered reports', () => {
+    const base = join(ROOT, 'research', 'v8_forward_shadow');
+    for (const f of ['scripts/lib.mjs', 'scripts/runner.mjs', 'scripts/report.mjs', 'V8F_PREREGISTRATION.md', 'README.md']) assert.ok(!GATE_PATTERNS.test(readFileSync(join(base, f), 'utf8')), `${f} still describes a sample-size gate`);
+    assert.equal(lib.CHECKPOINTS, undefined, 'no checkpoint list is exported');
+    const dir = storeWith([mkDecision({ k: 1 }), mkDecision({ engine: 'CONTROL', k: 1 })]); const out = mkdtempSync(join(tmpdir(), 'v8f-r-')); renderReports({ dir, outDir: out });
+    assert.ok(!GATE_PATTERNS.test(allReportsText(out))); assert.ok(!existsSync(join(out, 'V8_300_SIGNAL_FINAL_REPORT.md')));
+    const sum = JSON.parse(readFileSync(join(out, 'forward_summary.json'), 'utf8')); assert.equal(sum.sample_size_gate, 'NONE'); assert.equal(sum.trade_count_target, 'NONE');
+    rmSync(dir, { recursive: true, force: true }); rmSync(out, { recursive: true, force: true });
+  });
+  it('no artificial trade target: no target constant exists and the runner status declares none', async () => {
+    for (const f of ['lib.mjs', 'runner.mjs', 'report.mjs']) assert.ok(!TARGET_PATTERNS.test(readFileSync(join(ROOT, 'research', 'v8_forward_shadow', 'scripts', f), 'utf8')), f);
+    const mkt = market(6500); const dir = mkdtempSync(join(tmpdir(), 'v8f-st-')); const clock = { now: 0 }; const bt = mkt['5m'][6400].time;
+    const fs = await createForwardShadow({ dir, reader: fakeReader(mkt, clock), prod: null, newsEval: () => ({ state: 'NORMAL' }), now: () => clock.now, engines: ENGINES });
+    clock.now = bt + 320; await fs.cycle(); const st = JSON.parse(readFileSync(join(dir, 'status.json'), 'utf8'));
+    assert.equal(st.sample_size_gate, 'NONE'); assert.equal(st.trade_count_target, 'NONE'); assert.ok(!('frozen_300' in st) && !('checkpoints_done' in st)); assert.ok(st.observation_start);
+    clock.now = bt + 320 + 60; await fs.cycle(); assert.equal(fs.decisions().length, 2, 'no decision is created without a new completed candle');
+    rmSync(dir, { recursive: true, force: true });
+  });
+  it('zero valid setups is a valid observation: recorded as 0, reports render, no error, DEMO not enabled', () => {
+    const ds = []; for (let k = 0; k < 12; k++) ds.push(mkDecision({ k }), mkDecision({ engine: 'CONTROL', k }));
+    const dir = storeWith(ds); const a = analyse(dir); assert.equal(a.ev.V8.valid_setups, 0); assert.equal(a.ev.V8.shadow_signals, 0); assert.equal(a.ev.V8.total_candidates, 0); assert.equal(a.demo, 'NO');
+    const out = mkdtempSync(join(tmpdir(), 'v8f-r0-')); const r = renderReports({ dir, outDir: out }); assert.equal(r.reports, 16); assert.match(readFileSync(join(out, 'V8_FORWARD_SHADOW_REPORT.md'), 'utf8'), /VALID_SETUPS \(full core rule chain passed, non-duplicate\) \| 0 \| 0 \|/);
+    rmSync(dir, { recursive: true, force: true }); rmSync(out, { recursive: true, force: true });
+  });
+  it('one valid setup is recorded and reported as exactly one', () => {
+    const ds = [mkDecision({ k: 0 }), mkDecision({ k: 1, setup: true }), mkDecision({ k: 2 })];
+    const a = analyse(storeWith(ds)); assert.equal(a.ev.V8.valid_setups, 1); assert.equal(a.ev.V8.shadow_signals, 1); assert.equal(a.ev.V8.total_candidates, 1); assert.equal(a.ev.V8.d1_d6_regressions, 0); assert.equal(a.demo, 'NO');
+  });
+  it('multiple genuine setups are recorded normally; a duplicate of the same setup is not double-counted', () => {
+    const ds = [mkDecision({ k: 1, setup: true, anchor: 4000 }), mkDecision({ k: 2, setup: true, anchor: 4000, duplicate: true }), mkDecision({ k: 20, setup: true, side: 'SELL', model: 'SR', anchor: 4010 }), mkDecision({ k: 40, setup: true, model: 'MC', anchor: 4020 }), mkDecision({ k: 41 })];
+    const a = analyse(storeWith(ds)); assert.equal(a.ev.V8.valid_setups, 3); assert.equal(a.ev.V8.shadow_signals, 3); assert.equal(a.A.V8.duplicates, 1); assert.equal(a.A.V8.set.length, 3);
+    const out = mkdtempSync(join(tmpdir(), 'v8f-r3-')); renderReports({ dir: storeWith(ds), outDir: out }); const log = readFileSync(join(out, 'V8_FORWARD_SIGNAL_LOG.md'), 'utf8'); assert.equal((log.match(/SHADOW_SIGNAL=TRUE EXECUTED=FALSE/g) ?? []).length, 3);
+    rmSync(out, { recursive: true, force: true });
+  });
+  it('execution remains completely disabled: every recorded decision is EXECUTED=FALSE with authority NONE, and the DEMO gate is owner-only', () => {
+    const ds = [mkDecision({ k: 1, setup: true }), mkDecision({ k: 2 })]; const dir = storeWith(ds); const out = mkdtempSync(join(tmpdir(), 'v8f-r4-')); renderReports({ dir, outDir: out });
+    for (const d of ds) { assert.equal(d.executed, false); assert.equal(d.execution_authority, 'NONE'); }
+    const gate = readFileSync(join(out, 'DEMO_VALIDATION_GATE.md'), 'utf8'); assert.match(gate, /DEMO_ELIGIBLE = NO\.\*\* DEMO is never enabled automatically and there is no signal-count rule/); for (const area of ['CORE RULE CORRECTNESS', 'FORWARD BEHAVIOUR', 'RISK CONTROL', 'COST REALISM', 'STABILITY']) assert.ok(gate.includes(area), area);
+    rmSync(dir, { recursive: true, force: true }); rmSync(out, { recursive: true, force: true });
   });
 });

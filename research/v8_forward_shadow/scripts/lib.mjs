@@ -24,7 +24,6 @@ export const RR = 1.70;
 export const WAIT_CATEGORIES = Object.freeze(['NO_PATTERN', 'NO_SETUP', 'NO_TRIGGER', 'MODEL_NOT_ELIGIBLE', 'LOCATION_INVALID', 'STRUCTURAL_RISK_INVALID', 'RR_INVALID', 'SPREAD_BLOCK', 'NEWS_BLOCK', 'VOLATILITY_BLOCK', 'BROKER_SAFETY', 'DATA_UNAVAILABLE', 'STALE_DATA', 'CONTEXT_CONFLICT', 'OTHER_GOVERNED_REASON']);
 export const MISSED_CLASSES = Object.freeze(['DETECTED_CORRECTLY', 'MISSED', 'DETECTED_LATE', 'BLOCKED_CORRECTLY', 'BLOCKED_INCORRECTLY', 'UNCERTAIN']);
 export const WRONG_CLASSES = Object.freeze(['VALID_LOSING_TRADE', 'PATTERN_ERROR', 'SETUP_ERROR', 'TRIGGER_ERROR', 'DIRECTION_ERROR', 'LOCATION_ERROR', 'TIMING_ERROR', 'DATA_ERROR', 'OTHER']);
-export const CHECKPOINTS = Object.freeze([25, 50, 100, 150, 200, 250, 300]);
 export const MODELS = Object.freeze(['MC', 'PB', 'BO', 'SR', 'MR']);
 const r3 = (n) => (n == null || !Number.isFinite(n) ? null : Math.round(n * 1000) / 1000);
 export const sha = (s) => createHash('sha256').update(s).digest('hex');
