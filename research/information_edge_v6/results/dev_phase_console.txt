@@ -1,0 +1,9 @@
+features ...
+events 1640 1842
+phase DEV; news events in range 81
+populations CONTROL:9617 S3:4342
+controls {"leak_mean_r":0.489,"leak_n":2674,"null_mean_r":-0.085,"null_n":2674,"cost_test":{"diff":0.1,"expected":0.1,"pass":true},"first_exit_after_entry":true,"context_prefix_invariance":true,"news_events_in_range":81}
+DEV families ...
+DERIVED {"simple":["C2 V6-AGREE"],"supported":["A_HTF:HTF_ALIGNED/HTF_CONFLICTING","A2_HTF_TREND:NO_HTF_TREND","B_SESSION:NEW_YORK/ASIA","B2_TIME:OVERLAP/US_DATA_WINDOW","C2_RANGE_STATE:EXPANSION/CONTRACTION","D_REGIME:HIGH_VOLATILITY","E_MOM:SUPPORTIVE","E2_MOM_FLAGS:NEITHER","F_RANGE_POS:MID","F2_RANGE_FLAGS:POST_BREAK/POST_RECLAIM","G_LOCATION:BAD","H2_EQUAL:NONE","J_XTF:FULL","K_VOLUME:HIGH","L_SHOCK:SHOCK"],"fixed":[{"k":"C1 V6-HTF","dev_n":805,"improvement_r":-0.007,"wd_lower":false,"incremental":false},{"k":"C2 V6-AGREE","dev_n":797,"improvement_r":0.001,"wd_lower":false,"incremental":false},{"k":"C3 V6-MOM","dev_n":784,"improvement_r":-0.009,"wd_lower":true,"incremental":false},{"k":"C4 V6-LOC","dev_n":392,"improvement_r":-0.067,"wd_lower":false,"incremental":false},{"k":"C5 V6-SAFETY","dev_n":835,"improvement_r":0,"wd_lower":false,"incremental":false}]}
+finalists.json sha256 286342a26372dd3bf1bb948e46b35f8471822a969da4501cd4390f4bace97578
+written DEV

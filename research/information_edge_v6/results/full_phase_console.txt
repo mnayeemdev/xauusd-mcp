@@ -1,0 +1,165 @@
+features ...
+events 1640 1842
+phase FULL; news events in range 81
+populations CONTROL:9617 S3:4342
+controls {"leak_mean_r":0.489,"leak_n":2674,"null_mean_r":-0.085,"null_n":2674,"cost_test":{"diff":0.1,"expected":0.1,"pass":true},"first_exit_after_entry":true,"context_prefix_invariance":true,"news_events_in_range":81}
+DEV families ...
+HOLD ...
+DECISIONS {
+ "passing": [],
+ "best_candidate": "C3 V6-MOM",
+ "best_information_family_by_hold_improvement": "C3 V6-MOM",
+ "families_with_incremental_value_both_splits": [],
+ "families_with_incremental_value_one_split": [],
+ "information_incremental_value": "NO",
+ "directional_accuracy_improved": "NO",
+ "entry_economics_improved": "INCONCLUSIVE",
+ "edge_demonstrated": "NO",
+ "demo_eligible": "NO",
+ "simple_vs_composite": {
+  "simple": {
+   "def": [
+    "C2 V6-AGREE"
+   ],
+   "hold": {
+    "n": 1084,
+    "expectancy_r": -0.05,
+    "pf": 0.94,
+    "max_dd_r": 81.18,
+    "ci95_r": [
+     -0.155,
+     0.054
+    ],
+    "block_ci95_r": [
+     -0.156,
+     0.061
+    ],
+    "wrong_direction_rate": 0.304,
+    "bad_entry_rate": 0.434,
+    "capture": 0.242,
+    "event_wd": 0.196,
+    "wait_share": 0.062,
+    "win_rate": 0.367,
+    "stress_r": -0.145
+   },
+   "dev": {
+    "n": 797,
+    "expectancy_r": -0.054,
+    "pf": 0.94,
+    "max_dd_r": 79.3,
+    "ci95_r": [
+     -0.175,
+     0.07
+    ],
+    "block_ci95_r": [
+     -0.172,
+     0.067
+    ],
+    "wrong_direction_rate": 0.307,
+    "bad_entry_rate": 0.444,
+    "capture": 0.182,
+    "event_wd": 0.174,
+    "wait_share": 0.075,
+    "win_rate": 0.376,
+    "stress_r": -0.181
+   }
+  },
+  "composite": {
+   "def": [
+    "A_HTF:HTF_ALIGNED/HTF_CONFLICTING",
+    "A2_HTF_TREND:NO_HTF_TREND",
+    "B_SESSION:NEW_YORK/ASIA",
+    "B2_TIME:OVERLAP/US_DATA_WINDOW",
+    "C2_RANGE_STATE:EXPANSION/CONTRACTION",
+    "D_REGIME:HIGH_VOLATILITY",
+    "E_MOM:SUPPORTIVE",
+    "E2_MOM_FLAGS:NEITHER",
+    "F_RANGE_POS:MID",
+    "F2_RANGE_FLAGS:POST_BREAK/POST_RECLAIM",
+    "G_LOCATION:BAD",
+    "H2_EQUAL:NONE",
+    "J_XTF:FULL",
+    "K_VOLUME:HIGH",
+    "L_SHOCK:SHOCK"
+   ],
+   "hold": {
+    "n": 0,
+    "capture": 0,
+    "event_wd": 0,
+    "wait_share": 1
+   },
+   "dev": {
+    "n": 0,
+    "capture": 0,
+    "event_wd": 0,
+    "wait_share": 1
+   }
+  }
+ },
+ "control": {
+  "n": 1163,
+  "expectancy_r": -0.064,
+  "pf": 0.93,
+  "max_dd_r": 98.89,
+  "ci95_r": [
+   -0.167,
+   0.041
+  ],
+  "block_ci95_r": [
+   -0.172,
+   0.047
+  ],
+  "wrong_direction_rate": 0.297,
+  "bad_entry_rate": 0.436,
+  "capture": 0.266,
+  "event_wd": 0.202,
+  "wait_share": 0,
+  "win_rate": 0.363,
+  "stress_r": -0.157
+ },
+ "best": {
+  "n": 1060,
+  "expectancy_r": -0.033,
+  "pf": 0.96,
+  "max_dd_r": 75.61,
+  "ci95_r": [
+   -0.138,
+   0.068
+  ],
+  "block_ci95_r": [
+   -0.14,
+   0.077
+  ],
+  "wrong_direction_rate": 0.3,
+  "bad_entry_rate": 0.433,
+  "capture": 0.248,
+  "event_wd": 0.182,
+  "wait_share": 0.124,
+  "win_rate": 0.371,
+  "stress_r": -0.122,
+  "name": "C3 V6-MOM",
+  "status": "FAILS_GATE",
+  "reasons": [
+   "(1) wrong direction not lower (trade 0.3 vs 0.297; events 0.182 vs 0.202)",
+   "(3) expectancy<=0",
+   "(4) PF<=1.10",
+   "(5) not a meaningful improvement (-0.033 vs -0.064; DD 75.61 vs 98.89)",
+   "(7) quarters positive <60%",
+   "(8) thresholds NEGATIVE_CENTRE",
+   "(10) stress expectancy<=0",
+   "(11) trade CI includes 0",
+   "(11) session-block CI includes 0",
+   "DEV expectancy<=0",
+   "drift expectancy<=0"
+  ]
+ }
+}
+C1 V6-HTF FAILS_GATE n 1051 exp -0.056 pf 0.94 dd 92.81 wd 0.296 evwd 0.189 bad 0.426 cap 0.236 wait 0.087 dev -0.062 ci [-0.162,0.057] (3) expectancy<=0; (4) PF<=1.10; (5) not a meaningful improvement (-0.056 vs -0.064; DD 92.81 vs 98.89); (7) quarters positive <60%; (8) thresholds NEGATIVE_CENTRE; (10) stress expectancy<=0; (11) trade CI includes 0; (11) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+C2 V6-AGREE FAILS_GATE n 1084 exp -0.05 pf 0.94 dd 81.18 wd 0.304 evwd 0.196 bad 0.434 cap 0.242 wait 0.062 dev -0.054 ci [-0.155,0.054] (1) wrong direction not lower (trade 0.304 vs 0.297; events 0.196 vs 0.202); (3) expectancy<=0; (4) PF<=1.10; (5) not a meaningful improvement (-0.05 vs -0.064; DD 81.18 vs 98.89); (7) quarters positive <60%; (8) thresholds NEGATIVE_CENTRE; (10) stress expectancy<=0; (11) trade CI includes 0; (11) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+C3 V6-MOM FAILS_GATE n 1060 exp -0.033 pf 0.96 dd 75.61 wd 0.3 evwd 0.182 bad 0.433 cap 0.248 wait 0.124 dev -0.064 ci [-0.138,0.068] (1) wrong direction not lower (trade 0.3 vs 0.297; events 0.182 vs 0.202); (3) expectancy<=0; (4) PF<=1.10; (5) not a meaningful improvement (-0.033 vs -0.064; DD 75.61 vs 98.89); (7) quarters positive <60%; (8) thresholds NEGATIVE_CENTRE; (10) stress expectancy<=0; (11) trade CI includes 0; (11) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+C4 V6-LOC FAILS_GATE n 557 exp -0.157 pf 0.83 dd 108.24 wd 0.275 evwd 0.069 bad 0.418 cap 0.075 wait 0.826 dev -0.122 ci [-0.312,-0.017] (3) expectancy<=0; (4) PF<=1.10; (5) not a meaningful improvement (-0.157 vs -0.064; DD 108.24 vs 98.89); (7) quarters positive <60%; (8) thresholds NEGATIVE_CENTRE; (10) stress expectancy<=0; (11) trade CI includes 0; (11) session-block CI includes 0; (12) capture 0.075 < 50 % of CONTROL 0.266; DEV expectancy<=0; drift expectancy<=0
+C5 V6-SAFETY FAILS_GATE n 1123 exp -0.103 pf 0.89 dd 141.28 wd 0.296 evwd 0.193 bad 0.431 cap 0.245 wait 0.1 dev -0.055 ci [-0.209,0.004] (3) expectancy<=0; (4) PF<=1.10; (5) not a meaningful improvement (-0.103 vs -0.064; DD 141.28 vs 98.89); (7) quarters positive <60%; (8) thresholds NEGATIVE_CENTRE; (10) stress expectancy<=0; (11) trade CI includes 0; (11) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+C6 V6-DIR FAILS_GATE n 211 exp -0.094 pf 0.9 dd 29.99 wd 0.294 evwd 0.025 bad 0.436 cap 0.029 wait 0.948 dev -0.31 ci [-0.317,0.159] (2) bad-entry rate not lower; (3) expectancy<=0; (4) PF<=1.10; (5) not a meaningful improvement (-0.094 vs -0.064; DD 29.99 vs 98.89); (8) thresholds NEGATIVE_CENTRE; (10) stress expectancy<=0; (11) trade CI includes 0; (11) session-block CI includes 0; (12) capture 0.029 < 50 % of CONTROL 0.266; DEV expectancy<=0; drift expectancy<=0
+C7 V6-SIMPLE FAILS_GATE n 1084 exp -0.05 pf 0.94 dd 81.18 wd 0.304 evwd 0.196 bad 0.434 cap 0.242 wait 0.062 dev -0.054 ci [-0.155,0.054] (1) wrong direction not lower (trade 0.304 vs 0.297; events 0.196 vs 0.202); (3) expectancy<=0; (4) PF<=1.10; (5) not a meaningful improvement (-0.05 vs -0.064; DD 81.18 vs 98.89); (7) quarters positive <60%; (8) thresholds NEGATIVE_CENTRE; (10) stress expectancy<=0; (11) trade CI includes 0; (11) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+C8 V6-COMPOSITE EMPTY n undefined exp undefined pf undefined dd undefined wd undefined evwd undefined bad undefined cap undefined wait undefined dev undefined ci undefined no trades
+written FULL

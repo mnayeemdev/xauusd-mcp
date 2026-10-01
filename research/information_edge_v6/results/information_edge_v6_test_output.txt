@@ -1,0 +1,43 @@
+▶ market-context rules (reference implementations)
+  ✔ HTF structure: aligned / conflicting / mixed relative to the side; a missing 30m structure is mixed (0.424ms)
+  ✔ momentum: supportive / opposing / flat by sign and the 0.3 ATR threshold (neighbours 0.2 / 0.5) (0.1067ms)
+  ✔ structural location: opposing-swing distance / risk >= 1.7 GOOD, >= 1.0 NEUTRAL, else BAD; no swing within 6 ATR = GOOD (0.0941ms)
+  ✔ cross-timeframe agreement: count of 5m/15m/30m/1H directions agreeing with the side; FULL 4, PARTIAL >= 2, CONFLICT otherwise (0.5818ms)
+  ✔ news state uses scheduled release timestamps only: PRE within 60 min before, POST within 60 min after, else NORMAL (0.1198ms)
+  ✔ shock: a 3 ATR bar in the last 3 bars, ATR ratio >= 1.5, or an abnormal spread (> trailing p99 AND >= 2 x median); the modal spread is never a shock (0.1168ms)
+  ✔ session / time windows: overlap 13-15 UTC, session opens 22 / 07 / 12 UTC (0.0602ms)
+  ✔ directional bias engine: at least one HTF aligned and none opposing, momentum not opposing, location not BAD; conflict -> WAIT (0.09ms)
+✔ market-context rules (reference implementations) (2.37ms)
+▶ pre-registration discipline and controls
+  ✔ pre-registration, control-baseline and finalists hashes match and are carried in the results; finalists derived from DEV only (1.2305ms)
+  ✔ leak / null / cost / first-exit / context prefix-invariance controls pass; CONTROL reproduces V5 and V4 exactly; S3 reproduces V4 (0.2118ms)
+  ✔ restart determinism: DEV family tables, fixed-rule results and redundancy are identical between the DEV phase and the FULL phase (0.3852ms)
+  ✔ populations, families and candidate set are the pre-registered ones; tick volume is labelled as a proxy (0.1531ms)
+✔ pre-registration discipline and controls (2.1439ms)
+▶ derivation and accounting invariants
+  ✔ DEV-derived state sets follow the frozen rule (N >= 150, expectancy above base, wrong direction below base; supported = some but not all states) (0.2023ms)
+  ✔ V6-SIMPLE = the <=3 DEV-incremental fixed rules, else the single best fixed rule; incremental = N >= 200, +0.05 R and lower wrong direction (0.1057ms)
+  ✔ DEV: family states partition the population; wrong-direction, bad-entry and right-direction labels are consistent (0.1153ms)
+  ✔ DEV: every candidate is a WAIT filter on the frozen entries (kept <= in; trades + skips = signals; capture <= control capture + blocked share accounted) (0.1164ms)
+  ✔ HOLD: family states partition the population; wrong-direction, bad-entry and right-direction labels are consistent (0.0391ms)
+  ✔ HOLD: every candidate is a WAIT filter on the frozen entries (kept <= in; trades + skips = signals; capture <= control capture + blocked share accounted) (0.0489ms)
+  ✔ redundancy: phi coefficients are in [-1, 1] and support rates in [0, 1]; redundant pairs are those with |phi| >= 0.5 (0.1492ms)
+  ✔ risk / margin gate reporting: 0.01 lot is infeasible below ~71 USD equity (MARGIN_SAFETY_VETO) and feasible at 100 / 1,000 / 10,000 (0.0639ms)
+✔ derivation and accounting invariants (0.9922ms)
+▶ decision rules recompute from the persisted HOLDOUT statistics
+  ✔ each candidate status follows the section-9 gate (0.1614ms)
+  ✔ aggregate: no pass, information incremental value NO, directional accuracy NO, EDGE NO, DEMO NO; best = highest HOLD expectancy with N >= 200 (0.0948ms)
+  ✔ incremental value per family recomputes (N >= 200, +0.05 R, lower wrong direction) and V6-COMPOSITE is empty by construction of the frozen rule (0.072ms)
+✔ decision rules recompute from the persisted HOLDOUT statistics (0.3882ms)
+▶ production preservation
+  ✔ the study imports only the pure re-entry guard and the V5 research modules; no executor, bridge, watcher or MT5; no V6 runtime module (0.5538ms)
+  ✔ CONTROL geometry, costs, split and safety unchanged; RR 1.70 and lot 0.01 frozen; exits not optimised (control exit everywhere) (2.5013ms)
+✔ production preservation (3.1394ms)
+ℹ tests 25
+ℹ suites 5
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 99.1264

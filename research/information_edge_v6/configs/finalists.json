@@ -1,0 +1,163 @@
+{
+ "derived_from": "DEV",
+ "state_sets": {
+  "A_HTF": {
+   "states": [
+    "HTF_ALIGNED",
+    "HTF_CONFLICTING"
+   ],
+   "supported": true
+  },
+  "A2_HTF_TREND": {
+   "states": [
+    "NO_HTF_TREND"
+   ],
+   "supported": true
+  },
+  "B_SESSION": {
+   "states": [
+    "NEW_YORK",
+    "ASIA"
+   ],
+   "supported": true
+  },
+  "B2_TIME": {
+   "states": [
+    "OVERLAP",
+    "US_DATA_WINDOW"
+   ],
+   "supported": true
+  },
+  "C_VOL": {
+   "states": [],
+   "supported": false
+  },
+  "C2_RANGE_STATE": {
+   "states": [
+    "EXPANSION",
+    "CONTRACTION"
+   ],
+   "supported": true
+  },
+  "D_REGIME": {
+   "states": [
+    "HIGH_VOLATILITY"
+   ],
+   "supported": true
+  },
+  "E_MOM": {
+   "states": [
+    "SUPPORTIVE"
+   ],
+   "supported": true
+  },
+  "E2_MOM_FLAGS": {
+   "states": [
+    "NEITHER"
+   ],
+   "supported": true
+  },
+  "F_RANGE_POS": {
+   "states": [
+    "MID"
+   ],
+   "supported": true
+  },
+  "F2_RANGE_FLAGS": {
+   "states": [
+    "POST_BREAK",
+    "POST_RECLAIM"
+   ],
+   "supported": true
+  },
+  "G_LOCATION": {
+   "states": [
+    "BAD"
+   ],
+   "supported": true
+  },
+  "H_SWEEP": {
+   "states": [],
+   "supported": false
+  },
+  "H2_EQUAL": {
+   "states": [
+    "NONE"
+   ],
+   "supported": true
+  },
+  "I_NEWS": {
+   "states": [],
+   "supported": false
+  },
+  "J_XTF": {
+   "states": [
+    "FULL"
+   ],
+   "supported": true
+  },
+  "K_VOLUME": {
+   "states": [
+    "HIGH"
+   ],
+   "supported": true
+  },
+  "L_SHOCK": {
+   "states": [
+    "SHOCK"
+   ],
+   "supported": true
+  }
+ },
+ "fixed_rule_dev_value": [
+  {
+   "k": "C1 V6-HTF",
+   "dev_n": 805,
+   "improvement_r": -0.007,
+   "wd_lower": false,
+   "incremental": false
+  },
+  {
+   "k": "C2 V6-AGREE",
+   "dev_n": 797,
+   "improvement_r": 0.001,
+   "wd_lower": false,
+   "incremental": false
+  },
+  {
+   "k": "C3 V6-MOM",
+   "dev_n": 784,
+   "improvement_r": -0.009,
+   "wd_lower": true,
+   "incremental": false
+  },
+  {
+   "k": "C4 V6-LOC",
+   "dev_n": 392,
+   "improvement_r": -0.067,
+   "wd_lower": false,
+   "incremental": false
+  },
+  {
+   "k": "C5 V6-SAFETY",
+   "dev_n": 835,
+   "improvement_r": 0,
+   "wd_lower": false,
+   "incremental": false
+  }
+ ],
+ "simple": [
+  "C2 V6-AGREE"
+ ],
+ "simple_note": "no fixed rule had DEV incremental value; V6-SIMPLE = the single best fixed rule",
+ "candidates": [
+  "C1 V6-HTF",
+  "C2 V6-AGREE",
+  "C3 V6-MOM",
+  "C4 V6-LOC",
+  "C5 V6-SAFETY",
+  "C6 V6-DIR",
+  "C7 V6-SIMPLE",
+  "C8 V6-COMPOSITE"
+ ]
+}
