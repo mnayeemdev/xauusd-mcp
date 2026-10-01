@@ -1,0 +1,28 @@
+▶ baseline and run-to-end reproduce the V5/V8 simulator
+  ✔ target, broker fail-safe, thesis invalidation and horizon: identical exits and R for BUY and SELL (5.9591ms)
+✔ baseline and run-to-end reproduce the V5/V8 simulator (6.6872ms)
+▶ protected-profit floor
+  ✔ arms only after MFE >= arm, is monotone, never below break-even, never above the close, and acts from the next bar (0.2977ms)
+  ✔ before profit is available the adaptive policy is identical to the baseline (loss side unchanged) (0.3022ms)
+✔ protected-profit floor (0.7927ms)
+▶ continuation states and governed actions
+  ✔ STRONG / WEAK / INVALIDATED / MODERATE, symmetric for SELL (0.4082ms)
+  ✔ STRONG suspends the 1.70R target (protect + run beyond it); a weak close with enough open profit is harvested (0.272ms)
+✔ continuation states and governed actions (0.9336ms)
+▶ no hindsight, live-time = replay, costs
+  ✔ features are causal and decisions up to bar j are unchanged when every later bar is corrupted (1.0112ms)
+  ✔ feeding bars one completed close at a time reproduces the full replay decision by decision (0.2652ms)
+  ✔ costs: a zero-slippage baseline differs by exactly the slippage; stress is worse than normal; post-exit continuation is measured from the exit (0.3032ms)
+✔ no hindsight, live-time = replay, costs (1.7853ms)
+▶ research boundaries
+  ✔ no execution code, no fixed-dollar profit target, entries never altered (0.9201ms)
+  ✔ frozen study results (local, skipped when absent): reproduction exact, integrity PASS, decision not DEMONSTRATED-by-accident (0.6587ms)
+✔ research boundaries (1.6842ms)
+ℹ tests 10
+ℹ suites 5
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 85.2269

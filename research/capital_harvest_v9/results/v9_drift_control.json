@@ -1,0 +1,214 @@
+{
+ "generated_utc": "2026-10-01T13:24:52.481Z",
+ "note": "same entry bars and risk distance; RUN_TO_END = structural stop + broker fail-safe + 288-bar horizon, no target; NORMAL cost",
+ "DEV": {
+  "actual": {
+   "run_to_end": {
+    "n": 4858,
+    "expectancy_r": -0.081,
+    "win_rate": 0.127,
+    "pf": 0.934
+   },
+   "fixed_170r": {
+    "n": 4858,
+    "expectancy_r": -0.089,
+    "win_rate": 0.432,
+    "pf": 0.888
+   }
+  },
+  "opposite_side": {
+   "run_to_end": {
+    "n": 4858,
+    "expectancy_r": -0.169,
+    "win_rate": 0.131,
+    "pf": 0.863
+   },
+   "fixed_170r": {
+    "n": 4858,
+    "expectancy_r": -0.106,
+    "win_rate": 0.423,
+    "pf": 0.867
+   }
+  },
+  "random_side": {
+   "run_to_end": {
+    "n": 4858,
+    "expectancy_r": -0.02,
+    "win_rate": 0.138,
+    "pf": 0.984
+   },
+   "fixed_170r": {
+    "n": 4858,
+    "expectancy_r": -0.03,
+    "win_rate": 0.45,
+    "pf": 0.96
+   }
+  },
+  "actual_BUY_only": {
+   "run_to_end": {
+    "n": 2775,
+    "expectancy_r": 0.293,
+    "win_rate": 0.151,
+    "pf": 1.237
+   },
+   "fixed_170r": {
+    "n": 2775,
+    "expectancy_r": -0.013,
+    "win_rate": 0.464,
+    "pf": 0.983
+   }
+  },
+  "actual_SELL_only": {
+   "run_to_end": {
+    "n": 2083,
+    "expectancy_r": -0.58,
+    "win_rate": 0.094,
+    "pf": 0.534
+   },
+   "fixed_170r": {
+    "n": 2083,
+    "expectancy_r": -0.189,
+    "win_rate": 0.39,
+    "pf": 0.775
+   }
+  },
+  "all_entries_as_BUY": {
+   "run_to_end": {
+    "n": 4858,
+    "expectancy_r": 0.267,
+    "win_rate": 0.156,
+    "pf": 1.217
+   },
+   "fixed_170r": {
+    "n": 4858,
+    "expectancy_r": -0.027,
+    "win_rate": 0.46,
+    "pf": 0.965
+   }
+  },
+  "all_entries_as_SELL": {
+   "run_to_end": {
+    "n": 4858,
+    "expectancy_r": -0.517,
+    "win_rate": 0.101,
+    "pf": 0.582
+   },
+   "fixed_170r": {
+    "n": 4858,
+    "expectancy_r": -0.168,
+    "win_rate": 0.395,
+    "pf": 0.797
+   }
+  },
+  "market_move": {
+   "first_close": 3397.691,
+   "last_close": 4318.855,
+   "change_pct": 27.111
+  }
+ },
+ "HOLD": {
+  "actual": {
+   "run_to_end": {
+    "n": 6549,
+    "expectancy_r": 0.465,
+    "win_rate": 0.142,
+    "pf": 1.391
+   },
+   "fixed_170r": {
+    "n": 6553,
+    "expectancy_r": -0.043,
+    "win_rate": 0.435,
+    "pf": 0.943
+   }
+  },
+  "opposite_side": {
+   "run_to_end": {
+    "n": 6548,
+    "expectancy_r": 0.187,
+    "win_rate": 0.145,
+    "pf": 1.155
+   },
+   "fixed_170r": {
+    "n": 6553,
+    "expectancy_r": -0.091,
+    "win_rate": 0.425,
+    "pf": 0.885
+   }
+  },
+  "random_side": {
+   "run_to_end": {
+    "n": 6549,
+    "expectancy_r": 0.424,
+    "win_rate": 0.146,
+    "pf": 1.357
+   },
+   "fixed_170r": {
+    "n": 6553,
+    "expectancy_r": -0.066,
+    "win_rate": 0.429,
+    "pf": 0.915
+   }
+  },
+  "actual_BUY_only": {
+   "run_to_end": {
+    "n": 2996,
+    "expectancy_r": 0.303,
+    "win_rate": 0.141,
+    "pf": 1.252
+   },
+   "fixed_170r": {
+    "n": 3000,
+    "expectancy_r": -0.135,
+    "win_rate": 0.409,
+    "pf": 0.832
+   }
+  },
+  "actual_SELL_only": {
+   "run_to_end": {
+    "n": 3553,
+    "expectancy_r": 0.601,
+    "win_rate": 0.144,
+    "pf": 1.512
+   },
+   "fixed_170r": {
+    "n": 3553,
+    "expectancy_r": 0.034,
+    "win_rate": 0.457,
+    "pf": 1.047
+   }
+  },
+  "all_entries_as_BUY": {
+   "run_to_end": {
+    "n": 6544,
+    "expectancy_r": 0.17,
+    "win_rate": 0.138,
+    "pf": 1.14
+   },
+   "fixed_170r": {
+    "n": 6553,
+    "expectancy_r": -0.155,
+    "win_rate": 0.406,
+    "pf": 0.811
+   }
+  },
+  "all_entries_as_SELL": {
+   "run_to_end": {
+    "n": 6553,
+    "expectancy_r": 0.481,
+    "win_rate": 0.15,
+    "pf": 1.41
+   },
+   "fixed_170r": {
+    "n": 6553,
+    "expectancy_r": 0.021,
+    "win_rate": 0.454,
+    "pf": 1.028
+   }
+  },
+  "market_move": {
+   "first_close": 4333.397,
+   "last_close": 4185.063,
+   "change_pct": -3.423
+  }
+ }
+}

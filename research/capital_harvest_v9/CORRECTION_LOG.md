@@ -1,0 +1,4 @@
+# V9 CORRECTION LOG (analysis code only; pre-registration, harvest.mjs and the frozen selection unchanged)
+
+1. 2026-10-01, after the first FULL run: the give-back "% of MFE" averaged per-trade ratios (MFE − r) / MFE over every trade with MFE > 0, which explodes for trades whose MFE is tiny (values around 870 %). It is now an aggregate ratio Σ(MFE − r) / ΣMFE over trades whose MFE reached at least 0.5 R ("meaningful profit available"); mean give-back in R and USD use the same trades. The decision checks of §8 never used this metric; FULL was re-run deterministically (selection frozen, freeze verified).
+2. Diagnostic added after the FULL run (descriptive, not a candidate): `scripts/v9_drift_control.mjs` — RUN_TO_END with the same entry bars and risk under actual / opposite / random side and BUY-only / SELL-only, to test whether the large HOLDOUT RUN_TO_END result is a property of the entries or of the 2026 market.

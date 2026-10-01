@@ -1,0 +1,3376 @@
+{
+ "phase": "FULL",
+ "generated_utc": "2026-10-01T13:26:16.238Z",
+ "freeze": {
+  "frozen_utc": "2026-10-01T13:22:00.731Z",
+  "prereg_sha": "de61b5f19cb90a356b7543370868baa779b0c2e23182b5415a0485f07ef9dad0",
+  "harvest_sha": "3b99495ce80bcf805156052e9911ff7774446081610614a7728fe6e85c3d5c72",
+  "selection_sha": "98abac4896d6f69927378b7a6375a4ea7430e5dc68e9e58afddf7016b5d87767",
+  "dev_grid_sha": "191dc82cd1567b3330f5b0fdb379f7aeffe6fd3192728267bbeac9815f796c70"
+ },
+ "baseline_reproduction": {
+  "compared": 9716,
+  "mismatches": 0,
+  "examples": []
+ },
+ "splits": {
+  "DEV": {
+   "normal": {
+    "baseline": {
+     "per_signal": {
+      "n": 4858,
+      "expectancy_r": -0.089,
+      "pf": 0.89,
+      "win_rate": 0.432,
+      "avg_win_r": 1.629,
+      "avg_loss_r": 1.397,
+      "max_dd_r": 502.2,
+      "max_loss_streak": 32,
+      "net_r": -430.49,
+      "mfe_r": 1.205,
+      "mae_r": 1.199,
+      "duration_bars": 17.99
+     },
+     "sequential": {
+      "n": 1133,
+      "expectancy_r": -0.077,
+      "pf": 0.9,
+      "win_rate": 0.442,
+      "avg_win_r": 1.622,
+      "avg_loss_r": 1.424,
+      "max_dd_r": 120.78,
+      "max_loss_streak": 10,
+      "net_r": -87.3,
+      "mfe_r": 1.257,
+      "mae_r": 1.241,
+      "duration_bars": 15.41,
+      "capital_10k": {
+       "start": 10000,
+       "end": 9933.26,
+       "min_equity": 9799.19,
+       "max_dd_pct": 0.032,
+       "survived": true
+      },
+      "capital_62": {
+       "start": 62.07,
+       "end": -4.67,
+       "min_equity": -138.74,
+       "max_dd_pct": 1.744,
+       "survived": false
+      }
+     },
+     "giveback": {
+      "trades_with_mfe_ge_0_5r": 3331,
+      "mean_r": 1.168,
+      "aggregate_pct_of_mfe": 0.696,
+      "mean_usd_001lot": 6.287
+     },
+     "right_tail": {
+      "strong": 1903,
+      "preserved": 1903,
+      "preservation": 1,
+      "closed_below_1r": 0,
+      "mean_r_policy": 1.631,
+      "mean_r_baseline": 1.631
+     }
+    },
+    "run_to_end": {
+     "n": 4858,
+     "expectancy_r": -0.081,
+     "pf": 0.93,
+     "win_rate": 0.127,
+     "avg_win_r": 9.134,
+     "avg_loss_r": 1.417,
+     "max_dd_r": 1231.45,
+     "max_loss_streak": 182,
+     "net_r": -395.7,
+     "mfe_r": 3.453,
+     "mae_r": 1.6,
+     "duration_bars": 73.64
+    },
+    "milestones_open_path": {
+     "1": 0.554,
+     "2": 0.392,
+     "3": 0.303,
+     "0.25": 0.789,
+     "0.5": 0.686,
+     "0.75": 0.613,
+     "1.25": 0.502,
+     "1.5": 0.457,
+     "1.7": 0.427,
+     "2.5": 0.34
+    },
+    "policies": {
+     "FLOOR_A_arm0.75_lag0.5": {
+      "policy": "FLOOR_A_arm0.75_lag0.5",
+      "cost": "normal",
+      "per_signal": {
+       "n": 4858,
+       "expectancy_r": -0.076,
+       "pf": 0.86,
+       "win_rate": 0.468,
+       "avg_win_r": 1.014,
+       "avg_loss_r": 1.033,
+       "max_dd_r": 419.1,
+       "max_loss_streak": 23,
+       "net_r": -367.96,
+       "mfe_r": 0.999,
+       "mae_r": 0.99,
+       "duration_bars": 10.66
+      },
+      "paired_mean_r": 0.013,
+      "paired_ci95_r": [
+       -0.012,
+       0.04
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 3331,
+       "mean_r": 0.847,
+       "aggregate_pct_of_mfe": 0.616,
+       "mean_usd_001lot": 4.559
+      },
+      "early_exits": {
+       "n": 1280,
+       "share_of_trades": 0.263,
+       "classes": {
+        "GOOD": 432,
+        "ACCEPTABLE": 1,
+        "PREMATURE": 847
+       },
+       "premature_rate": 0.662,
+       "profit_lost_mean_r": 0.669,
+       "post_exit_continuation_mean_r": 4.081
+      },
+      "harvested_early_share": 0,
+      "protected_and_ran_share": 0,
+      "armed_share": 0.554,
+      "additional_profit_after_protection_r": -0.016,
+      "right_tail": {
+       "strong": 1903,
+       "preserved": 913,
+       "preservation": 0.48,
+       "closed_below_1r": 0.52,
+       "mean_r_policy": 0.988,
+       "mean_r_baseline": 1.631
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 1980,
+       "THESIS_INVALIDATION": 1047,
+       "BROKER_SL": 839,
+       "TARGET_170R": 992
+      },
+      "sequential": {
+       "n": 1334,
+       "expectancy_r": -0.067,
+       "pf": 0.87,
+       "win_rate": 0.471,
+       "avg_win_r": 0.999,
+       "avg_loss_r": 1.015,
+       "max_dd_r": 108.08,
+       "max_loss_streak": 9,
+       "net_r": -89.79,
+       "mfe_r": 1.039,
+       "mae_r": 1.028,
+       "duration_bars": 9.41,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 9892.05,
+        "min_equity": 9858.37,
+        "max_dd_pct": 0.022,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": -45.89,
+        "min_equity": -79.56,
+        "max_dd_pct": 1.543,
+        "survived": false
+       }
+      }
+     },
+     "FLOOR_B_arm0.75_k2": {
+      "policy": "FLOOR_B_arm0.75_k2",
+      "cost": "normal",
+      "per_signal": {
+       "n": 4858,
+       "expectancy_r": -0.075,
+       "pf": 0.86,
+       "win_rate": 0.391,
+       "avg_win_r": 1.214,
+       "avg_loss_r": 0.904,
+       "max_dd_r": 416.18,
+       "max_loss_streak": 35,
+       "net_r": -363.94,
+       "mfe_r": 1.04,
+       "mae_r": 0.999,
+       "duration_bars": 10.74
+      },
+      "paired_mean_r": 0.014,
+      "paired_ci95_r": [
+       -0.01,
+       0.039
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 3331,
+       "mean_r": 0.906,
+       "aggregate_pct_of_mfe": 0.631,
+       "mean_usd_001lot": 4.776
+      },
+      "early_exits": {
+       "n": 643,
+       "share_of_trades": 0.132,
+       "classes": {
+        "GOOD": 241,
+        "ACCEPTABLE": 0,
+        "PREMATURE": 402
+       },
+       "premature_rate": 0.625,
+       "profit_lost_mean_r": 0.682,
+       "post_exit_continuation_mean_r": 2.738
+      },
+      "harvested_early_share": 0,
+      "protected_and_ran_share": 0,
+      "armed_share": 0.554,
+      "additional_profit_after_protection_r": -0.015,
+      "right_tail": {
+       "strong": 1903,
+       "preserved": 1144,
+       "preservation": 0.601,
+       "closed_below_1r": 0.392,
+       "mean_r_policy": 1.047,
+       "mean_r_baseline": 1.631
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 1714,
+       "THESIS_INVALIDATION": 1047,
+       "TARGET_170R": 1258,
+       "BROKER_SL": 839
+      },
+      "sequential": {
+       "n": 1311,
+       "expectancy_r": -0.049,
+       "pf": 0.91,
+       "win_rate": 0.38,
+       "avg_win_r": 1.289,
+       "avg_loss_r": 0.869,
+       "max_dd_r": 81.88,
+       "max_loss_streak": 12,
+       "net_r": -64.71,
+       "mfe_r": 1.09,
+       "mae_r": 1.033,
+       "duration_bars": 9.45,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 9996.36,
+        "min_equity": 9941.87,
+        "max_dd_pct": 0.021,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": 58.43,
+        "min_equity": 3.94,
+        "max_dd_pct": 0.975,
+        "survived": true
+       }
+      }
+     },
+     "FLOOR_C_arm0.75": {
+      "policy": "FLOOR_C_arm0.75",
+      "cost": "normal",
+      "per_signal": {
+       "n": 4858,
+       "expectancy_r": -0.078,
+       "pf": 0.86,
+       "win_rate": 0.326,
+       "avg_win_r": 1.449,
+       "avg_loss_r": 0.816,
+       "max_dd_r": 430.26,
+       "max_loss_streak": 40,
+       "net_r": -380.35,
+       "mfe_r": 1.052,
+       "mae_r": 1.001,
+       "duration_bars": 11.32
+      },
+      "paired_mean_r": 0.01,
+      "paired_ci95_r": [
+       -0.013,
+       0.036
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 3331,
+       "mean_r": 0.93,
+       "aggregate_pct_of_mfe": 0.639,
+       "mean_usd_001lot": 5.015
+      },
+      "early_exits": {
+       "n": 239,
+       "share_of_trades": 0.049,
+       "classes": {
+        "GOOD": 93,
+        "ACCEPTABLE": 2,
+        "PREMATURE": 144
+       },
+       "premature_rate": 0.603,
+       "profit_lost_mean_r": 0.606,
+       "post_exit_continuation_mean_r": 2.569
+      },
+      "harvested_early_share": 0,
+      "protected_and_ran_share": 0,
+      "armed_share": 0.554,
+      "additional_profit_after_protection_r": -0.021,
+      "right_tail": {
+       "strong": 1903,
+       "preserved": 1224,
+       "preservation": 0.643,
+       "closed_below_1r": 0.352,
+       "mean_r_policy": 1.07,
+       "mean_r_baseline": 1.631
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 1629,
+       "THESIS_INVALIDATION": 1047,
+       "TARGET_170R": 1343,
+       "BROKER_SL": 839
+      },
+      "sequential": {
+       "n": 1283,
+       "expectancy_r": -0.057,
+       "pf": 0.89,
+       "win_rate": 0.327,
+       "avg_win_r": 1.465,
+       "avg_loss_r": 0.797,
+       "max_dd_r": 87.7,
+       "max_loss_streak": 17,
+       "net_r": -72.73,
+       "mfe_r": 1.098,
+       "mae_r": 1.033,
+       "duration_bars": 9.91,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 9881.52,
+        "min_equity": 9851.97,
+        "max_dd_pct": 0.027,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": -56.41,
+        "min_equity": -85.96,
+        "max_dd_pct": 1.461,
+        "survived": false
+       }
+      }
+     },
+     "FLOOR_D_arm0.75_rho0.4": {
+      "policy": "FLOOR_D_arm0.75_rho0.4",
+      "cost": "normal",
+      "per_signal": {
+       "n": 4858,
+       "expectancy_r": -0.074,
+       "pf": 0.87,
+       "win_rate": 0.586,
+       "avg_win_r": 0.812,
+       "avg_loss_r": 1.329,
+       "max_dd_r": 415.51,
+       "max_loss_streak": 16,
+       "net_r": -357.73,
+       "mfe_r": 0.968,
+       "mae_r": 0.985,
+       "duration_bars": 10.32
+      },
+      "paired_mean_r": 0.015,
+      "paired_ci95_r": [
+       -0.011,
+       0.043
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 3331,
+       "mean_r": 0.799,
+       "aggregate_pct_of_mfe": 0.6,
+       "mean_usd_001lot": 4.264
+      },
+      "early_exits": {
+       "n": 1869,
+       "share_of_trades": 0.385,
+       "classes": {
+        "GOOD": 687,
+        "ACCEPTABLE": 0,
+        "PREMATURE": 1182
+       },
+       "premature_rate": 0.632,
+       "profit_lost_mean_r": 0.717,
+       "post_exit_continuation_mean_r": 3.935
+      },
+      "harvested_early_share": 0,
+      "protected_and_ran_share": 0,
+      "armed_share": 0.554,
+      "additional_profit_after_protection_r": -0.013,
+      "right_tail": {
+       "strong": 1903,
+       "preserved": 898,
+       "preservation": 0.472,
+       "closed_below_1r": 0.528,
+       "mean_r_policy": 0.963,
+       "mean_r_baseline": 1.631
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 1993,
+       "THESIS_INVALIDATION": 1047,
+       "BROKER_SL": 839,
+       "TARGET_170R": 979
+      },
+      "sequential": {
+       "n": 1359,
+       "expectancy_r": -0.046,
+       "pf": 0.91,
+       "win_rate": 0.598,
+       "avg_win_r": 0.823,
+       "avg_loss_r": 1.339,
+       "max_dd_r": 80.51,
+       "max_loss_streak": 7,
+       "net_r": -62.27,
+       "mfe_r": 1.024,
+       "mae_r": 1.024,
+       "duration_bars": 8.99,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 10074.5,
+        "min_equity": 9914.59,
+        "max_dd_pct": 0.018,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": 136.57,
+        "min_equity": -23.34,
+        "max_dd_pct": 1.161,
+        "survived": false
+       }
+      }
+     },
+     "FLOOR_E_arm0.75_k1.5": {
+      "policy": "FLOOR_E_arm0.75_k1.5",
+      "cost": "normal",
+      "per_signal": {
+       "n": 4858,
+       "expectancy_r": -0.082,
+       "pf": 0.85,
+       "win_rate": 0.446,
+       "avg_win_r": 1.049,
+       "avg_loss_r": 0.994,
+       "max_dd_r": 440.44,
+       "max_loss_streak": 33,
+       "net_r": -397.83,
+       "mfe_r": 1.014,
+       "mae_r": 0.995,
+       "duration_bars": 10.16
+      },
+      "paired_mean_r": 0.007,
+      "paired_ci95_r": [
+       -0.018,
+       0.034
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 3331,
+       "mean_r": 0.879,
+       "aggregate_pct_of_mfe": 0.628,
+       "mean_usd_001lot": 4.566
+      },
+      "early_exits": {
+       "n": 1052,
+       "share_of_trades": 0.217,
+       "classes": {
+        "GOOD": 376,
+        "ACCEPTABLE": 1,
+        "PREMATURE": 675
+       },
+       "premature_rate": 0.642,
+       "profit_lost_mean_r": 0.703,
+       "post_exit_continuation_mean_r": 3.085
+      },
+      "harvested_early_share": 0,
+      "protected_and_ran_share": 0,
+      "armed_share": 0.554,
+      "additional_profit_after_protection_r": -0.028,
+      "right_tail": {
+       "strong": 1903,
+       "preserved": 1019,
+       "preservation": 0.535,
+       "closed_below_1r": 0.454,
+       "mean_r_policy": 1.004,
+       "mean_r_baseline": 1.631
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 1855,
+       "THESIS_INVALIDATION": 1047,
+       "TARGET_170R": 1117,
+       "BROKER_SL": 839
+      },
+      "sequential": {
+       "n": 1354,
+       "expectancy_r": -0.068,
+       "pf": 0.88,
+       "win_rate": 0.426,
+       "avg_win_r": 1.125,
+       "avg_loss_r": 0.953,
+       "max_dd_r": 99.3,
+       "max_loss_streak": 10,
+       "net_r": -91.72,
+       "mfe_r": 1.067,
+       "mae_r": 1.039,
+       "duration_bars": 8.94,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 9885.75,
+        "min_equity": 9851.66,
+        "max_dd_pct": 0.023,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": -52.18,
+        "min_equity": -86.27,
+        "max_dd_pct": 1.583,
+        "survived": false
+       }
+      }
+     },
+     "POLICY1_D_arm0.75_rho0.5_h1.25": {
+      "policy": "POLICY1_D_arm0.75_rho0.5_h1.25",
+      "cost": "normal",
+      "per_signal": {
+       "n": 4858,
+       "expectancy_r": -0.078,
+       "pf": 0.86,
+       "win_rate": 0.586,
+       "avg_win_r": 0.805,
+       "avg_loss_r": 1.329,
+       "max_dd_r": 431.65,
+       "max_loss_streak": 16,
+       "net_r": -379.67,
+       "mfe_r": 0.971,
+       "mae_r": 0.985,
+       "duration_bars": 9.99
+      },
+      "paired_mean_r": 0.01,
+      "paired_ci95_r": [
+       -0.017,
+       0.039
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 3331,
+       "mean_r": 0.81,
+       "aggregate_pct_of_mfe": 0.607,
+       "mean_usd_001lot": 4.356
+      },
+      "early_exits": {
+       "n": 2441,
+       "share_of_trades": 0.502,
+       "classes": {
+        "GOOD": 725,
+        "ACCEPTABLE": 39,
+        "PREMATURE": 1677
+       },
+       "premature_rate": 0.687,
+       "profit_lost_mean_r": 0.633,
+       "post_exit_continuation_mean_r": 4.04
+      },
+      "harvested_early_share": 0.029,
+      "protected_and_ran_share": 0.03,
+      "armed_share": 0.554,
+      "additional_profit_after_protection_r": -0.021,
+      "right_tail": {
+       "strong": 1903,
+       "preserved": 536,
+       "preservation": 0.282,
+       "closed_below_1r": 0.634,
+       "mean_r_policy": 0.933,
+       "mean_r_baseline": 1.631
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 2285,
+       "THESIS_INVALIDATION": 1047,
+       "BROKER_SL": 839,
+       "HARVEST": 272,
+       "TARGET_170R": 407,
+       "STRUCTURE_EXIT": 8
+      },
+      "sequential": {
+       "n": 1384,
+       "expectancy_r": -0.041,
+       "pf": 0.92,
+       "win_rate": 0.595,
+       "avg_win_r": 0.833,
+       "avg_loss_r": 1.327,
+       "max_dd_r": 83.95,
+       "max_loss_streak": 7,
+       "net_r": -56.59,
+       "mfe_r": 1.037,
+       "mae_r": 1.019,
+       "duration_bars": 8.64,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 10084.73,
+        "min_equity": 9987.58,
+        "max_dd_pct": 0.022,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": 146.8,
+        "min_equity": 49.65,
+        "max_dd_pct": 0.803,
+        "survived": true
+       }
+      }
+     },
+     "POLICY2_E_arm1_k1.5_h1": {
+      "policy": "POLICY2_E_arm1_k1.5_h1",
+      "cost": "normal",
+      "per_signal": {
+       "n": 4858,
+       "expectancy_r": -0.081,
+       "pf": 0.87,
+       "win_rate": 0.462,
+       "avg_win_r": 1.186,
+       "avg_loss_r": 1.169,
+       "max_dd_r": 436.66,
+       "max_loss_streak": 33,
+       "net_r": -391.74,
+       "mfe_r": 1.154,
+       "mae_r": 1.065,
+       "duration_bars": 12.39
+      },
+      "paired_mean_r": 0.008,
+      "paired_ci95_r": [
+       -0.016,
+       0.035
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 3331,
+       "mean_r": 1.081,
+       "aggregate_pct_of_mfe": 0.674,
+       "mean_usd_001lot": 5.639
+      },
+      "early_exits": {
+       "n": 1616,
+       "share_of_trades": 0.333,
+       "classes": {
+        "GOOD": 379,
+        "ACCEPTABLE": 75,
+        "PREMATURE": 1162
+       },
+       "premature_rate": 0.719,
+       "profit_lost_mean_r": 0.511,
+       "post_exit_continuation_mean_r": 3.852
+      },
+      "harvested_early_share": 0.078,
+      "protected_and_ran_share": 0.045,
+      "armed_share": 0.469,
+      "additional_profit_after_protection_r": -0.01,
+      "right_tail": {
+       "strong": 1903,
+       "preserved": 820,
+       "preservation": 0.431,
+       "closed_below_1r": 0.364,
+       "mean_r_policy": 1.208,
+       "mean_r_baseline": 1.631
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 1526,
+       "THESIS_INVALIDATION": 1188,
+       "BROKER_SL": 981,
+       "HARVEST": 532,
+       "TARGET_170R": 629,
+       "STRUCTURE_EXIT": 2
+      },
+      "sequential": {
+       "n": 1292,
+       "expectancy_r": -0.06,
+       "pf": 0.9,
+       "win_rate": 0.449,
+       "avg_win_r": 1.266,
+       "avg_loss_r": 1.14,
+       "max_dd_r": 96.63,
+       "max_loss_streak": 10,
+       "net_r": -77.19,
+       "mfe_r": 1.218,
+       "mae_r": 1.095,
+       "duration_bars": 10.45,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 9915.52,
+        "min_equity": 9889.86,
+        "max_dd_pct": 0.034,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": -22.41,
+        "min_equity": -48.07,
+        "max_dd_pct": 1.16,
+        "survived": false
+       }
+      }
+     },
+     "POLICY3_A_arm0.75_lag0.5_h1.25": {
+      "policy": "POLICY3_A_arm0.75_lag0.5_h1.25",
+      "cost": "normal",
+      "per_signal": {
+       "n": 4858,
+       "expectancy_r": -0.074,
+       "pf": 0.87,
+       "win_rate": 0.47,
+       "avg_win_r": 1.014,
+       "avg_loss_r": 1.037,
+       "max_dd_r": 411.78,
+       "max_loss_streak": 23,
+       "net_r": -358.45,
+       "mfe_r": 1.035,
+       "mae_r": 0.991,
+       "duration_bars": 10.72
+      },
+      "paired_mean_r": 0.015,
+      "paired_ci95_r": [
+       -0.011,
+       0.043
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 3331,
+       "mean_r": 0.897,
+       "aggregate_pct_of_mfe": 0.628,
+       "mean_usd_001lot": 4.875
+      },
+      "early_exits": {
+       "n": 1839,
+       "share_of_trades": 0.379,
+       "classes": {
+        "GOOD": 484,
+        "ACCEPTABLE": 63,
+        "PREMATURE": 1292
+       },
+       "premature_rate": 0.703,
+       "profit_lost_mean_r": 0.541,
+       "post_exit_continuation_mean_r": 4.162
+      },
+      "harvested_early_share": 0.034,
+      "protected_and_ran_share": 0.038,
+      "armed_share": 0.554,
+      "additional_profit_after_protection_r": -0.013,
+      "right_tail": {
+       "strong": 1903,
+       "preserved": 614,
+       "preservation": 0.323,
+       "closed_below_1r": 0.562,
+       "mean_r_policy": 1.004,
+       "mean_r_baseline": 1.631
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 2241,
+       "THESIS_INVALIDATION": 1047,
+       "BROKER_SL": 839,
+       "HARVEST": 253,
+       "TARGET_170R": 442,
+       "STRUCTURE_EXIT": 36
+      },
+      "sequential": {
+       "n": 1331,
+       "expectancy_r": -0.053,
+       "pf": 0.9,
+       "win_rate": 0.476,
+       "avg_win_r": 1.015,
+       "avg_loss_r": 1.024,
+       "max_dd_r": 94.93,
+       "max_loss_streak": 9,
+       "net_r": -70.21,
+       "mfe_r": 1.081,
+       "mae_r": 1.024,
+       "duration_bars": 9.31,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 9982.56,
+        "min_equity": 9946.59,
+        "max_dd_pct": 0.022,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": 44.63,
+        "min_equity": 8.66,
+        "max_dd_pct": 0.963,
+        "survived": true
+       }
+      }
+     }
+    }
+   },
+   "stress": {
+    "baseline": {
+     "per_signal": {
+      "n": 4858,
+      "expectancy_r": -0.213,
+      "pf": 0.76,
+      "win_rate": 0.426,
+      "avg_win_r": 1.544,
+      "avg_loss_r": 1.515,
+      "max_dd_r": 1046.17,
+      "max_loss_streak": 33,
+      "net_r": -1035.25,
+      "mfe_r": 1.135,
+      "mae_r": 1.302,
+      "duration_bars": 18.25
+     },
+     "sequential": {
+      "n": 1122,
+      "expectancy_r": -0.226,
+      "pf": 0.74,
+      "win_rate": 0.43,
+      "avg_win_r": 1.528,
+      "avg_loss_r": 1.548,
+      "max_dd_r": 265.56,
+      "max_loss_streak": 10,
+      "net_r": -253.9,
+      "mfe_r": 1.181,
+      "mae_r": 1.356,
+      "duration_bars": 15.87,
+      "capital_10k": {
+       "start": 10000,
+       "end": 9258.35,
+       "min_equity": 9167.96,
+       "max_dd_pct": 0.084,
+       "survived": true
+      },
+      "capital_62": {
+       "start": 62.07,
+       "end": -679.58,
+       "min_equity": -769.97,
+       "max_dd_pct": 11.237,
+       "survived": false
+      }
+     },
+     "giveback": {
+      "trades_with_mfe_ge_0_5r": 3190,
+      "mean_r": 1.179,
+      "aggregate_pct_of_mfe": 0.713,
+      "mean_usd_001lot": 6.444
+     },
+     "right_tail": {
+      "strong": 1829,
+      "preserved": 1829,
+      "preservation": 1,
+      "closed_below_1r": 0,
+      "mean_r_policy": 1.548,
+      "mean_r_baseline": 1.548
+     }
+    },
+    "run_to_end": {
+     "n": 4858,
+     "expectancy_r": -0.202,
+     "pf": 0.85,
+     "win_rate": 0.126,
+     "avg_win_r": 9.07,
+     "avg_loss_r": 1.541,
+     "max_dd_r": 1714.43,
+     "max_loss_streak": 182,
+     "net_r": -982.04,
+     "mfe_r": 3.371,
+     "mae_r": 1.694,
+     "duration_bars": 73.64
+    },
+    "milestones_open_path": {
+     "1": 0.536,
+     "2": 0.376,
+     "3": 0.296,
+     "0.25": 0.75,
+     "0.5": 0.657,
+     "0.75": 0.59,
+     "1.25": 0.487,
+     "1.5": 0.441,
+     "1.7": 0.414,
+     "2.5": 0.333
+    },
+    "policies": {
+     "FLOOR_A_arm0.75_lag0.5": {
+      "policy": "FLOOR_A_arm0.75_lag0.5",
+      "cost": "stress",
+      "per_signal": {
+       "n": 4858,
+       "expectancy_r": -0.205,
+       "pf": 0.68,
+       "win_rate": 0.441,
+       "avg_win_r": 0.98,
+       "avg_loss_r": 1.139,
+       "max_dd_r": 1014.4,
+       "max_loss_streak": 31,
+       "net_r": -994.03,
+       "mfe_r": 0.941,
+       "mae_r": 1.114,
+       "duration_bars": 11.23
+      },
+      "paired_mean_r": 0.008,
+      "paired_ci95_r": [
+       -0.016,
+       0.034
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 3190,
+       "mean_r": 0.871,
+       "aggregate_pct_of_mfe": 0.642,
+       "mean_usd_001lot": 4.731
+      },
+      "early_exits": {
+       "n": 1145,
+       "share_of_trades": 0.236,
+       "classes": {
+        "GOOD": 379,
+        "ACCEPTABLE": 1,
+        "PREMATURE": 765
+       },
+       "premature_rate": 0.668,
+       "profit_lost_mean_r": 0.669,
+       "post_exit_continuation_mean_r": 4.214
+      },
+      "harvested_early_share": 0,
+      "protected_and_ran_share": 0,
+      "armed_share": 0.526,
+      "additional_profit_after_protection_r": -0.046,
+      "right_tail": {
+       "strong": 1829,
+       "preserved": 885,
+       "preservation": 0.484,
+       "closed_below_1r": 0.516,
+       "mean_r_policy": 0.918,
+       "mean_r_baseline": 1.548
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 1862,
+       "THESIS_INVALIDATION": 1092,
+       "BROKER_SL": 906,
+       "TARGET_170R": 998
+      },
+      "sequential": {
+       "n": 1326,
+       "expectancy_r": -0.214,
+       "pf": 0.67,
+       "win_rate": 0.439,
+       "avg_win_r": 0.979,
+       "avg_loss_r": 1.148,
+       "max_dd_r": 290.49,
+       "max_loss_streak": 11,
+       "net_r": -284.25,
+       "mfe_r": 0.981,
+       "mae_r": 1.163,
+       "duration_bars": 9.61,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 9219.21,
+        "min_equity": 9193.33,
+        "max_dd_pct": 0.082,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": -718.72,
+        "min_equity": -744.6,
+        "max_dd_pct": 10.212,
+        "survived": false
+       }
+      }
+     },
+     "FLOOR_B_arm0.75_k2": {
+      "policy": "FLOOR_B_arm0.75_k2",
+      "cost": "stress",
+      "per_signal": {
+       "n": 4858,
+       "expectancy_r": -0.201,
+       "pf": 0.69,
+       "win_rate": 0.381,
+       "avg_win_r": 1.144,
+       "avg_loss_r": 1.03,
+       "max_dd_r": 999.05,
+       "max_loss_streak": 38,
+       "net_r": -974.08,
+       "mfe_r": 0.977,
+       "mae_r": 1.12,
+       "duration_bars": 11.19
+      },
+      "paired_mean_r": 0.013,
+      "paired_ci95_r": [
+       -0.011,
+       0.038
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 3190,
+       "mean_r": 0.919,
+       "aggregate_pct_of_mfe": 0.651,
+       "mean_usd_001lot": 4.933
+      },
+      "early_exits": {
+       "n": 634,
+       "share_of_trades": 0.131,
+       "classes": {
+        "GOOD": 235,
+        "ACCEPTABLE": 0,
+        "PREMATURE": 399
+       },
+       "premature_rate": 0.629,
+       "profit_lost_mean_r": 0.683,
+       "post_exit_continuation_mean_r": 2.738
+      },
+      "harvested_early_share": 0,
+      "protected_and_ran_share": 0,
+      "armed_share": 0.526,
+      "additional_profit_after_protection_r": -0.038,
+      "right_tail": {
+       "strong": 1829,
+       "preserved": 1089,
+       "preservation": 0.595,
+       "closed_below_1r": 0.399,
+       "mean_r_policy": 0.978,
+       "mean_r_baseline": 1.548
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 1641,
+       "THESIS_INVALIDATION": 1092,
+       "TARGET_170R": 1219,
+       "BROKER_SL": 906
+      },
+      "sequential": {
+       "n": 1309,
+       "expectancy_r": -0.201,
+       "pf": 0.69,
+       "win_rate": 0.371,
+       "avg_win_r": 1.206,
+       "avg_loss_r": 1.033,
+       "max_dd_r": 269.41,
+       "max_loss_streak": 18,
+       "net_r": -263.73,
+       "mfe_r": 1.019,
+       "mae_r": 1.17,
+       "duration_bars": 9.65,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 9244.82,
+        "min_equity": 9216.57,
+        "max_dd_pct": 0.079,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": -693.11,
+        "min_equity": -721.36,
+        "max_dd_pct": 11.88,
+        "survived": false
+       }
+      }
+     },
+     "FLOOR_C_arm0.75": {
+      "policy": "FLOOR_C_arm0.75",
+      "cost": "stress",
+      "per_signal": {
+       "n": 4858,
+       "expectancy_r": -0.203,
+       "pf": 0.68,
+       "win_rate": 0.315,
+       "avg_win_r": 1.378,
+       "avg_loss_r": 0.929,
+       "max_dd_r": 1008.61,
+       "max_loss_streak": 40,
+       "net_r": -987.04,
+       "mfe_r": 0.99,
+       "mae_r": 1.121,
+       "duration_bars": 11.73
+      },
+      "paired_mean_r": 0.01,
+      "paired_ci95_r": [
+       -0.014,
+       0.034
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 3190,
+       "mean_r": 0.943,
+       "aggregate_pct_of_mfe": 0.659,
+       "mean_usd_001lot": 5.165
+      },
+      "early_exits": {
+       "n": 220,
+       "share_of_trades": 0.045,
+       "classes": {
+        "GOOD": 88,
+        "ACCEPTABLE": 3,
+        "PREMATURE": 129
+       },
+       "premature_rate": 0.586,
+       "profit_lost_mean_r": 0.612,
+       "post_exit_continuation_mean_r": 2.542
+      },
+      "harvested_early_share": 0,
+      "protected_and_ran_share": 0,
+      "armed_share": 0.526,
+      "additional_profit_after_protection_r": -0.043,
+      "right_tail": {
+       "strong": 1829,
+       "preserved": 1167,
+       "preservation": 0.638,
+       "closed_below_1r": 0.359,
+       "mean_r_policy": 0.999,
+       "mean_r_baseline": 1.548
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 1551,
+       "THESIS_INVALIDATION": 1092,
+       "TARGET_170R": 1309,
+       "BROKER_SL": 906
+      },
+      "sequential": {
+       "n": 1277,
+       "expectancy_r": -0.198,
+       "pf": 0.69,
+       "win_rate": 0.323,
+       "avg_win_r": 1.383,
+       "avg_loss_r": 0.951,
+       "max_dd_r": 258.66,
+       "max_loss_streak": 18,
+       "net_r": -252.79,
+       "mfe_r": 1.033,
+       "mae_r": 1.167,
+       "duration_bars": 10.16,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 9262.89,
+        "min_equity": 9237.21,
+        "max_dd_pct": 0.078,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": -675.04,
+        "min_equity": -700.72,
+        "max_dd_pct": 9.962,
+        "survived": false
+       }
+      }
+     },
+     "FLOOR_D_arm0.75_rho0.4": {
+      "policy": "FLOOR_D_arm0.75_rho0.4",
+      "cost": "stress",
+      "per_signal": {
+       "n": 4858,
+       "expectancy_r": -0.203,
+       "pf": 0.68,
+       "win_rate": 0.557,
+       "avg_win_r": 0.778,
+       "avg_loss_r": 1.439,
+       "max_dd_r": 1005.9,
+       "max_loss_streak": 16,
+       "net_r": -986.81,
+       "mfe_r": 0.915,
+       "mae_r": 1.11,
+       "duration_bars": 10.83
+      },
+      "paired_mean_r": 0.01,
+      "paired_ci95_r": [
+       -0.015,
+       0.037
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 3190,
+       "mean_r": 0.828,
+       "aggregate_pct_of_mfe": 0.629,
+       "mean_usd_001lot": 4.469
+      },
+      "early_exits": {
+       "n": 1744,
+       "share_of_trades": 0.359,
+       "classes": {
+        "GOOD": 614,
+        "ACCEPTABLE": 0,
+        "PREMATURE": 1130
+       },
+       "premature_rate": 0.648,
+       "profit_lost_mean_r": 0.715,
+       "post_exit_continuation_mean_r": 3.867
+      },
+      "harvested_early_share": 0,
+      "protected_and_ran_share": 0,
+      "armed_share": 0.526,
+      "additional_profit_after_protection_r": -0.043,
+      "right_tail": {
+       "strong": 1829,
+       "preserved": 866,
+       "preservation": 0.473,
+       "closed_below_1r": 0.527,
+       "mean_r_policy": 0.901,
+       "mean_r_baseline": 1.548
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 1896,
+       "THESIS_INVALIDATION": 1092,
+       "BROKER_SL": 906,
+       "TARGET_170R": 964
+      },
+      "sequential": {
+       "n": 1348,
+       "expectancy_r": -0.204,
+       "pf": 0.69,
+       "win_rate": 0.553,
+       "avg_win_r": 0.804,
+       "avg_loss_r": 1.453,
+       "max_dd_r": 283.3,
+       "max_loss_streak": 8,
+       "net_r": -274.94,
+       "mfe_r": 0.961,
+       "mae_r": 1.166,
+       "duration_bars": 9.32,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 9329.87,
+        "min_equity": 9299.13,
+        "max_dd_pct": 0.072,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": -608.06,
+        "min_equity": -638.8,
+        "max_dd_pct": 8.636,
+        "survived": false
+       }
+      }
+     },
+     "FLOOR_E_arm0.75_k1.5": {
+      "policy": "FLOOR_E_arm0.75_k1.5",
+      "cost": "stress",
+      "per_signal": {
+       "n": 4858,
+       "expectancy_r": -0.206,
+       "pf": 0.68,
+       "win_rate": 0.432,
+       "avg_win_r": 0.996,
+       "avg_loss_r": 1.122,
+       "max_dd_r": 1025.23,
+       "max_loss_streak": 33,
+       "net_r": -1002.23,
+       "mfe_r": 0.952,
+       "mae_r": 1.117,
+       "duration_bars": 10.63
+      },
+      "paired_mean_r": 0.007,
+      "paired_ci95_r": [
+       -0.017,
+       0.032
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 3190,
+       "mean_r": 0.889,
+       "aggregate_pct_of_mfe": 0.648,
+       "mean_usd_001lot": 4.691
+      },
+      "early_exits": {
+       "n": 1014,
+       "share_of_trades": 0.209,
+       "classes": {
+        "GOOD": 353,
+        "ACCEPTABLE": 1,
+        "PREMATURE": 660
+       },
+       "premature_rate": 0.651,
+       "profit_lost_mean_r": 0.699,
+       "post_exit_continuation_mean_r": 3.125
+      },
+      "harvested_early_share": 0,
+      "protected_and_ran_share": 0,
+      "armed_share": 0.526,
+      "additional_profit_after_protection_r": -0.049,
+      "right_tail": {
+       "strong": 1829,
+       "preserved": 970,
+       "preservation": 0.53,
+       "closed_below_1r": 0.462,
+       "mean_r_policy": 0.937,
+       "mean_r_baseline": 1.548
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 1774,
+       "THESIS_INVALIDATION": 1092,
+       "TARGET_170R": 1086,
+       "BROKER_SL": 906
+      },
+      "sequential": {
+       "n": 1352,
+       "expectancy_r": -0.221,
+       "pf": 0.66,
+       "win_rate": 0.41,
+       "avg_win_r": 1.064,
+       "avg_loss_r": 1.113,
+       "max_dd_r": 301.59,
+       "max_loss_streak": 11,
+       "net_r": -298.49,
+       "mfe_r": 0.99,
+       "mae_r": 1.176,
+       "duration_bars": 9.13,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 9149.24,
+        "min_equity": 9125.4,
+        "max_dd_pct": 0.089,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": -788.69,
+        "min_equity": -812.53,
+        "max_dd_pct": 11.983,
+        "survived": false
+       }
+      }
+     },
+     "POLICY1_D_arm0.75_rho0.5_h1.25": {
+      "policy": "POLICY1_D_arm0.75_rho0.5_h1.25",
+      "cost": "stress",
+      "per_signal": {
+       "n": 4858,
+       "expectancy_r": -0.205,
+       "pf": 0.68,
+       "win_rate": 0.558,
+       "avg_win_r": 0.774,
+       "avg_loss_r": 1.439,
+       "max_dd_r": 1013.8,
+       "max_loss_streak": 16,
+       "net_r": -996.17,
+       "mfe_r": 0.919,
+       "mae_r": 1.11,
+       "duration_bars": 10.54
+      },
+      "paired_mean_r": 0.008,
+      "paired_ci95_r": [
+       -0.018,
+       0.036
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 3190,
+       "mean_r": 0.838,
+       "aggregate_pct_of_mfe": 0.633,
+       "mean_usd_001lot": 4.55
+      },
+      "early_exits": {
+       "n": 2277,
+       "share_of_trades": 0.469,
+       "classes": {
+        "GOOD": 656,
+        "ACCEPTABLE": 32,
+        "PREMATURE": 1589
+       },
+       "premature_rate": 0.698,
+       "profit_lost_mean_r": 0.627,
+       "post_exit_continuation_mean_r": 4.036
+      },
+      "harvested_early_share": 0.026,
+      "protected_and_ran_share": 0.026,
+      "armed_share": 0.526,
+      "additional_profit_after_protection_r": -0.047,
+      "right_tail": {
+       "strong": 1829,
+       "preserved": 543,
+       "preservation": 0.297,
+       "closed_below_1r": 0.634,
+       "mean_r_policy": 0.881,
+       "mean_r_baseline": 1.548
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 2180,
+       "THESIS_INVALIDATION": 1092,
+       "BROKER_SL": 906,
+       "HARVEST": 239,
+       "TARGET_170R": 432,
+       "STRUCTURE_EXIT": 9
+      },
+      "sequential": {
+       "n": 1364,
+       "expectancy_r": -0.195,
+       "pf": 0.7,
+       "win_rate": 0.553,
+       "avg_win_r": 0.813,
+       "avg_loss_r": 1.441,
+       "max_dd_r": 279.16,
+       "max_loss_streak": 8,
+       "net_r": -265.81,
+       "mfe_r": 0.98,
+       "mae_r": 1.158,
+       "duration_bars": 9.13,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 9356.09,
+        "min_equity": 9278.22,
+        "max_dd_pct": 0.076,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": -581.84,
+        "min_equity": -659.71,
+        "max_dd_pct": 7.511,
+        "survived": false
+       }
+      }
+     },
+     "POLICY2_E_arm1_k1.5_h1": {
+      "policy": "POLICY2_E_arm1_k1.5_h1",
+      "cost": "stress",
+      "per_signal": {
+       "n": 4858,
+       "expectancy_r": -0.207,
+       "pf": 0.71,
+       "win_rate": 0.452,
+       "avg_win_r": 1.125,
+       "avg_loss_r": 1.305,
+       "max_dd_r": 1035.55,
+       "max_loss_streak": 28,
+       "net_r": -1004.73,
+       "mfe_r": 1.083,
+       "mae_r": 1.181,
+       "duration_bars": 12.74
+      },
+      "paired_mean_r": 0.006,
+      "paired_ci95_r": [
+       -0.017,
+       0.03
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 3190,
+       "mean_r": 1.091,
+       "aggregate_pct_of_mfe": 0.693,
+       "mean_usd_001lot": 5.751
+      },
+      "early_exits": {
+       "n": 1532,
+       "share_of_trades": 0.315,
+       "classes": {
+        "GOOD": 350,
+        "ACCEPTABLE": 72,
+        "PREMATURE": 1110
+       },
+       "premature_rate": 0.725,
+       "profit_lost_mean_r": 0.509,
+       "post_exit_continuation_mean_r": 3.945
+      },
+      "harvested_early_share": 0.068,
+      "protected_and_ran_share": 0.038,
+      "armed_share": 0.437,
+      "additional_profit_after_protection_r": -0.046,
+      "right_tail": {
+       "strong": 1829,
+       "preserved": 812,
+       "preservation": 0.444,
+       "closed_below_1r": 0.379,
+       "mean_r_policy": 1.138,
+       "mean_r_baseline": 1.548
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 1472,
+       "THESIS_INVALIDATION": 1223,
+       "BROKER_SL": 1037,
+       "HARVEST": 461,
+       "TARGET_170R": 663,
+       "STRUCTURE_EXIT": 2
+      },
+      "sequential": {
+       "n": 1282,
+       "expectancy_r": -0.21,
+       "pf": 0.71,
+       "win_rate": 0.441,
+       "avg_win_r": 1.174,
+       "avg_loss_r": 1.301,
+       "max_dd_r": 281.66,
+       "max_loss_streak": 11,
+       "net_r": -269.31,
+       "mfe_r": 1.132,
+       "mae_r": 1.224,
+       "duration_bars": 10.98,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 9275.88,
+        "min_equity": 9255.28,
+        "max_dd_pct": 0.082,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": -662.05,
+        "min_equity": -682.65,
+        "max_dd_pct": 5.913,
+        "survived": false
+       }
+      }
+     },
+     "POLICY3_A_arm0.75_lag0.5_h1.25": {
+      "policy": "POLICY3_A_arm0.75_lag0.5_h1.25",
+      "cost": "stress",
+      "per_signal": {
+       "n": 4858,
+       "expectancy_r": -0.203,
+       "pf": 0.68,
+       "win_rate": 0.444,
+       "avg_win_r": 0.978,
+       "avg_loss_r": 1.145,
+       "max_dd_r": 1001.13,
+       "max_loss_streak": 31,
+       "net_r": -984.27,
+       "mfe_r": 0.977,
+       "mae_r": 1.115,
+       "duration_bars": 11.28
+      },
+      "paired_mean_r": 0.01,
+      "paired_ci95_r": [
+       -0.014,
+       0.038
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 3190,
+       "mean_r": 0.923,
+       "aggregate_pct_of_mfe": 0.653,
+       "mean_usd_001lot": 5.062
+      },
+      "early_exits": {
+       "n": 1694,
+       "share_of_trades": 0.349,
+       "classes": {
+        "GOOD": 429,
+        "ACCEPTABLE": 51,
+        "PREMATURE": 1214
+       },
+       "premature_rate": 0.717,
+       "profit_lost_mean_r": 0.532,
+       "post_exit_continuation_mean_r": 4.307
+      },
+      "harvested_early_share": 0.031,
+      "protected_and_ran_share": 0.035,
+      "armed_share": 0.526,
+      "additional_profit_after_protection_r": -0.042,
+      "right_tail": {
+       "strong": 1829,
+       "preserved": 619,
+       "preservation": 0.338,
+       "closed_below_1r": 0.563,
+       "mean_r_policy": 0.938,
+       "mean_r_baseline": 1.548
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 2128,
+       "THESIS_INVALIDATION": 1092,
+       "BROKER_SL": 906,
+       "HARVEST": 228,
+       "TARGET_170R": 462,
+       "STRUCTURE_EXIT": 42
+      },
+      "sequential": {
+       "n": 1323,
+       "expectancy_r": -0.199,
+       "pf": 0.69,
+       "win_rate": 0.444,
+       "avg_win_r": 0.992,
+       "avg_loss_r": 1.152,
+       "max_dd_r": 275.04,
+       "max_loss_streak": 11,
+       "net_r": -263.08,
+       "mfe_r": 1.024,
+       "mae_r": 1.159,
+       "duration_bars": 9.57,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 9332.8,
+        "min_equity": 9304.27,
+        "max_dd_pct": 0.075,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": -605.13,
+        "min_equity": -633.66,
+        "max_dd_pct": 6.38,
+        "survived": false
+       }
+      }
+     }
+    }
+   },
+   "signals": 4858,
+   "sessions": 205
+  },
+  "HOLD": {
+   "normal": {
+    "baseline": {
+     "per_signal": {
+      "n": 6553,
+      "expectancy_r": -0.043,
+      "pf": 0.94,
+      "win_rate": 0.435,
+      "avg_win_r": 1.66,
+      "avg_loss_r": 1.355,
+      "max_dd_r": 388.95,
+      "max_loss_streak": 21,
+      "net_r": -283.63,
+      "mfe_r": 1.276,
+      "mae_r": 1.174,
+      "duration_bars": 16.21
+     },
+     "sequential": {
+      "n": 1510,
+      "expectancy_r": -0.022,
+      "pf": 0.97,
+      "win_rate": 0.45,
+      "avg_win_r": 1.654,
+      "avg_loss_r": 1.393,
+      "max_dd_r": 64.9,
+      "max_loss_streak": 16,
+      "net_r": -33.96,
+      "mfe_r": 1.314,
+      "mae_r": 1.237,
+      "duration_bars": 14.59,
+      "capital_10k": {
+       "start": 10000,
+       "end": 10206.94,
+       "min_equity": 9649.91,
+       "max_dd_pct": 0.066,
+       "survived": true
+      },
+      "capital_62": {
+       "start": 62.07,
+       "end": 269.02,
+       "min_equity": -288.02,
+       "max_dd_pct": 1.999,
+       "survived": false
+      }
+     },
+     "giveback": {
+      "trades_with_mfe_ge_0_5r": 4592,
+      "mean_r": 1.223,
+      "aggregate_pct_of_mfe": 0.703,
+      "mean_usd_001lot": 11.032
+     },
+     "right_tail": {
+      "strong": 2586,
+      "preserved": 2586,
+      "preservation": 1,
+      "closed_below_1r": 0,
+      "mean_r_policy": 1.663,
+      "mean_r_baseline": 1.663
+     }
+    },
+    "run_to_end": {
+     "n": 6549,
+     "expectancy_r": 0.465,
+     "pf": 1.39,
+     "win_rate": 0.142,
+     "avg_win_r": 11.609,
+     "avg_loss_r": 1.385,
+     "max_dd_r": 705,
+     "max_loss_streak": 192,
+     "net_r": 3042.72,
+     "mfe_r": 4.207,
+     "mae_r": 1.627,
+     "duration_bars": 72.35
+    },
+    "milestones_open_path": {
+     "1": 0.564,
+     "2": 0.395,
+     "3": 0.309,
+     "0.25": 0.811,
+     "0.5": 0.701,
+     "0.75": 0.626,
+     "1.25": 0.506,
+     "1.5": 0.465,
+     "1.7": 0.431,
+     "2.5": 0.345
+    },
+    "policies": {
+     "FLOOR_A_arm0.75_lag0.5": {
+      "policy": "FLOOR_A_arm0.75_lag0.5",
+      "cost": "normal",
+      "per_signal": {
+       "n": 6553,
+       "expectancy_r": -0.04,
+       "pf": 0.92,
+       "win_rate": 0.464,
+       "avg_win_r": 1.03,
+       "avg_loss_r": 0.968,
+       "max_dd_r": 321.31,
+       "max_loss_streak": 22,
+       "net_r": -262.5,
+       "mfe_r": 1.027,
+       "mae_r": 0.957,
+       "duration_bars": 9.49
+      },
+      "paired_mean_r": 0.003,
+      "paired_ci95_r": [
+       -0.021,
+       0.026
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 4592,
+       "mean_r": 0.863,
+       "aggregate_pct_of_mfe": 0.623,
+       "mean_usd_001lot": 7.834
+      },
+      "early_exits": {
+       "n": 1755,
+       "share_of_trades": 0.268,
+       "classes": {
+        "GOOD": 583,
+        "ACCEPTABLE": 2,
+        "PREMATURE": 1170
+       },
+       "premature_rate": 0.667,
+       "profit_lost_mean_r": 0.671,
+       "post_exit_continuation_mean_r": 4.964
+      },
+      "harvested_early_share": 0,
+      "protected_and_ran_share": 0,
+      "armed_share": 0.557,
+      "additional_profit_after_protection_r": -0.025,
+      "right_tail": {
+       "strong": 2586,
+       "preserved": 1181,
+       "preservation": 0.457,
+       "closed_below_1r": 0.543,
+       "mean_r_policy": 0.979,
+       "mean_r_baseline": 1.663
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 2805,
+       "TARGET_170R": 1288,
+       "BROKER_SL": 1028,
+       "THESIS_INVALIDATION": 1432
+      },
+      "sequential": {
+       "n": 1816,
+       "expectancy_r": -0.049,
+       "pf": 0.91,
+       "win_rate": 0.471,
+       "avg_win_r": 1.022,
+       "avg_loss_r": 1.003,
+       "max_dd_r": 96.71,
+       "max_loss_streak": 9,
+       "net_r": -88.24,
+       "mfe_r": 1.042,
+       "mae_r": 1.01,
+       "duration_bars": 8.27,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 9858.93,
+        "min_equity": 9476.38,
+        "max_dd_pct": 0.076,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": -79,
+        "min_equity": -461.55,
+        "max_dd_pct": 3.277,
+        "survived": false
+       }
+      }
+     },
+     "FLOOR_B_arm0.75_k2": {
+      "policy": "FLOOR_B_arm0.75_k2",
+      "cost": "normal",
+      "per_signal": {
+       "n": 6553,
+       "expectancy_r": -0.034,
+       "pf": 0.93,
+       "win_rate": 0.389,
+       "avg_win_r": 1.245,
+       "avg_loss_r": 0.849,
+       "max_dd_r": 295.44,
+       "max_loss_streak": 34,
+       "net_r": -225.44,
+       "mfe_r": 1.089,
+       "mae_r": 0.965,
+       "duration_bars": 9.67
+      },
+      "paired_mean_r": 0.009,
+      "paired_ci95_r": [
+       -0.013,
+       0.031
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 4592,
+       "mean_r": 0.945,
+       "aggregate_pct_of_mfe": 0.641,
+       "mean_usd_001lot": 8.301
+      },
+      "early_exits": {
+       "n": 820,
+       "share_of_trades": 0.125,
+       "classes": {
+        "GOOD": 324,
+        "ACCEPTABLE": 2,
+        "PREMATURE": 494
+       },
+       "premature_rate": 0.602,
+       "profit_lost_mean_r": 0.664,
+       "post_exit_continuation_mean_r": 3.114
+      },
+      "harvested_early_share": 0,
+      "protected_and_ran_share": 0,
+      "armed_share": 0.557,
+      "additional_profit_after_protection_r": -0.015,
+      "right_tail": {
+       "strong": 2586,
+       "preserved": 1583,
+       "preservation": 0.612,
+       "closed_below_1r": 0.384,
+       "mean_r_policy": 1.069,
+       "mean_r_baseline": 1.663
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 2364,
+       "TARGET_170R": 1729,
+       "BROKER_SL": 1028,
+       "THESIS_INVALIDATION": 1432
+      },
+      "sequential": {
+       "n": 1780,
+       "expectancy_r": -0.052,
+       "pf": 0.9,
+       "win_rate": 0.371,
+       "avg_win_r": 1.291,
+       "avg_loss_r": 0.844,
+       "max_dd_r": 103.71,
+       "max_loss_streak": 13,
+       "net_r": -93.41,
+       "mfe_r": 1.101,
+       "mae_r": 1.017,
+       "duration_bars": 8.54,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 9645.03,
+        "min_equity": 9168.06,
+        "max_dd_pct": 0.089,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": -292.9,
+        "min_equity": -769.87,
+        "max_dd_pct": 7.315,
+        "survived": false
+       }
+      }
+     },
+     "FLOOR_C_arm0.75": {
+      "policy": "FLOOR_C_arm0.75",
+      "cost": "normal",
+      "per_signal": {
+       "n": 6553,
+       "expectancy_r": -0.034,
+       "pf": 0.93,
+       "win_rate": 0.325,
+       "avg_win_r": 1.491,
+       "avg_loss_r": 0.768,
+       "max_dd_r": 295.26,
+       "max_loss_streak": 35,
+       "net_r": -223.03,
+       "mfe_r": 1.102,
+       "mae_r": 0.968,
+       "duration_bars": 10.22
+      },
+      "paired_mean_r": 0.009,
+      "paired_ci95_r": [
+       -0.012,
+       0.03
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 4592,
+       "mean_r": 0.962,
+       "aggregate_pct_of_mfe": 0.645,
+       "mean_usd_001lot": 8.553
+      },
+      "early_exits": {
+       "n": 280,
+       "share_of_trades": 0.043,
+       "classes": {
+        "GOOD": 137,
+        "ACCEPTABLE": 2,
+        "PREMATURE": 141
+       },
+       "premature_rate": 0.504,
+       "profit_lost_mean_r": 0.549,
+       "post_exit_continuation_mean_r": 2.442
+      },
+      "harvested_early_share": 0,
+      "protected_and_ran_share": 0,
+      "armed_share": 0.557,
+      "additional_profit_after_protection_r": -0.014,
+      "right_tail": {
+       "strong": 2586,
+       "preserved": 1686,
+       "preservation": 0.652,
+       "closed_below_1r": 0.346,
+       "mean_r_policy": 1.094,
+       "mean_r_baseline": 1.663
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 2243,
+       "TARGET_170R": 1850,
+       "BROKER_SL": 1028,
+       "THESIS_INVALIDATION": 1432
+      },
+      "sequential": {
+       "n": 1730,
+       "expectancy_r": -0.05,
+       "pf": 0.91,
+       "win_rate": 0.323,
+       "avg_win_r": 1.495,
+       "avg_loss_r": 0.785,
+       "max_dd_r": 99.77,
+       "max_loss_streak": 17,
+       "net_r": -85.86,
+       "mfe_r": 1.107,
+       "mae_r": 1.022,
+       "duration_bars": 9,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 9798.76,
+        "min_equity": 9342.74,
+        "max_dd_pct": 0.081,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": -139.17,
+        "min_equity": -595.19,
+        "max_dd_pct": 3.548,
+        "survived": false
+       }
+      }
+     },
+     "FLOOR_D_arm0.75_rho0.4": {
+      "policy": "FLOOR_D_arm0.75_rho0.4",
+      "cost": "normal",
+      "per_signal": {
+       "n": 6553,
+       "expectancy_r": -0.043,
+       "pf": 0.92,
+       "win_rate": 0.592,
+       "avg_win_r": 0.803,
+       "avg_loss_r": 1.271,
+       "max_dd_r": 314.91,
+       "max_loss_streak": 18,
+       "net_r": -281.74,
+       "mfe_r": 0.992,
+       "mae_r": 0.952,
+       "duration_bars": 9.13
+      },
+      "paired_mean_r": 0,
+      "paired_ci95_r": [
+       -0.024,
+       0.023
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 4592,
+       "mean_r": 0.818,
+       "aggregate_pct_of_mfe": 0.612,
+       "mean_usd_001lot": 7.344
+      },
+      "early_exits": {
+       "n": 2624,
+       "share_of_trades": 0.4,
+       "classes": {
+        "GOOD": 975,
+        "ACCEPTABLE": 2,
+        "PREMATURE": 1647
+       },
+       "premature_rate": 0.628,
+       "profit_lost_mean_r": 0.726,
+       "post_exit_continuation_mean_r": 4.949
+      },
+      "harvested_early_share": 0,
+      "protected_and_ran_share": 0,
+      "armed_share": 0.557,
+      "additional_profit_after_protection_r": -0.03,
+      "right_tail": {
+       "strong": 2586,
+       "preserved": 1145,
+       "preservation": 0.443,
+       "closed_below_1r": 0.557,
+       "mean_r_policy": 0.937,
+       "mean_r_baseline": 1.663
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 2836,
+       "TARGET_170R": 1257,
+       "BROKER_SL": 1028,
+       "THESIS_INVALIDATION": 1432
+      },
+      "sequential": {
+       "n": 1862,
+       "expectancy_r": -0.057,
+       "pf": 0.89,
+       "win_rate": 0.58,
+       "avg_win_r": 0.825,
+       "avg_loss_r": 1.276,
+       "max_dd_r": 111.25,
+       "max_loss_streak": 9,
+       "net_r": -107.01,
+       "mfe_r": 1.013,
+       "mae_r": 1.013,
+       "duration_bars": 7.94,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 9815.98,
+        "min_equity": 9499.17,
+        "max_dd_pct": 0.067,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": -121.95,
+        "min_equity": -438.76,
+        "max_dd_pct": 3.906,
+        "survived": false
+       }
+      }
+     },
+     "FLOOR_E_arm0.75_k1.5": {
+      "policy": "FLOOR_E_arm0.75_k1.5",
+      "cost": "normal",
+      "per_signal": {
+       "n": 6553,
+       "expectancy_r": -0.041,
+       "pf": 0.92,
+       "win_rate": 0.449,
+       "avg_win_r": 1.065,
+       "avg_loss_r": 0.94,
+       "max_dd_r": 327.17,
+       "max_loss_streak": 27,
+       "net_r": -267.88,
+       "mfe_r": 1.061,
+       "mae_r": 0.961,
+       "duration_bars": 9.2
+      },
+      "paired_mean_r": 0.002,
+      "paired_ci95_r": [
+       -0.021,
+       0.023
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 4592,
+       "mean_r": 0.913,
+       "aggregate_pct_of_mfe": 0.637,
+       "mean_usd_001lot": 7.853
+      },
+      "early_exits": {
+       "n": 1407,
+       "share_of_trades": 0.215,
+       "classes": {
+        "GOOD": 537,
+        "ACCEPTABLE": 1,
+        "PREMATURE": 869
+       },
+       "premature_rate": 0.618,
+       "profit_lost_mean_r": 0.675,
+       "post_exit_continuation_mean_r": 3.362
+      },
+      "harvested_early_share": 0,
+      "protected_and_ran_share": 0,
+      "armed_share": 0.557,
+      "additional_profit_after_protection_r": -0.026,
+      "right_tail": {
+       "strong": 2586,
+       "preserved": 1396,
+       "preservation": 0.54,
+       "closed_below_1r": 0.452,
+       "mean_r_policy": 1.015,
+       "mean_r_baseline": 1.663
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 2560,
+       "TARGET_170R": 1533,
+       "BROKER_SL": 1028,
+       "THESIS_INVALIDATION": 1432
+      },
+      "sequential": {
+       "n": 1828,
+       "expectancy_r": -0.049,
+       "pf": 0.91,
+       "win_rate": 0.421,
+       "avg_win_r": 1.141,
+       "avg_loss_r": 0.916,
+       "max_dd_r": 99.75,
+       "max_loss_streak": 13,
+       "net_r": -89.7,
+       "mfe_r": 1.085,
+       "mae_r": 1.012,
+       "duration_bars": 8.12,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 9763.72,
+        "min_equity": 9297.33,
+        "max_dd_pct": 0.08,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": -174.21,
+        "min_equity": -640.6,
+        "max_dd_pct": 4.941,
+        "survived": false
+       }
+      }
+     },
+     "POLICY1_D_arm0.75_rho0.5_h1.25": {
+      "policy": "POLICY1_D_arm0.75_rho0.5_h1.25",
+      "cost": "normal",
+      "per_signal": {
+       "n": 6553,
+       "expectancy_r": -0.041,
+       "pf": 0.92,
+       "win_rate": 0.592,
+       "avg_win_r": 0.805,
+       "avg_loss_r": 1.271,
+       "max_dd_r": 308.87,
+       "max_loss_streak": 18,
+       "net_r": -270.85,
+       "mfe_r": 0.994,
+       "mae_r": 0.951,
+       "duration_bars": 8.97
+      },
+      "paired_mean_r": 0.002,
+      "paired_ci95_r": [
+       -0.024,
+       0.026
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 4592,
+       "mean_r": 0.819,
+       "aggregate_pct_of_mfe": 0.612,
+       "mean_usd_001lot": 7.341
+      },
+      "early_exits": {
+       "n": 3248,
+       "share_of_trades": 0.496,
+       "classes": {
+        "GOOD": 1029,
+        "ACCEPTABLE": 43,
+        "PREMATURE": 2176
+       },
+       "premature_rate": 0.67,
+       "profit_lost_mean_r": 0.657,
+       "post_exit_continuation_mean_r": 5.161
+      },
+      "harvested_early_share": 0.02,
+      "protected_and_ran_share": 0.02,
+      "armed_share": 0.557,
+      "additional_profit_after_protection_r": -0.027,
+      "right_tail": {
+       "strong": 2586,
+       "preserved": 725,
+       "preservation": 0.28,
+       "closed_below_1r": 0.648,
+       "mean_r_policy": 0.921,
+       "mean_r_baseline": 1.663
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 3191,
+       "HARVEST": 254,
+       "TARGET_170R": 633,
+       "BROKER_SL": 1028,
+       "THESIS_INVALIDATION": 1432,
+       "STRUCTURE_EXIT": 15
+      },
+      "sequential": {
+       "n": 1876,
+       "expectancy_r": -0.06,
+       "pf": 0.89,
+       "win_rate": 0.579,
+       "avg_win_r": 0.824,
+       "avg_loss_r": 1.277,
+       "max_dd_r": 119.49,
+       "max_loss_streak": 9,
+       "net_r": -111.77,
+       "mfe_r": 1.012,
+       "mae_r": 1.007,
+       "duration_bars": 7.82,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 9889.72,
+        "min_equity": 9698.13,
+        "max_dd_pct": 0.067,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": -48.21,
+        "min_equity": -239.8,
+        "max_dd_pct": 3.054,
+        "survived": false
+       }
+      }
+     },
+     "POLICY2_E_arm1_k1.5_h1": {
+      "policy": "POLICY2_E_arm1_k1.5_h1",
+      "cost": "normal",
+      "per_signal": {
+       "n": 6553,
+       "expectancy_r": -0.028,
+       "pf": 0.95,
+       "win_rate": 0.461,
+       "avg_win_r": 1.233,
+       "avg_loss_r": 1.106,
+       "max_dd_r": 297.44,
+       "max_loss_streak": 27,
+       "net_r": -183.44,
+       "mfe_r": 1.212,
+       "mae_r": 1.029,
+       "duration_bars": 11.46
+      },
+      "paired_mean_r": 0.015,
+      "paired_ci95_r": [
+       -0.007,
+       0.037
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 4592,
+       "mean_r": 1.11,
+       "aggregate_pct_of_mfe": 0.673,
+       "mean_usd_001lot": 9.752
+      },
+      "early_exits": {
+       "n": 2063,
+       "share_of_trades": 0.315,
+       "classes": {
+        "GOOD": 485,
+        "ACCEPTABLE": 86,
+        "PREMATURE": 1492
+       },
+       "premature_rate": 0.723,
+       "profit_lost_mean_r": 0.521,
+       "post_exit_continuation_mean_r": 4.778
+      },
+      "harvested_early_share": 0.063,
+      "protected_and_ran_share": 0.043,
+      "armed_share": 0.459,
+      "additional_profit_after_protection_r": -0.016,
+      "right_tail": {
+       "strong": 2586,
+       "preserved": 1188,
+       "preservation": 0.459,
+       "closed_below_1r": 0.363,
+       "mean_r_policy": 1.25,
+       "mean_r_baseline": 1.663
+      },
+      "exits": {
+       "HARVEST": 605,
+       "TARGET_170R": 957,
+       "PROTECTED_FLOOR": 2122,
+       "BROKER_SL": 1192,
+       "THESIS_INVALIDATION": 1674,
+       "STRUCTURE_EXIT": 3
+      },
+      "sequential": {
+       "n": 1726,
+       "expectancy_r": -0.021,
+       "pf": 0.97,
+       "win_rate": 0.446,
+       "avg_win_r": 1.294,
+       "avg_loss_r": 1.08,
+       "max_dd_r": 57.73,
+       "max_loss_streak": 13,
+       "net_r": -36.13,
+       "mfe_r": 1.245,
+       "mae_r": 1.067,
+       "duration_bars": 9.83,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 10053.43,
+        "min_equity": 9671.14,
+        "max_dd_pct": 0.058,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": 115.5,
+        "min_equity": -266.79,
+        "max_dd_pct": 2.801,
+        "survived": false
+       }
+      }
+     },
+     "POLICY3_A_arm0.75_lag0.5_h1.25": {
+      "policy": "POLICY3_A_arm0.75_lag0.5_h1.25",
+      "cost": "normal",
+      "per_signal": {
+       "n": 6553,
+       "expectancy_r": -0.03,
+       "pf": 0.94,
+       "win_rate": 0.467,
+       "avg_win_r": 1.045,
+       "avg_loss_r": 0.973,
+       "max_dd_r": 255.34,
+       "max_loss_streak": 22,
+       "net_r": -197.54,
+       "mfe_r": 1.062,
+       "mae_r": 0.957,
+       "duration_bars": 9.55
+      },
+      "paired_mean_r": 0.013,
+      "paired_ci95_r": [
+       -0.013,
+       0.037
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 4592,
+       "mean_r": 0.899,
+       "aggregate_pct_of_mfe": 0.627,
+       "mean_usd_001lot": 8.203
+      },
+      "early_exits": {
+       "n": 2367,
+       "share_of_trades": 0.361,
+       "classes": {
+        "GOOD": 631,
+        "ACCEPTABLE": 71,
+        "PREMATURE": 1665
+       },
+       "premature_rate": 0.703,
+       "profit_lost_mean_r": 0.565,
+       "post_exit_continuation_mean_r": 5.265
+      },
+      "harvested_early_share": 0.022,
+      "protected_and_ran_share": 0.029,
+      "armed_share": 0.557,
+      "additional_profit_after_protection_r": -0.007,
+      "right_tail": {
+       "strong": 2586,
+       "preserved": 839,
+       "preservation": 0.324,
+       "closed_below_1r": 0.577,
+       "mean_r_policy": 1.012,
+       "mean_r_baseline": 1.663
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 3135,
+       "HARVEST": 216,
+       "TARGET_170R": 696,
+       "BROKER_SL": 1028,
+       "THESIS_INVALIDATION": 1432,
+       "STRUCTURE_EXIT": 46
+      },
+      "sequential": {
+       "n": 1805,
+       "expectancy_r": -0.028,
+       "pf": 0.95,
+       "win_rate": 0.477,
+       "avg_win_r": 1.048,
+       "avg_loss_r": 1.01,
+       "max_dd_r": 74.65,
+       "max_loss_streak": 9,
+       "net_r": -50.98,
+       "mfe_r": 1.075,
+       "mae_r": 1.002,
+       "duration_bars": 8.29,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 10063.86,
+        "min_equity": 9694.52,
+        "max_dd_pct": 0.061,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": 125.93,
+        "min_equity": -243.41,
+        "max_dd_pct": 3.015,
+        "survived": false
+       }
+      }
+     }
+    }
+   },
+   "stress": {
+    "baseline": {
+     "per_signal": {
+      "n": 6553,
+      "expectancy_r": -0.121,
+      "pf": 0.85,
+      "win_rate": 0.43,
+      "avg_win_r": 1.615,
+      "avg_loss_r": 1.434,
+      "max_dd_r": 833.37,
+      "max_loss_streak": 21,
+      "net_r": -795.4,
+      "mfe_r": 1.233,
+      "mae_r": 1.241,
+      "duration_bars": 16.37
+     },
+     "sequential": {
+      "n": 1499,
+      "expectancy_r": -0.107,
+      "pf": 0.87,
+      "win_rate": 0.446,
+      "avg_win_r": 1.602,
+      "avg_loss_r": 1.484,
+      "max_dd_r": 167.55,
+      "max_loss_streak": 16,
+      "net_r": -159.74,
+      "mfe_r": 1.266,
+      "mae_r": 1.31,
+      "duration_bars": 14.8,
+      "capital_10k": {
+       "start": 10000,
+       "end": 9558.95,
+       "min_equity": 9278.07,
+       "max_dd_pct": 0.094,
+       "survived": true
+      },
+      "capital_62": {
+       "start": 62.07,
+       "end": -378.98,
+       "min_equity": -659.86,
+       "max_dd_pct": 3.166,
+       "survived": false
+      }
+     },
+     "giveback": {
+      "trades_with_mfe_ge_0_5r": 4475,
+      "mean_r": 1.235,
+      "aggregate_pct_of_mfe": 0.715,
+      "mean_usd_001lot": 11.196
+     },
+     "right_tail": {
+      "strong": 2545,
+      "preserved": 2545,
+      "preservation": 1,
+      "closed_below_1r": 0,
+      "mean_r_policy": 1.619,
+      "mean_r_baseline": 1.619
+     }
+    },
+    "run_to_end": {
+     "n": 6549,
+     "expectancy_r": 0.385,
+     "pf": 1.31,
+     "win_rate": 0.142,
+     "avg_win_r": 11.549,
+     "avg_loss_r": 1.467,
+     "max_dd_r": 886.53,
+     "max_loss_streak": 192,
+     "net_r": 2523.88,
+     "mfe_r": 4.152,
+     "mae_r": 1.689,
+     "duration_bars": 72.35
+    },
+    "milestones_open_path": {
+     "1": 0.55,
+     "2": 0.389,
+     "3": 0.305,
+     "0.25": 0.783,
+     "0.5": 0.683,
+     "0.75": 0.612,
+     "1.25": 0.497,
+     "1.5": 0.455,
+     "1.7": 0.423,
+     "2.5": 0.34
+    },
+    "policies": {
+     "FLOOR_A_arm0.75_lag0.5": {
+      "policy": "FLOOR_A_arm0.75_lag0.5",
+      "cost": "stress",
+      "per_signal": {
+       "n": 6553,
+       "expectancy_r": -0.115,
+       "pf": 0.8,
+       "win_rate": 0.452,
+       "avg_win_r": 1.01,
+       "avg_loss_r": 1.042,
+       "max_dd_r": 785.01,
+       "max_loss_streak": 33,
+       "net_r": -750.59,
+       "mfe_r": 0.993,
+       "mae_r": 1.034,
+       "duration_bars": 9.71
+      },
+      "paired_mean_r": 0.007,
+      "paired_ci95_r": [
+       -0.017,
+       0.029
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 4475,
+       "mean_r": 0.874,
+       "aggregate_pct_of_mfe": 0.635,
+       "mean_usd_001lot": 7.961
+      },
+      "early_exits": {
+       "n": 1668,
+       "share_of_trades": 0.255,
+       "classes": {
+        "GOOD": 538,
+        "ACCEPTABLE": 2,
+        "PREMATURE": 1128
+       },
+       "premature_rate": 0.676,
+       "profit_lost_mean_r": 0.68,
+       "post_exit_continuation_mean_r": 5.168
+      },
+      "harvested_early_share": 0,
+      "protected_and_ran_share": 0,
+      "armed_share": 0.541,
+      "additional_profit_after_protection_r": -0.042,
+      "right_tail": {
+       "strong": 2545,
+       "preserved": 1180,
+       "preservation": 0.464,
+       "closed_below_1r": 0.536,
+       "mean_r_policy": 0.953,
+       "mean_r_baseline": 1.619
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 2711,
+       "TARGET_170R": 1294,
+       "BROKER_SL": 1081,
+       "THESIS_INVALIDATION": 1467
+      },
+      "sequential": {
+       "n": 1806,
+       "expectancy_r": -0.13,
+       "pf": 0.78,
+       "win_rate": 0.451,
+       "avg_win_r": 1.015,
+       "avg_loss_r": 1.07,
+       "max_dd_r": 238.15,
+       "max_loss_streak": 12,
+       "net_r": -234.73,
+       "mfe_r": 1.004,
+       "mae_r": 1.095,
+       "duration_bars": 8.48,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 9142.11,
+        "min_equity": 9128.74,
+        "max_dd_pct": 0.103,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": -795.82,
+        "min_equity": -809.19,
+        "max_dd_pct": 4.433,
+        "survived": false
+       }
+      }
+     },
+     "FLOOR_B_arm0.75_k2": {
+      "policy": "FLOOR_B_arm0.75_k2",
+      "cost": "stress",
+      "per_signal": {
+       "n": 6553,
+       "expectancy_r": -0.106,
+       "pf": 0.81,
+       "win_rate": 0.385,
+       "avg_win_r": 1.206,
+       "avg_loss_r": 0.93,
+       "max_dd_r": 737.33,
+       "max_loss_streak": 34,
+       "net_r": -697.16,
+       "mfe_r": 1.049,
+       "mae_r": 1.04,
+       "duration_bars": 9.88
+      },
+      "paired_mean_r": 0.015,
+      "paired_ci95_r": [
+       -0.009,
+       0.036
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 4475,
+       "mean_r": 0.944,
+       "aggregate_pct_of_mfe": 0.647,
+       "mean_usd_001lot": 8.378
+      },
+      "early_exits": {
+       "n": 822,
+       "share_of_trades": 0.125,
+       "classes": {
+        "GOOD": 313,
+        "ACCEPTABLE": 2,
+        "PREMATURE": 507
+       },
+       "premature_rate": 0.617,
+       "profit_lost_mean_r": 0.67,
+       "post_exit_continuation_mean_r": 3.156
+      },
+      "harvested_early_share": 0,
+      "protected_and_ran_share": 0,
+      "armed_share": 0.541,
+      "additional_profit_after_protection_r": -0.027,
+      "right_tail": {
+       "strong": 2545,
+       "preserved": 1552,
+       "preservation": 0.61,
+       "closed_below_1r": 0.386,
+       "mean_r_policy": 1.037,
+       "mean_r_baseline": 1.619
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 2301,
+       "TARGET_170R": 1704,
+       "BROKER_SL": 1081,
+       "THESIS_INVALIDATION": 1467
+      },
+      "sequential": {
+       "n": 1770,
+       "expectancy_r": -0.128,
+       "pf": 0.78,
+       "win_rate": 0.368,
+       "avg_win_r": 1.256,
+       "avg_loss_r": 0.933,
+       "max_dd_r": 229.2,
+       "max_loss_streak": 13,
+       "net_r": -227.05,
+       "mfe_r": 1.053,
+       "mae_r": 1.1,
+       "duration_bars": 8.7,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 8934.68,
+        "min_equity": 8852.46,
+        "max_dd_pct": 0.115,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": -1003.25,
+        "min_equity": -1085.47,
+        "max_dd_pct": 17.401,
+        "survived": false
+       }
+      }
+     },
+     "FLOOR_C_arm0.75": {
+      "policy": "FLOOR_C_arm0.75",
+      "cost": "stress",
+      "per_signal": {
+       "n": 6553,
+       "expectancy_r": -0.107,
+       "pf": 0.81,
+       "win_rate": 0.321,
+       "avg_win_r": 1.448,
+       "avg_loss_r": 0.841,
+       "max_dd_r": 738.33,
+       "max_loss_streak": 35,
+       "net_r": -700.49,
+       "mfe_r": 1.061,
+       "mae_r": 1.042,
+       "duration_bars": 10.41
+      },
+      "paired_mean_r": 0.014,
+      "paired_ci95_r": [
+       -0.008,
+       0.034
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 4475,
+       "mean_r": 0.963,
+       "aggregate_pct_of_mfe": 0.652,
+       "mean_usd_001lot": 8.651
+      },
+      "early_exits": {
+       "n": 277,
+       "share_of_trades": 0.042,
+       "classes": {
+        "GOOD": 129,
+        "ACCEPTABLE": 2,
+        "PREMATURE": 146
+       },
+       "premature_rate": 0.527,
+       "profit_lost_mean_r": 0.589,
+       "post_exit_continuation_mean_r": 2.64
+      },
+      "harvested_early_share": 0,
+      "protected_and_ran_share": 0,
+      "armed_share": 0.541,
+      "additional_profit_after_protection_r": -0.028,
+      "right_tail": {
+       "strong": 2545,
+       "preserved": 1655,
+       "preservation": 0.65,
+       "closed_below_1r": 0.348,
+       "mean_r_policy": 1.059,
+       "mean_r_baseline": 1.619
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 2180,
+       "TARGET_170R": 1825,
+       "BROKER_SL": 1081,
+       "THESIS_INVALIDATION": 1467
+      },
+      "sequential": {
+       "n": 1717,
+       "expectancy_r": -0.125,
+       "pf": 0.79,
+       "win_rate": 0.32,
+       "avg_win_r": 1.444,
+       "avg_loss_r": 0.865,
+       "max_dd_r": 217.16,
+       "max_loss_streak": 17,
+       "net_r": -215.01,
+       "mfe_r": 1.066,
+       "mae_r": 1.102,
+       "duration_bars": 9.2,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 9065.45,
+        "min_equity": 9033.5,
+        "max_dd_pct": 0.104,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": -872.48,
+        "min_equity": -904.43,
+        "max_dd_pct": 7.481,
+        "survived": false
+       }
+      }
+     },
+     "FLOOR_D_arm0.75_rho0.4": {
+      "policy": "FLOOR_D_arm0.75_rho0.4",
+      "cost": "stress",
+      "per_signal": {
+       "n": 6553,
+       "expectancy_r": -0.117,
+       "pf": 0.79,
+       "win_rate": 0.577,
+       "avg_win_r": 0.787,
+       "avg_loss_r": 1.348,
+       "max_dd_r": 792.18,
+       "max_loss_streak": 18,
+       "net_r": -767.36,
+       "mfe_r": 0.962,
+       "mae_r": 1.03,
+       "duration_bars": 9.39
+      },
+      "paired_mean_r": 0.004,
+      "paired_ci95_r": [
+       -0.021,
+       0.028
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 4475,
+       "mean_r": 0.833,
+       "aggregate_pct_of_mfe": 0.625,
+       "mean_usd_001lot": 7.514
+      },
+      "early_exits": {
+       "n": 2521,
+       "share_of_trades": 0.385,
+       "classes": {
+        "GOOD": 938,
+        "ACCEPTABLE": 2,
+        "PREMATURE": 1581
+       },
+       "premature_rate": 0.627,
+       "profit_lost_mean_r": 0.725,
+       "post_exit_continuation_mean_r": 5.15
+      },
+      "harvested_early_share": 0,
+      "protected_and_ran_share": 0,
+      "armed_share": 0.541,
+      "additional_profit_after_protection_r": -0.047,
+      "right_tail": {
+       "strong": 2545,
+       "preserved": 1147,
+       "preservation": 0.451,
+       "closed_below_1r": 0.549,
+       "mean_r_policy": 0.916,
+       "mean_r_baseline": 1.619
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 2748,
+       "TARGET_170R": 1257,
+       "BROKER_SL": 1081,
+       "THESIS_INVALIDATION": 1467
+      },
+      "sequential": {
+       "n": 1842,
+       "expectancy_r": -0.132,
+       "pf": 0.78,
+       "win_rate": 0.561,
+       "avg_win_r": 0.82,
+       "avg_loss_r": 1.349,
+       "max_dd_r": 246.76,
+       "max_loss_streak": 9,
+       "net_r": -242.62,
+       "mfe_r": 0.978,
+       "mae_r": 1.089,
+       "duration_bars": 8.17,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 9223.95,
+        "min_equity": 9218.49,
+        "max_dd_pct": 0.095,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": -713.98,
+        "min_equity": -719.44,
+        "max_dd_pct": 4.391,
+        "survived": false
+       }
+      }
+     },
+     "FLOOR_E_arm0.75_k1.5": {
+      "policy": "FLOOR_E_arm0.75_k1.5",
+      "cost": "stress",
+      "per_signal": {
+       "n": 6553,
+       "expectancy_r": -0.116,
+       "pf": 0.8,
+       "win_rate": 0.444,
+       "avg_win_r": 1.026,
+       "avg_loss_r": 1.027,
+       "max_dd_r": 788.81,
+       "max_loss_streak": 27,
+       "net_r": -758.68,
+       "mfe_r": 1.019,
+       "mae_r": 1.036,
+       "duration_bars": 9.4
+      },
+      "paired_mean_r": 0.006,
+      "paired_ci95_r": [
+       -0.019,
+       0.027
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 4475,
+       "mean_r": 0.914,
+       "aggregate_pct_of_mfe": 0.646,
+       "mean_usd_001lot": 7.929
+      },
+      "early_exits": {
+       "n": 1415,
+       "share_of_trades": 0.216,
+       "classes": {
+        "GOOD": 524,
+        "ACCEPTABLE": 1,
+        "PREMATURE": 890
+       },
+       "premature_rate": 0.629,
+       "profit_lost_mean_r": 0.677,
+       "post_exit_continuation_mean_r": 3.485
+      },
+      "harvested_early_share": 0,
+      "protected_and_ran_share": 0,
+      "armed_share": 0.541,
+      "additional_profit_after_protection_r": -0.044,
+      "right_tail": {
+       "strong": 2545,
+       "preserved": 1353,
+       "preservation": 0.532,
+       "closed_below_1r": 0.459,
+       "mean_r_policy": 0.976,
+       "mean_r_baseline": 1.619
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 2512,
+       "TARGET_170R": 1493,
+       "BROKER_SL": 1081,
+       "THESIS_INVALIDATION": 1467
+      },
+      "sequential": {
+       "n": 1824,
+       "expectancy_r": -0.124,
+       "pf": 0.79,
+       "win_rate": 0.416,
+       "avg_win_r": 1.114,
+       "avg_loss_r": 1.004,
+       "max_dd_r": 226.88,
+       "max_loss_streak": 13,
+       "net_r": -225.37,
+       "mfe_r": 1.036,
+       "mae_r": 1.093,
+       "duration_bars": 8.32,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 9079.23,
+        "min_equity": 9008.66,
+        "max_dd_pct": 0.106,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": -858.7,
+        "min_equity": -929.27,
+        "max_dd_pct": 7.513,
+        "survived": false
+       }
+      }
+     },
+     "POLICY1_D_arm0.75_rho0.5_h1.25": {
+      "policy": "POLICY1_D_arm0.75_rho0.5_h1.25",
+      "cost": "stress",
+      "per_signal": {
+       "n": 6553,
+       "expectancy_r": -0.111,
+       "pf": 0.81,
+       "win_rate": 0.577,
+       "avg_win_r": 0.798,
+       "avg_loss_r": 1.348,
+       "max_dd_r": 753.55,
+       "max_loss_streak": 18,
+       "net_r": -727.97,
+       "mfe_r": 0.971,
+       "mae_r": 1.029,
+       "duration_bars": 9.26
+      },
+      "paired_mean_r": 0.01,
+      "paired_ci95_r": [
+       -0.016,
+       0.035
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 4475,
+       "mean_r": 0.837,
+       "aggregate_pct_of_mfe": 0.623,
+       "mean_usd_001lot": 7.524
+      },
+      "early_exits": {
+       "n": 3141,
+       "share_of_trades": 0.479,
+       "classes": {
+        "GOOD": 988,
+        "ACCEPTABLE": 44,
+        "PREMATURE": 2109
+       },
+       "premature_rate": 0.671,
+       "profit_lost_mean_r": 0.649,
+       "post_exit_continuation_mean_r": 5.322
+      },
+      "harvested_early_share": 0.02,
+      "protected_and_ran_share": 0.019,
+      "armed_share": 0.541,
+      "additional_profit_after_protection_r": -0.036,
+      "right_tail": {
+       "strong": 2545,
+       "preserved": 738,
+       "preservation": 0.29,
+       "closed_below_1r": 0.642,
+       "mean_r_policy": 0.911,
+       "mean_r_baseline": 1.619
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 3102,
+       "HARVEST": 251,
+       "TARGET_170R": 637,
+       "BROKER_SL": 1081,
+       "THESIS_INVALIDATION": 1467,
+       "STRUCTURE_EXIT": 15
+      },
+      "sequential": {
+       "n": 1856,
+       "expectancy_r": -0.138,
+       "pf": 0.77,
+       "win_rate": 0.561,
+       "avg_win_r": 0.815,
+       "avg_loss_r": 1.356,
+       "max_dd_r": 263.46,
+       "max_loss_streak": 9,
+       "net_r": -256.5,
+       "mfe_r": 0.982,
+       "mae_r": 1.089,
+       "duration_bars": 8.05,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 9301.54,
+        "min_equity": 9293.69,
+        "max_dd_pct": 0.105,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": -636.39,
+        "min_equity": -644.24,
+        "max_dd_pct": 3.436,
+        "survived": false
+       }
+      }
+     },
+     "POLICY2_E_arm1_k1.5_h1": {
+      "policy": "POLICY2_E_arm1_k1.5_h1",
+      "cost": "stress",
+      "per_signal": {
+       "n": 6553,
+       "expectancy_r": -0.11,
+       "pf": 0.83,
+       "win_rate": 0.456,
+       "avg_win_r": 1.191,
+       "avg_loss_r": 1.198,
+       "max_dd_r": 760.7,
+       "max_loss_streak": 27,
+       "net_r": -720.65,
+       "mfe_r": 1.165,
+       "mae_r": 1.104,
+       "duration_bars": 11.63
+      },
+      "paired_mean_r": 0.011,
+      "paired_ci95_r": [
+       -0.011,
+       0.032
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 4475,
+       "mean_r": 1.12,
+       "aggregate_pct_of_mfe": 0.687,
+       "mean_usd_001lot": 9.884
+      },
+      "early_exits": {
+       "n": 2024,
+       "share_of_trades": 0.309,
+       "classes": {
+        "GOOD": 461,
+        "ACCEPTABLE": 89,
+        "PREMATURE": 1474
+       },
+       "premature_rate": 0.728,
+       "profit_lost_mean_r": 0.529,
+       "post_exit_continuation_mean_r": 4.83
+      },
+      "harvested_early_share": 0.057,
+      "protected_and_ran_share": 0.038,
+      "armed_share": 0.441,
+      "additional_profit_after_protection_r": -0.034,
+      "right_tail": {
+       "strong": 2545,
+       "preserved": 1165,
+       "preservation": 0.458,
+       "closed_below_1r": 0.38,
+       "mean_r_policy": 1.207,
+       "mean_r_baseline": 1.619
+      },
+      "exits": {
+       "HARVEST": 541,
+       "TARGET_170R": 961,
+       "PROTECTED_FLOOR": 2094,
+       "BROKER_SL": 1245,
+       "THESIS_INVALIDATION": 1709,
+       "STRUCTURE_EXIT": 3
+      },
+      "sequential": {
+       "n": 1714,
+       "expectancy_r": -0.117,
+       "pf": 0.82,
+       "win_rate": 0.438,
+       "avg_win_r": 1.244,
+       "avg_loss_r": 1.178,
+       "max_dd_r": 210.22,
+       "max_loss_streak": 13,
+       "net_r": -200.02,
+       "mfe_r": 1.195,
+       "mae_r": 1.152,
+       "duration_bars": 10.08,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 9162.39,
+        "min_equity": 9154.39,
+        "max_dd_pct": 0.102,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": -775.54,
+        "min_equity": -783.54,
+        "max_dd_pct": 4.018,
+        "survived": false
+       }
+      }
+     },
+     "POLICY3_A_arm0.75_lag0.5_h1.25": {
+      "policy": "POLICY3_A_arm0.75_lag0.5_h1.25",
+      "cost": "stress",
+      "per_signal": {
+       "n": 6553,
+       "expectancy_r": -0.106,
+       "pf": 0.81,
+       "win_rate": 0.455,
+       "avg_win_r": 1.022,
+       "avg_loss_r": 1.048,
+       "max_dd_r": 729.31,
+       "max_loss_streak": 33,
+       "net_r": -696.48,
+       "mfe_r": 1.028,
+       "mae_r": 1.034,
+       "duration_bars": 9.8
+      },
+      "paired_mean_r": 0.015,
+      "paired_ci95_r": [
+       -0.011,
+       0.038
+      ],
+      "giveback": {
+       "trades_with_mfe_ge_0_5r": 4475,
+       "mean_r": 0.914,
+       "aggregate_pct_of_mfe": 0.64,
+       "mean_usd_001lot": 8.355
+      },
+      "early_exits": {
+       "n": 2298,
+       "share_of_trades": 0.351,
+       "classes": {
+        "GOOD": 581,
+        "ACCEPTABLE": 74,
+        "PREMATURE": 1643
+       },
+       "premature_rate": 0.715,
+       "profit_lost_mean_r": 0.566,
+       "post_exit_continuation_mean_r": 5.436
+      },
+      "harvested_early_share": 0.021,
+      "protected_and_ran_share": 0.029,
+      "armed_share": 0.541,
+      "additional_profit_after_protection_r": -0.027,
+      "right_tail": {
+       "strong": 2545,
+       "preserved": 835,
+       "preservation": 0.328,
+       "closed_below_1r": 0.576,
+       "mean_r_policy": 0.984,
+       "mean_r_baseline": 1.619
+      },
+      "exits": {
+       "PROTECTED_FLOOR": 3070,
+       "HARVEST": 208,
+       "TARGET_170R": 683,
+       "BROKER_SL": 1081,
+       "THESIS_INVALIDATION": 1467,
+       "STRUCTURE_EXIT": 44
+      },
+      "sequential": {
+       "n": 1797,
+       "expectancy_r": -0.121,
+       "pf": 0.79,
+       "win_rate": 0.455,
+       "avg_win_r": 1.025,
+       "avg_loss_r": 1.078,
+       "max_dd_r": 223.4,
+       "max_loss_streak": 12,
+       "net_r": -217.08,
+       "mfe_r": 1.029,
+       "mae_r": 1.092,
+       "duration_bars": 8.49,
+       "trades_per_session": null,
+       "capital_10k": {
+        "start": 10000,
+        "end": 9182.3,
+        "min_equity": 9158.85,
+        "max_dd_pct": 0.107,
+        "survived": true
+       },
+       "capital_62": {
+        "start": 62.07,
+        "end": -755.63,
+        "min_equity": -779.08,
+        "max_dd_pct": 3.738,
+        "survived": false
+       }
+      }
+     }
+    }
+   },
+   "signals": 6553,
+   "sessions": 232
+  }
+ },
+ "sensitivity_production_entries_hold": {
+  "signals": 5519,
+  "baseline": {
+   "n": 5519,
+   "expectancy_r": -0.05,
+   "pf": 0.94,
+   "win_rate": 0.431,
+   "avg_win_r": 1.662,
+   "avg_loss_r": 1.348,
+   "max_dd_r": 373.8,
+   "max_loss_streak": 24,
+   "net_r": -274.24,
+   "mfe_r": 1.262,
+   "mae_r": 1.168,
+   "duration_bars": 17.73
+  },
+  "policies": {
+   "POLICY1_D_arm0.75_rho0.5_h1.25": {
+    "per_signal": {
+     "n": 5519,
+     "expectancy_r": -0.048,
+     "pf": 0.91,
+     "win_rate": 0.596,
+     "avg_win_r": 0.779,
+     "avg_loss_r": 1.265,
+     "max_dd_r": 304.45,
+     "max_loss_streak": 16,
+     "net_r": -262.89,
+     "mfe_r": 0.983,
+     "mae_r": 0.937,
+     "duration_bars": 9.77
+    },
+    "paired_mean_r": 0.002,
+    "paired_ci95_r": [
+     -0.025,
+     0.033
+    ]
+   },
+   "POLICY2_E_arm1_k1.5_h1": {
+    "per_signal": {
+     "n": 5519,
+     "expectancy_r": -0.047,
+     "pf": 0.92,
+     "win_rate": 0.463,
+     "avg_win_r": 1.186,
+     "avg_loss_r": 1.112,
+     "max_dd_r": 333.22,
+     "max_loss_streak": 27,
+     "net_r": -257.32,
+     "mfe_r": 1.182,
+     "mae_r": 1.021,
+     "duration_bars": 12.38
+    },
+    "paired_mean_r": 0.003,
+    "paired_ci95_r": [
+     -0.02,
+     0.026
+    ]
+   },
+   "POLICY3_A_arm0.75_lag0.5_h1.25": {
+    "per_signal": {
+     "n": 5519,
+     "expectancy_r": -0.034,
+     "pf": 0.93,
+     "win_rate": 0.472,
+     "avg_win_r": 1.012,
+     "avg_loss_r": 0.969,
+     "max_dd_r": 253.16,
+     "max_loss_streak": 22,
+     "net_r": -185.2,
+     "mfe_r": 1.053,
+     "mae_r": 0.944,
+     "duration_bars": 10.45
+    },
+    "paired_mean_r": 0.016,
+    "paired_ci95_r": [
+     -0.01,
+     0.044
+    ]
+   }
+  }
+ },
+ "integrity": {
+  "live_time_vs_replay": {
+   "trades": 480,
+   "bars": 4205,
+   "mismatches": 0,
+   "examples": []
+  },
+  "hindsight": {
+   "trades": 480,
+   "checks": 2434,
+   "violations": 0
+  },
+  "determinism": {
+   "identical": true,
+   "sha": "d3271b570fa8558d52c64ff89b16329a2e5efa2c24f5080a225bb9cb5f47ec6d"
+  },
+  "cost_accounting": {
+   "mean_diff_usd": 0.1,
+   "expected": 0.1,
+   "pass": true
+  }
+ },
+ "decision": {
+  "per_policy": {
+   "POLICY1_D_arm0.75_rho0.5_h1.25": {
+    "checks": {
+     "hold_paired_mean_gt_0": true,
+     "dev_paired_mean_gt_0": true,
+     "hold_paired_ci_lower_gt_0": false,
+     "hold_stress_paired_mean_gt_0": true,
+     "hold_pf_ge_baseline": false,
+     "hold_seq_dd_le_baseline": false,
+     "right_tail_preserved_ge_80": false,
+     "premature_rate_le_30": false,
+     "no_winrate_for_expectancy_trade": true,
+     "replay_parity": true,
+     "hindsight": true
+    },
+    "verdict": "INCONCLUSIVE"
+   },
+   "POLICY2_E_arm1_k1.5_h1": {
+    "checks": {
+     "hold_paired_mean_gt_0": true,
+     "dev_paired_mean_gt_0": true,
+     "hold_paired_ci_lower_gt_0": false,
+     "hold_stress_paired_mean_gt_0": true,
+     "hold_pf_ge_baseline": true,
+     "hold_seq_dd_le_baseline": true,
+     "right_tail_preserved_ge_80": false,
+     "premature_rate_le_30": false,
+     "no_winrate_for_expectancy_trade": true,
+     "replay_parity": true,
+     "hindsight": true
+    },
+    "verdict": "INCONCLUSIVE"
+   },
+   "POLICY3_A_arm0.75_lag0.5_h1.25": {
+    "checks": {
+     "hold_paired_mean_gt_0": true,
+     "dev_paired_mean_gt_0": true,
+     "hold_paired_ci_lower_gt_0": false,
+     "hold_stress_paired_mean_gt_0": true,
+     "hold_pf_ge_baseline": true,
+     "hold_seq_dd_le_baseline": false,
+     "right_tail_preserved_ge_80": false,
+     "premature_rate_le_30": false,
+     "no_winrate_for_expectancy_trade": true,
+     "replay_parity": true,
+     "hindsight": true
+    },
+    "verdict": "INCONCLUSIVE"
+   }
+  },
+  "CAPITAL_HARVEST_EDGE": "INCONCLUSIVE",
+  "PROPOSED_POLICY": "NO"
+ }
+}

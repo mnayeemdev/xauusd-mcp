@@ -1,0 +1,124 @@
+{
+ "A": {
+  "name": "FLOOR_A_arm0.75_lag0.5",
+  "constraint": "CONSTRAINT_UNMET",
+  "dev_paired_mean_r": 0.013,
+  "policy": {
+   "name": "FLOOR_A_arm0.75_lag0.5",
+   "family": "A",
+   "kind": "FLOOR",
+   "floor": {
+    "family": "A",
+    "arm": 0.75,
+    "lag": 0.5
+   }
+  }
+ },
+ "B": {
+  "name": "FLOOR_B_arm0.75_k2",
+  "constraint": "CONSTRAINT_UNMET",
+  "dev_paired_mean_r": 0.014,
+  "policy": {
+   "name": "FLOOR_B_arm0.75_k2",
+   "family": "B",
+   "kind": "FLOOR",
+   "floor": {
+    "family": "B",
+    "arm": 0.75,
+    "k": 2
+   }
+  }
+ },
+ "C": {
+  "name": "FLOOR_C_arm0.75",
+  "constraint": "CONSTRAINT_UNMET",
+  "dev_paired_mean_r": 0.01,
+  "policy": {
+   "name": "FLOOR_C_arm0.75",
+   "family": "C",
+   "kind": "FLOOR",
+   "floor": {
+    "family": "C",
+    "arm": 0.75
+   }
+  }
+ },
+ "D": {
+  "name": "FLOOR_D_arm0.75_rho0.4",
+  "constraint": "CONSTRAINT_UNMET",
+  "dev_paired_mean_r": 0.015,
+  "policy": {
+   "name": "FLOOR_D_arm0.75_rho0.4",
+   "family": "D",
+   "kind": "FLOOR",
+   "floor": {
+    "family": "D",
+    "arm": 0.75,
+    "rho": 0.4
+   }
+  }
+ },
+ "E": {
+  "name": "FLOOR_E_arm0.75_k1.5",
+  "constraint": "CONSTRAINT_UNMET",
+  "dev_paired_mean_r": 0.007,
+  "policy": {
+   "name": "FLOOR_E_arm0.75_k1.5",
+   "family": "E",
+   "kind": "FLOOR",
+   "floor": {
+    "family": "E",
+    "arm": 0.75,
+    "k": 1.5
+   }
+  }
+ },
+ "POLICY1": {
+  "name": "POLICY1_D_arm0.75_rho0.5_h1.25",
+  "constraint": "CONSTRAINT_UNMET",
+  "dev_paired_mean_r": 0.01,
+  "policy": {
+   "name": "POLICY1_D_arm0.75_rho0.5_h1.25",
+   "family": "POLICY1",
+   "kind": "ADAPTIVE",
+   "floor": {
+    "family": "D",
+    "arm": 0.75,
+    "rho": 0.5
+   },
+   "harvestMinR": 1.25
+  }
+ },
+ "POLICY2": {
+  "name": "POLICY2_E_arm1_k1.5_h1",
+  "constraint": "CONSTRAINT_UNMET",
+  "dev_paired_mean_r": 0.008,
+  "policy": {
+   "name": "POLICY2_E_arm1_k1.5_h1",
+   "family": "POLICY2",
+   "kind": "ADAPTIVE",
+   "floor": {
+    "family": "E",
+    "arm": 1,
+    "k": 1.5
+   },
+   "harvestMinR": 1
+  }
+ },
+ "POLICY3": {
+  "name": "POLICY3_A_arm0.75_lag0.5_h1.25",
+  "constraint": "CONSTRAINT_UNMET",
+  "dev_paired_mean_r": 0.015,
+  "policy": {
+   "name": "POLICY3_A_arm0.75_lag0.5_h1.25",
+   "family": "POLICY3",
+   "kind": "ADAPTIVE",
+   "floor": {
+    "family": "A",
+    "arm": 0.75,
+    "lag": 0.5
+   },
+   "harvestMinR": 1.25
+  }
+ }
+}
