@@ -1,0 +1,112 @@
+features ...
+events 1640 1842
+phase FULL; populations CONTROL:9617 S3:4342; news 81
+controls {"leak_mean_r":0.489,"leak_n":2674,"null_mean_r":-0.085,"null_n":2674,"cost_test":{"diff":0.1,"expected":0.1,"pass":true},"first_exit_after_entry":true,"cross_prefix_invariance":true,"prefix_tested":200,"timestamp_rule_no_future_bar":true}
+parity {"available":true,"records":684,"first":"2026-09-25T10:05:00.000Z","last":"2026-10-01T07:15:00.000Z","tolerance":{"close":0.000001,"ret":0.0001,"z":0.05},"by_symbol":{"XAGUSDm":{"live_records":684,"live_stale":278,"comparable":152,"close_match_rate":0.98,"ret_match_rate":0.98,"z_match_rate":0.98,"z_abs_diff_median":0,"z_abs_diff_p95":0,"pass":true},"DXYm":{"live_records":684,"live_stale":276,"comparable":152,"close_match_rate":0.98,"ret_match_rate":0.98,"z_match_rate":0.98,"z_abs_diff_median":0,"z_abs_diff_p95":0,"pass":true},"USTECm":{"live_records":684,"live_stale":278,"comparable":152,"close_match_rate":0.98,"ret_match_rate":0.98,"z_match_rate":0.98,"z_abs_diff_median":0,"z_abs_diff_p95":0,"pass":true}},"pass":true}
+DEV ...
+DECISIONS {
+ "passing": [],
+ "best_candidate": "N2 SILVER_CONFIRM",
+ "best_new_information": "N2 SILVER_CONFIRM",
+ "best_new_information_source": "XAGUSDm",
+ "new_data_sources_tested": [
+  "XAGUSDm 5m/15m (silver)",
+  "DXYm 5m/15m (dollar index CFD)",
+  "USTECm 15m (Nasdaq CFD)",
+  "XAGUSDm tick activity",
+  "official USD release timestamps (reaction, derived)",
+  "XAUUSDm broker spread (execution state)"
+ ],
+ "forward_only_candidates": [
+  "MT5 market depth / order-book imbalance (no history; broker-synthetic CFD depth)",
+  "execution latency / slippage logs (not captured)"
+ ],
+ "unavailable": [
+  "COMEX exchange volume",
+  "Treasury yields (no instrument captured)",
+  "release surprise values (no consensus data)",
+  "news sentiment feeds"
+ ],
+ "families_with_incremental_value_both_splits": [
+  "N2 SILVER_CONFIRM",
+  "N9 COMBINATION"
+ ],
+ "families_with_incremental_value_one_split": [
+  "N1 SILVER_OPPOSE",
+  "N2 SILVER_CONFIRM",
+  "N9 COMBINATION"
+ ],
+ "information_incremental_value": "YES",
+ "directional_accuracy_improved": "INCONCLUSIVE",
+ "trade_economics_improved": "INCONCLUSIVE",
+ "edge_demonstrated": "INCONCLUSIVE",
+ "demo_eligible": "NO",
+ "data_quality": "PASS",
+ "timestamp_integrity": "FAIL",
+ "live_replay_parity": "PASS",
+ "control": {
+  "n": 1163,
+  "expectancy_r": -0.064,
+  "pf": 0.93,
+  "max_dd_r": 98.89,
+  "ci95_r": [
+   -0.167,
+   0.041
+  ],
+  "block_ci95_r": [
+   -0.172,
+   0.047
+  ],
+  "wrong_direction_rate": 0.297,
+  "bad_entry_rate": 0.436,
+  "capture": 0.266,
+  "event_wd": 0.202,
+  "wait_share": 0,
+  "win_rate": 0.363,
+  "stress_r": -0.157
+ },
+ "best": {
+  "n": 854,
+  "expectancy_r": 0.021,
+  "pf": 1.02,
+  "max_dd_r": 53.78,
+  "ci95_r": [
+   -0.095,
+   0.14
+  ],
+  "block_ci95_r": [
+   -0.106,
+   0.144
+  ],
+  "wrong_direction_rate": 0.292,
+  "bad_entry_rate": 0.433,
+  "capture": 0.176,
+  "event_wd": 0.126,
+  "wait_share": 0.466,
+  "win_rate": 0.385,
+  "stress_r": -0.069,
+  "name": "N2 SILVER_CONFIRM",
+  "status": "FAILS_GATE",
+  "reasons": [
+   "(2) timestamp/delay sensitivity (Δ -0.028)",
+   "(6) PF<=1.10",
+   "(7) not a meaningful improvement (0.021 vs -0.064; DD 53.78 vs 98.89)",
+   "(9) quarters positive <60%",
+   "(10) thresholds SENSITIVE",
+   "(11) stress expectancy<=0",
+   "(12) trade CI includes 0",
+   "(12) session-block CI includes 0",
+   "tiny-cell dependence"
+  ]
+ }
+}
+N1 SILVER_OPPOSE FAILS_GATE n 1081 exp -0.064 pf 0.93 dd 95.09 wd 0.303 evwd 0.184 bad 0.44 cap 0.241 wait 0.147 na 0.001 dev 0.008 ci [-0.17,0.047] (3) wrong direction not lower (trade 0.303 vs 0.297; events 0.184 vs 0.202); (4) bad-entry rate not lower; (5) expectancy<=0; (6) PF<=1.10; (7) not a meaningful improvement (-0.064 vs -0.064; DD 95.09 vs 98.89); (9) quarters positive <60%; (10) thresholds NEGATIVE_CENTRE; (11) stress expectancy<=0; (12) trade CI includes 0; (12) session-block CI includes 0; drift expectancy<=0
+N2 SILVER_CONFIRM FAILS_GATE n 854 exp 0.021 pf 1.02 dd 53.78 wd 0.292 evwd 0.126 bad 0.433 cap 0.176 wait 0.466 na 0.001 dev 0.011 ci [-0.095,0.14] (2) timestamp/delay sensitivity (Δ -0.028); (6) PF<=1.10; (7) not a meaningful improvement (0.021 vs -0.064; DD 53.78 vs 98.89); (9) quarters positive <60%; (10) thresholds SENSITIVE; (11) stress expectancy<=0; (12) trade CI includes 0; (12) session-block CI includes 0; tiny-cell dependence
+N3 DXY_WITH FAILS_GATE n 1008 exp -0.062 pf 0.93 dd 84.58 wd 0.302 evwd 0.172 bad 0.44 cap 0.232 wait 0.264 na 0 dev -0.062 ci [-0.178,0.049] (3) wrong direction not lower (trade 0.302 vs 0.297; events 0.172 vs 0.202); (4) bad-entry rate not lower; (5) expectancy<=0; (6) PF<=1.10; (7) not a meaningful improvement (-0.062 vs -0.064; DD 84.58 vs 98.89); (9) quarters positive <60%; (10) thresholds NEGATIVE_CENTRE; (11) stress expectancy<=0; (12) trade CI includes 0; (12) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+N4 DXY_SHOCK FAILS_GATE n 1163 exp -0.06 pf 0.93 dd 94.72 wd 0.297 evwd 0.201 bad 0.436 cap 0.264 wait 0.011 na 0 dev -0.049 ci [-0.162,0.047] (3) wrong direction not lower (trade 0.297 vs 0.297; events 0.201 vs 0.202); (4) bad-entry rate not lower; (5) expectancy<=0; (6) PF<=1.10; (7) not a meaningful improvement (-0.06 vs -0.064; DD 94.72 vs 98.89); (9) quarters positive <60%; (10) thresholds NEGATIVE_CENTRE; (11) stress expectancy<=0; (12) trade CI includes 0; (12) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+N5 USTEC_RISK FAILS_GATE n 1090 exp -0.087 pf 0.9 dd 113.02 wd 0.312 evwd 0.187 bad 0.446 cap 0.238 wait 0.195 na 0.004 dev -0.07 ci [-0.186,0.018] (3) wrong direction not lower (trade 0.312 vs 0.297; events 0.187 vs 0.202); (4) bad-entry rate not lower; (5) expectancy<=0; (6) PF<=1.10; (7) not a meaningful improvement (-0.087 vs -0.064; DD 113.02 vs 98.89); (9) quarters positive <60%; (10) thresholds NEGATIVE_CENTRE; (11) stress expectancy<=0; (12) trade CI includes 0; (12) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+N6 ACTIVITY_DIVERGENCE FAILS_GATE n 1163 exp -0.064 pf 0.93 dd 98.89 wd 0.297 evwd 0.202 bad 0.436 cap 0.266 wait 0.001 na 0.001 dev -0.063 ci [-0.167,0.041] (3) wrong direction not lower (trade 0.297 vs 0.297; events 0.202 vs 0.202); (4) bad-entry rate not lower; (5) expectancy<=0; (6) PF<=1.10; (7) not a meaningful improvement (-0.064 vs -0.064; DD 98.89 vs 98.89); (9) quarters positive <60%; (10) thresholds NEGATIVE_CENTRE; (11) stress expectancy<=0; (12) trade CI includes 0; (12) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+N7 MACRO_REACTION FAILS_GATE n 1152 exp -0.055 pf 0.94 dd 89.21 wd 0.296 evwd 0.2 bad 0.437 cap 0.261 wait 0.019 na 0 dev -0.047 ci [-0.161,0.05] (4) bad-entry rate not lower; (5) expectancy<=0; (6) PF<=1.10; (7) not a meaningful improvement (-0.055 vs -0.064; DD 89.21 vs 98.89); (9) quarters positive <60%; (10) thresholds NEGATIVE_CENTRE; (11) stress expectancy<=0; (12) trade CI includes 0; (12) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+N8 SPREAD_STATE FAILS_GATE n 1133 exp -0.055 pf 0.94 dd 86.02 wd 0.296 evwd 0.197 bad 0.432 cap 0.256 wait 0.034 na 0 dev -0.055 ci [-0.157,0.047] (5) expectancy<=0; (6) PF<=1.10; (7) not a meaningful improvement (-0.055 vs -0.064; DD 86.02 vs 98.89); (9) quarters positive <60%; (10) thresholds NEGATIVE_CENTRE; (11) stress expectancy<=0; (12) trade CI includes 0; (12) session-block CI includes 0; DEV expectancy<=0; drift expectancy<=0
+N9 COMBINATION FAILS_GATE n 854 exp 0.021 pf 1.02 dd 53.78 wd 0.292 evwd 0.126 bad 0.433 cap 0.176 wait 0.466 na 0 dev 0.011 ci [-0.095,0.14] (6) PF<=1.10; (7) not a meaningful improvement (0.021 vs -0.064; DD 53.78 vs 98.89); (9) quarters positive <60%; (11) stress expectancy<=0; (12) trade CI includes 0; (12) session-block CI includes 0; tiny-cell dependence
+written FULL

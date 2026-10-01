@@ -1,0 +1,127 @@
+{
+ "derived_from": "DEV",
+ "finalists": {
+  "N1 SILVER_OPPOSE": {
+   "source": "XAGUSDm",
+   "param": "silver_opp",
+   "value": 0.5,
+   "dev_n": 776,
+   "dev_expectancy_r": 0.008,
+   "dev_improvement_r": 0.063,
+   "dev_wd": 0.277,
+   "dev_wd_lower": true,
+   "dev_incremental": true,
+   "wait_share": 0.186,
+   "na_share": 0.003
+  },
+  "N2 SILVER_CONFIRM": {
+   "source": "XAGUSDm",
+   "param": "silver_conf",
+   "value": 0.75,
+   "dev_n": 611,
+   "dev_expectancy_r": 0.011,
+   "dev_improvement_r": 0.066,
+   "dev_wd": 0.275,
+   "dev_wd_lower": true,
+   "dev_incremental": true,
+   "wait_share": 0.496,
+   "na_share": 0.003
+  },
+  "N3 DXY_WITH": {
+   "source": "DXYm",
+   "param": "dxy_with",
+   "value": 0.5,
+   "dev_n": 748,
+   "dev_expectancy_r": -0.062,
+   "dev_improvement_r": -0.007,
+   "dev_wd": 0.311,
+   "dev_wd_lower": false,
+   "dev_incremental": false,
+   "wait_share": 0.321,
+   "na_share": 0
+  },
+  "N4 DXY_SHOCK": {
+   "source": "DXYm",
+   "param": "dxy_shock",
+   "value": 3,
+   "dev_n": 873,
+   "dev_expectancy_r": -0.049,
+   "dev_improvement_r": 0.006,
+   "dev_wd": 0.297,
+   "dev_wd_lower": true,
+   "dev_incremental": false,
+   "wait_share": 0.009,
+   "na_share": 0
+  },
+  "N5 USTEC_RISK": {
+   "source": "USTECm",
+   "param": "ustec",
+   "value": 1,
+   "dev_n": 805,
+   "dev_expectancy_r": -0.07,
+   "dev_improvement_r": -0.015,
+   "dev_wd": 0.294,
+   "dev_wd_lower": true,
+   "dev_incremental": false,
+   "wait_share": 0.144,
+   "na_share": 0.004
+  },
+  "N6 ACTIVITY_DIVERGENCE": {
+   "source": "XAGUSDm tick volume + XAUUSDm tick volume",
+   "param": "act_div",
+   "value": 0.7,
+   "dev_n": 884,
+   "dev_expectancy_r": -0.063,
+   "dev_improvement_r": -0.008,
+   "dev_wd": 0.3,
+   "dev_wd_lower": false,
+   "dev_incremental": false,
+   "wait_share": 0.002,
+   "na_share": 0.003
+  },
+  "N7 MACRO_REACTION": {
+   "source": "official release timestamps + XAUUSD price (DERIVED)",
+   "param": "macro_win",
+   "value": 180,
+   "dev_n": 877,
+   "dev_expectancy_r": -0.047,
+   "dev_improvement_r": 0.008,
+   "dev_wd": 0.298,
+   "dev_wd_lower": false,
+   "dev_incremental": false,
+   "wait_share": 0.013,
+   "na_share": 0
+  },
+  "N8 SPREAD_STATE": {
+   "source": "XAUUSDm broker spread (execution state)",
+   "param": "spread_p",
+   "value": 0.9,
+   "dev_n": 878,
+   "dev_expectancy_r": -0.055,
+   "dev_improvement_r": 0,
+   "dev_wd": 0.298,
+   "dev_wd_lower": false,
+   "dev_incremental": false,
+   "wait_share": 0.001,
+   "na_share": 0
+  }
+ },
+ "combination": {
+  "components": [
+   "N1 SILVER_OPPOSE",
+   "N2 SILVER_CONFIRM"
+  ],
+  "rule": "intersection of WAITs (WAIT if any component waits)"
+ },
+ "candidates": [
+  "N1 SILVER_OPPOSE",
+  "N2 SILVER_CONFIRM",
+  "N3 DXY_WITH",
+  "N4 DXY_SHOCK",
+  "N5 USTEC_RISK",
+  "N6 ACTIVITY_DIVERGENCE",
+  "N7 MACRO_REACTION",
+  "N8 SPREAD_STATE",
+  "N9 COMBINATION"
+ ]
+}
