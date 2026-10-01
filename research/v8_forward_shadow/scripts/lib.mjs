@@ -208,3 +208,41 @@ export function classifyMissed(ev, decisionsByBarTime, barTimes, onsetTime) {
   if (gov) return { cls: 'BLOCKED_CORRECTLY', why: `governed rule: ${gov.shadow_signal ? 'opposite-side priority / signal' : gov.wait_category} ${gov.wait_detail ?? ''}`.trim() };
   return { cls: 'MISSED', why: 'a model triggered in the move direction and no governed reason explains the WAIT' };
 }
+
+// ---------------- primary audit per genuine setup (report-side; uses only what was recorded at decision time) ----------------
+export const AUDIT_CLASSES = Object.freeze(['DETECTED_CORRECTLY', 'MISSED', 'DETECTED_LATE', 'BLOCKED_CORRECTLY', 'BLOCKED_INCORRECTLY', 'VALID_LOSING_TRADE', 'IMPLEMENTATION_ERROR', 'UNKNOWN']);
+const MODEL_LIMIT = { MC: 3, PB: 3, BO: 10, SR: 0, MR: 3 };
+/**
+ * d: a recorded decision with valid_setup = true; outcome: its labelled hypothetical outcome or null; parityRec: its replay
+ * cross-check or null. Answers the owner's 10 questions and returns { checks, cls, why }.
+ */
+export function primaryAudit(d, outcome = null, parityRec = null) {
+  const c = d.candidate; if (!c || !d.stages) return { checks: {}, cls: 'UNKNOWN', why: 'no candidate or stage information recorded' };
+  const idx = MODELS.indexOf(c.model); const st = (side) => d.stages[side] ?? '00000'; const mine = st(c.side)[idx];
+  const supports = (side) => (side === 'BUY' && d.bias?.direction === 'BULLISH') || (side === 'SELL' && d.bias?.direction === 'BEARISH');
+  const allowed = allowedPairs({ direction: d.bias?.direction, eligible_models: d.bias?.eligible ?? [] });
+  const trig = (m, side) => st(side)[MODELS.indexOf(m)] === '3' || (m === 'SR' && st(side)[MODELS.indexOf('SR')] === '2' && supports(side));
+  let expected = null; for (const m of MODELS) { for (const side of ['BUY', 'SELL']) if (allowed.has(`${m}|${side}`) && trig(m, side)) { expected = { m, side }; break; } if (expected) break; }
+  const integrityOk = !d.data_integrity || Object.values(d.data_integrity).every((v) => v === 'PASS');
+  const checks = {
+    pattern_detected: mine >= '1',
+    model_correct: !!expected && expected.m === c.model && expected.side === c.side,
+    setup_recognised: mine >= '2',
+    trigger_confirmed: trig(c.model, c.side) && integrityOk && (d.latency_sec ?? 0) <= 120,
+    direction_correct: (c.model === 'MC' || c.model === 'PB' ? supports(c.side) : true) && trig(c.model, c.side),
+    location_correct: (c.overextension_atr ?? 0) <= 2.5 + 1e-9 && d.regression?.D4 !== 'VIOLATION',
+    sl_structural: (c.side === 'BUY' ? c.stop_loss < c.entry : c.stop_loss > c.entry) && (c.risk_atr ?? 1) >= 0.5 - 0.01 && !!c.sl_source,
+    rr_exact_170: c.risk_distance > 0 && Math.abs(Math.abs(c.tp_170r - c.entry) / c.risk_distance - 1.70) <= 0.002 && (c.rr_engine_unrounded ?? 0) >= 1.70 - 1e-9,
+  };
+  const failed = Object.entries(checks).filter(([, v]) => !v).map(([k]) => k);
+  const reg = Object.entries(d.regression ?? {}).filter(([, v]) => v === 'VIOLATION').map(([k]) => k);
+  if (failed.length || reg.length || (d.stage_parity_mismatch ?? []).length || parityRec?.match === false) return { checks, cls: 'IMPLEMENTATION_ERROR', why: [...failed, ...reg.map((k) => `${k} regression`), ...((d.stage_parity_mismatch ?? []).length ? ['stage parity'] : []), ...(parityRec?.match === false ? ['replay mismatch'] : [])].join(', ') };
+  if (!d.shadow_signal) {
+    const b = d.safety?.block; const ok = b && ((b.category === 'SPREAD_BLOCK' && d.spread_usd > SAFETY.maxSpreadUsd) || (b.category === 'NEWS_BLOCK' && d.news_state !== 'NORMAL') || (b.category === 'VOLATILITY_BLOCK' && d.shock_state === 'VOLATILITY_SHOCK') || (b.category === 'DATA_UNAVAILABLE' && d.spread_usd == null) || b.category === 'BROKER_SAFETY');
+    checks.block_correct = !!ok; return { checks, cls: ok ? 'BLOCKED_CORRECTLY' : 'BLOCKED_INCORRECTLY', why: b ? `${b.category}: ${b.detail}` : 'blocked without a recorded reason' };
+  }
+  checks.block_correct = true;
+  if ((c.bars_from_origin ?? 0) > (MODEL_LIMIT[c.model] ?? 99)) return { checks, cls: 'DETECTED_LATE', why: `entry ${c.bars_from_origin} bars after the setup origin` };
+  if (outcome) { const r = outcome.fix170_normal?.r; if (r != null && r <= 0) { const f = outcome.forensics?.cls ?? 'VALID_LOSING_TRADE'; return f === 'VALID_LOSING_TRADE' ? { checks, cls: 'VALID_LOSING_TRADE', why: 'all rules followed; the market went the other way' } : { checks, cls: 'IMPLEMENTATION_ERROR', why: `forensics ${f}: ${outcome.forensics?.why ?? ''}` }; } }
+  return { checks, cls: 'DETECTED_CORRECTLY', why: outcome ? 'all rules followed; hypothetical outcome positive' : 'all rules followed; outcome pending' };
+}

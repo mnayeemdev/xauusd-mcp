@@ -1,9 +1,9 @@
 {
- "generated_utc": "2026-10-01T12:47:29.411Z",
+ "generated_utc": "2026-10-01T12:57:45.322Z",
  "observation": {
   "start": "2026-10-01T11:58:45.000Z",
-  "end": "2026-10-01T12:45:00.000Z",
-  "elapsed_hours": 0.7708333333333334
+  "end": "2026-10-01T12:55:00.000Z",
+  "elapsed_hours": 0.9375
  },
  "sample_size_gate": "NONE",
  "trade_count_target": "NONE",
@@ -19,6 +19,13 @@
    "wrong_direction_decisions": 0,
    "valid_losing_trades": 1,
    "implementation_errors": 0,
+   "model_distribution": {
+    "MC": 0,
+    "PB": 0,
+    "BO": 1,
+    "SR": 0,
+    "MR": 0
+   },
    "d1_d6_regressions": 0
   },
   "CONTROL": {
@@ -32,11 +39,18 @@
    "wrong_direction_decisions": 0,
    "valid_losing_trades": 0,
    "implementation_errors": 1,
-   "d1_d6_regressions": 7
+   "model_distribution": {
+    "MC": 0,
+    "PB": 0,
+    "BO": 1,
+    "SR": 0,
+    "MR": 0
+   },
+   "d1_d6_regressions": 9
   }
  },
  "V8": {
-  "decisions": 10,
+  "decisions": 12,
   "valid_setups": 1,
   "signals": 1,
   "labelled": 1,
@@ -78,12 +92,12 @@
   },
   "regression": {
    "D1": {
-    "OK": 10,
+    "OK": 12,
     "VIOLATION": 0,
     "VIOLATION_ON_SIGNALS": 0
    },
    "D2": {
-    "OK": 10,
+    "OK": 12,
     "VIOLATION": 0,
     "VIOLATION_ON_SIGNALS": 0
    },
@@ -117,7 +131,7 @@
   }
  },
  "CONTROL": {
-  "decisions": 10,
+  "decisions": 12,
   "valid_setups": 1,
   "signals": 1,
   "labelled": 1,
@@ -159,13 +173,13 @@
   },
   "regression": {
    "D1": {
-    "OK": 10,
+    "OK": 12,
     "VIOLATION": 0,
     "VIOLATION_ON_SIGNALS": 0
    },
    "D2": {
     "OK": 3,
-    "VIOLATION": 7,
+    "VIOLATION": 9,
     "VIOLATION_ON_SIGNALS": 3
    },
    "D3": {

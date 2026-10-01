@@ -203,3 +203,35 @@ describe('owner amendment: no fixed sample-size gate, no trade target, any setup
     rmSync(dir, { recursive: true, force: true }); rmSync(out, { recursive: true, force: true });
   });
 });
+
+describe('primary audit per genuine setup (10 owner questions)', () => {
+  const { primaryAudit, AUDIT_CLASSES } = lib;
+  const ok = () => mkDecision({ k: 5, setup: true });
+  const lossOutcome = (cls = 'VALID_LOSING_TRADE') => ({ fix170_normal: { r: -1.0 }, forensics: { cls, why: 'x' } });
+  it('a valid setup is DETECTED_CORRECTLY; a valid loser is VALID_LOSING_TRADE; a loser with a failed forensic check is IMPLEMENTATION_ERROR', () => {
+    assert.deepEqual([...AUDIT_CLASSES], ['DETECTED_CORRECTLY', 'MISSED', 'DETECTED_LATE', 'BLOCKED_CORRECTLY', 'BLOCKED_INCORRECTLY', 'VALID_LOSING_TRADE', 'IMPLEMENTATION_ERROR', 'UNKNOWN']);
+    const a = primaryAudit(ok()); assert.equal(a.cls, 'DETECTED_CORRECTLY'); assert.ok(Object.values(a.checks).every(Boolean));
+    assert.equal(primaryAudit(ok(), lossOutcome()).cls, 'VALID_LOSING_TRADE');
+    assert.equal(primaryAudit(ok(), { fix170_normal: { r: 1.6 } }).cls, 'DETECTED_CORRECTLY');
+    assert.equal(primaryAudit(ok(), lossOutcome('PATTERN_ERROR')).cls, 'IMPLEMENTATION_ERROR');
+  });
+  it('wrong RR, wrong-side SL, wrong model, a D1-D6 violation or a replay mismatch make it an IMPLEMENTATION_ERROR', () => {
+    const d1 = ok(); d1.candidate.tp_170r = d1.candidate.entry + 1.5 * d1.candidate.risk_distance; assert.match(primaryAudit(d1).why, /rr_exact_170/);
+    const d2 = ok(); d2.candidate.stop_loss = d2.candidate.entry + 1; assert.equal(primaryAudit(d2).cls, 'IMPLEMENTATION_ERROR'); assert.match(primaryAudit(d2).why, /sl_structural/);
+    const d3 = ok(); d3.bias = { direction: 'BULLISH', regime: 'BULL_TREND', eligible: ['MC', 'PB', 'BO', 'SR'] }; d3.stages = { BUY: '30300', SELL: '00000' }; assert.match(primaryAudit(d3).why, /model_correct/);
+    const d4 = ok(); d4.regression = { ...d4.regression, D1: 'VIOLATION' }; assert.match(primaryAudit(d4).why, /D1 regression/);
+    assert.match(primaryAudit(ok(), null, { match: false }).why, /replay mismatch/);
+  });
+  it('safety blocks are judged against the recorded market state; late entries and missing stages are classified', () => {
+    const b1 = ok(); b1.shadow_signal = false; b1.spread_usd = 0.7; b1.safety = { block: { category: 'SPREAD_BLOCK', detail: 'spread 0.7 > 0.6' } }; assert.equal(primaryAudit(b1).cls, 'BLOCKED_CORRECTLY');
+    const b2 = ok(); b2.shadow_signal = false; b2.spread_usd = 0.3; b2.safety = { block: { category: 'SPREAD_BLOCK', detail: 'x' } }; assert.equal(primaryAudit(b2).cls, 'BLOCKED_INCORRECTLY');
+    const l = ok(); l.candidate.bars_from_origin = 12; assert.equal(primaryAudit(l).cls, 'DETECTED_LATE');
+    const u = ok(); delete u.stages; assert.equal(primaryAudit(u).cls, 'UNKNOWN');
+  });
+  it('reports show the primary-audit classes and the model distribution; MISSED comes from move events', () => {
+    const dir = storeWith([mkDecision({ k: 1, setup: true }), mkDecision({ k: 2 }), mkDecision({ engine: 'CONTROL', k: 1, setup: true })]); const out = mkdtempSync(join(tmpdir(), 'v8f-pa-')); renderReports({ dir, outDir: out });
+    const main = readFileSync(join(out, 'V8_FORWARD_SHADOW_REPORT.md'), 'utf8'); assert.match(main, /\| DETECTED_CORRECTLY \| 1 \| 1 \|/); assert.match(main, /model distribution of valid setups: V8 MC 0, PB 0, BO 1/);
+    assert.match(readFileSync(join(out, 'V8_FORWARD_SIGNAL_LOG.md'), 'utf8'), /## Primary audit — V8/);
+    rmSync(dir, { recursive: true, force: true }); rmSync(out, { recursive: true, force: true });
+  });
+});
