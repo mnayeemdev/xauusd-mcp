@@ -1,10 +1,11 @@
 # READ-ONLY MT5 reader for the FORWARD SHADOW OBSERVER (Stage 11C).
 # JSON-lines request/response over stdin/stdout. It can only read: rates, ticks, symbol info, account
-# identity (login/server for the audit trail). It contains NO trading call of any kind by design; a test
+# identity (login/server for the audit trail) and the read-only market book (2026-10-01). It contains NO trading call of any kind by design; a test
 # (tests/shadow_observer.test.js) scans this file for the MetaTrader5 trading function names.
 import sys, json, time
 import MetaTrader5 as mt5
 
+BOOK_SUBSCRIBED = {}
 TF = {"5m": mt5.TIMEFRAME_M5, "15m": mt5.TIMEFRAME_M15, "30m": mt5.TIMEFRAME_M30, "1H": mt5.TIMEFRAME_H1}
 
 def out(obj):
@@ -40,9 +41,25 @@ def main():
                 else:
                     ok = True if si.visible else bool(mt5.symbol_select(req["symbol"], True))
                     out({"id": req.get("id"), "ok": ok, "was_visible": bool(si.visible)})
+            elif cmd == "book":
+                # READ-ONLY market depth (DOM): market_book_add subscribes, market_book_get reads the current book.
+                # No trading call is involved. A symbol without depth returns None: recorded as unavailable, never fabricated.
+                sym = req["symbol"]
+                if sym not in BOOK_SUBSCRIBED:
+                    BOOK_SUBSCRIBED[sym] = bool(mt5.market_book_add(sym))
+                items = mt5.market_book_get(sym) if BOOK_SUBSCRIBED.get(sym) else None
+                if items is None:
+                    out({"id": req.get("id"), "ok": False, "error": "NO_BOOK " + str(mt5.last_error()), "subscribed": BOOK_SUBSCRIBED.get(sym, False), "time": time.time()})
+                else:
+                    out({"id": req.get("id"), "ok": True, "time": time.time(), "levels": [{"type": "BID" if it.type == mt5.BOOK_TYPE_BUY else "ASK" if it.type == mt5.BOOK_TYPE_SELL else str(it.type), "price": float(it.price), "volume": float(it.volume_real if getattr(it, "volume_real", 0) else it.volume)} for it in items]})
             elif cmd == "ping":
                 out({"id": req.get("id"), "ok": True, "now": time.time()})
             elif cmd == "quit":
+                for sym in list(BOOK_SUBSCRIBED.keys()):
+                    try:
+                        mt5.market_book_release(sym)
+                    except Exception:
+                        pass
                 out({"id": req.get("id"), "ok": True}); break
             else:
                 out({"id": req.get("id"), "ok": False, "error": "UNKNOWN_CMD"})

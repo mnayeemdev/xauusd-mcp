@@ -81,3 +81,73 @@ export function labelOutcome({ observation, horizonKey, horizonBars, tfSec, bars
   if (geometry) { const risk = Math.abs(geometry.entry - geometry.stop_loss); const reward = Math.abs(geometry.tp1 - geometry.entry); out.geometry = { touch: geomTouch ?? 'NONE', touch_bar_time: geomBar, r_multiple: geomTouch === 'TP1' ? r4(reward / risk) : geomTouch === 'SL' ? -1 : geomTouch === 'BOTH_SAME_BAR' ? null : r4(dir * (end - geometry.entry) / risk), risk_usd: r4(risk), reward_usd: r4(reward) }; }
   return out;
 }
+
+
+// ======================= SILVER N2 + DOM FORWARD OBSERVATION (2026-10-01, MEASURE ONLY) =======================
+export const SILVER_N2 = Object.freeze({ threshold_atr: 0.75, stale_sec: 600, mom_bars: 6 });
+export const HYP_COSTS = Object.freeze({ normal: { spread: 0.24, slip: 0.10 }, stress: { spread: 0.60, slip: 0.20 } });
+export const HYP_MILESTONES = Object.freeze([1, 1.25, 1.5, 1.7, 2]);
+export const HYP_LABEL = 'HYPOTHETICAL_NOT_EXECUTED';
+
+/**
+ * Silver N2 snapshot for one production signal (pure). silver5 = XAGUSDm 5m bars (may include the forming bar);
+ * decisionSec = signal bar close; side = production side. lag = 0 uses the bar with the SAME open time as the signal bar
+ * (complete at the decision instant); lag = 1 uses the previous completed bar (realistic-latency variant).
+ * Only bars with time + 300 <= decisionSec are ever used. Missing/stale -> state NA (recorded, never substituted).
+ */
+export function silverN2Snapshot(silver5, decisionSec, side, { lag = 0, threshold = SILVER_N2.threshold_atr } = {}) {
+  const done = completedBars(silver5, 300, decisionSec); const sgn = side === 'BUY' ? 1 : side === 'SELL' ? -1 : 0; const timing = lag ? 'LAG_1' : 'SAME_BAR';
+  const idx = done.length - 1 - lag; if (idx < SILVER_N2.mom_bars + 14) return { available: false, reason: done.length ? 'INSUFFICIENT_HISTORY' : 'NO_COMPLETED_BAR', state: 'NA', timing };
+  const bar = done[idx]; if (decisionSec - (bar.time + 300) > SILVER_N2.stale_sec + lag * 300) return { available: false, reason: 'STALE', state: 'NA', timing, last_bar_close_time: bar.time + 300 };
+  const atr = atr14(done.slice(0, idx + 1)); if (!atr) return { available: false, reason: 'ATR_UNAVAILABLE', state: 'NA', timing };
+  const mom6 = (bar.close - done[idx - SILVER_N2.mom_bars].close) / atr; const signed = sgn * mom6;
+  const state = sgn === 0 ? 'NA' : signed >= threshold ? 'CONFIRMED' : signed <= -threshold ? 'CONFLICT' : 'NEUTRAL';
+  return { available: true, timing, same_open_as_signal: lag === 0 && bar.time === decisionSec - 300, bar_time: bar.time, bar_close_time: bar.time + 300, close: bar.close, atr14: r4(atr), mom6_atr: r4(mom6), signed_mom6_atr: r4(signed), silver_direction: mom6 > 0 ? 'UP' : mom6 < 0 ? 'DOWN' : 'FLAT', threshold_atr: threshold, state };
+}
+
+/** Hypothetical 1.70R geometry from the production signal (never sent anywhere). */
+export function hypotheticalGeometry(sig) {
+  const entry = Number(sig.entry), sl = Number(sig.stop_loss); if (!Number.isFinite(entry) || !Number.isFinite(sl) || entry === sl) return null;
+  const risk = Math.abs(entry - sl); const dir = sig.side === 'BUY' ? 1 : -1;
+  return { label: HYP_LABEL, side: sig.side, entry, stop_loss: sl, risk_usd: r4(risk), target_170r: r4(entry + dir * 1.7 * risk), production_tp1: Number.isFinite(sig.tp1) ? sig.tp1 : null, production_tp2: Number.isFinite(sig.tp2) ? sig.tp2 : null, production_rr: Number.isFinite(sig.rr) ? sig.rr : null };
+}
+
+/** DOM snapshot (pure) from a market-book level list [{type:'BID'|'ASK', price, volume}]; prev = previous snapshot for change metrics. */
+export function domSnapshot(book, { tick = null, prev = null, nowSec = null } = {}) {
+  if (!book || !book.ok || !Array.isArray(book.levels)) return { available: false, reason: book?.error ?? 'NO_BOOK', forward_only_data: true, measure_only: true };
+  const bids = book.levels.filter((l) => l.type === 'BID'), asks = book.levels.filter((l) => l.type === 'ASK'); if (!bids.length || !asks.length) return { available: false, reason: 'EMPTY_BOOK', forward_only_data: true, measure_only: true, level_count: book.levels.length };
+  const bidDepth = bids.reduce((a, l) => a + (l.volume ?? 0), 0), askDepth = asks.reduce((a, l) => a + (l.volume ?? 0), 0); const bestBid = Math.max(...bids.map((l) => l.price)), bestAsk = Math.min(...asks.map((l) => l.price));
+  const total = bidDepth + askDepth; const prevTotal = prev?.available ? prev.bid_depth + prev.ask_depth : null;
+  return { available: true, forward_only_data: true, measure_only: true, snapshot_time: nowSec, best_bid: bestBid, best_ask: bestAsk, spread: r4(bestAsk - bestBid), tick_bid: tick?.bid ?? null, tick_ask: tick?.ask ?? null, bid_depth: bidDepth, ask_depth: askDepth, imbalance: total ? r4((bidDepth - askDepth) / total) : null, level_count: book.levels.length, bid_levels: bids.length, ask_levels: asks.length, depth_change_vs_prev: prevTotal != null ? r4((total - prevTotal) / Math.max(1, prevTotal)) : null, liquidity_withdrawal: prevTotal != null ? total <= 0.5 * prevTotal : null, book_time: book.time ?? null };
+}
+
+/** Observation record for SC3 (one per production signal). cross_asset.XAGUSDm_5m carries the same-bar snapshot so the schema's anti-future check applies. */
+export function buildSilverN2Observation({ candidate, nowSec, signal, provenance, silver5, tick = null, bars5 = [], news = null, dom = null, prodSnapshot = null, execution = null }) {
+  const barTime = signal.signal_bar_time; const decisionSec = barTime + 300; const same = silverN2Snapshot(silver5, decisionSec, signal.side, { lag: 0 }); const lag1 = silverN2Snapshot(silver5, decisionSec, signal.side, { lag: 1 });
+  const hist5 = completedBars(bars5, 300, decisionSec); const atr = atr14(hist5); const spreadNow = tick && Number.isFinite(tick.bid) && Number.isFinite(tick.ask) ? r4(tick.ask - tick.bid) : null;
+  const o = { schema_version: SCHEMA_VERSION, record: 'observation', type: 'CANDIDATE_TRIGGER', candidate_id: candidate.id, candidate_version: candidate.version, observation_id: null, provenance, source: 'shadow-observer', created_at_utc: new Date(nowSec * 1000).toISOString(), decision_time_utc: new Date(decisionSec * 1000).toISOString(), symbol: 'XAUUSDm', feed: 'Exness MT5', timeframe: '5m', bar_time: barTime, bar_close_time: decisionSec, hypothesis_side: signal.side, execution_authority: 'NONE', measure_only: true,
+    cross_asset: { XAGUSDm_5m: same.available ? { symbol: 'XAGUSDm', available: true, bar_time: same.bar_time, bar_close_time: same.bar_close_time, close: same.close } : { symbol: 'XAGUSDm', available: false, reason: same.reason } },
+    payload: { signal_id: signal.signal_id, side: signal.side, model: signal.model ?? null, quality: signal.quality ?? null, engine_created_at: signal.created_at ?? null, xauusd_price_at_signal: Number.isFinite(signal.entry) ? signal.entry : null, xauusd_last_close: hist5.at(-1)?.close ?? null, xagusd_price: same.available ? same.close : null, silver_same_bar: same, silver_lag_1: lag1, silver_confirmation_state: same.state, silver_divergence: same.available ? same.state === 'CONFLICT' : null, silver_available_at_decision: !!same.available, hypothetical: hypotheticalGeometry(signal), context: { atr14_5m: r4(atr), spread_now_usd: spreadNow, session_utc_hour: new Date(barTime * 1000).getUTCHours(), production: prodSnapshot, news, execution }, dom },
+  };
+  o.observation_id = observationId({ type: o.type, candidate_id: candidate.id, symbol: o.symbol, timeframe: o.timeframe, bar_time: o.bar_time }); return o;
+}
+
+/**
+ * Hypothetical EXIT_F outcome (pure, HYPOTHETICAL_NOT_EXECUTED). Uses only completed gold 5m bars after the decision.
+ * Labels when the open path (structural stop only) has resolved or the 288-bar horizon has elapsed; returns null before that.
+ */
+export function labelHypothetical({ observation, bars5, nowSec, horizonBars = 288, provenance }) {
+  const g = observation.payload?.hypothetical; if (!g) return null; const decisionSec = Date.parse(observation.decision_time_utc) / 1000; const horizonEnd = decisionSec + horizonBars * 300;
+  const path = completedBars(bars5, 300, nowSec).filter((b) => b.time >= decisionSec && b.time + 300 <= horizonEnd); if (!path.length) return null;
+  const dir = g.side === 'BUY' ? 1 : -1; const risk = Math.abs(g.entry - g.stop_loss);
+  const run = (costs, tpPrice) => { const sp = costs.spread, slip = costs.slip; const fill = dir > 0 ? g.entry + sp : g.entry; const brokerDist = 1.5 * risk + sp; let mfe = 0, mae = 0, exit = null, exitBar = null, pnl = 0; const reach = Object.fromEntries(HYP_MILESTONES.map((m) => [m, null]));
+    for (const b of path) { const adv = dir > 0 ? fill - b.low : (b.high + sp) - fill, fav = dir > 0 ? b.high - fill : fill - (b.low + sp); if (adv > mae) mae = adv; if (adv >= brokerDist) { exit = 'BROKER_SL'; pnl = -brokerDist - slip; exitBar = b.time; break; } if (tpPrice != null && (dir > 0 ? b.high >= tpPrice : (b.low + sp) <= tpPrice)) { if (fav > mfe) mfe = fav; exit = 'TARGET_170R'; pnl = Math.abs(tpPrice - fill) - slip; exitBar = b.time; break; } if (fav > mfe) mfe = fav; for (const m of HYP_MILESTONES) if (reach[m] == null && mfe >= m * risk) reach[m] = b.time; if (dir > 0 ? b.close < g.stop_loss : b.close > g.stop_loss) { exit = 'THESIS_INVALIDATION'; pnl = dir * ((dir > 0 ? b.close : b.close + sp) - fill) - slip; exitBar = b.time; break; } }
+    const resolved = exit != null; const horizonElapsed = path.length >= horizonBars; if (!resolved && !horizonElapsed) return { resolved: false }; if (!resolved) { const last = path.at(-1); exit = 'HORIZON'; pnl = dir * ((dir > 0 ? last.close : last.close + sp) - fill) - slip; exitBar = last.time; }
+    return { resolved: true, exit, exit_bar_time: exitBar, duration_bars: Math.round((exitBar - decisionSec) / 300) + 1, exit_r: r4(pnl / risk), pnl_usd: r4(pnl), mfe_r: r4(mfe / risk), mae_r: r4(mae / risk), reach, cost_usd: r4(sp + slip) }; };
+  const open = run(HYP_COSTS.normal, null); if (!open.resolved) return null; // the open path (structural stop only) decides when the record is final
+  const normal = run(HYP_COSTS.normal, g.target_170r), stress = run(HYP_COSTS.stress, g.target_170r);
+  const wrong = open.mfe_r < 0.5 && (open.exit === 'BROKER_SL' || open.exit === 'THESIS_INVALIDATION'); const bad = open.reach[1] == null;
+  // the record is final once the open path resolved (no later bar can change it): effective horizon end = close of the resolving bar
+  const resolvedEarly = open.exit !== 'HORIZON'; const effectiveEnd = resolvedEarly ? open.exit_bar_time + 300 : horizonEnd; const lastUsed = resolvedEarly ? open.exit_bar_time : path.at(-1).time;
+  return { schema_version: SCHEMA_VERSION, record: 'outcome', outcome_id: outcomeId(observation.observation_id, 'hyp288'), observation_id: observation.observation_id, horizon: 'hyp288', provenance, labeled_at_utc: new Date(nowSec * 1000).toISOString(), horizon_end_time: effectiveEnd, nominal_horizon_end_time: horizonEnd, resolved_before_nominal_horizon: resolvedEarly, last_bar_time_used: lastUsed, status: 'LABELED', label: HYP_LABEL, executed: false, side: g.side, risk_usd: r4(risk), open_path: { exit: open.exit, mfe_r: open.mfe_r, mae_r: open.mae_r, reach_bar_time: open.reach, reach: Object.fromEntries(HYP_MILESTONES.map((m) => [m, open.reach[m] != null])), duration_bars: open.duration_bars }, wrong_direction: wrong, bad_entry: bad, hypothetical_normal_cost: { exit: normal.exit, exit_r: normal.exit_r, pnl_usd: normal.pnl_usd, duration_bars: normal.duration_bars, cost_usd: normal.cost_usd }, hypothetical_stress_cost: { exit: stress.exit, exit_r: stress.exit_r, pnl_usd: stress.pnl_usd, cost_usd: stress.cost_usd }, silver_state_same_bar: observation.payload?.silver_same_bar?.state ?? 'NA', silver_state_lag_1: observation.payload?.silver_lag_1?.state ?? 'NA' };
+}

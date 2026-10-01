@@ -40,6 +40,27 @@ export const CANDIDATES = Object.freeze([
     cost_assumptions: { spread_usd_round_trip: 0.26, note: 'no fill is fabricated; the engine entry is the reference price; executed trades additionally carry the real fill from the audit log' },
     metrics: ['expectancy_R', 'p_tp1_first', 'excess_atr at h12/h24/h48', 'split by executed vs blocked reason', 'split by model', 'no_top5', 'monthly_stability'],
   }),
+  Object.freeze({
+    id: 'SC3_SILVER_N2_v1', version: 1, status: 'MEASURE_ONLY', execution_authority: 'NONE', origin: 'V7 NEW INFORMATION research (research/new_information_v7): silver confirmation = the only candidate with incremental value on both DEV and HOLDOUT (+0.066 / +0.085 R) but PF 1.02, CI through zero, stress-negative and sign-flipping under one bar of lag; forward measurement requested by the owner (SILVER N2 + DOM FORWARD OBSERVATION directive).',
+    hypothesis: 'A production XAUUSDm signal whose direction is confirmed by the contemporaneous XAGUSDm 30-minute move (same-open 5m bar, 6-bar close change >= +0.75 silver ATR14 in the signal direction) has lower wrong-direction rate and higher after-cost expectancy than the unfiltered production stream; conflicting silver (<= -0.75) is worse. MEASURED ONLY; never authorises, blocks or permits an order.',
+    data_source: 'Exness MT5 XAGUSDm 5m completed bars (same broker clock as XAUUSDm) read by the read-only shadow reader; the XAGUSDm bar used has the SAME open time as the production signal bar and is complete at the same instant.',
+    rule: { feature: 'silver_mom6 = (close - close[-6]) / ATR14(14 simple TR) on XAGUSDm 5m', threshold_atr: 0.75, states: ['CONFIRMED (sgn*mom6 >= +0.75)', 'CONFLICT (sgn*mom6 <= -0.75)', 'NEUTRAL'], timing_variants: ['SAME_BAR (bar open == signal bar open, close <= decision)', 'LAG_1 (previous completed bar; realistic-latency variant)'], missing_policy: 'no XAGUSDm bar complete at the decision time or stale > 10 min -> state NA, recorded, never substituted' },
+    hypothesis_side: 'AS_SIGNALLED', timeframe: '5m', outcome_symbol: 'XAUUSDm', min_freshness_sec: 900,
+    duplicate_policy: 'one observation per production signal_id (observation_id derived from candidate_id + symbol + timeframe + signal bar_time)',
+    hypothetical_geometry: { entry: 'production signal entry', stop_loss: 'production structural stop_loss', target: 'entry +/- 1.70 x |entry - stop_loss| (RR 1.70 CONTROL; production tp2 recorded alongside, not used)', exit_model: 'EXIT_F: broker fail-safe 1.5R + spread intrabar, thesis invalidation on close beyond the structural stop, target touch, 288-bar horizon, SL before TP on the same bar', costs: { normal: { spread_usd: 0.24, slippage_usd: 0.10 }, stress: { spread_usd: 0.60, slippage_usd: 0.20 } }, label: 'HYPOTHETICAL_NOT_EXECUTED' },
+    horizons: { hyp288: { bars_5m: 288 } },
+    metrics: ['wrong_direction (open-path MFE < 0.5R and structural stop reached)', 'reach 1R / 1.25R / 1.5R / 1.7R / 2R before invalidation', 'MFE_R', 'MAE_R', 'hypothetical exit_R normal and stress cost', 'duration bars', 'three-way CONTROL vs CONFIRMED vs CONFLICT', 'SAME_BAR vs LAG_1 timing sensitivity'],
+    minimum_forward_sample: 300, gate: 'docs/XAUUSD_SILVER_N2_FORWARD_OBSERVATION.md section 5; evaluated only on FORWARD_LIVE records; backfill and replay never count',
+  }),
+  Object.freeze({
+    id: 'SC4_DOM_SNAPSHOT_v1', version: 1, status: 'DOM_MEASURE_ONLY', execution_authority: 'NONE', origin: 'V7 FORWARD_ONLY_CANDIDATE (order flow / depth has no history; Exness CFD depth is broker-synthetic).',
+    hypothesis: 'NONE YET. Collection only: record the MT5 market book of XAUUSDm at every 5m decision and at every production signal so a depth hypothesis can be pre-registered later on genuinely forward data. No entry rule is derived from DOM in this stage.',
+    data_source: 'MetaTrader5.market_book_add / market_book_get on XAUUSDm (read-only subscription; broker depth, NOT global market depth). FORWARD_ONLY_DATA = true (no historical DOM exists; none is fabricated).',
+    recorded: ['timestamp', 'best bid / best ask / spread', 'bid depth (sum of bid volumes)', 'ask depth', 'imbalance (bid - ask) / (bid + ask)', 'level count', 'depth change vs the previous snapshot', 'liquidity withdrawal flag (total depth fell >= 50 % vs previous snapshot)', 'availability / reason when the broker returns no book'],
+    hypothesis_side: 'NONE', timeframe: '5m', outcome_symbol: 'XAUUSDm',
+    duplicate_policy: 'embedded in the CANDLE_5M and SC3 observations of the same decision time (no separate record type)',
+    missing_policy: 'book unavailable (broker/API) -> { available: false, reason } recorded; never filled',
+  }),
 ]);
 
 export function candidateById(id) { return CANDIDATES.find((c) => c.id === id) ?? null; }

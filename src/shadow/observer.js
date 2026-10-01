@@ -7,6 +7,10 @@
  *   node src/shadow/observer.js            run (poll every 60 s; own lock state/shadow/observer.lock)
  *   node src/shadow/observer.js --once     one cycle (used for smoke checks)
  *
+ * 2026-10-01 extension (SILVER N2 + DOM FORWARD OBSERVATION, measure only): per cycle also reads XAGUSDm 5m bars and the
+ * read-only XAUUSDm market book; records SC3 (silver N2 state at every production signal, same-bar and one-bar-lag, with a
+ * HYPOTHETICAL_NOT_EXECUTED 1.70R geometry) and SC4 (DOM snapshot). Nothing here can authorise, block or permit an order.
+ *
  * Cycle: (1) read completed XAUUSDm 5m/15m/30m/1H bars and the tick; (2) for every completed 5m bar not yet
  * observed (max 24 h back) build a CANDLE_5M observation, FORWARD_LIVE only if created within 15 min of the
  * candle close, else BACKFILL; (3) on 15m boundaries evaluate the frozen SC1 silver-lead trigger; (4) record
@@ -19,7 +23,7 @@ import { createEvidenceStore } from './store.js';
 import { createMt5Reader } from './mt5Reader.js';
 import { createProductionReader } from './production.js';
 import { CANDIDATES, candidateById, verifyFrozenRegistry } from './candidates.js';
-import { buildCandleObservation, buildTriggerObservation, evaluateSilverLead, labelOutcome, completedBars, atr14, provenanceFor, TF_SEC } from './core.js';
+import { buildCandleObservation, buildTriggerObservation, evaluateSilverLead, labelOutcome, completedBars, atr14, provenanceFor, TF_SEC, buildSilverN2Observation, labelHypothetical, domSnapshot } from './core.js';
 import { SCHEMA_VERSION, observationId, outcomeId } from './schema.js';
 import { evaluateNewsState, NEWS_RISK_PARAMS } from '../engine/newsRisk.js';
 import { classifyNewsTier } from '../engine/newsCalendar.js';
@@ -32,7 +36,9 @@ export const OUTCOME_PLAN = Object.freeze({
   CANDLE_5M: [['h12', 12, '5m'], ['h24', 24, '5m'], ['h48', 48, '5m']],
   'SC1_SILVER_LEAD_v1': [['h4', 4, '15m'], ['h8', 8, '15m'], ['h16', 16, '15m']],
   'SC2_PRODUCTION_SIGNAL_v1': [['h12', 12, '5m'], ['h24', 24, '5m'], ['h48', 48, '5m']],
+  'SC3_SILVER_N2_v1': [['hyp288', 288, '5m']], // HYPOTHETICAL_NOT_EXECUTED EXIT_F outcome (2026-10-01)
 });
+export const SILVER_5M_SYMBOL = 'XAGUSDm'; export const DOM_SYMBOL = 'XAUUSDm'; // DOM measure-only, forward-only data
 
 export function createShadowObserver({ dir = SHADOW_DIR, reader, prod, now = () => Date.now() / 1000, log = () => {}, mode = 'LIVE' } = {}) {
   verifyFrozenRegistry();
@@ -48,7 +54,9 @@ export function createShadowObserver({ dir = SHADOW_DIR, reader, prod, now = () 
   async function marketSnapshot() {
     const [r5, r15, r30, r60, tk] = await Promise.all([reader.rates('XAUUSDm', '5m', 600), reader.rates('XAUUSDm', '15m', 300), reader.rates('XAUUSDm', '30m', 120), reader.rates('XAUUSDm', '1H', 80), reader.tick('XAUUSDm')]);
     const cross = {}; for (const s of CROSS_SYMBOLS) { try { const r = await reader.rates(s, '15m', 200); cross[s] = r.ok ? r.bars : null; } catch { cross[s] = null; } }
-    return { bars5: r5.ok ? r5.bars : [], bars15: r15.ok ? r15.bars : [], bars30: r30.ok ? r30.bars : [], bars60: r60.ok ? r60.bars : [], tick: tk.ok ? tk.tick : null, cross };
+    let silver5 = null; try { const r = await reader.rates(SILVER_5M_SYMBOL, '5m', 150); silver5 = r.ok ? r.bars : null; } catch { silver5 = null; } // SC3: same-clock 5m silver bars (read-only)
+    let book = null; try { book = typeof reader.book === 'function' ? await reader.book(DOM_SYMBOL) : null; } catch (e) { book = { ok: false, error: e.message }; } // SC4: read-only market depth, never fabricated
+    return { bars5: r5.ok ? r5.bars : [], bars15: r15.ok ? r15.bars : [], bars30: r30.ok ? r30.bars : [], bars60: r60.ok ? r60.bars : [], tick: tk.ok ? tk.tick : null, cross, silver5, book };
   }
   function newsFor(decisionSec) {
     const cal = prod.calendar(); if (!cal) return { available: false, reason: 'NO_CALENDAR_SNAPSHOT' };
@@ -57,16 +65,19 @@ export function createShadowObserver({ dir = SHADOW_DIR, reader, prod, now = () 
     return { available: true, computed_from_snapshot: { state: s.state, reason: s.reason, event: s.event ? { event_name: s.event.event_name, tier: s.event.tier, event_time_utc: s.event.event_time_utc, minutes_to_event: s.event.minutes_to_event, clock_min_end_utc: s.event.clock_min_end_utc ?? null, cluster_anchor_utc: s.event.cluster_anchor_utc ?? null, press_conference_utc: s.event.press_conference_utc ?? null } : null, next_event: s.next_event ? { event_name: s.next_event.event_name, tier: s.next_event.tier ?? classifyNewsTier(s.next_event), event_time_utc: s.next_event.event_time_utc, minutes_to_event: s.next_event.minutes_to_event } : null, block_ends_utc: s.block_ends_utc ?? null, calendar_source_timestamp: cal.source_timestamp }, production_reported: lp ? { at: lp.at, news_state: lp.news_state, news_tier: lp.news_tier ?? null, shock_state: lp.shock_state, block_reasons: lp.block_reasons, blocking: lp.blocking, last_block_cleared_at: lp.last_block_cleared_at, spread_ratio: lp.spread_ratio ?? null, feed_stale: lp.feed_stale ?? null, normalization_shadow: lp.normalization_shadow ?? null } : null };
   }
 
+  let prevDom = null; st.dom = { last: null, available_cycles: 0, unavailable_cycles: 0 }; st.silver_n2 = { observations: 0, na: 0 };
   async function cycle() {
     const nowSec = Math.floor(now()); st.cycles++; st.last_cycle_at = new Date(nowSec * 1000).toISOString();
     try {
-      const m = await marketSnapshot(); const done5 = completedBars(m.bars5, 300, nowSec); st.market = { feed_state: m.tick ? (nowSec - m.tick.time > 90 ? 'STALE' : 'FRESH') : 'UNKNOWN', last_tick_time: m.tick?.time ?? null, last_completed_5m: done5.at(-1)?.time ?? null };
+      const m = await marketSnapshot(); const done5 = completedBars(m.bars5, 300, nowSec);
+      const dom = domSnapshot(m.book, { tick: m.tick, prev: prevDom, nowSec }); if (dom.available) { prevDom = dom; st.dom.available_cycles++; } else st.dom.unavailable_cycles++; st.dom.last = dom.available ? { time: nowSec, bid_depth: dom.bid_depth, ask_depth: dom.ask_depth, imbalance: dom.imbalance, levels: dom.level_count } : { time: nowSec, reason: dom.reason }; st.market = { feed_state: m.tick ? (nowSec - m.tick.time > 90 ? 'STALE' : 'FRESH') : 'UNKNOWN', last_tick_time: m.tick?.time ?? null, last_completed_5m: done5.at(-1)?.time ?? null };
       // (2) candle observations for completed bars not yet stored (bounded backfill)
       for (const b of done5) {
         const closeSec = b.time + 300; const prov = mode === 'LIVE' ? provenanceFor({ barCloseSec: closeSec, nowSec }) : provenanceFor({ barCloseSec: closeSec, nowSec, mode }); if (!prov) continue;
         const id = observationId({ type: 'CANDLE_5M', candidate_id: null, symbol: 'XAUUSDm', timeframe: '5m', bar_time: b.time }); if (store.hasObservation(id)) continue;
         if (prov === 'FORWARD_LIVE' && nowSec - closeSec < 120) continue; // give the production watcher its evaluation window (<= 2 min) so the snapshot is not falsely "missing"
         const o = buildCandleObservation({ nowSec, barTime: b.time, bars5: m.bars5, bars15: m.bars15, bars30: m.bars30, bars60: m.bars60, tick: m.tick, cross: m.cross, prod: prod.snapshotForBar(b.time), news: newsFor(closeSec), provenance: prov });
+        if (prov === 'FORWARD_LIVE') o.dom = dom; // SC4: depth at the observation time (forward-only; never attached to backfill)
         put(o); st.last_bar_time = b.time;
         // (3) SC1 at 15m boundaries
         if (closeSec % 900 === 0) { const c = candidateById('SC1_SILVER_LEAD_v1'); const ev = evaluateSilverLead(c, m.cross.XAGUSDm ?? [], closeSec); if (ev.triggered) put(buildTriggerObservation({ candidate: c, nowSec, decisionSec: closeSec, barTime: closeSec - 900, provenance: prov, side: c.hypothesis_side, payload: { z: ev.z, ret_15m: ev.ret, silver_bar_time: ev.bar_time, gold_atr14_15m: atr14(completedBars(m.bars15, 900, closeSec)) } })); }
@@ -78,6 +89,8 @@ export function createShadowObserver({ dir = SHADOW_DIR, reader, prod, now = () 
         const exec = prod.executionStatus(s.signal_id);
         const o = { schema_version: SCHEMA_VERSION, record: 'observation', type: 'PRODUCTION_SIGNAL', candidate_id: c.id, candidate_version: c.version, observation_id: observationId({ type: 'PRODUCTION_SIGNAL', candidate_id: c.id, symbol: 'XAUUSDm', timeframe: '5m', bar_time: barTime }), provenance: prov, source: 'shadow-observer', created_at_utc: new Date(nowSec * 1000).toISOString(), decision_time_utc: new Date(closeSec * 1000).toISOString(), symbol: 'XAUUSDm', feed: 'Exness MT5', timeframe: '5m', bar_time: barTime, bar_close_time: closeSec, hypothesis_side: s.side, execution_authority: 'NONE', payload: { signal_id: s.signal_id, side: s.side, model: s.model, quality: s.quality, rr: s.rr, entry: s.entry, stop_loss: s.stop_loss, tp1: s.tp1, tp2: s.tp2, thesis_id: s.thesis_id, engine_symbol: s.symbol, engine_created_at: s.created_at, execution: exec, news: newsFor(closeSec) } };
         if (put(o).ok || store.hasObservation(o.observation_id)) knownSignals.add(s.signal_id);
+        // SC3: silver N2 measurement for the same production signal (MEASURE ONLY; execution authority NONE)
+        try { const c3 = candidateById('SC3_SILVER_N2_v1'); const o3 = buildSilverN2Observation({ candidate: c3, nowSec, signal: s, provenance: prov, silver5: m.silver5 ?? [], tick: m.tick, bars5: m.bars5, news: newsFor(closeSec), dom: prov === 'FORWARD_LIVE' ? dom : null, prodSnapshot: prod.snapshotForBar(barTime), execution: exec }); const r3 = put(o3); if (r3.ok) { st.silver_n2.observations++; if (!o3.payload.silver_available_at_decision) st.silver_n2.na++; } } catch (e) { log(`[shadow] SC3 observation failed for ${s.signal_id}: ${e.message}`); }
       }
       // (5) news / shock / protection transitions
       for (const ev of prod.protectionEvents(lastNewsTs)) {
@@ -96,6 +109,7 @@ export function createShadowObserver({ dir = SHADOW_DIR, reader, prod, now = () 
   function labelPending({ nowSec, bars5, bars15 }) {
     for (const o of store.readAll('observations')) {
       const plan = OUTCOME_PLAN[o.type === 'CANDIDATE_TRIGGER' || o.type === 'PRODUCTION_SIGNAL' ? o.candidate_id : o.type]; if (!plan) continue;
+      if (o.candidate_id === 'SC3_SILVER_N2_v1') { if (store.hasOutcome(outcomeId(o.observation_id, 'hyp288'))) continue; const r = labelHypothetical({ observation: o, bars5, nowSec, horizonBars: 288, provenance: o.provenance }); if (r) putOutcome(r); continue; }
       for (const [key, bars, tf] of plan) {
         if (store.hasOutcome(outcomeId(o.observation_id, key))) continue;
         const side = o.hypothesis_side === 'BUY' || o.hypothesis_side === 'SELL' ? o.hypothesis_side : null; const atr = o.type === 'CANDLE_5M' ? o.market?.atr14_5m : o.type === 'CANDIDATE_TRIGGER' ? o.payload?.gold_atr14_15m : null;
@@ -121,6 +135,7 @@ if (isMain) {
   (async () => {
     const hello = await reader.start(); log(`reader hello login=${hello.login} server=${hello.server} read_only=${hello.read_only}`);
     for (const s of CROSS_SYMBOLS) { try { const r = await reader.select(s); log(`select ${s}: ${JSON.stringify(r)}`); } catch (e) { log(`select ${s} failed: ${e.message}`); } }
+    try { const b = await reader.book(DOM_SYMBOL); log(`dom ${DOM_SYMBOL}: ${b.ok ? `${b.levels.length} levels` : b.error} (read-only, DOM_MEASURE_ONLY, FORWARD_ONLY_DATA)`); } catch (e) { log(`dom ${DOM_SYMBOL} unavailable: ${e.message}`); }
     const obs = createShadowObserver({ reader, prod, log }); const st = obs.status(); st.reader = { login: hello.login, server: hello.server, read_only: true }; log(`shadow observer started pid=${process.pid} schema=${SCHEMA_VERSION} candidates=${CANDIDATES.map((c) => c.id).join(',')}`);
     await obs.cycle(); log(`cycle 1 done: ${JSON.stringify(obs.status().counts)} market=${JSON.stringify(obs.status().market)}`);
     if (once) return shutdown('once');

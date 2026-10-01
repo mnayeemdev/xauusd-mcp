@@ -96,13 +96,13 @@ describe('E-H. confirmed candles only, stale feed, cross-asset causality, no loo
 
 describe('J-L. candidate registry immutability, provenance, replay never counts as forward', () => {
   it('the frozen registry verifies; a modified definition or an unfrozen candidate is refused; definitions are frozen objects with no execution fields', () => {
-    assert.equal(verifyFrozenRegistry().ok, true); assert.deepEqual(Object.keys(registryHashes()), ['SC1_SILVER_LEAD_v1', 'SC2_PRODUCTION_SIGNAL_v1']);
+    assert.equal(verifyFrozenRegistry().ok, true); assert.deepEqual(Object.keys(registryHashes()), ['SC1_SILVER_LEAD_v1', 'SC2_PRODUCTION_SIGNAL_v1', 'SC3_SILVER_N2_v1', 'SC4_DOM_SNAPSHOT_v1']);
     const c = candidateById('SC1_SILVER_LEAD_v1'); assert.equal(c.trigger.z_threshold, -1.5); assert.equal(c.hypothesis_side, 'SELL'); assert.ok(Object.isFrozen(c));
     assert.notEqual(definitionHash({ ...c, trigger: { ...c.trigger, z_threshold: -1.0 } }), definitionHash(c));
     const d = tmp(); const f = join(d, 'frozen.json');
     writeFileSync(f, JSON.stringify({ frozen_at: 'x', hashes: { ...registryHashes(), SC1_SILVER_LEAD_v1: 'deadbeef' } })); assert.throws(() => verifyFrozenRegistry(f), /CANDIDATE_MODIFIED:SC1_SILVER_LEAD_v1/);
     writeFileSync(f, JSON.stringify({ frozen_at: 'x', hashes: { SC1_SILVER_LEAD_v1: registryHashes().SC1_SILVER_LEAD_v1 } })); assert.throws(() => verifyFrozenRegistry(f), /UNFROZEN_CANDIDATE:SC2_PRODUCTION_SIGNAL_v1/); rmSync(d, { recursive: true, force: true });
-    for (const cand of CANDIDATES) { assert.equal(cand.status, 'MEASURE_ONLY'); for (const k of ['execution', 'order', 'lot', 'volume', 'action']) assert.equal(k in cand, false, k); }
+    for (const cand of CANDIDATES) { assert.ok(['MEASURE_ONLY', 'DOM_MEASURE_ONLY'].includes(cand.status), cand.id); assert.equal(cand.execution_authority ?? 'NONE', 'NONE'); for (const k of ['execution', 'order', 'lot', 'volume', 'action']) assert.equal(k in cand, false, k); }
     assert.deepEqual(STATUSES, ['COLLECTING', 'INSUFFICIENT_FORWARD_EVIDENCE', 'PROMISING_UNPROVEN', 'FAILED_FORWARD_GATE', 'ELIGIBLE_FOR_INDEPENDENT_VALIDATION']); assert.equal(STATUSES.includes('PRODUCTION_APPROVED'), false);
     assert.equal(FORWARD_GATES.SC1_SILVER_LEAD_v1.min_observations, 150); assert.equal(FORWARD_GATES.SC2_PRODUCTION_SIGNAL_v1.min_observations, 100);
   });
@@ -134,8 +134,9 @@ describe('Observer integration (fake reader + fake production files): live cycle
     const events = [{ timestamp: new Date((dec + 5) * 1000).toISOString(), type: 'NEWS_STATE_CHANGED', from: 'NORMAL', to: 'PRE_NEWS', reason: 'PRE_NEWS:CPI m/m', protection: { news_tier: 'B' } }];
     const prod = fakeProd({ signals: [sig], exec: { status: 'SKIPPED:NEWS_ENTRY_BLOCK', guard: 'news' }, events });
     const ob = createShadowObserver({ dir, reader: rd, prod, now: () => now, log: () => {} }); await ob.cycle();
-    const recs = ob.store.readAll('observations'); const trig = recs.filter((r) => r.type === 'CANDIDATE_TRIGGER'); const ps = recs.filter((r) => r.type === 'PRODUCTION_SIGNAL'); const ne = recs.filter((r) => r.type === 'NEWS_V2_EVENT');
+    const recs = ob.store.readAll('observations'); const trig = recs.filter((r) => r.type === 'CANDIDATE_TRIGGER' && r.candidate_id === 'SC1_SILVER_LEAD_v1'); const sc3 = recs.filter((r) => r.candidate_id === 'SC3_SILVER_N2_v1'); const ps = recs.filter((r) => r.type === 'PRODUCTION_SIGNAL'); const ne = recs.filter((r) => r.type === 'NEWS_V2_EVENT');
     assert.equal(trig.length, 1); assert.equal(trig[0].candidate_id, 'SC1_SILVER_LEAD_v1'); assert.equal(trig[0].hypothesis_side, 'SELL'); assert.equal(trig[0].execution_authority, 'NONE'); assert.equal(trig[0].decision_time_utc, new Date(dec * 1000).toISOString()); assert.equal(trig[0].provenance, 'FORWARD_LIVE');
+    assert.equal(sc3.length, 1, 'one SC3 silver-N2 measure-only record per production signal'); assert.equal(sc3[0].execution_authority, 'NONE'); assert.equal(sc3[0].payload.signal_id, 'sig1');
     assert.equal(ps.length, 1); assert.equal(ps[0].payload.execution.status, 'SKIPPED:NEWS_ENTRY_BLOCK'); assert.equal(ps[0].hypothesis_side, 'BUY'); assert.equal(ps[0].execution_authority, 'NONE');
     assert.equal(ne.length, 1); assert.equal(ne[0].payload.to, 'PRE_NEWS'); assert.equal(ne[0].provenance, 'FORWARD_LIVE');
     const candle = recs.find((r) => r.type === 'CANDLE_5M' && r.bar_time === barT); assert.equal(candle.cross_asset.USTECm.available, false, 'missing cross-asset series recorded as unavailable'); assert.equal(candle.cross_asset.XAGUSDm.available, true);
@@ -147,7 +148,7 @@ describe('Observer integration (fake reader + fake production files): live cycle
     const outs = ob2.store.readAll('outcomes'); const t = outs.filter((r) => r.observation_id === trig[0].observation_id); assert.equal(t.length, 3); assert.deepEqual(t.map((r) => r.horizon).sort(), ['h16', 'h4', 'h8']); assert.ok(t.every((r) => r.status === 'LABELED' && r.provenance === 'FORWARD_LIVE' && r.side_signed_move_usd > 0), 'gold fell after the silver crash: SELL-signed move positive'); assert.ok(t.find((r) => r.horizon === 'h16').side_signed_move_usd > t.find((r) => r.horizon === 'h4').side_signed_move_usd);
     const s = outs.filter((r) => r.observation_id === ps[0].observation_id); assert.equal(s.length, 3); assert.equal(s.find((r) => r.horizon === 'h48').geometry.touch, 'SL');
     const n = outs.length; await ob2.cycle(); assert.equal(ob2.store.readAll('outcomes').length, n, 'outcomes are never re-labeled');
-    assert.deepEqual(Object.keys(OUTCOME_PLAN), ['CANDLE_5M', 'SC1_SILVER_LEAD_v1', 'SC2_PRODUCTION_SIGNAL_v1']); assert.deepEqual([...CROSS_SYMBOLS], ['DXYm', 'XAGUSDm', 'USTECm']);
+    assert.deepEqual(Object.keys(OUTCOME_PLAN), ['CANDLE_5M', 'SC1_SILVER_LEAD_v1', 'SC2_PRODUCTION_SIGNAL_v1', 'SC3_SILVER_N2_v1']); assert.deepEqual([...CROSS_SYMBOLS], ['DXYm', 'XAGUSDm', 'USTECm']);
     rmSync(dir, { recursive: true, force: true });
   });
 });
@@ -158,8 +159,8 @@ describe('M-N. no order path; production view is read-only', () => {
     const forbidden = ['mt5Executor', 'mt5Bridge', 'mt5Policy', 'mt5RealPolicy', 'mt5RealScaling', 'mt5CapitalPolicy', 'watcher.js', 'xauusd_calculate', 'xauusd_analyze_market', 'signalStore', 'newsMonitor', 'protectionGuards', 'marketShock'];
     const files = ['schema.js', 'candidates.js', 'core.js', 'store.js', 'production.js', 'mt5Reader.js', 'observer.js', 'report.js'];
     for (const f of files) { const s = src(`src/shadow/${f}`); const imports = [...s.matchAll(/from\s+'([^']+)'/g)].map((m) => m[1]); for (const imp of imports) for (const bad of forbidden) assert.ok(!imp.includes(bad), `${f} imports ${imp}`); assert.ok(!/order_send|\.request\('open'|'close'|'modify'|order\(/.test(s), `${f} contains an order-like call`); }
-    const py = src('mt5/mt5_shadow_reader.py'); for (const bad of ['order_send', 'order_check', 'order_calc', 'positions_close', 'TRADE_ACTION', 'Close(', 'Buy(', 'Sell(']) assert.ok(!py.includes(bad), `reader contains ${bad}`);
-    assert.deepEqual([...READER_COMMANDS], ['rates', 'tick', 'select', 'ping', 'quit']);
+    const py = src('mt5/mt5_shadow_reader.py'); for (const bad of ['order_send', 'order_check', 'order_calc', 'positions_close', 'TRADE_ACTION', 'Close(', 'Buy(', 'Sell(', 'position_modify', 'order_modify']) assert.ok(!py.includes(bad), `reader contains ${bad}`);
+    assert.deepEqual([...READER_COMMANDS], ['rates', 'tick', 'select', 'ping', 'quit', 'book']); // 'book' = read-only market depth (2026-10-01)
     const r = createMt5Reader({ python: 'nonexistent-python-binary' }); return assert.rejects(r.request('order', {}), /READER_CMD_NOT_ALLOWED|READER_NOT_RUNNING/);
   });
   it('the production reader only reads production files (no write API, no fs write imports) and the observer writes only under its own directory', () => {

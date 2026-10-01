@@ -1,14 +1,14 @@
 /**
  * Node client for the READ-ONLY MT5 reader (mt5/mt5_shadow_reader.py). Separate python process, separate
- * terminal session from the REAL bridge; it can request rates, ticks and symbol selection only. There is no
- * order/modify/close command in the protocol (tests scan both files).
+ * terminal session from the REAL bridge; it can request rates, ticks, symbol selection and the read-only market book only.
+ * There is no order or position command in the protocol (tests scan both files).
  */
 import { spawn } from 'node:child_process';
 import { createInterface } from 'node:readline';
 import { fileURLToPath } from 'node:url';
 
 export const DEFAULT_READER_SCRIPT = fileURLToPath(new URL('../../mt5/mt5_shadow_reader.py', import.meta.url));
-export const READER_COMMANDS = Object.freeze(['rates', 'tick', 'select', 'ping', 'quit']);
+export const READER_COMMANDS = Object.freeze(['rates', 'tick', 'select', 'ping', 'quit', 'book']); // 'book' = read-only market depth (2026-10-01, DOM measure-only)
 
 export function createMt5Reader({ python = 'python', script = DEFAULT_READER_SCRIPT, env = { ...process.env, OPENBLAS_NUM_THREADS: '1' }, timeoutMs = 20_000, log = () => {} } = {}) {
   let child = null, rl = null, hello = null, seq = 0; const pending = new Map();
@@ -28,5 +28,5 @@ export function createMt5Reader({ python = 'python', script = DEFAULT_READER_SCR
     const id = ++seq; return new Promise((res, rej) => { const t = setTimeout(() => { pending.delete(id); rej(new Error(`READER_TIMEOUT:${cmd}`)); }, timeoutMs); pending.set(id, { res, rej, t }); child.stdin.write(JSON.stringify({ id, cmd, ...params }) + '\n'); });
   }
   async function stop() { if (!child) return; try { await request('quit'); } catch { /* ignore */ } try { child.kill(); } catch { /* ignore */ } child = null; }
-  return { start, stop, request, hello: () => hello, alive: () => !!child, rates: (symbol, tf, count) => request('rates', { symbol, tf, count }), tick: (symbol) => request('tick', { symbol }), select: (symbol) => request('select', { symbol }), ping: () => request('ping') };
+  return { start, stop, request, hello: () => hello, alive: () => !!child, rates: (symbol, tf, count) => request('rates', { symbol, tf, count }), tick: (symbol) => request('tick', { symbol }), select: (symbol) => request('select', { symbol }), ping: () => request('ping'), book: (symbol) => request('book', { symbol }) };
 }

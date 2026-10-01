@@ -4,6 +4,10 @@
  "note": "SHA-256 of each candidate definition (JSON.stringify of the frozen object). Any change to a definition must be a NEW candidate id/version; verifyFrozenRegistry() and the test suite refuse a modified definition.",
  "hashes": {
   "SC1_SILVER_LEAD_v1": "e5216ec3501a0b8bc019185bfa33083a35a586ed4282e1f8f1cb2ef1530a05c0",
-  "SC2_PRODUCTION_SIGNAL_v1": "4414f8142ebe64425fccfdb60182bd79442de2b0652ecfc76668a6ebc6486afd"
- }
+  "SC2_PRODUCTION_SIGNAL_v1": "4414f8142ebe64425fccfdb60182bd79442de2b0652ecfc76668a6ebc6486afd",
+  "SC3_SILVER_N2_v1": "59d0586bf53df38ec6264f0526ea9c9f22b43fc78577f1934750201686da3f05",
+  "SC4_DOM_SNAPSHOT_v1": "cb1a153374a79d2fead97e47276172d7703768179719709eb80d86f481fcaa1d"
+ },
+ "extended_at": "2026-10-01T08:00:00.000Z",
+ "extension_note": "SC3_SILVER_N2_v1 and SC4_DOM_SNAPSHOT_v1 added 2026-10-01 (SILVER N2 + DOM FORWARD OBSERVATION directive). Existing SC1/SC2 definitions and hashes unchanged."
 }
