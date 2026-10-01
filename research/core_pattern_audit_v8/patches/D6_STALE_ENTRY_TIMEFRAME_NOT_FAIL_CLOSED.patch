@@ -1,0 +1,16 @@
+diff --git a/src/core/xauusd_calculate.js b/src/core/xauusd_calculate.js
+index 3cf361e..3e5e75e 100644
+--- a/src/core/xauusd_calculate.js
++++ b/src/core/xauusd_calculate.js
+@@ -221,7 +221,10 @@ export async function calculateEntry({ enablePineComparison = true, engineProfil
+   // Only the entry tiers (5m/15m/30m) are decision-critical -- a context
+   // tier's own data failure degrades just that tier's context to
+   // DATA_UNAVAILABLE (handled below), it never fails the whole call.
+-  if (ENTRY_TIMEFRAMES.some((tf) => split[tf].error)) {
++  // V8 D6: a STALE entry-timeframe snapshot (last confirmed bar older than STALE_BAR_MULTIPLE + 1 bar durations) is never
++  // substituted for current data: the call fails closed exactly like invalid data, with the exact reason recorded.
++  for (const tf of ENTRY_TIMEFRAMES) if (!split[tf].error && split[tf].stale) dataErrors.push(`${TF_LABEL[tf]}: stale data (last confirmed bar ${Math.round(split[tf].lastConfirmedAgeSec)}s old)`);
++  if (ENTRY_TIMEFRAMES.some((tf) => split[tf].error || split[tf].stale)) {
+     return { schema_version: CALCULATE_SCHEMA_VERSION, status: 'DATA_UNAVAILABLE', action: 'WAIT', reason: 'insufficient/invalid market data', errors: dataErrors, symbol, calculated_at, ...(isIntradayProfile(profile) ? { engine_profile: profile } : {}) };
+   }
+ 

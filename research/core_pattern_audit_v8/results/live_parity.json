@@ -1,0 +1,85 @@
+{
+ "generated_utc": "2026-10-01T11:23:16.740Z",
+ "sample_bars": 2245,
+ "signals_in_sample": 266,
+ "last_week_bars": 1656,
+ "mismatches": {
+  "action": 0,
+  "wait_reason": 0,
+  "model": 0,
+  "entry": 0,
+  "stop_loss": 0,
+  "tp1": 0,
+  "tp2": 0,
+  "rr": 0
+ },
+ "examples": [],
+ "forming_bar": "garbage (high x1.5, low x0.5) on every timeframe",
+ "result_keys": [
+  "schema_version",
+  "engine_profile",
+  "status",
+  "action",
+  "reason",
+  "symbol",
+  "timeframes",
+  "regime",
+  "bias",
+  "direction",
+  "setup",
+  "entry",
+  "sl",
+  "tp1",
+  "tp2",
+  "rr",
+  "quality",
+  "correction_state",
+  "confirmation_state",
+  "overextension_state",
+  "signal",
+  "market_data_times",
+  "calculated_at",
+  "pine_reference",
+  "engine_disagreement",
+  "diagnostics"
+ ],
+ "stale_snapshot": {
+  "production_15m_stale_4h": {
+   "status": "OK",
+   "action": "WAIT",
+   "reason": "NO_ELIGIBLE_STRATEGY",
+   "errors": null
+  },
+  "d6_15m_stale_4h": {
+   "status": "DATA_UNAVAILABLE",
+   "action": "WAIT",
+   "reason": "insufficient/invalid market data",
+   "errors": [
+    "2H: n/a",
+    "8H: n/a",
+    "1D: n/a",
+    "1W: n/a",
+    "1M: n/a",
+    "2H: insufficient bars: 0 available, 151 required (including the forming bar)",
+    "8H: insufficient bars: 0 available, 151 required (including the forming bar)",
+    "1D: insufficient bars: 0 available, 151 required (including the forming bar)",
+    "1W: insufficient bars: 0 available, 151 required (including the forming bar)",
+    "1M: insufficient bars: 0 available, 151 required (including the forming bar)",
+    "15m: stale data (last confirmed bar 15931s old)"
+   ]
+  },
+  "production_fresh": {
+   "status": "OK",
+   "action": "WAIT",
+   "reason": "NO_ELIGIBLE_STRATEGY",
+   "errors": null
+  },
+  "d6_fresh": {
+   "status": "OK",
+   "action": "WAIT",
+   "reason": "NO_ELIGIBLE_STRATEGY",
+   "errors": null
+  }
+ },
+ "pass": true
+}

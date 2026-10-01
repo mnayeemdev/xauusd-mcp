@@ -1,0 +1,156 @@
+{
+ "generated_utc": "2026-10-01T11:23:48.364Z",
+ "feed_note": "live production reads OANDA:XAUUSD through TradingView; the replay reads Exness XAUUSDm through MT5 -- prices differ by the broker feed, so decisions can differ without any code difference",
+ "wait_log": {
+  "compared": 205,
+  "action_match": 199,
+  "reason_match": 189,
+  "mismatches": [
+   {
+    "t": "2026-09-21T11:45:00.000Z",
+    "live": "WAIT/insufficient/invalid market data",
+    "replay": "WAIT/NO_ELIGIBLE_STRATEGY"
+   },
+   {
+    "t": "2026-09-21T12:00:00.000Z",
+    "live": "WAIT/insufficient/invalid market data",
+    "replay": "WAIT/NO_ELIGIBLE_STRATEGY"
+   },
+   {
+    "t": "2026-09-21T12:15:00.000Z",
+    "live": "WAIT/insufficient/invalid market data",
+    "replay": "WAIT/RR_NOT_ACCEPTABLE"
+   },
+   {
+    "t": "2026-09-21T13:25:00.000Z",
+    "live": "WAIT/insufficient/invalid market data",
+    "replay": "WAIT/NO_ELIGIBLE_STRATEGY"
+   },
+   {
+    "t": "2026-09-22T14:10:00.000Z",
+    "live": "WAIT/insufficient/invalid market data",
+    "replay": "WAIT/NO_ELIGIBLE_STRATEGY"
+   },
+   {
+    "t": "2026-09-23T10:50:00.000Z",
+    "live": "WAIT/insufficient/invalid market data",
+    "replay": "SELL/null"
+   },
+   {
+    "t": "2026-09-23T11:00:00.000Z",
+    "live": "WAIT/insufficient/invalid market data",
+    "replay": "WAIT/RR_NOT_ACCEPTABLE"
+   },
+   {
+    "t": "2026-09-23T11:00:00.000Z",
+    "live": "WAIT/insufficient/invalid market data",
+    "replay": "WAIT/RR_NOT_ACCEPTABLE"
+   },
+   {
+    "t": "2026-09-23T11:05:00.000Z",
+    "live": "WAIT/insufficient/invalid market data",
+    "replay": "WAIT/NO_ELIGIBLE_STRATEGY"
+   },
+   {
+    "t": "2026-09-25T04:20:00.000Z",
+    "live": "WAIT/RR_NOT_ACCEPTABLE",
+    "replay": "SELL/null"
+   },
+   {
+    "t": "2026-09-25T06:55:00.000Z",
+    "live": "BUY/null",
+    "replay": "WAIT/NO_ELIGIBLE_STRATEGY"
+   },
+   {
+    "t": "2026-09-25T08:00:00.000Z",
+    "live": "WAIT/RR_NOT_ACCEPTABLE",
+    "replay": "WAIT/NO_ELIGIBLE_STRATEGY"
+   },
+   {
+    "t": "2026-09-25T08:05:00.000Z",
+    "live": "SELL/null",
+    "replay": "WAIT/NO_ELIGIBLE_STRATEGY"
+   },
+   {
+    "t": "2026-09-25T08:30:00.000Z",
+    "live": "WAIT/NO_GOOD_ENTRY",
+    "replay": "BUY/null"
+   },
+   {
+    "t": "2026-09-25T10:50:00.000Z",
+    "live": "WAIT/OVEREXTENDED",
+    "replay": "BUY/null"
+   },
+   {
+    "t": "2026-09-25T19:35:00.000Z",
+    "live": "WAIT/RR_NOT_ACCEPTABLE",
+    "replay": "WAIT/NO_ELIGIBLE_STRATEGY"
+   }
+  ]
+ },
+ "signal_store": {
+  "live_signals": 22,
+  "in_replay_range": 11,
+  "same_side_same_bar": 10,
+  "same_side_within_2_bars": 10,
+  "replay_wait": 1,
+  "replay_opposite": 0,
+  "rows": [
+   {
+    "t": "2026-09-25T06:50:00.000Z",
+    "live": "BUY BO",
+    "replay": "BUY BO"
+   },
+   {
+    "t": "2026-09-25T07:35:00.000Z",
+    "live": "SELL SR",
+    "replay": "SELL MR"
+   },
+   {
+    "t": "2026-09-25T07:40:00.000Z",
+    "live": "SELL MR",
+    "replay": "SELL MR"
+   },
+   {
+    "t": "2026-09-25T07:45:00.000Z",
+    "live": "SELL MR",
+    "replay": "SELL MR"
+   },
+   {
+    "t": "2026-09-25T08:05:00.000Z",
+    "live": "SELL MR",
+    "replay": "WAIT/NO_ELIGIBLE_STRATEGY"
+   },
+   {
+    "t": "2026-09-25T08:15:00.000Z",
+    "live": "BUY BO",
+    "replay": "BUY BO"
+   },
+   {
+    "t": "2026-09-25T08:25:00.000Z",
+    "live": "BUY BO",
+    "replay": "BUY BO"
+   },
+   {
+    "t": "2026-09-25T10:05:00.000Z",
+    "live": "BUY MC",
+    "replay": "BUY MC"
+   },
+   {
+    "t": "2026-09-25T10:55:00.000Z",
+    "live": "BUY MC",
+    "replay": "BUY MC"
+   },
+   {
+    "t": "2026-09-25T12:25:00.000Z",
+    "live": "BUY PB",
+    "replay": "BUY PB"
+   },
+   {
+    "t": "2026-09-25T18:50:00.000Z",
+    "live": "BUY BO",
+    "replay": "BUY BO"
+   }
+  ]
+ }
+}

@@ -1,0 +1,150 @@
+diff --git a/src/engine/structure.js b/src/engine/structure.js
+index 97e6f2c..8ef26f7 100644
+--- a/src/engine/structure.js
++++ b/src/engine/structure.js
+@@ -63,40 +63,39 @@ export function computeStructure(bars, params = STRUCTURE_PARAMS) {
+   let structureDirection = null;
+   let lastEvent = null; // { type: 'BOS'|'CHOCH', direction, bar }
+   const allPivotsSorted = [...highs, ...lows].sort((a, b) => a.index - b.index);
++  // V8 D1: find each pivot's FIRST confirmed close-break, then walk the breaks in TIME order (break bar, then pivot
++  // index) so the running direction and lastEvent describe the most recent genuine break, not the newest broken pivot.
++  const breaks = [];
+   for (const piv of allPivotsSorted) {
+     const confirmedAt = piv.index + right;
+     for (let j = confirmedAt + 1; j < bars.length; j++) {
+-      if (piv.type === 'high' && bars[j].close > piv.price) {
+-        const isContinuation = structureDirection === 'BULLISH';
+-        lastEvent = { type: isContinuation ? 'BOS' : (structureDirection === null ? 'BOS' : 'CHOCH'), direction: 'BULLISH', bar: j, level: piv.price, pivotIndex: piv.index };
+-        structureDirection = 'BULLISH';
+-        break;
+-      }
+-      if (piv.type === 'low' && bars[j].close < piv.price) {
+-        const isContinuation = structureDirection === 'BEARISH';
+-        lastEvent = { type: isContinuation ? 'BOS' : (structureDirection === null ? 'BOS' : 'CHOCH'), direction: 'BEARISH', bar: j, level: piv.price, pivotIndex: piv.index };
+-        structureDirection = 'BEARISH';
+-        break;
+-      }
++      if (piv.type === 'high' && bars[j].close > piv.price) { breaks.push({ j, piv, direction: 'BULLISH' }); break; }
++      if (piv.type === 'low' && bars[j].close < piv.price) { breaks.push({ j, piv, direction: 'BEARISH' }); break; }
+     }
+   }
++  breaks.sort((a, b) => a.j - b.j || a.piv.index - b.piv.index);
++  for (const { j, piv, direction } of breaks) {
++    const isContinuation = structureDirection === direction;
++    lastEvent = { type: isContinuation ? 'BOS' : (structureDirection === null ? 'BOS' : 'CHOCH'), direction, bar: j, level: piv.price, pivotIndex: piv.index };
++    structureDirection = direction;
++  }
+ 
+   // Liquidity sweep: the most recent pivot whose extreme was exceeded
+   // intrabar (high/low) WITHOUT a confirmed close beyond it -- a
+   // rejection, not a break.
++  // V8 D2: the MOST RECENT sweep event in time (largest bar; ties -> the more recent pivot), not the last sweep of the
++  // newest pivot that was ever swept. The per-bar sweep definition itself is unchanged.
+   let lastSweep = null;
+-  for (const piv of [...allPivotsSorted].reverse()) {
++  let lastSweepPivot = -1;
++  for (const piv of allPivotsSorted) {
+     const confirmedAt = piv.index + right;
+     for (let j = confirmedAt + 1; j < bars.length; j++) {
+       const tol = piv.price * (STRUCTURE_PARAMS.sweepTolerancePct / 100);
+-      if (piv.type === 'high' && bars[j].high > piv.price + tol && bars[j].close <= piv.price) {
+-        lastSweep = { type: 'SWEEP_HIGH', bar: j, level: piv.price };
+-      }
+-      if (piv.type === 'low' && bars[j].low < piv.price - tol && bars[j].close >= piv.price) {
+-        lastSweep = { type: 'SWEEP_LOW', bar: j, level: piv.price };
+-      }
++      let ev = null;
++      if (piv.type === 'high' && bars[j].high > piv.price + tol && bars[j].close <= piv.price) ev = { type: 'SWEEP_HIGH', bar: j, level: piv.price };
++      if (piv.type === 'low' && bars[j].low < piv.price - tol && bars[j].close >= piv.price) ev = { type: 'SWEEP_LOW', bar: j, level: piv.price };
++      if (ev && (!lastSweep || j > lastSweep.bar || (j === lastSweep.bar && piv.index > lastSweepPivot))) { lastSweep = ev; lastSweepPivot = piv.index; }
+     }
+-    if (lastSweep) break;
+   }
+ 
+   // Range high/low: the highest confirmed pivot-high and lowest
+diff --git a/src/engine/intraday/models5m.js b/src/engine/intraday/models5m.js
+index fb86bbb..b1153e7 100644
+--- a/src/engine/intraday/models5m.js
++++ b/src/engine/intraday/models5m.js
+@@ -21,6 +21,7 @@
+ import { computeCorrection, CORRECTION_PARAMS } from '../correction.js';
+ import { sideAllowedByBias } from './bias.js';
+ import { INTRADAY_PARAMS } from './params.js';
++import { atr } from '../math.js';
+ 
+ export const INTRADAY_MODELS = Object.freeze(['MC', 'PB', 'BO', 'SR', 'MR']);
+ 
+@@ -99,7 +100,10 @@ export function evaluatePullbackContinuation({ bars, ema20, bias, params = INTRA
+     corrAtrMultiplier: p.pbCorrAtrMultiplier,
+     corrResolveConfirmBars: p.pbResolveConfirmBars,
+   });
+-  if (corr.state !== 'RESOLVED') return null;
++  // V8 D3: the pullback DEPTH (20-bar extreme -> deepest point AFTER it) must reach pbCorrAtrMultiplier x ATR (checked
++  // below). The correction state measured the REMAINING distance at the current close, so a deep pullback with a strong
++  // reclaim was never RESOLVED. Resolution (pbResolveConfirmBars closes back on the bias side of EMA20) and freshness
++  // are unchanged.
+ 
+   // Freshness: resolution happened when the trend-side run reached N bars.
+   const run = trendSideRunLength(bars, ema20, side, i);
+@@ -114,10 +118,15 @@ export function evaluatePullbackContinuation({ bars, ema20, bias, params = INTRA
+   }
+   const pullbackLeg = bars.slice(extremeIdx, i + 1);
+   const pullbackExtreme = side === 'BUY' ? Math.min(...pullbackLeg.map((b) => b.low)) : Math.max(...pullbackLeg.map((b) => b.high));
++  if (extremeIdx >= i) return null;
++  const afterExtreme = bars.slice(extremeIdx + 1, i + 1);
++  const depth = side === 'BUY' ? bars[extremeIdx].high - Math.min(...afterExtreme.map((b) => b.low)) : Math.max(...afterExtreme.map((b) => b.high)) - bars[extremeIdx].low;
++  const atrNow = atr(bars, 14).at(-1);
++  if (!(atrNow > 0) || !(depth >= p.pbCorrAtrMultiplier * atrNow)) return null;
+ 
+   return {
+     model: 'PB', side, anchor: pullbackExtreme, slAnchor: pullbackExtreme, originBar: i - barsSinceResolved,
+-    reason: `5m pullback of ${corr.evidence?.pullbackAtr?.toFixed(2) ?? '?'}x ATR against the ${bias.direction} 15m bias resolved ${barsSinceResolved} bar(s) ago`,
++    reason: `5m pullback of ${(depth / atrNow).toFixed(2)}x ATR against the ${bias.direction} 15m bias resolved ${barsSinceResolved} bar(s) ago`,
+     correction: corr,
+   };
+ }
+@@ -220,6 +229,9 @@ export function evaluateMeanReversion({ bars, regime, structure, bias, m30Regime
+   const rh = bias.structure?.rangeHigh ?? null;
+   const rl = bias.structure?.rangeLow ?? null;
+   const objectiveOverride = rh !== null && rl !== null ? (rh + rl) / 2 : null;
++  // V8 D4: MR's own objective is the 15m range midpoint; the entry must lie on the far side of it (SELL above, BUY below).
++  // A sweep on the wrong side of the midpoint is not a mean-reversion location and is not traded.
++  if (objectiveOverride === null || (side === 'BUY' ? !(objectiveOverride > bars[i].close) : !(objectiveOverride < bars[i].close))) return null;
+   const sweepBar = bars[sweep.bar];
+   return {
+     model: 'MR', side, anchor: sweep.level, slAnchor: side === 'BUY' ? sweepBar.low : sweepBar.high, originBar: sweep.bar, objectiveOverride,
+diff --git a/src/engine/intraday/risk5m.js b/src/engine/intraday/risk5m.js
+index 05f0bc5..3b3d1aa 100644
+--- a/src/engine/intraday/risk5m.js
++++ b/src/engine/intraday/risk5m.js
+@@ -103,10 +103,12 @@ export function computeIntradayRisk({ candidate, bars, atrVal, structure5 = null
+     }
+   }
+ 
+-  const rr = +(Math.abs(tp2 - entry) / risk).toFixed(2);
++  const rrRaw = Math.abs(tp2 - entry) / risk;
++  const rr = +rrRaw.toFixed(2);
+   const geometry = { entry: round2(entry), stop_loss: round2(sl), tp1: round2(tp1), tp2: round2(tp2), rr, objective, skipped_minor_objectives: skipped, sl_source: slSource, risk_atr: +(risk / atrVal).toFixed(2) };
+ 
+-  if (rr < p.minRR) {
++  // V8 D5: gate on the unrounded RR (toFixed(2) rounded 1.695 up to 1.70 and let it through).
++  if (rrRaw < p.minRR - 1e-9) {
+     return { gate: 'RR_NOT_ACCEPTABLE', reason: `calculated RR ${rr} to the ${objective.source} objective is below the minimum ${p.minRR}`, ...geometry };
+   }
+   return { gate: 'OK', ...geometry };
+diff --git a/src/core/xauusd_calculate.js b/src/core/xauusd_calculate.js
+index 3cf361e..3e5e75e 100644
+--- a/src/core/xauusd_calculate.js
++++ b/src/core/xauusd_calculate.js
+@@ -221,7 +221,10 @@ export async function calculateEntry({ enablePineComparison = true, engineProfil
+   // Only the entry tiers (5m/15m/30m) are decision-critical -- a context
+   // tier's own data failure degrades just that tier's context to
+   // DATA_UNAVAILABLE (handled below), it never fails the whole call.
+-  if (ENTRY_TIMEFRAMES.some((tf) => split[tf].error)) {
++  // V8 D6: a STALE entry-timeframe snapshot (last confirmed bar older than STALE_BAR_MULTIPLE + 1 bar durations) is never
++  // substituted for current data: the call fails closed exactly like invalid data, with the exact reason recorded.
++  for (const tf of ENTRY_TIMEFRAMES) if (!split[tf].error && split[tf].stale) dataErrors.push(`${TF_LABEL[tf]}: stale data (last confirmed bar ${Math.round(split[tf].lastConfirmedAgeSec)}s old)`);
++  if (ENTRY_TIMEFRAMES.some((tf) => split[tf].error || split[tf].stale)) {
+     return { schema_version: CALCULATE_SCHEMA_VERSION, status: 'DATA_UNAVAILABLE', action: 'WAIT', reason: 'insufficient/invalid market data', errors: dataErrors, symbol, calculated_at, ...(isIntradayProfile(profile) ? { engine_profile: profile } : {}) };
+   }
+ 

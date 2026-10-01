@@ -1,0 +1,14 @@
+/** V8 -- live production records (TradingView OANDA:XAUUSD feed) vs the research replay (Exness XAUUSDm feed). READ-ONLY. */
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..'); const REPO = join(ROOT, '..', '..');
+const byT = new Map(); for (const ph of ['DEV', 'HOLD']) { const p = join(ROOT, 'results', 'rows', `CONTROL_${ph}.jsonl`); if (!existsSync(p)) continue; for (const l of readFileSync(p, 'utf8').split('\n')) if (l) { const r = JSON.parse(l); byT.set(r.t, r); } }
+const iso = (t) => new Date(t * 1000).toISOString();
+const w = { compared: 0, action_match: 0, reason_match: 0, mismatches: [] };
+for (const l of readFileSync(join(REPO, 'state', 'xauusd_wait_opportunity_log.jsonl'), 'utf8').trim().split('\n')) { const o = JSON.parse(l); if (o.decision_timeframe && o.decision_timeframe !== '5m') continue; const r = byT.get(o.confirmed_bar_time); if (!r) continue; w.compared++; if (r.act === o.authoritative_action) w.action_match++; if ((r.wr ?? null) === (o.authoritative_wait_reason ?? null)) w.reason_match++; else if (w.mismatches.length < 30) w.mismatches.push({ t: iso(o.confirmed_bar_time), live: `${o.authoritative_action}/${o.authoritative_wait_reason}`, replay: `${r.act}/${r.wr}` }); }
+const store = JSON.parse(readFileSync(join(REPO, 'validation', 'mcp_engine_signals.json'), 'utf8')); const sigs = (store.signals ?? store).filter((s) => s.timeframe === '5m' || s.timeframe == null);
+const s = { live_signals: sigs.length, in_replay_range: 0, same_side_same_bar: 0, same_side_within_2_bars: 0, replay_wait: 0, replay_opposite: 0, rows: [] };
+for (const x of sigs) { const t = Number(x.signal_bar_time); const r = byT.get(t); if (!r) continue; s.in_replay_range++; const near = [-2, -1, 0, 1, 2].map((d) => byT.get(t + d * 300)).filter(Boolean); if (r.act === x.side) s.same_side_same_bar++; if (near.some((n) => n.act === x.side)) s.same_side_within_2_bars++; if (r.act === 'WAIT') s.replay_wait++; else if (r.act !== x.side) s.replay_opposite++; s.rows.push({ t: iso(t), live: `${x.side} ${x.model}`, replay: r.act === 'WAIT' ? `WAIT/${r.wr}${r.mdl ? ` (${r.mdl} ${r.cs})` : ''}` : `${r.act} ${r.mdl}` }); }
+const out = { generated_utc: new Date().toISOString(), feed_note: 'live production reads OANDA:XAUUSD through TradingView; the replay reads Exness XAUUSDm through MT5 -- prices differ by the broker feed, so decisions can differ without any code difference', wait_log: w, signal_store: s };
+writeFileSync(join(ROOT, 'results', 'live_production_parity.json'), JSON.stringify(out, null, 1)); console.log(JSON.stringify({ wait_log: { compared: w.compared, action_match: w.action_match, reason_match: w.reason_match }, signals: { ...s, rows: s.rows.length } }));

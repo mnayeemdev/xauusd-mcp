@@ -1,0 +1,853 @@
+{
+ "generated_utc": "2026-10-01T11:26:33.983Z",
+ "sample_bars": 3000,
+ "split": "DEV",
+ "K": "2 x round(close of the decision bar)",
+ "engines": {
+  "CONTROL": {
+   "bars": 3000,
+   "signals": 256,
+   "exact": 2966,
+   "mismatch": 34,
+   "by_field": {
+    "action": 7,
+    "wait_reason": 7,
+    "bias": 26,
+    "model": 6,
+    "candidate_side": 5,
+    "stop": 4,
+    "tp2": 4,
+    "entry": 3,
+    "rr": 3,
+    "structure": 1
+   },
+   "examples": [
+    {
+     "i": 1796,
+     "t": "2025-05-13T15:40:00.000Z",
+     "fields": [
+      "action",
+      "wait_reason"
+     ],
+     "original": {
+      "act": "WAIT",
+      "wr": "HTF_CONFLICT",
+      "mdl": "BO",
+      "cs": "BUY",
+      "e": 3250.58,
+      "sl": 3247.61,
+      "tp2": 3255.79,
+      "rr": 1.76,
+      "b15": "NEUTRAL",
+      "st5": "BULLISH"
+     },
+     "mirrored": {
+      "act": "SELL",
+      "wr": null,
+      "mdl": "BO",
+      "cs": "SELL",
+      "e": 3251.42,
+      "sl": 3254.39,
+      "tp2": 3246.21,
+      "rr": 1.76,
+      "b15": "NEUTRAL",
+      "st5": "BEARISH"
+     }
+    },
+    {
+     "i": 2062,
+     "t": "2025-05-14T14:50:00.000Z",
+     "fields": [
+      "bias"
+     ],
+     "original": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "NEUTRAL",
+      "st5": "BEARISH"
+     },
+     "mirrored": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "BULLISH",
+      "st5": "BULLISH"
+     }
+    },
+    {
+     "i": 4463,
+     "t": "2025-05-27T10:55:00.000Z",
+     "fields": [
+      "bias"
+     ],
+     "original": {
+      "act": "SELL",
+      "wr": null,
+      "mdl": "BO",
+      "cs": "SELL",
+      "e": 3293.26,
+      "sl": 3298.71,
+      "tp2": 3282.37,
+      "rr": 2,
+      "b15": "NEUTRAL",
+      "st5": "BEARISH"
+     },
+     "mirrored": {
+      "act": "BUY",
+      "wr": null,
+      "mdl": "BO",
+      "cs": "BUY",
+      "e": 3292.74,
+      "sl": 3287.29,
+      "tp2": 3303.63,
+      "rr": 2,
+      "b15": "BULLISH",
+      "st5": "BULLISH"
+     }
+    },
+    {
+     "i": 5332,
+     "t": "2025-05-30T14:20:00.000Z",
+     "fields": [
+      "bias"
+     ],
+     "original": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "NEUTRAL",
+      "st5": "BEARISH"
+     },
+     "mirrored": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "BULLISH",
+      "st5": "BULLISH"
+     }
+    },
+    {
+     "i": 6168,
+     "t": "2025-06-04T15:05:00.000Z",
+     "fields": [
+      "bias"
+     ],
+     "original": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "BULLISH",
+      "st5": "BULLISH"
+     },
+     "mirrored": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "NEUTRAL",
+      "st5": "BEARISH"
+     }
+    },
+    {
+     "i": 6700,
+     "t": "2025-06-06T13:25:00.000Z",
+     "fields": [
+      "bias"
+     ],
+     "original": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "BEARISH",
+      "st5": "BULLISH"
+     },
+     "mirrored": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "NEUTRAL",
+      "st5": "BEARISH"
+     }
+    },
+    {
+     "i": 6701,
+     "t": "2025-06-06T13:30:00.000Z",
+     "fields": [
+      "bias"
+     ],
+     "original": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "BEARISH",
+      "st5": "BULLISH"
+     },
+     "mirrored": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "NEUTRAL",
+      "st5": "BEARISH"
+     }
+    },
+    {
+     "i": 6727,
+     "t": "2025-06-06T15:40:00.000Z",
+     "fields": [
+      "bias"
+     ],
+     "original": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "NEUTRAL",
+      "st5": "BEARISH"
+     },
+     "mirrored": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "BULLISH",
+      "st5": "BULLISH"
+     }
+    },
+    {
+     "i": 11946,
+     "t": "2025-07-03T17:40:00.000Z",
+     "fields": [
+      "wait_reason",
+      "model",
+      "candidate_side",
+      "bias"
+     ],
+     "original": {
+      "act": "WAIT",
+      "wr": "VOLATILITY_INSUFFICIENT",
+      "mdl": "PB",
+      "cs": "SELL",
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "BEARISH",
+      "st5": "BULLISH"
+     },
+     "mirrored": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "NEUTRAL",
+      "st5": "BEARISH"
+     }
+    },
+    {
+     "i": 13205,
+     "t": "2025-07-10T11:55:00.000Z",
+     "fields": [
+      "action"
+     ],
+     "original": {
+      "act": "SELL",
+      "wr": null,
+      "mdl": "BO",
+      "cs": "SELL",
+      "e": 3320.42,
+      "sl": 3322.31,
+      "tp2": 3314.8,
+      "rr": 2.98,
+      "b15": "NEUTRAL",
+      "st5": "BEARISH"
+     },
+     "mirrored": {
+      "act": "WAIT",
+      "wr": "ENTRY_CONFLICT",
+      "mdl": "BO",
+      "cs": "BUY",
+      "e": 3319.58,
+      "sl": 3317.69,
+      "tp2": 3325.2,
+      "rr": 2.98,
+      "b15": "NEUTRAL",
+      "st5": "BULLISH"
+     }
+    },
+    {
+     "i": 17810,
+     "t": "2025-08-04T05:00:00.000Z",
+     "fields": [
+      "bias"
+     ],
+     "original": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "NEUTRAL",
+      "st5": "BULLISH"
+     },
+     "mirrored": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "BEARISH",
+      "st5": "BEARISH"
+     }
+    },
+    {
+     "i": 17970,
+     "t": "2025-08-04T18:20:00.000Z",
+     "fields": [
+      "bias"
+     ],
+     "original": {
+      "act": "WAIT",
+      "wr": "VOLATILITY_INSUFFICIENT",
+      "mdl": "BO",
+      "cs": "BUY",
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "NEUTRAL",
+      "st5": "BULLISH"
+     },
+     "mirrored": {
+      "act": "WAIT",
+      "wr": "VOLATILITY_INSUFFICIENT",
+      "mdl": "BO",
+      "cs": "SELL",
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "BEARISH",
+      "st5": "BEARISH"
+     }
+    }
+   ],
+   "symmetry_rate": 0.9887
+  },
+  "ALL": {
+   "bars": 3000,
+   "signals": 312,
+   "exact": 2969,
+   "mismatch": 31,
+   "by_field": {
+    "action": 7,
+    "wait_reason": 4,
+    "bias": 26,
+    "model": 4,
+    "candidate_side": 4,
+    "entry": 3,
+    "stop": 3,
+    "tp2": 3,
+    "rr": 3
+   },
+   "examples": [
+    {
+     "i": 1796,
+     "t": "2025-05-13T15:40:00.000Z",
+     "fields": [
+      "action",
+      "wait_reason"
+     ],
+     "original": {
+      "act": "WAIT",
+      "wr": "HTF_CONFLICT",
+      "mdl": "BO",
+      "cs": "BUY",
+      "e": 3250.58,
+      "sl": 3247.61,
+      "tp2": 3255.79,
+      "rr": 1.76,
+      "b15": "NEUTRAL",
+      "st5": "BULLISH"
+     },
+     "mirrored": {
+      "act": "SELL",
+      "wr": null,
+      "mdl": "BO",
+      "cs": "SELL",
+      "e": 3251.42,
+      "sl": 3254.39,
+      "tp2": 3246.21,
+      "rr": 1.76,
+      "b15": "NEUTRAL",
+      "st5": "BEARISH"
+     }
+    },
+    {
+     "i": 2062,
+     "t": "2025-05-14T14:50:00.000Z",
+     "fields": [
+      "bias"
+     ],
+     "original": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "NEUTRAL",
+      "st5": "BEARISH"
+     },
+     "mirrored": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "BULLISH",
+      "st5": "BULLISH"
+     }
+    },
+    {
+     "i": 4463,
+     "t": "2025-05-27T10:55:00.000Z",
+     "fields": [
+      "bias"
+     ],
+     "original": {
+      "act": "SELL",
+      "wr": null,
+      "mdl": "BO",
+      "cs": "SELL",
+      "e": 3293.26,
+      "sl": 3298.71,
+      "tp2": 3282.37,
+      "rr": 2,
+      "b15": "NEUTRAL",
+      "st5": "BEARISH"
+     },
+     "mirrored": {
+      "act": "BUY",
+      "wr": null,
+      "mdl": "BO",
+      "cs": "BUY",
+      "e": 3292.74,
+      "sl": 3287.29,
+      "tp2": 3303.63,
+      "rr": 2,
+      "b15": "BULLISH",
+      "st5": "BULLISH"
+     }
+    },
+    {
+     "i": 5332,
+     "t": "2025-05-30T14:20:00.000Z",
+     "fields": [
+      "bias"
+     ],
+     "original": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "NEUTRAL",
+      "st5": "BEARISH"
+     },
+     "mirrored": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "BULLISH",
+      "st5": "BULLISH"
+     }
+    },
+    {
+     "i": 6168,
+     "t": "2025-06-04T15:05:00.000Z",
+     "fields": [
+      "bias"
+     ],
+     "original": {
+      "act": "BUY",
+      "wr": null,
+      "mdl": "BO",
+      "cs": "BUY",
+      "e": 3376.44,
+      "sl": 3372.72,
+      "tp2": 3384.64,
+      "rr": 2.2,
+      "b15": "BULLISH",
+      "st5": "BULLISH"
+     },
+     "mirrored": {
+      "act": "SELL",
+      "wr": null,
+      "mdl": "BO",
+      "cs": "SELL",
+      "e": 3375.56,
+      "sl": 3379.28,
+      "tp2": 3367.36,
+      "rr": 2.2,
+      "b15": "NEUTRAL",
+      "st5": "BEARISH"
+     }
+    },
+    {
+     "i": 6700,
+     "t": "2025-06-06T13:25:00.000Z",
+     "fields": [
+      "bias"
+     ],
+     "original": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "BEARISH",
+      "st5": "BEARISH"
+     },
+     "mirrored": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "NEUTRAL",
+      "st5": "BULLISH"
+     }
+    },
+    {
+     "i": 6701,
+     "t": "2025-06-06T13:30:00.000Z",
+     "fields": [
+      "bias"
+     ],
+     "original": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "BEARISH",
+      "st5": "BEARISH"
+     },
+     "mirrored": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "NEUTRAL",
+      "st5": "BULLISH"
+     }
+    },
+    {
+     "i": 6727,
+     "t": "2025-06-06T15:40:00.000Z",
+     "fields": [
+      "bias"
+     ],
+     "original": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "NEUTRAL",
+      "st5": "BEARISH"
+     },
+     "mirrored": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "BULLISH",
+      "st5": "BULLISH"
+     }
+    },
+    {
+     "i": 11946,
+     "t": "2025-07-03T17:40:00.000Z",
+     "fields": [
+      "wait_reason",
+      "model",
+      "candidate_side",
+      "bias"
+     ],
+     "original": {
+      "act": "WAIT",
+      "wr": "VOLATILITY_INSUFFICIENT",
+      "mdl": "PB",
+      "cs": "SELL",
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "BEARISH",
+      "st5": "BULLISH"
+     },
+     "mirrored": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "NEUTRAL",
+      "st5": "BEARISH"
+     }
+    },
+    {
+     "i": 13205,
+     "t": "2025-07-10T11:55:00.000Z",
+     "fields": [
+      "action"
+     ],
+     "original": {
+      "act": "SELL",
+      "wr": null,
+      "mdl": "BO",
+      "cs": "SELL",
+      "e": 3320.42,
+      "sl": 3322.31,
+      "tp2": 3314.8,
+      "rr": 2.98,
+      "b15": "NEUTRAL",
+      "st5": "BEARISH"
+     },
+     "mirrored": {
+      "act": "WAIT",
+      "wr": "ENTRY_CONFLICT",
+      "mdl": "BO",
+      "cs": "BUY",
+      "e": 3319.58,
+      "sl": 3317.69,
+      "tp2": 3325.2,
+      "rr": 2.98,
+      "b15": "NEUTRAL",
+      "st5": "BULLISH"
+     }
+    },
+    {
+     "i": 17810,
+     "t": "2025-08-04T05:00:00.000Z",
+     "fields": [
+      "bias"
+     ],
+     "original": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "NEUTRAL",
+      "st5": "BULLISH"
+     },
+     "mirrored": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "BEARISH",
+      "st5": "BEARISH"
+     }
+    },
+    {
+     "i": 17970,
+     "t": "2025-08-04T18:20:00.000Z",
+     "fields": [
+      "bias"
+     ],
+     "original": {
+      "act": "WAIT",
+      "wr": "VOLATILITY_INSUFFICIENT",
+      "mdl": "BO",
+      "cs": "BUY",
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "NEUTRAL",
+      "st5": "BULLISH"
+     },
+     "mirrored": {
+      "act": "WAIT",
+      "wr": "VOLATILITY_INSUFFICIENT",
+      "mdl": "BO",
+      "cs": "SELL",
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "BEARISH",
+      "st5": "BEARISH"
+     }
+    }
+   ],
+   "symmetry_rate": 0.9897
+  },
+  "SYMPROBE": {
+   "bars": 3000,
+   "signals": 256,
+   "exact": 2999,
+   "mismatch": 1,
+   "by_field": {
+    "structure": 1
+   },
+   "examples": [
+    {
+     "i": 42510,
+     "t": "2025-12-08T03:55:00.000Z",
+     "fields": [
+      "structure"
+     ],
+     "original": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "BEARISH",
+      "st5": "BEARISH"
+     },
+     "mirrored": {
+      "act": "WAIT",
+      "wr": "NO_ELIGIBLE_STRATEGY",
+      "mdl": null,
+      "cs": null,
+      "e": null,
+      "sl": null,
+      "tp2": null,
+      "rr": null,
+      "b15": "BULLISH",
+      "st5": "BEARISH"
+     }
+    }
+   ],
+   "symmetry_rate": 0.9997
+  },
+  "SYMPROBE_ALL": {
+   "bars": 3000,
+   "signals": 310,
+   "exact": 3000,
+   "mismatch": 0,
+   "by_field": {},
+   "examples": [],
+   "symmetry_rate": 1
+  }
+ }
+}

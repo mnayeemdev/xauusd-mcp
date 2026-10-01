@@ -1,0 +1,41 @@
+diff --git a/src/engine/intraday/models5m.js b/src/engine/intraday/models5m.js
+index fb86bbb..6ede18a 100644
+--- a/src/engine/intraday/models5m.js
++++ b/src/engine/intraday/models5m.js
+@@ -21,6 +21,7 @@
+ import { computeCorrection, CORRECTION_PARAMS } from '../correction.js';
+ import { sideAllowedByBias } from './bias.js';
+ import { INTRADAY_PARAMS } from './params.js';
++import { atr } from '../math.js';
+ 
+ export const INTRADAY_MODELS = Object.freeze(['MC', 'PB', 'BO', 'SR', 'MR']);
+ 
+@@ -99,7 +100,10 @@ export function evaluatePullbackContinuation({ bars, ema20, bias, params = INTRA
+     corrAtrMultiplier: p.pbCorrAtrMultiplier,
+     corrResolveConfirmBars: p.pbResolveConfirmBars,
+   });
+-  if (corr.state !== 'RESOLVED') return null;
++  // V8 D3: the pullback DEPTH (20-bar extreme -> deepest point AFTER it) must reach pbCorrAtrMultiplier x ATR (checked
++  // below). The correction state measured the REMAINING distance at the current close, so a deep pullback with a strong
++  // reclaim was never RESOLVED. Resolution (pbResolveConfirmBars closes back on the bias side of EMA20) and freshness
++  // are unchanged.
+ 
+   // Freshness: resolution happened when the trend-side run reached N bars.
+   const run = trendSideRunLength(bars, ema20, side, i);
+@@ -114,10 +118,15 @@ export function evaluatePullbackContinuation({ bars, ema20, bias, params = INTRA
+   }
+   const pullbackLeg = bars.slice(extremeIdx, i + 1);
+   const pullbackExtreme = side === 'BUY' ? Math.min(...pullbackLeg.map((b) => b.low)) : Math.max(...pullbackLeg.map((b) => b.high));
++  if (extremeIdx >= i) return null;
++  const afterExtreme = bars.slice(extremeIdx + 1, i + 1);
++  const depth = side === 'BUY' ? bars[extremeIdx].high - Math.min(...afterExtreme.map((b) => b.low)) : Math.max(...afterExtreme.map((b) => b.high)) - bars[extremeIdx].low;
++  const atrNow = atr(bars, 14).at(-1);
++  if (!(atrNow > 0) || !(depth >= p.pbCorrAtrMultiplier * atrNow)) return null;
+ 
+   return {
+     model: 'PB', side, anchor: pullbackExtreme, slAnchor: pullbackExtreme, originBar: i - barsSinceResolved,
+-    reason: `5m pullback of ${corr.evidence?.pullbackAtr?.toFixed(2) ?? '?'}x ATR against the ${bias.direction} 15m bias resolved ${barsSinceResolved} bar(s) ago`,
++    reason: `5m pullback of ${(depth / atrNow).toFixed(2)}x ATR against the ${bias.direction} 15m bias resolved ${barsSinceResolved} bar(s) ago`,
+     correction: corr,
+   };
+ }

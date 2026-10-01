@@ -1,0 +1,39 @@
+diff --git a/src/engine/structure.js b/src/engine/structure.js
+index 97e6f2c..307b9aa 100644
+--- a/src/engine/structure.js
++++ b/src/engine/structure.js
+@@ -63,23 +63,22 @@ export function computeStructure(bars, params = STRUCTURE_PARAMS) {
+   let structureDirection = null;
+   let lastEvent = null; // { type: 'BOS'|'CHOCH', direction, bar }
+   const allPivotsSorted = [...highs, ...lows].sort((a, b) => a.index - b.index);
++  // V8 D1: find each pivot's FIRST confirmed close-break, then walk the breaks in TIME order (break bar, then pivot
++  // index) so the running direction and lastEvent describe the most recent genuine break, not the newest broken pivot.
++  const breaks = [];
+   for (const piv of allPivotsSorted) {
+     const confirmedAt = piv.index + right;
+     for (let j = confirmedAt + 1; j < bars.length; j++) {
+-      if (piv.type === 'high' && bars[j].close > piv.price) {
+-        const isContinuation = structureDirection === 'BULLISH';
+-        lastEvent = { type: isContinuation ? 'BOS' : (structureDirection === null ? 'BOS' : 'CHOCH'), direction: 'BULLISH', bar: j, level: piv.price, pivotIndex: piv.index };
+-        structureDirection = 'BULLISH';
+-        break;
+-      }
+-      if (piv.type === 'low' && bars[j].close < piv.price) {
+-        const isContinuation = structureDirection === 'BEARISH';
+-        lastEvent = { type: isContinuation ? 'BOS' : (structureDirection === null ? 'BOS' : 'CHOCH'), direction: 'BEARISH', bar: j, level: piv.price, pivotIndex: piv.index };
+-        structureDirection = 'BEARISH';
+-        break;
+-      }
++      if (piv.type === 'high' && bars[j].close > piv.price) { breaks.push({ j, piv, direction: 'BULLISH' }); break; }
++      if (piv.type === 'low' && bars[j].close < piv.price) { breaks.push({ j, piv, direction: 'BEARISH' }); break; }
+     }
+   }
++  breaks.sort((a, b) => a.j - b.j || a.piv.index - b.piv.index);
++  for (const { j, piv, direction } of breaks) {
++    const isContinuation = structureDirection === direction;
++    lastEvent = { type: isContinuation ? 'BOS' : (structureDirection === null ? 'BOS' : 'CHOCH'), direction, bar: j, level: piv.price, pivotIndex: piv.index };
++    structureDirection = direction;
++  }
+ 
+   // Liquidity sweep: the most recent pivot whose extreme was exceeded
+   // intrabar (high/low) WITHOUT a confirmed close beyond it -- a

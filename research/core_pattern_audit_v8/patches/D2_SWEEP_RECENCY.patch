@@ -1,0 +1,32 @@
+diff --git a/src/engine/structure.js b/src/engine/structure.js
+index 97e6f2c..2867f8e 100644
+--- a/src/engine/structure.js
++++ b/src/engine/structure.js
+@@ -84,19 +84,19 @@ export function computeStructure(bars, params = STRUCTURE_PARAMS) {
+   // Liquidity sweep: the most recent pivot whose extreme was exceeded
+   // intrabar (high/low) WITHOUT a confirmed close beyond it -- a
+   // rejection, not a break.
++  // V8 D2: the MOST RECENT sweep event in time (largest bar; ties -> the more recent pivot), not the last sweep of the
++  // newest pivot that was ever swept. The per-bar sweep definition itself is unchanged.
+   let lastSweep = null;
+-  for (const piv of [...allPivotsSorted].reverse()) {
++  let lastSweepPivot = -1;
++  for (const piv of allPivotsSorted) {
+     const confirmedAt = piv.index + right;
+     for (let j = confirmedAt + 1; j < bars.length; j++) {
+       const tol = piv.price * (STRUCTURE_PARAMS.sweepTolerancePct / 100);
+-      if (piv.type === 'high' && bars[j].high > piv.price + tol && bars[j].close <= piv.price) {
+-        lastSweep = { type: 'SWEEP_HIGH', bar: j, level: piv.price };
+-      }
+-      if (piv.type === 'low' && bars[j].low < piv.price - tol && bars[j].close >= piv.price) {
+-        lastSweep = { type: 'SWEEP_LOW', bar: j, level: piv.price };
+-      }
++      let ev = null;
++      if (piv.type === 'high' && bars[j].high > piv.price + tol && bars[j].close <= piv.price) ev = { type: 'SWEEP_HIGH', bar: j, level: piv.price };
++      if (piv.type === 'low' && bars[j].low < piv.price - tol && bars[j].close >= piv.price) ev = { type: 'SWEEP_LOW', bar: j, level: piv.price };
++      if (ev && (!lastSweep || j > lastSweep.bar || (j === lastSweep.bar && piv.index > lastSweepPivot))) { lastSweep = ev; lastSweepPivot = piv.index; }
+     }
+-    if (lastSweep) break;
+   }
+ 
+   // Range high/low: the highest confirmed pivot-high and lowest

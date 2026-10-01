@@ -1,0 +1,3 @@
+# V8 CORRECTION LOG (analysis code only; no engine, correction, replay or pre-registered rule changed)
+
+1. 2026-10-01 after the DEV evaluation, before any HOLDOUT replay: the "unexplained decision change" check treated D5 changes as unexplained because D5 alters only the RR gate verdict, not a recorded primitive or the geometry. The check now counts a change as explained by D5 when the variant includes D5, the variant row is RR_NOT_ACCEPTABLE and the CONTROL row's rounded RR is exactly 1.70. `scripts/v8_study.mjs` only; the freeze covers the pre-registration, corrections, engine copies and replay script, which are unchanged.

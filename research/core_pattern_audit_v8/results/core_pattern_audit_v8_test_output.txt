@@ -1,0 +1,69 @@
+▶ V8 corrections are research-only and apply to the unchanged production source
+  ✔ every correction anchor occurs exactly once in production and production carries no V8 edit (1.7386ms)
+✔ V8 corrections are research-only and apply to the unchanged production source (15.172ms)
+▶ candle structure: rejection candle (SR) needs shape AND location, BUY/SELL symmetric
+  ✔ BUY rejection at the 5m swing low -> SR BUY with the stop beyond the wick; the mirrored candle at the mirrored swing high -> SR SELL (0.5013ms)
+  ✔ the same candle away from any level stays WAIT; a long wick that closes mid-bar is not a rejection (0.1464ms)
+✔ candle structure: rejection candle (SR) needs shape AND location, BUY/SELL symmetric (0.82ms)
+▶ structure: pivots, confirmation latency, BOS / CHoCH chronology (D1)
+  ✔ a pivot is reported only once pivotRightBars (5) confirmed bars exist after it -- never from future bars (0.6926ms)
+  ✔ PRODUCTION (D1 defect): after a close below the 94.8 swing low the structure still reads BULLISH (last event = an older CHoCH) (0.3461ms)
+  ✔ CORRECTED: breaks are walked in time order -> BEARISH, last event = the bar-51 break of 94.8; BOS / CHoCH labels follow the running direction (0.8253ms)
+  ✔ CORRECTED structure is mirror-symmetric on the D1 fixture (BEARISH <-> BULLISH) (0.2395ms)
+✔ structure: pivots, confirmation latency, BOS / CHoCH chronology (D1) (2.3798ms)
+▶ liquidity sweep recency (D2)
+  ✔ PRODUCTION returns a 9-bar-old sweep of the newer pivot; CORRECTED returns the current bar sweeping the 105.2 high (0.3273ms)
+✔ liquidity sweep recency (D2) (0.4364ms)
+▶ breakout + retest + reclaim (BO): level, confirmation, retest, invalidation, lateness, BUY/SELL
+  ✔ a confirmed close above the level, a retest within 0.3 ATR and a reclaim close -> BO BUY; stop anchor = the retest low (0.3329ms)
+  ✔ no retest -> WAIT; retest but the current close is back below the level -> WAIT; more than 10 bars after the break -> WAIT; CHOP regime -> WAIT (0.161ms)
+  ✔ mirrored chart -> BO SELL with the mirrored stop (0.1237ms)
+✔ breakout + retest + reclaim (BO): level, confirmation, retest, invalidation, lateness, BUY/SELL (0.792ms)
+▶ momentum continuation (MC)
+  ✔ 3 progressing closes above EMA20 with expanding ATR and a fresh close above the prior swing -> MC BUY; contracting ATR -> WAIT; NEUTRAL bias -> WAIT (0.2842ms)
+✔ momentum continuation (MC) (0.3408ms)
+▶ pullback continuation (PB, D3): depth of the pullback, not the remaining distance
+  ✔ a 2.6-ATR pullback resolved by two closes back above EMA20: PRODUCTION misses it, CORRECTED recognises PB BUY with the stop at the pullback low (1.6544ms)
+  ✔ a single close back above EMA20 is not yet a resolution in either engine (0.1659ms)
+✔ pullback continuation (PB, D3): depth of the pullback, not the remaining distance (1.8955ms)
+▶ mean reversion location (MR, D4)
+  ✔ a SELL sweep below the 15m range midpoint: PRODUCTION trades MR SELL toward a target ABOVE the entry; CORRECTED stays WAIT (0.2388ms)
+  ✔ a SELL sweep above the midpoint is MR SELL in both engines, target = midpoint 105 (0.093ms)
+✔ mean reversion location (MR, D4) (0.3918ms)
+▶ structural SL, TP and RR (D5); BUY and SELL; fractional prices
+  ✔ BUY: SL = anchor - 0.25 ATR, TP1 = entry + 1R, TP2 = the structural objective, RR exact (0.4375ms)
+  ✔ SELL mirrors BUY exactly (0.108ms)
+  ✔ min risk 0.5 ATR, wrong-side fallback 1.5 ATR, default TP2 = 2R without objectives, cap 3R (0.1142ms)
+  ✔ PRODUCTION accepts an objective at 1.696 R because the RR is rounded before the 1.70 gate; CORRECTED rejects it; exactly 1.70 R passes both (0.4463ms)
+✔ structural SL, TP and RR (D5); BUY and SELL; fractional prices (1.2101ms)
+▶ model eligibility, context conflicts, BUY / SELL / WAIT
+  ✔ 15m regime -> eligible model sets (documented mapping) (0.1384ms)
+  ✔ fresh opposing 15m CHoCH -> ENTRY_CONFLICT; 30m regime AND structure opposed -> ENTRY_CONFLICT; 30m regime only -> allowed (0.2126ms)
+  ✔ 1H opposed: vetoes MR and unaligned trades (HTF_CONFLICT) but not an aligned continuation (0.0835ms)
+✔ model eligibility, context conflicts, BUY / SELL / WAIT (0.5285ms)
+▶ live orchestrator: timing, forming bar, data failure, stale data (D6)
+  ✔ the forming bar is never used: wildly different forming bars on every timeframe give the identical decision (14.1072ms)
+  ✔ the decision bar is the last CONFIRMED 5m bar (3.6961ms)
+  ✔ missing or invalid 5m / 15m data fails closed to DATA_UNAVAILABLE with the reason recorded (never a pattern WAIT); missing 1H only drops that context (4.4879ms)
+  ✔ PRODUCTION (D6 defect) decides on a 15m snapshot 4 h old; CORRECTED fails closed with the stale reason; fresh data is OK in both (20.2663ms)
+✔ live orchestrator: timing, forming bar, data failure, stale data (D6) (42.8152ms)
+▶ duplicates, restart and stale signals
+  ✔ the same signal registers once; a restart (store saved and reloaded) does not create a second record (3.8801ms)
+  ✔ re-entry rules: never on the same or an earlier candle; the same setup within 12 bars is stale; revenge guard after a loss (0.1705ms)
+✔ duplicates, restart and stale signals (4.1612ms)
+▶ replay parity and symmetry evidence (local research results; skipped when the regenerable results are absent)
+  ✔ research replay = Edge Lab replay on every bar; CONTROL reproduces V7; unchanged copy identical; stage logic = production models (1.4459ms)
+  ✔ live orchestrator (garbage forming bar) = research replay on the sample (0.2299ms)
+  ✔ with the price-relative terms neutralised the corrected engine mirrors every sampled decision (0.2628ms)
+✔ replay parity and symmetry evidence (local research results; skipped when the regenerable results are absent) (2.0486ms)
+▶ no execution path
+  ✔ the V8 research scripts import no executor, bridge, watcher, policy or order code (0.9405ms)
+✔ no execution path (1.0047ms)
+ℹ tests 33
+ℹ suites 14
+ℹ pass 33
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 232.4809

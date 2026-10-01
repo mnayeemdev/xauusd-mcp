@@ -1,0 +1,11 @@
+[
+ {
+  "i": 42510,
+  "t": "2025-12-08T03:55:00.000Z",
+  "bars_that_are_both_pivot_high_and_low": 1,
+  "production_original": "BEARISH",
+  "production_mirrored": "BEARISH",
+  "d1_original": "BULLISH",
+  "d1_mirrored": "BEARISH"
+ }
+]

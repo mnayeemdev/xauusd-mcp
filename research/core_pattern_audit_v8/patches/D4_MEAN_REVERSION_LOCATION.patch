@@ -1,0 +1,14 @@
+diff --git a/src/engine/intraday/models5m.js b/src/engine/intraday/models5m.js
+index fb86bbb..60cfaae 100644
+--- a/src/engine/intraday/models5m.js
++++ b/src/engine/intraday/models5m.js
+@@ -220,6 +220,9 @@ export function evaluateMeanReversion({ bars, regime, structure, bias, m30Regime
+   const rh = bias.structure?.rangeHigh ?? null;
+   const rl = bias.structure?.rangeLow ?? null;
+   const objectiveOverride = rh !== null && rl !== null ? (rh + rl) / 2 : null;
++  // V8 D4: MR's own objective is the 15m range midpoint; the entry must lie on the far side of it (SELL above, BUY below).
++  // A sweep on the wrong side of the midpoint is not a mean-reversion location and is not traded.
++  if (objectiveOverride === null || (side === 'BUY' ? !(objectiveOverride > bars[i].close) : !(objectiveOverride < bars[i].close))) return null;
+   const sweepBar = bars[sweep.bar];
+   return {
+     model: 'MR', side, anchor: sweep.level, slAnchor: side === 'BUY' ? sweepBar.low : sweepBar.high, originBar: sweep.bar, objectiveOverride,
