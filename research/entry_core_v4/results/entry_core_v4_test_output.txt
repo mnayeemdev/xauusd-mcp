@@ -1,0 +1,54 @@
+▶ pre-registration discipline
+  ✔ V4 pre-registration and control-baseline hashes match the frozen .sha256 files and are carried in the results (1.5685ms)
+  ✔ finalists were frozen from DEV before the FULL pass (hash matches; identical to the DEV-phase derivation) (1.0153ms)
+  ✔ the grid is the pre-registered family set (38 points) and the candidate set is S1..S7 plus justified combinations only (0.2505ms)
+  ✔ CONTROL reproduces the V3 (= V2 = V1) CONTROL exactly on both splits, including move capture (0.1485ms)
+  ✔ move-event set is identical to V1-V3 (1,640 DEV / 1,842 HOLD) (0.1335ms)
+✔ pre-registration discipline (3.9471ms)
+▶ built-in controls
+  ✔ leak / null / cost / first-exit / prefix-invariance controls pass and are identical between phases (0.1133ms)
+  ✔ DEV diagnostics are identical between the DEV phase and the FULL phase (restart determinism) (0.7383ms)
+✔ built-in controls (1.0083ms)
+▶ setup / trigger rules on synthetic bars (information-time)
+  ✔ compression -> expansion: a 1.5 ATR directional bar closing beyond a <= 3 ATR 12-bar range triggers BUY/SELL with the range end as stop; a mid-close bar does not (0.491ms)
+  ✔ expansion requires compression at t-1: a trending prior window (12-bar range >> 3 ATR) is not a setup (1.1415ms)
+  ✔ liquidity sweep: a bar trading beyond a confirmed swing (known at t-1, >= 6 bars old) and closing back inside is a sweep; the swing is only known 3 bars after the pivot (0.5933ms)
+  ✔ reclaim confirmation (B2) = first later close beyond the sweep bar opposite extreme; structure break (C1) = first close beyond the confirmed swing; the second consecutive close is confirmation (C2) (0.3187ms)
+  ✔ geometry: TP = entry +/- 1.70 x risk, risk floored at 0.5 ATR, blocked above 3 ATR or below the 2 USD ATR floor (0.1918ms)
+  ✔ no look-ahead: a setup/trigger decision at t is unchanged when bars after t are altered (0.2572ms)
+  ✔ every V4 signal in the study is a pure function of bars <= t: first exit bar >= t + 1 and blocked signals never trade (0.1327ms)
+✔ setup / trigger rules on synthetic bars (information-time) (3.4822ms)
+▶ accounting invariants
+  ✔ DEV: forensics categories partition every move event and detection rates are consistent (0.192ms)
+  ✔ DEV: sequential walk (one position, re-entry guard): trades + skips = signals; exit mix sums to one (0.1247ms)
+  ✔ DEV: directional accounting (BUY + SELL = N) and false-move accounting (followed + false = signals) reconcile (0.1914ms)
+  ✔ DEV: family grid points are internally consistent (blocked <= raw; sequential N <= independent N; capture <= 1) (0.116ms)
+  ✔ DEV: pre-move feature research quintile shares sum to one and categorical lifts are base-consistent (0.1438ms)
+  ✔ HOLD: forensics categories partition every move event and detection rates are consistent (0.0595ms)
+  ✔ HOLD: sequential walk (one position, re-entry guard): trades + skips = signals; exit mix sums to one (0.0482ms)
+  ✔ HOLD: directional accounting (BUY + SELL = N) and false-move accounting (followed + false = signals) reconcile (0.0491ms)
+  ✔ HOLD: family grid points are internally consistent (blocked <= raw; sequential N <= independent N; capture <= 1) (0.0711ms)
+  ✔ HOLD: pre-move feature research quintile shares sum to one and categorical lifts are base-consistent (0.0674ms)
+  ✔ regime / HTF context are diagnostics only: no candidate definition carries a regime or HTF gate (G uses the 30m regime as pre-registered context) (0.0897ms)
+✔ accounting invariants (1.3836ms)
+▶ finalist derivation reproduces the pre-registered DEV rules
+  ✔ per family: highest DEV sequential expectancy among grid points with N >= 80, else largest-N point UNSUPPORTED; supported = exp > 0, PF > 1.05, stress > 0 (0.2059ms)
+  ✔ combinations are tested only when both components are DEV-supported, and kept only with incremental value (0.0762ms)
+✔ finalist derivation reproduces the pre-registered DEV rules (0.362ms)
+▶ decision rules recompute from the persisted HOLDOUT statistics
+  ✔ each candidate status follows the section-9 gate including the detection (14) and false-positive (15) items (0.2068ms)
+  ✔ aggregate decisions: no pass, EDGE NO, DEMO NO, best candidate = highest HOLD expectancy with N >= 200, V4_BEATS_CONTROL per the frozen rule (0.2565ms)
+  ✔ no candidate has positive HOLDOUT expectancy with N >= 200; the only positive HOLDOUT candidate (S7) has N < 50 (0.0781ms)
+✔ decision rules recompute from the persisted HOLDOUT statistics (0.6329ms)
+▶ production preservation
+  ✔ the study imports only the pure re-entry guard; no executor, bridge, watcher or MT5 module; no V4 runtime module exists (0.8803ms)
+  ✔ frozen registry present; costs, split and RR unchanged; R economics and 0.01-lot USD reported separately (1.6123ms)
+✔ production preservation (2.5869ms)
+ℹ tests 32
+ℹ suites 7
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 142.1345

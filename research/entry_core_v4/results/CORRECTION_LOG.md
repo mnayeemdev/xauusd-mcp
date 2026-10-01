@@ -1,0 +1,6 @@
+# ENTRY CORE V4 — correction log (kept outside the frozen V4_PREREGISTRATION.md)
+
+| # | When (UTC) | Phase | What | Effect |
+|---|---|---|---|---|
+| 1 | 2026-10-01 ~05:20Z | DEV (before HOLDOUT opened) | The EXIT_F memo key omitted slippage, so the cost-accounting control (spread-only vs spread + 0.10 slippage) hit the cache and read 0.000. Key extended with `costs.slip`. The study aborted on the failed control, as designed. | No outcome inspected; control now passes (0.100 exactly). |
+| 2 | 2026-10-01 ~05:25Z | DEV (before HOLDOUT opened) | Move-capture and forensics accounting received the sequential TRADES instead of all unblocked SIGNALS, so CONTROL capture read 12.0 % instead of the V1–V3 definition's 19.6 % (ALREADY_POSITIONED absorbed captured events). Caught by the CONTROL-reproduction check (n / expectancy / DD matched, capture did not). Corrected to signals (identical to V1–V3) and the CONTROL reproduction assertion now also compares capture and NO_SETUP_OR_TRIGGER rates with V3. | Candidate selection (configs/finalists.json) does not depend on capture (no combination was tested), so the frozen finalists are unchanged; the DEV diagnostics were regenerated. HOLDOUT had not been run. |

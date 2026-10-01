@@ -1,0 +1,247 @@
+phase FULL; bars 99990; rows 99381; control signals 9617
+features ...
+events 1640 1842
+generating grid signals ...
+A1|wA2|xA1.5:67/51 A2|wA2|xA1.5:63/48 A3|wA2|xA1.5:89/67 A1|wA2|xA2:23/16 A2|wA2|xA2:20/14 A3|wA2|xA2:28/19 A1|wA2.5|xA1.5:440/236 A2|wA2.5|xA1.5:403/209 A3|wA2.5|xA1.5:731/461 A1|wA2.5|xA2:203/93 A2|wA2.5|xA2:186/82 A3|wA2.5|xA2:259/139 A1|wA3|xA1.5:1008/390 A2|wA3|xA1.5:913/342 A3|wA3|xA1.5:1859/1070 A1|wA3|xA2:482/158 A2|wA3|xA2:442/140 A3|wA3|xA2:669/312 B1|aB3:11352/9782 B2|aB3:4979/3421 B1|aB6:11352/9782 B2|aB6:5750/3910 C1:8408/4342 C2:5936/2557 C3|rC6:4887/2486 C3|rC12:5067/2594 D1|dD0.8:3734/3276 D2|dD0.8:1152/1009 D1|dD1.2:3685/3233 D2|dD1.2:1152/1009 E1|mE1:790/50 E1|mE1.5:462/3 F1|wF3:149/128 F2|wF3:131/105 F1|wF4:966/875 F2|wF4:826/724 G1|dG1:676/3 G1|dG1.5:676/67
+controls {"leak_mean_r":0.489,"leak_n":2674,"null_mean_r":-0.085,"null_n":2674,"cost_test":{"diff":0.1,"expected":0.1,"pass":true},"first_exit_after_entry":true,"prefix_invariance":true,"events_match_v3":true}
+DEV: control, pre-move research, grid ...
+HOLD ...
+DECISIONS {
+ "candidates": {
+  "S1": {
+   "status": "FAILS_GATE",
+   "reasons": [
+    "(1) normal expectancy<=0",
+    "(2) stress expectancy<=0",
+    "(3) PF<=1.10",
+    "(4) improvement < +0.10 R over CONTROL",
+    "(6) N<200",
+    "(8) quarters positive <60%",
+    "(9) thresholds not ROBUST (wA:NEGATIVE_CENTRE, xA:NEGATIVE_CENTRE, variant:NEGATIVE_CENTRE)",
+    "(10) trade CI includes 0",
+    "(10) session-block CI includes 0",
+    "(14) detection not improved (capture 0.03 vs 0.266; no-setup/no-trigger 0.842 vs 0.325)",
+    "drift expectancy<=0"
+   ],
+   "hold_n": 182,
+   "hold_expectancy_r": -0.024,
+   "hold_pf": 0.97,
+   "hold_dd_r": 19.47,
+   "ci95_r": [
+    -0.233,
+    0.187
+   ],
+   "block_ci95_r": [
+    -0.224,
+    0.189
+   ],
+   "dev_expectancy_r": 0.23,
+   "capture": 0.03,
+   "no_setup_no_trigger": 0.842,
+   "fp_rate_24": 0.469,
+   "detection_met": false
+  },
+  "S2": {
+   "status": "FAILS_GATE",
+   "reasons": [
+    "(1) normal expectancy<=0",
+    "(2) stress expectancy<=0",
+    "(3) PF<=1.10",
+    "(4) improvement < +0.10 R over CONTROL",
+    "(8) quarters positive <60%",
+    "(9) thresholds not ROBUST (aB:NEGATIVE_CENTRE, variant:NEGATIVE_CENTRE)",
+    "(10) trade CI includes 0",
+    "(10) session-block CI includes 0",
+    "(14) detection not improved (capture 0.308 vs 0.266; no-setup/no-trigger 0.385 vs 0.325)",
+    "DEV expectancy<=0",
+    "drift expectancy<=0"
+   ],
+   "hold_n": 1269,
+   "hold_expectancy_r": -0.035,
+   "hold_pf": 0.95,
+   "hold_dd_r": 79.09,
+   "ci95_r": [
+    -0.117,
+    0.047
+   ],
+   "block_ci95_r": [
+    -0.115,
+    0.043
+   ],
+   "dev_expectancy_r": -0.068,
+   "capture": 0.308,
+   "no_setup_no_trigger": 0.385,
+   "fp_rate_24": 0.46,
+   "detection_met": false
+  },
+  "S3": {
+   "status": "FAILS_GATE",
+   "reasons": [
+    "(1) normal expectancy<=0",
+    "(2) stress expectancy<=0",
+    "(3) PF<=1.10",
+    "(4) improvement < +0.10 R over CONTROL",
+    "(8) quarters positive <60%",
+    "(9) thresholds not ROBUST (variant:NEGATIVE_CENTRE)",
+    "(10) trade CI includes 0",
+    "(10) session-block CI includes 0",
+    "DEV expectancy<=0",
+    "drift expectancy<=0"
+   ],
+   "hold_n": 912,
+   "hold_expectancy_r": -0.034,
+   "hold_pf": 0.95,
+   "hold_dd_r": 69.69,
+   "ci95_r": [
+    -0.126,
+    0.061
+   ],
+   "block_ci95_r": [
+    -0.124,
+    0.058
+   ],
+   "dev_expectancy_r": -0.043,
+   "capture": 0.329,
+   "no_setup_no_trigger": 0.179,
+   "fp_rate_24": 0.462,
+   "detection_met": true
+  },
+  "S4": {
+   "status": "FAILS_GATE",
+   "reasons": [
+    "(1) normal expectancy<=0",
+    "(2) stress expectancy<=0",
+    "(3) PF<=1.10",
+    "(4) improvement < +0.10 R over CONTROL",
+    "(5) DD worse than CONTROL",
+    "(8) quarters positive <60%",
+    "(9) thresholds not ROBUST (dD:NEGATIVE_CENTRE, variant:NEGATIVE_CENTRE)",
+    "(10) trade CI includes 0",
+    "(10) session-block CI includes 0",
+    "(14) detection not improved (capture 0.179 vs 0.266; no-setup/no-trigger 0.542 vs 0.325)",
+    "DEV expectancy<=0",
+    "drift expectancy<=0"
+   ],
+   "hold_n": 1037,
+   "hold_expectancy_r": -0.123,
+   "hold_pf": 0.85,
+   "hold_dd_r": 129.92,
+   "ci95_r": [
+    -0.216,
+    -0.032
+   ],
+   "block_ci95_r": [
+    -0.216,
+    -0.03
+   ],
+   "dev_expectancy_r": -0.069,
+   "capture": 0.179,
+   "no_setup_no_trigger": 0.542,
+   "fp_rate_24": 0.484,
+   "detection_met": false
+  },
+  "S5": {
+   "status": "FAILS_GATE",
+   "reasons": [
+    "(1) normal expectancy<=0",
+    "(2) stress expectancy<=0",
+    "(3) PF<=1.10",
+    "(4) improvement < +0.10 R over CONTROL",
+    "(6) N<200",
+    "(8) quarters positive <60%",
+    "(9) thresholds not ROBUST (mE:NEGATIVE_CENTRE, variant:NEGATIVE_CENTRE)",
+    "(10) trade CI includes 0",
+    "(10) session-block CI includes 0",
+    "(14) detection not improved (capture 0.002 vs 0.266; no-setup/no-trigger 0.929 vs 0.325)",
+    "(15) false-positive rate 0.742 > CONTROL 0.484",
+    "DEV expectancy<=0",
+    "drift expectancy<=0"
+   ],
+   "hold_n": 30,
+   "hold_expectancy_r": -0.213,
+   "hold_pf": 0.74,
+   "hold_dd_r": 15.6,
+   "ci95_r": [
+    -0.727,
+    0.357
+   ],
+   "block_ci95_r": [
+    -0.743,
+    0.353
+   ],
+   "dev_expectancy_r": -0.106,
+   "capture": 0.002,
+   "no_setup_no_trigger": 0.929,
+   "fp_rate_24": 0.742,
+   "detection_met": false
+  },
+  "S6": {
+   "status": "FAILS_GATE",
+   "reasons": [
+    "(1) normal expectancy<=0",
+    "(2) stress expectancy<=0",
+    "(3) PF<=1.10",
+    "(4) improvement < +0.10 R over CONTROL",
+    "(8) quarters positive <60%",
+    "(9) thresholds not ROBUST (wF:NEGATIVE_CENTRE, variant:NEGATIVE_CENTRE)",
+    "(10) trade CI includes 0",
+    "(10) session-block CI includes 0",
+    "(14) detection not improved (capture 0.068 vs 0.266; no-setup/no-trigger 0.857 vs 0.325)",
+    "drift expectancy<=0"
+   ],
+   "hold_n": 405,
+   "hold_expectancy_r": -0.092,
+   "hold_pf": 0.89,
+   "hold_dd_r": 46.09,
+   "ci95_r": [
+    -0.244,
+    0.052
+   ],
+   "block_ci95_r": [
+    -0.228,
+    0.049
+   ],
+   "dev_expectancy_r": 0.002,
+   "capture": 0.068,
+   "no_setup_no_trigger": 0.857,
+   "fp_rate_24": 0.45,
+   "detection_met": false
+  },
+  "S7": {
+   "status": "FAILS_GATE",
+   "reasons": [
+    "(6) N<200",
+    "(7) tiny-cell dependence",
+    "(10) trade CI includes 0",
+    "(10) session-block CI includes 0",
+    "(14) detection not improved (capture 0.006 vs 0.266; no-setup/no-trigger 0.948 vs 0.325)"
+   ],
+   "hold_n": 35,
+   "hold_expectancy_r": 0.323,
+   "hold_pf": 1.56,
+   "hold_dd_r": 9.79,
+   "ci95_r": [
+    -0.197,
+    0.831
+   ],
+   "block_ci95_r": [
+    -0.139,
+    0.792
+   ],
+   "dev_expectancy_r": 0.548,
+   "capture": 0.006,
+   "no_setup_no_trigger": 0.948,
+   "fp_rate_24": 0.342,
+   "detection_met": false
+  }
+ },
+ "passing": [],
+ "best_candidate": "S3",
+ "best_setup_by_detection": "S3",
+ "best_trigger_by_capture": "S3",
+ "v4_pass": false,
+ "edge_demonstrated": "NO",
+ "v4_beats_control": "INCONCLUSIVE",
+ "demo_eligible": "NO"
+}
+written FULL

@@ -1,0 +1,140 @@
+{
+ "derived_from": "DEV",
+ "finalists": {
+  "S1": {
+   "family": "A",
+   "grid_key": "A2|wA3|xA1.5",
+   "variant": "A2",
+   "params": {
+    "wA": 3,
+    "xA": 1.5
+   },
+   "dev_n": 114,
+   "dev_expectancy_r": 0.23,
+   "dev_pf": 1.38,
+   "dev_stress_r": 0.179,
+   "supported": true
+  },
+  "S2": {
+   "family": "B",
+   "grid_key": "B2|aB6",
+   "variant": "B2",
+   "params": {
+    "aB": 6
+   },
+   "dev_n": 838,
+   "dev_expectancy_r": -0.068,
+   "dev_pf": 0.91,
+   "dev_stress_r": -0.178,
+   "supported": false
+  },
+  "S3": {
+   "family": "C",
+   "grid_key": "C1",
+   "variant": "C1",
+   "params": {},
+   "dev_n": 685,
+   "dev_expectancy_r": -0.043,
+   "dev_pf": 0.94,
+   "dev_stress_r": -0.11,
+   "supported": false
+  },
+  "S4": {
+   "family": "D",
+   "grid_key": "D1|dD0.8",
+   "variant": "D1",
+   "params": {
+    "dD": 0.8
+   },
+   "dev_n": 747,
+   "dev_expectancy_r": -0.069,
+   "dev_pf": 0.91,
+   "dev_stress_r": -0.189,
+   "supported": false
+  },
+  "S5": {
+   "family": "E",
+   "grid_key": "E1|mE1",
+   "variant": "E1",
+   "params": {
+    "mE": 1
+   },
+   "dev_n": 19,
+   "dev_expectancy_r": -0.106,
+   "dev_pf": 0.86,
+   "dev_stress_r": -0.214,
+   "supported": false,
+   "note": "no grid point reached DEV N >= 80; largest-N point carried, UNSUPPORTED"
+  },
+  "S6": {
+   "family": "F",
+   "grid_key": "F1|wF4",
+   "variant": "F1",
+   "params": {
+    "wF": 4
+   },
+   "dev_n": 287,
+   "dev_expectancy_r": 0.002,
+   "dev_pf": 1,
+   "dev_stress_r": -0.161,
+   "supported": false
+  },
+  "S7": {
+   "family": "G",
+   "grid_key": "G1|dG1.5",
+   "variant": "G1",
+   "params": {
+    "dG": 1.5
+   },
+   "dev_n": 27,
+   "dev_expectancy_r": 0.548,
+   "dev_pf": 2.12,
+   "dev_stress_r": 0.473,
+   "supported": false,
+   "note": "no grid point reached DEV N >= 80; largest-N point carried, UNSUPPORTED"
+  }
+ },
+ "combinations": {
+  "S1+S3": {
+   "components": [
+    "S1",
+    "S3"
+   ],
+   "tested": false,
+   "reason": "a component is UNSUPPORTED on DEV"
+  },
+  "S2+S3": {
+   "components": [
+    "S2",
+    "S3"
+   ],
+   "tested": false,
+   "reason": "a component is UNSUPPORTED on DEV"
+  },
+  "S4+S3": {
+   "components": [
+    "S4",
+    "S3"
+   ],
+   "tested": false,
+   "reason": "a component is UNSUPPORTED on DEV"
+  },
+  "S1+S5": {
+   "components": [
+    "S1",
+    "S5"
+   ],
+   "tested": false,
+   "reason": "a component is UNSUPPORTED on DEV"
+  }
+ },
+ "candidates": [
+  "S1",
+  "S2",
+  "S3",
+  "S4",
+  "S5",
+  "S6",
+  "S7"
+ ]
+}
