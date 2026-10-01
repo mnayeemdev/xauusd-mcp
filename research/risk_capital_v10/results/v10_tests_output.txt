@@ -1,0 +1,50 @@
+▶ percentage risk, structural SL distance and position size
+  ✔ equity -> risk % -> cash risk -> worst-case loss per lot at the hard stop -> lots (0.5366ms)
+  ✔ a wider structural SL gives a smaller size at the same risk; the SL itself is never moved (0.8854ms)
+  ✔ risk candidates are the five pre-registered percentages; the streak drawdown maths is 1 - (1 - r)^k (0.6054ms)
+✔ percentage risk, structural SL distance and position size (2.7274ms)
+▶ broker rounding and actual-risk recalculation
+  ✔ rounds DOWN to the volume step, never up; exact multiples are kept; the maximum volume caps the size (0.1574ms)
+  ✔ property: over 5,000 random cases the lot is a step multiple and the actual risk never exceeds the approved cash risk (3.209ms)
+  ✔ below the broker minimum the trade is REJECTED (RISK_BELOW_MIN_LOT), never rounded up to 0.01 (0.2097ms)
+✔ broker rounding and actual-risk recalculation (3.7888ms)
+▶ broker specification is read from the platform, never assumed
+  ✔ parses the latest XAUUSDm record of a bridge log; missing file or field fails closed (4.5074ms)
+  ✔ the production bridge log (local, skipped when absent) yields the recorded XAUUSDm contract and no credentials (0.9811ms)
+✔ broker specification is read from the platform, never assumed (5.67ms)
+▶ margin protection
+  ✔ margin = lots x contract x price / leverage; a cap and a margin-level-after-loss buffer (60 % + 40) are enforced (0.1561ms)
+  ✔ margin availability is not risk permission: more leverage never increases the size (0.2383ms)
+✔ margin protection (0.4921ms)
+▶ daily loss limit, consecutive-loss pause, weekly halt
+  ✔ daily: no new trade once realized loss reaches the limit or the next planned risk would exceed the remaining capacity; resets next UTC day (0.3753ms)
+  ✔ pause: after N consecutive losses no new trade until the next UTC day; a win resets the streak (0.2745ms)
+  ✔ weekly: a 5 % loss from the week-start equity halts until the next ISO week (HALTED state) (0.1366ms)
+✔ daily loss limit, consecutive-loss pause, weekly halt (0.8924ms)
+▶ exposure, martingale prohibition, restart, duplicates, broker rejection
+  ✔ MAX_SIMULTANEOUS_TRADES = 1: a second decision while a position is open is rejected (0.1121ms)
+  ✔ no martingale and no profit escalation: cash risk is always equity x r, independent of the streak or the last result (5.2948ms)
+  ✔ restart from serialized state equals an uninterrupted chronological walk; replay is deterministic (3.118ms)
+  ✔ decide is pure (input state never mutated) and a duplicate signal is rejected, also after a restart (0.091ms)
+  ✔ broker rejection: recorded, no retry, no size change, no open position; the same signal cannot be resubmitted (0.3073ms)
+✔ exposure, martingale prohibition, restart, duplicates, broker rejection (9.0717ms)
+▶ execution fail-safes: missing SL, wrong side, gap / slippage excess, connection
+  ✔ a fill whose real SL exposure exceeds the approved risk beyond tolerance fails safe; within tolerance is OK (0.118ms)
+  ✔ missing broker SL, wrong-side SL, loosened SL and lost connection each fail closed; a tighter SL is accepted (0.1188ms)
+  ✔ stress costs are ordered and SEVERE carries the deterministic gap on every 10th stop-out (0.0424ms)
+✔ execution fail-safes: missing SL, wrong side, gap / slippage excess, connection (0.3502ms)
+▶ CURRENT production model (fixed 0.01 lot) through the real margin veto
+  ✔ assessRealLot vetoes a tiny account; a large account accepts 0.01 lot and the planned risk is reported as % of equity (0.2596ms)
+✔ CURRENT production model (fixed 0.01 lot) through the real margin veto (0.3001ms)
+▶ research boundaries and frozen results
+  ✔ no execution code; production is imported only for the pure CURRENT margin veto; AUTO_SCALING stays OFF (1.2093ms)
+  ✔ frozen study (local, skipped when absent): hashes, freeze, never above approved, replay / restart, decision consistent (1.3825ms)
+✔ research boundaries and frozen results (2.6698ms)
+ℹ tests 24
+ℹ suites 9
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 98.6674

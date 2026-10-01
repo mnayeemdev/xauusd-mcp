@@ -1,0 +1,24 @@
+
+> tradingview-mcp@1.0.0 xauusd:fingerprint
+> node src/engine/strategyFingerprint.js --verify
+
+{
+  "ok": true,
+  "reason": null,
+  "changed": [],
+  "added": [],
+  "removed": [],
+  "config_changed": false,
+  "frozen": {
+    "version": "PROD_STRATEGY_2026-09-26_PREMARKET_FREEZE",
+    "frozen_at": "2026-09-26T11:51:20.836Z",
+    "strategy_fingerprint": "356e41898259af88e459c4d5287f346992ad5c308c9f7aee1ee141671f1e46ed",
+    "code_fingerprint": "6876808dd9e4cfe46bda1b9b5fff83aefa187a82a551ec40e940b96d6937f752",
+    "config_fingerprint": "9f938cba368bf00d77ba28d0c16aea3bb2067041b8fa2f493179004c4b079332"
+  },
+  "current": {
+    "strategy_fingerprint": "356e41898259af88e459c4d5287f346992ad5c308c9f7aee1ee141671f1e46ed",
+    "code_fingerprint": "6876808dd9e4cfe46bda1b9b5fff83aefa187a82a551ec40e940b96d6937f752",
+    "config_fingerprint": "9f938cba368bf00d77ba28d0c16aea3bb2067041b8fa2f493179004c4b079332"
+  }
+}

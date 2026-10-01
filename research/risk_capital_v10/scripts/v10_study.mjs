@@ -1,0 +1,65 @@
+/**
+ * V10 RISK + CAPITAL CONTROL -- study runner (RESEARCH ONLY). Spec: ../V10_PREREGISTRATION.md (hash asserted).
+ * EDGE_PHASE=DEV: stage 1 risk %, stage 2 controls, stage 3 margin cap on DEV -> configs/selection.json (+ freeze).
+ * EDGE_PHASE=FULL: freeze verified; every model / account / risk % / cost on DEV and HOLDOUT; Monte Carlo proxy; loss-streak and
+ * recovery mathematics; replay / restart determinism; decision.
+ */
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
+import { RISK_CANDIDATES, initState, decide, serialize, deserialize, lossPerLot } from './risk.mjs';
+import { COSTS, ACCOUNTS, loadContext, signals, outcomes as outcomesOf, walk, cfgOf as cfgOfSpec, monteCarlo, streakDD, sessionsOf, r2, r4, pct } from './sim.mjs';
+
+const PHASE = process.env.EDGE_PHASE === 'FULL' ? 'FULL' : 'DEV';
+const HERE = dirname(fileURLToPath(import.meta.url)); const ROOT = join(HERE, '..');
+const OUT = join(ROOT, 'results'); const CFG = join(ROOT, 'configs'); mkdirSync(OUT, { recursive: true }); mkdirSync(CFG, { recursive: true });
+const sha = (s) => createHash('sha256').update(s).digest('hex'); const shaFile = (p) => sha(readFileSync(p));
+if (shaFile(join(ROOT, 'V10_PREREGISTRATION.md')) !== readFileSync(join(ROOT, 'V10_PREREGISTRATION.sha256'), 'utf8').trim().split(/\s+/)[0]) throw new Error('V10_PREREGISTRATION hash mismatch');
+const CTX = loadContext(); const SPEC = CTX.spec; // broker spec read from the production MT5 bridge log (read-only)
+const outcomes = (sigs) => outcomesOf(sigs, CTX);
+const cfgOf = (model, riskPct, cost, extra = {}) => cfgOfSpec(model, riskPct, cost, SPEC, extra);
+
+// ---------- DEV ----------
+const DEV = signals('DEV'); const OD = outcomes(DEV);
+// risk units for Monte Carlo: realized pnl relative to the planned worst-case loss per oz (DEV, normal, trades taken by the uncontrolled walk)
+const unitsOf = (sigs, O) => { const w = walk(sigs, O.normal, cfgOf('PCT', 0.0025, 'normal'), 1e9, { keepState: true }); return w._trades.map((x) => { const s = sigs.find((y) => y.id === x.id); return x.pnl / (x.lots * lossPerLot({ entry: s.entry, sl: s.sl, spread: COSTS.normal.spread, slipAllowance: COSTS.normal.slip, spec: SPEC })); }); };
+function stage1(sigs, O) { const units = unitsOf(sigs, O); const tradesPerYear = Math.round(units.length / sessionsOf(sigs) * 252); const rows = []; for (const r of RISK_CANDIDATES) { const per = {}; for (const A of ACCOUNTS) { const n = walk(sigs, O.normal, cfgOf('PCT', r, 'normal'), A); const sv = walk(sigs, O.severe, cfgOf('PCT', r, 'severe'), A); const cur = walk(sigs, O.normal, cfgOf('CURRENT', null, 'normal'), A); const sizeable = n.trades / Math.max(1, n.trades + (n.rejected_by_reason.RISK_BELOW_MIN_LOT ?? 0)); per[A] = { normal: n, severe: sv, current_trades: cur.trades, sizeable_share: r4(sizeable) }; } const mc = monteCarlo(units, r, tradesPerYear); const checks = Object.fromEntries(ACCOUNTS.filter((A) => A >= 1000).map((A) => [A, { a_actual_le_approved: per[A].normal.max_planned_risk_pct <= r + 1e-9, b_hist_dd_le_15: per[A].normal.max_dd_pct <= 0.15, c_severe_dd_le_25: per[A].severe.max_dd_pct <= 0.25, d_mc_p20_le_5: mc.p_dd_ge_20 <= 0.05, e_streak20_le_20: streakDD(r, 20) <= 0.20, f_sizeable_ge_90: per[A].sizeable_share >= 0.9 }])); rows.push({ riskPct: r, per_account: per, monte_carlo: mc, streak_dd: Object.fromEntries([5, 10, 15, 20].map((k) => [k, streakDD(r, k)])), checks, supported: Object.values(checks).every((c) => Object.values(c).every(Boolean)) }); } return { rows, units_n: units.length, trades_per_year: tradesPerYear }; }
+
+if (PHASE === 'DEV') {
+  const s1 = stage1(DEV, OD); const supported = s1.rows.filter((x) => x.supported).map((x) => x.riskPct); const R = supported.length ? Math.max(...supported) : null;
+  const s2 = {}; if (R != null) { const base = Object.fromEntries(ACCOUNTS.filter((A) => A >= 1000).map((A) => [A, walk(DEV, OD.normal, cfgOf('PCT', R, 'normal'), A)])); const CTRL = { daily_1: { dailyLimitPct: 0.01 }, daily_2: { dailyLimitPct: 0.02 }, daily_3: { dailyLimitPct: 0.03 }, pause_3: { pauseAfter: 3 }, pause_5: { pauseAfter: 5 }, weekly_5: { weeklyLimitPct: 0.05 } };
+    for (const [name, ex] of Object.entries(CTRL)) { const per = {}; let ok = true; for (const A of Object.keys(base)) { const w = walk(DEV, OD.normal, cfgOf('PCT', R, 'normal', ex), Number(A)); const ddRed = base[A].max_dd_pct > 0 ? 1 - w.max_dd_pct / base[A].max_dd_pct : 0; const betterBlocked = (w.blocked_mean_r ?? -99) > (w.taken_mean_r ?? 0) + 0.05; per[A] = { walk: w, dd_reduction_rel: r4(ddRed), blocked_better_than_taken: betterBlocked }; if (!(ddRed >= 0.10 && !betterBlocked)) ok = false; } s2[name] = { per_account: per, supported: ok }; } s2._baseline = base; }
+  const s3 = {}; if (R != null) for (const cap of [0.10, 0.25, 0.50]) { let worst = 0; for (const A of ACCOUNTS.filter((x) => x >= 1000)) { const w = walk(DEV, OD.normal, cfgOf('PCT', R, 'normal', { marginCapPct: cap }), A); const elig = w.trades + (w.rejected_by_reason.MARGIN_ABOVE_CAP ?? 0) + (w.rejected_by_reason.MARGIN_LEVEL_AFTER_LOSS_TOO_LOW ?? 0); worst = Math.max(worst, ((w.rejected_by_reason.MARGIN_ABOVE_CAP ?? 0) + (w.rejected_by_reason.MARGIN_LEVEL_AFTER_LOSS_TOO_LOW ?? 0)) / Math.max(1, elig)); } s3[cap] = { worst_margin_reject_share: r4(worst), supported: worst <= 0.01 }; }
+  const marginCap = R != null ? Math.min(...Object.entries(s3).filter(([, v]) => v.supported).map(([k]) => Number(k))) : null;
+  const ctrls = Object.entries(s2).filter(([k, v]) => !k.startsWith('_') && v.supported).map(([k]) => k);
+  const selection = { supported_risk_pcts: supported, approved_risk_pct: R, supported_controls: ctrls, margin_cap_pct: Number.isFinite(marginCap) ? marginCap : null, spec: SPEC };
+  const strip = (o) => JSON.parse(JSON.stringify(o, (k, v) => (k.startsWith('_') && k !== '_baseline' ? undefined : v)));
+  writeFileSync(join(OUT, 'v10_dev.json'), JSON.stringify(strip({ generated_utc: new Date().toISOString(), signals: DEV.length, sessions: sessionsOf(DEV), stage1: s1, stage2: s2, stage3: s3, selection }), null, 1));
+  writeFileSync(join(CFG, 'selection.json'), JSON.stringify(selection, null, 1));
+  const freeze = { frozen_utc: new Date().toISOString(), prereg_sha: shaFile(join(ROOT, 'V10_PREREGISTRATION.md')), risk_sha: shaFile(join(HERE, 'risk.mjs')), selection_sha: shaFile(join(CFG, 'selection.json')) };
+  writeFileSync(join(CFG, 'v10_freeze.json'), JSON.stringify(freeze, null, 1)); console.log('selection', JSON.stringify({ supported, R, ctrls, marginCap, s3 })); console.log('stage1', JSON.stringify(s1.rows.map((x) => [x.riskPct, x.supported, x.monte_carlo.p_dd_ge_20, Object.fromEntries(Object.entries(x.checks).map(([A, c]) => [A, Object.entries(c).filter(([, v]) => !v).map(([k]) => k)]))])));
+} else {
+  const fz = JSON.parse(readFileSync(join(CFG, 'v10_freeze.json'), 'utf8')); for (const [k, p] of [['prereg_sha', join(ROOT, 'V10_PREREGISTRATION.md')], ['risk_sha', join(HERE, 'risk.mjs')], ['selection_sha', join(CFG, 'selection.json')]]) if (fz[k] !== shaFile(p)) throw new Error(`freeze violated: ${k}`);
+  const SEL = JSON.parse(readFileSync(join(CFG, 'selection.json'), 'utf8')); const HOLD = signals('HOLD'); const OH = outcomes(HOLD); const res = { phase: 'FULL', generated_utc: new Date().toISOString(), freeze: fz, selection: SEL, spec: SPEC, splits: {} };
+  const ctrlEx = { daily_1: { dailyLimitPct: 0.01 }, daily_2: { dailyLimitPct: 0.02 }, daily_3: { dailyLimitPct: 0.03 }, pause_3: { pauseAfter: 3 }, pause_5: { pauseAfter: 5 }, weekly_5: { weeklyLimitPct: 0.05 } };
+  const frozenExtra = Object.assign({ marginCapPct: SEL.margin_cap_pct ?? 0.5 }, ...SEL.supported_controls.map((c) => ctrlEx[c]));
+  for (const [S, sigs, O] of [['DEV', DEV, OD], ['HOLD', HOLD, OH]]) { const grid = {}; for (const A of ACCOUNTS) { grid[A] = { CURRENT: Object.fromEntries(Object.keys(COSTS).map((c) => [c, walk(sigs, O[c], cfgOf('CURRENT', null, c), A)])) }; for (const r of RISK_CANDIDATES) grid[A][`PCT_${r}`] = Object.fromEntries(Object.keys(COSTS).map((c) => [c, walk(sigs, O[c], cfgOf('PCT', r, c), A)])); if (SEL.approved_risk_pct != null) grid[A].FROZEN_SPEC = Object.fromEntries(Object.keys(COSTS).map((c) => [c, walk(sigs, O[c], cfgOf('PCT', SEL.approved_risk_pct, c, frozenExtra), A)])); }
+    const ctrl = {}; if (SEL.approved_risk_pct != null) for (const [name, ex] of Object.entries(ctrlEx)) ctrl[name] = Object.fromEntries(ACCOUNTS.filter((A) => A >= 1000).map((A) => [A, walk(sigs, O.normal, cfgOf('PCT', SEL.approved_risk_pct, 'normal', ex), A)]));
+    const units = unitsOf(sigs, O); const tpy = Math.round(units.length / sessionsOf(sigs) * 252); res.splits[S] = { signals: sigs.length, sessions: sessionsOf(sigs), grid, controls_at_approved: ctrl, monte_carlo: Object.fromEntries(RISK_CANDIDATES.map((r) => [r, monteCarlo(units, r, tpy)])), units_n: units.length }; }
+  // HOLD re-check of the stage-1 criteria for the approved risk
+  const R = SEL.approved_risk_pct; const hold = res.splits.HOLD; let holdOk = R != null; const holdChecks = {}; if (R != null) for (const A of ACCOUNTS.filter((x) => x >= 1000)) { const n = hold.grid[A][`PCT_${R}`].normal, sv = hold.grid[A][`PCT_${R}`].severe; holdChecks[A] = { a_actual_le_approved: n.max_planned_risk_pct <= R + 1e-9, b_hist_dd_le_15: n.max_dd_pct <= 0.15, c_severe_dd_le_25: sv.max_dd_pct <= 0.25, d_mc_p20_le_5: hold.monte_carlo[R].p_dd_ge_20 <= 0.05, e_streak20_le_20: streakDD(R, 20) <= 0.2 }; if (!Object.values(holdChecks[A]).every(Boolean)) holdOk = false; }
+  // never above approved risk in any PCT scenario
+  let neverAbove = true; for (const S of ['DEV', 'HOLD']) for (const A of ACCOUNTS) for (const r of RISK_CANDIDATES) for (const c of Object.keys(COSTS)) if (res.splits[S].grid[A][`PCT_${r}`][c].max_planned_risk_pct > r + 1e-9) neverAbove = false;
+  // replay determinism + restart from serialized state
+  const rep = (() => { const cfg = cfgOf('PCT', R ?? 0.0025, 'normal', frozenExtra); const a = walk(HOLD, OH.normal, cfg, 10000, { keepState: true }); const b = walk(HOLD, OH.normal, cfg, 10000, { keepState: true }); const det = sha(JSON.stringify(a._trades)) === sha(JSON.stringify(b._trades));
+    const half = Math.floor(HOLD.length / 2); const first = walk(HOLD.slice(0, half), OH.normal, cfg, 10000, { keepState: true }); const restored = deserialize(serialize(first._state)); const second = walk(HOLD, OH.normal, cfg, 10000, { keepState: true, startState: restored, from: half });
+    const joined = [...first._trades, ...second._trades]; const cut = first._trades.at(-1)?.t ?? 0; const fullSame = a._trades.filter((x) => x.t <= cut).length === first._trades.length; const restartEqual = sha(JSON.stringify(joined.map((x) => [x.id, x.lots, Math.round(x.pnl * 1e6)]))) === sha(JSON.stringify(a._trades.map((x) => [x.id, x.lots, Math.round(x.pnl * 1e6)])));
+    const dup = (() => { const st = initState(10000); const sig = { id: 'X', t: HOLD[0].t, side: 'BUY', entry: 4000, sl: 3996, spread: 0.24 }; const d1 = decide(st, sig, cfg); const d2 = decide(d1.state, sig, cfg); return d1.decision.action === 'ACCEPT' && d2.decision.reason === 'DUPLICATE_SIGNAL'; })();
+    return { deterministic: det, restart_equals_uninterrupted: restartEqual, restart_prefix_consistent: fullSame, duplicate_prevented: dup }; })();
+  res.integrity = { replay: rep, pct_never_above_approved: neverAbove, hold_checks: holdChecks };
+  res.math = { recovery: Object.fromEntries([0.01, 0.05, 0.10, 0.20, 0.30, 0.40, 0.50].map((d) => [d, r4(d / (1 - d))])), streaks: Object.fromEntries(RISK_CANDIDATES.map((r) => [r, Object.fromEntries([5, 10, 15, 20].map((k) => [k, { normal: streakDD(r, k), severe_1_25x: streakDD(r, k, 1.25) }]))])), current_fixed_lot_streak: (() => { const per = DEV.map((s) => lossPerLot({ entry: s.entry, sl: s.sl, spread: 0.24, slipAllowance: 0.10, spec: SPEC }) * SPEC.volume_min); const med = pct(per, 0.5), p90 = pct(per, 0.9); return { median_worst_loss_usd_001lot: r2(med), p90_worst_loss_usd_001lot: r2(p90), by_account: Object.fromEntries(ACCOUNTS.map((A) => [A, { risk_pct_median: r4(med / A), risk_pct_p90: r4(p90 / A), equity_after_k_losses_median: Object.fromEntries([5, 10, 15, 20].map((k) => [k, r2(Math.max(0, A - k * med))])) }])) }; })() };
+  res.decision = { mechanics: 'see tests/risk_capital_v10.test.js (must pass)', supported_on_dev: R != null, hold_confirms: holdOk, never_above_approved: neverAbove, replay_ok: rep.deterministic && rep.restart_equals_uninterrupted && rep.duplicate_prevented, RISK_MODEL: R != null && holdOk && neverAbove && rep.deterministic && rep.restart_equals_uninterrupted && rep.duplicate_prevented ? 'DEMONSTRATED' : 'INCONCLUSIVE' };
+  res.decision.PROPOSED_RISK_SPEC = res.decision.RISK_MODEL === 'DEMONSTRATED' ? 'YES' : 'NO';
+  writeFileSync(join(OUT, 'v10_results_FULL.json'), JSON.stringify(res, null, 1)); console.log('integrity', JSON.stringify(res.integrity)); console.log('decision', JSON.stringify(res.decision));
+}

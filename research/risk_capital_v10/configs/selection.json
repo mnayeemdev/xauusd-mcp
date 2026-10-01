@@ -1,0 +1,26 @@
+{
+ "supported_risk_pcts": [],
+ "approved_risk_pct": null,
+ "supported_controls": [],
+ "margin_cap_pct": null,
+ "spec": {
+  "symbol": "XAUUSDm",
+  "contract_size": 100,
+  "volume_min": 0.01,
+  "volume_max": 200,
+  "volume_step": 0.01,
+  "point": 0.001,
+  "digits": 3,
+  "stops_level_points": 0,
+  "freeze_level_points": 0,
+  "leverage": 200,
+  "margin_call_pct": 60,
+  "margin_currency": "XAU",
+  "spread_points": 240,
+  "swap_long_points": -560,
+  "recorded_at": "2026-10-01T13:21:39.069Z",
+  "source": "state/xauusd_mt5_real_trade_log.jsonl (production MT5 bridge, read-only)",
+  "tick_size": 0.001,
+  "tick_value_per_lot": 0.1
+ }
+}

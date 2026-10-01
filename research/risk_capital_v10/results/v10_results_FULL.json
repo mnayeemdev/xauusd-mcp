@@ -1,0 +1,5467 @@
+{
+ "phase": "FULL",
+ "generated_utc": "2026-10-01T13:52:03.254Z",
+ "freeze": {
+  "frozen_utc": "2026-10-01T13:45:42.325Z",
+  "prereg_sha": "4a677f6e421ed033e41a761bc9263d8653304e22f72077b08523ad4efd0ae69e",
+  "risk_sha": "2fc1806a1e14748e430e75e6eb0fa58ce6ebf79ad63f4262d9275c0366e49cd0",
+  "selection_sha": "c7dbe6eeb5ed0cd212a7535a341f03c947267bae58774eaff6e9f2aa0c265082"
+ },
+ "selection": {
+  "supported_risk_pcts": [],
+  "approved_risk_pct": null,
+  "supported_controls": [],
+  "margin_cap_pct": null,
+  "spec": {
+   "symbol": "XAUUSDm",
+   "contract_size": 100,
+   "volume_min": 0.01,
+   "volume_max": 200,
+   "volume_step": 0.01,
+   "point": 0.001,
+   "digits": 3,
+   "stops_level_points": 0,
+   "freeze_level_points": 0,
+   "leverage": 200,
+   "margin_call_pct": 60,
+   "margin_currency": "XAU",
+   "spread_points": 240,
+   "swap_long_points": -560,
+   "recorded_at": "2026-10-01T13:21:39.069Z",
+   "source": "state/xauusd_mt5_real_trade_log.jsonl (production MT5 bridge, read-only)",
+   "tick_size": 0.001,
+   "tick_value_per_lot": 0.1
+  }
+ },
+ "spec": {
+  "symbol": "XAUUSDm",
+  "contract_size": 100,
+  "volume_min": 0.01,
+  "volume_max": 200,
+  "volume_step": 0.01,
+  "point": 0.001,
+  "digits": 3,
+  "stops_level_points": 0,
+  "freeze_level_points": 0,
+  "leverage": 200,
+  "margin_call_pct": 60,
+  "margin_currency": "XAU",
+  "spread_points": 240,
+  "swap_long_points": -560,
+  "recorded_at": "2026-10-01T13:21:39.069Z",
+  "source": "state/xauusd_mt5_real_trade_log.jsonl (production MT5 bridge, read-only)",
+  "tick_size": 0.001,
+  "tick_value_per_lot": 0.1
+ },
+ "splits": {
+  "DEV": {
+   "signals": 4858,
+   "sessions": 186,
+   "grid": {
+    "100": {
+     "CURRENT": {
+      "normal": {
+       "start": 100,
+       "end": 55.16,
+       "return_pct": -0.4484,
+       "max_dd_pct": 0.479,
+       "recovery_needed_pct": 0.9195,
+       "min_equity": 55.16,
+       "trades": 8,
+       "rejected": 4838,
+       "rejected_by_reason": {
+        "CURRENT_MARGIN_SAFETY_VETO": 4838
+       },
+       "mean_planned_risk_pct": 0.0965,
+       "max_planned_risk_pct": 0.2313,
+       "max_single_loss_pct": 0.1735,
+       "loss_overshoot_vs_planned": 1,
+       "max_margin_pct": 0.2505,
+       "mean_margin_pct": 0.1906,
+       "worst_loss_streak": 7,
+       "taken_mean_r": -1.047,
+       "blocked_mean_r": -0.0851,
+       "survived": true
+      },
+      "moderate": {
+       "start": 100,
+       "end": 64.22,
+       "return_pct": -0.3578,
+       "max_dd_pct": 0.3914,
+       "recovery_needed_pct": 0.6432,
+       "min_equity": 64.22,
+       "trades": 7,
+       "rejected": 4846,
+       "rejected_by_reason": {
+        "CURRENT_MARGIN_SAFETY_VETO": 4846
+       },
+       "mean_planned_risk_pct": 0.0874,
+       "max_planned_risk_pct": 0.2397,
+       "max_single_loss_pct": 0.1812,
+       "loss_overshoot_vs_planned": 1.0574,
+       "max_margin_pct": 0.2155,
+       "mean_margin_pct": 0.1845,
+       "worst_loss_streak": 6,
+       "taken_mean_r": -1.0861,
+       "blocked_mean_r": -0.1811,
+       "survived": true
+      },
+      "severe": {
+       "start": 100,
+       "end": 60.72,
+       "return_pct": -0.3928,
+       "max_dd_pct": 0.4219,
+       "recovery_needed_pct": 0.7297,
+       "min_equity": 60.72,
+       "trades": 7,
+       "rejected": 4846,
+       "rejected_by_reason": {
+        "CURRENT_MARGIN_SAFETY_VETO": 4846
+       },
+       "mean_planned_risk_pct": 0.0917,
+       "max_planned_risk_pct": 0.2519,
+       "max_single_loss_pct": 0.195,
+       "loss_overshoot_vs_planned": 1.1357,
+       "max_margin_pct": 0.2241,
+       "mean_margin_pct": 0.188,
+       "worst_loss_streak": 6,
+       "taken_mean_r": -1.2232,
+       "blocked_mean_r": -0.3447,
+       "survived": true
+      }
+     },
+     "PCT_0.001": {
+      "normal": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.0886,
+       "survived": true
+      },
+      "moderate": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.1831,
+       "survived": true
+      },
+      "severe": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.3467,
+       "survived": true
+      }
+     },
+     "PCT_0.0025": {
+      "normal": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.0886,
+       "survived": true
+      },
+      "moderate": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.1831,
+       "survived": true
+      },
+      "severe": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.3467,
+       "survived": true
+      }
+     },
+     "PCT_0.005": {
+      "normal": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.0886,
+       "survived": true
+      },
+      "moderate": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.1831,
+       "survived": true
+      },
+      "severe": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.3467,
+       "survived": true
+      }
+     },
+     "PCT_0.0075": {
+      "normal": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.0886,
+       "survived": true
+      },
+      "moderate": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.1831,
+       "survived": true
+      },
+      "severe": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.3467,
+       "survived": true
+      }
+     },
+     "PCT_0.01": {
+      "normal": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.0886,
+       "survived": true
+      },
+      "moderate": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.1831,
+       "survived": true
+      },
+      "severe": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.3467,
+       "survived": true
+      }
+     }
+    },
+    "250": {
+     "CURRENT": {
+      "normal": {
+       "start": 250,
+       "end": 69.68,
+       "return_pct": -0.7213,
+       "max_dd_pct": 0.8139,
+       "recovery_needed_pct": 4.3724,
+       "min_equity": 69.68,
+       "trades": 1071,
+       "rejected": 274,
+       "rejected_by_reason": {
+        "CURRENT_MARGIN_SAFETY_VETO": 274
+       },
+       "mean_planned_risk_pct": 0.0377,
+       "max_planned_risk_pct": 0.3308,
+       "max_single_loss_pct": 0.1512,
+       "loss_overshoot_vs_planned": 1.1427,
+       "max_margin_pct": 0.2888,
+       "mean_margin_pct": 0.0869,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.0856,
+       "blocked_mean_r": -0.008,
+       "survived": true
+      },
+      "moderate": {
+       "start": 250,
+       "end": 63.67,
+       "return_pct": -0.7453,
+       "max_dd_pct": 0.7939,
+       "recovery_needed_pct": 3.8529,
+       "min_equity": 63.67,
+       "trades": 423,
+       "rejected": 2954,
+       "rejected_by_reason": {
+        "CURRENT_MARGIN_SAFETY_VETO": 2954
+       },
+       "mean_planned_risk_pct": 0.0443,
+       "max_planned_risk_pct": 0.2045,
+       "max_single_loss_pct": 0.1183,
+       "loss_overshoot_vs_planned": 1.1197,
+       "max_margin_pct": 0.2529,
+       "mean_margin_pct": 0.1035,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.1188,
+       "blocked_mean_r": -0.1773,
+       "survived": true
+      },
+      "severe": {
+       "start": 250,
+       "end": 54.63,
+       "return_pct": -0.7815,
+       "max_dd_pct": 0.7858,
+       "recovery_needed_pct": 3.6681,
+       "min_equity": 54.63,
+       "trades": 135,
+       "rejected": 4229,
+       "rejected_by_reason": {
+        "CURRENT_MARGIN_SAFETY_VETO": 4229
+       },
+       "mean_planned_risk_pct": 0.0567,
+       "max_planned_risk_pct": 0.2344,
+       "max_single_loss_pct": 0.2699,
+       "loss_overshoot_vs_planned": 1.4301,
+       "max_margin_pct": 0.2482,
+       "mean_margin_pct": 0.102,
+       "worst_loss_streak": 6,
+       "taken_mean_r": -0.1968,
+       "blocked_mean_r": -0.3553,
+       "survived": true
+      }
+     },
+     "PCT_0.001": {
+      "normal": {
+       "start": 250,
+       "end": 250,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 250,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.0886,
+       "survived": true
+      },
+      "moderate": {
+       "start": 250,
+       "end": 250,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 250,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.1831,
+       "survived": true
+      },
+      "severe": {
+       "start": 250,
+       "end": 250,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 250,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.3467,
+       "survived": true
+      }
+     },
+     "PCT_0.0025": {
+      "normal": {
+       "start": 250,
+       "end": 250,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 250,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.0886,
+       "survived": true
+      },
+      "moderate": {
+       "start": 250,
+       "end": 250,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 250,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.1831,
+       "survived": true
+      },
+      "severe": {
+       "start": 250,
+       "end": 250,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 250,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.3467,
+       "survived": true
+      }
+     },
+     "PCT_0.005": {
+      "normal": {
+       "start": 250,
+       "end": 250,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 250,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.0886,
+       "survived": true
+      },
+      "moderate": {
+       "start": 250,
+       "end": 250,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 250,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.1831,
+       "survived": true
+      },
+      "severe": {
+       "start": 250,
+       "end": 250,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 250,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.3467,
+       "survived": true
+      }
+     },
+     "PCT_0.0075": {
+      "normal": {
+       "start": 250,
+       "end": 247.67,
+       "return_pct": -0.0093,
+       "max_dd_pct": 0.0148,
+       "recovery_needed_pct": 0.015,
+       "min_equity": 247.67,
+       "trades": 3,
+       "rejected": 4855,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4855
+       },
+       "mean_planned_risk_pct": 0.0074,
+       "max_planned_risk_pct": 0.0075,
+       "max_single_loss_pct": 0.0075,
+       "loss_overshoot_vs_planned": 1,
+       "max_margin_pct": 0.0665,
+       "mean_margin_pct": 0.0664,
+       "worst_loss_streak": 2,
+       "taken_mean_r": -0.77,
+       "blocked_mean_r": -0.0882,
+       "survived": true
+      },
+      "moderate": {
+       "start": 250,
+       "end": 250,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 250,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.1831,
+       "survived": true
+      },
+      "severe": {
+       "start": 250,
+       "end": 250,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 250,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.3467,
+       "survived": true
+      }
+     },
+     "PCT_0.01": {
+      "normal": {
+       "start": 250,
+       "end": 229.52,
+       "return_pct": -0.0819,
+       "max_dd_pct": 0.1311,
+       "recovery_needed_pct": 0.1509,
+       "min_equity": 223.85,
+       "trades": 106,
+       "rejected": 4563,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4563
+       },
+       "mean_planned_risk_pct": 0.009,
+       "max_planned_risk_pct": 0.01,
+       "max_single_loss_pct": 0.0099,
+       "loss_overshoot_vs_planned": 1,
+       "max_margin_pct": 0.0941,
+       "mean_margin_pct": 0.0708,
+       "worst_loss_streak": 6,
+       "taken_mean_r": -0.1802,
+       "blocked_mean_r": -0.0818,
+       "survived": true
+      },
+      "moderate": {
+       "start": 250,
+       "end": 208.71,
+       "return_pct": -0.1651,
+       "max_dd_pct": 0.1712,
+       "recovery_needed_pct": 0.2066,
+       "min_equity": 208.71,
+       "trades": 48,
+       "rejected": 4744,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4744
+       },
+       "mean_planned_risk_pct": 0.0094,
+       "max_planned_risk_pct": 0.01,
+       "max_single_loss_pct": 0.0109,
+       "loss_overshoot_vs_planned": 1.1,
+       "max_margin_pct": 0.0915,
+       "mean_margin_pct": 0.0718,
+       "worst_loss_streak": 7,
+       "taken_mean_r": -0.7699,
+       "blocked_mean_r": -0.1764,
+       "survived": true
+      },
+      "severe": {
+       "start": 250,
+       "end": 225.29,
+       "return_pct": -0.0988,
+       "max_dd_pct": 0.1085,
+       "recovery_needed_pct": 0.1217,
+       "min_equity": 225.29,
+       "trades": 23,
+       "rejected": 4804,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4804
+       },
+       "mean_planned_risk_pct": 0.0096,
+       "max_planned_risk_pct": 0.01,
+       "max_single_loss_pct": 0.0129,
+       "loss_overshoot_vs_planned": 1.4521,
+       "max_margin_pct": 0.0847,
+       "mean_margin_pct": 0.0702,
+       "worst_loss_streak": 5,
+       "taken_mean_r": -1.0204,
+       "blocked_mean_r": -0.3473,
+       "survived": true
+      }
+     }
+    },
+    "500": {
+     "CURRENT": {
+      "normal": {
+       "start": 500,
+       "end": 433.26,
+       "return_pct": -0.1335,
+       "max_dd_pct": 0.5208,
+       "recovery_needed_pct": 1.0869,
+       "min_equity": 299.19,
+       "trades": 1133,
+       "rejected": 0,
+       "rejected_by_reason": {},
+       "mean_planned_risk_pct": 0.0179,
+       "max_planned_risk_pct": 0.141,
+       "max_single_loss_pct": 0.0797,
+       "loss_overshoot_vs_planned": 1.1427,
+       "max_margin_pct": 0.0726,
+       "mean_margin_pct": 0.0408,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.0771,
+       "blocked_mean_r": null,
+       "survived": true
+      },
+      "moderate": {
+       "start": 500,
+       "end": 68.4,
+       "return_pct": -0.8632,
+       "max_dd_pct": 0.8776,
+       "recovery_needed_pct": 7.1722,
+       "min_equity": 68.4,
+       "trades": 982,
+       "rejected": 613,
+       "rejected_by_reason": {
+        "CURRENT_MARGIN_SAFETY_VETO": 613
+       },
+       "mean_planned_risk_pct": 0.0344,
+       "max_planned_risk_pct": 0.3312,
+       "max_single_loss_pct": 0.1615,
+       "loss_overshoot_vs_planned": 1.186,
+       "max_margin_pct": 0.2847,
+       "mean_margin_pct": 0.075,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.1821,
+       "blocked_mean_r": -0.1152,
+       "survived": true
+      },
+      "severe": {
+       "start": 500,
+       "end": 61.21,
+       "return_pct": -0.8776,
+       "max_dd_pct": 0.8788,
+       "recovery_needed_pct": 7.251,
+       "min_equity": 61.21,
+       "trades": 336,
+       "rejected": 3331,
+       "rejected_by_reason": {
+        "CURRENT_MARGIN_SAFETY_VETO": 3331
+       },
+       "mean_planned_risk_pct": 0.0305,
+       "max_planned_risk_pct": 0.1632,
+       "max_single_loss_pct": 0.1415,
+       "loss_overshoot_vs_planned": 1.4521,
+       "max_margin_pct": 0.2417,
+       "mean_margin_pct": 0.0685,
+       "worst_loss_streak": 7,
+       "taken_mean_r": -0.3406,
+       "blocked_mean_r": -0.3594,
+       "survived": true
+      }
+     },
+     "PCT_0.001": {
+      "normal": {
+       "start": 500,
+       "end": 500,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 500,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.0886,
+       "survived": true
+      },
+      "moderate": {
+       "start": 500,
+       "end": 500,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 500,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.1831,
+       "survived": true
+      },
+      "severe": {
+       "start": 500,
+       "end": 500,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 500,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.3467,
+       "survived": true
+      }
+     },
+     "PCT_0.0025": {
+      "normal": {
+       "start": 500,
+       "end": 500,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 500,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.0886,
+       "survived": true
+      },
+      "moderate": {
+       "start": 500,
+       "end": 500,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 500,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.1831,
+       "survived": true
+      },
+      "severe": {
+       "start": 500,
+       "end": 500,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 500,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.3467,
+       "survived": true
+      }
+     },
+     "PCT_0.005": {
+      "normal": {
+       "start": 500,
+       "end": 461.58,
+       "return_pct": -0.0768,
+       "max_dd_pct": 0.0935,
+       "recovery_needed_pct": 0.1032,
+       "min_equity": 460.17,
+       "trades": 118,
+       "rejected": 4527,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4527
+       },
+       "mean_planned_risk_pct": 0.0045,
+       "max_planned_risk_pct": 0.005,
+       "max_single_loss_pct": 0.005,
+       "loss_overshoot_vs_planned": 1,
+       "max_margin_pct": 0.0467,
+       "mean_margin_pct": 0.0354,
+       "worst_loss_streak": 6,
+       "taken_mean_r": -0.2811,
+       "blocked_mean_r": -0.078,
+       "survived": true
+      },
+      "moderate": {
+       "start": 500,
+       "end": 455.68,
+       "return_pct": -0.0887,
+       "max_dd_pct": 0.0947,
+       "recovery_needed_pct": 0.1046,
+       "min_equity": 455.68,
+       "trades": 69,
+       "rejected": 4674,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4674
+       },
+       "mean_planned_risk_pct": 0.0046,
+       "max_planned_risk_pct": 0.005,
+       "max_single_loss_pct": 0.0054,
+       "loss_overshoot_vs_planned": 1.1,
+       "max_margin_pct": 0.0474,
+       "mean_margin_pct": 0.0354,
+       "worst_loss_streak": 7,
+       "taken_mean_r": -0.5748,
+       "blocked_mean_r": -0.1737,
+       "survived": true
+      },
+      "severe": {
+       "start": 500,
+       "end": 461.08,
+       "return_pct": -0.0778,
+       "max_dd_pct": 0.0828,
+       "recovery_needed_pct": 0.0903,
+       "min_equity": 461.08,
+       "trades": 29,
+       "rejected": 4791,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4791
+       },
+       "mean_planned_risk_pct": 0.0048,
+       "max_planned_risk_pct": 0.005,
+       "max_single_loss_pct": 0.0071,
+       "loss_overshoot_vs_planned": 1.4521,
+       "max_margin_pct": 0.0416,
+       "mean_margin_pct": 0.035,
+       "worst_loss_streak": 8,
+       "taken_mean_r": -1.2494,
+       "blocked_mean_r": -0.3427,
+       "survived": true
+      }
+     },
+     "PCT_0.0075": {
+      "normal": {
+       "start": 500,
+       "end": 390.51,
+       "return_pct": -0.219,
+       "max_dd_pct": 0.2407,
+       "recovery_needed_pct": 0.3169,
+       "min_equity": 390.51,
+       "trades": 345,
+       "rejected": 3880,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 3880
+       },
+       "mean_planned_risk_pct": 0.006,
+       "max_planned_risk_pct": 0.0075,
+       "max_single_loss_pct": 0.0075,
+       "loss_overshoot_vs_planned": 1,
+       "max_margin_pct": 0.0575,
+       "mean_margin_pct": 0.0396,
+       "worst_loss_streak": 9,
+       "taken_mean_r": -0.2047,
+       "blocked_mean_r": -0.0661,
+       "survived": true
+      },
+      "moderate": {
+       "start": 500,
+       "end": 359.2,
+       "return_pct": -0.2816,
+       "max_dd_pct": 0.2877,
+       "recovery_needed_pct": 0.404,
+       "min_equity": 357.4,
+       "trades": 239,
+       "rejected": 4186,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4186
+       },
+       "mean_planned_risk_pct": 0.0063,
+       "max_planned_risk_pct": 0.0075,
+       "max_single_loss_pct": 0.008,
+       "loss_overshoot_vs_planned": 1.1,
+       "max_margin_pct": 0.0613,
+       "mean_margin_pct": 0.0405,
+       "worst_loss_streak": 8,
+       "taken_mean_r": -0.4269,
+       "blocked_mean_r": -0.1568,
+       "survived": true
+      },
+      "severe": {
+       "start": 500,
+       "end": 338.6,
+       "return_pct": -0.3228,
+       "max_dd_pct": 0.3288,
+       "recovery_needed_pct": 0.4899,
+       "min_equity": 338.6,
+       "trades": 149,
+       "rejected": 4430,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4430
+       },
+       "mean_planned_risk_pct": 0.0065,
+       "max_planned_risk_pct": 0.0075,
+       "max_single_loss_pct": 0.0099,
+       "loss_overshoot_vs_planned": 1.4521,
+       "max_margin_pct": 0.0636,
+       "mean_margin_pct": 0.0406,
+       "worst_loss_streak": 8,
+       "taken_mean_r": -0.8332,
+       "blocked_mean_r": -0.313,
+       "survived": true
+      }
+     },
+     "PCT_0.01": {
+      "normal": {
+       "start": 500,
+       "end": 338.97,
+       "return_pct": -0.3221,
+       "max_dd_pct": 0.3792,
+       "recovery_needed_pct": 0.611,
+       "min_equity": 325.16,
+       "trades": 480,
+       "rejected": 3439,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 3439
+       },
+       "mean_planned_risk_pct": 0.0079,
+       "max_planned_risk_pct": 0.01,
+       "max_single_loss_pct": 0.01,
+       "loss_overshoot_vs_planned": 1.1416,
+       "max_margin_pct": 0.083,
+       "mean_margin_pct": 0.0463,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.1744,
+       "blocked_mean_r": -0.0783,
+       "survived": true
+      },
+      "moderate": {
+       "start": 500,
+       "end": 301.83,
+       "return_pct": -0.3963,
+       "max_dd_pct": 0.4092,
+       "recovery_needed_pct": 0.6927,
+       "min_equity": 300.23,
+       "trades": 382,
+       "rejected": 3760,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 3760
+       },
+       "mean_planned_risk_pct": 0.008,
+       "max_planned_risk_pct": 0.01,
+       "max_single_loss_pct": 0.011,
+       "loss_overshoot_vs_planned": 1.1847,
+       "max_margin_pct": 0.0797,
+       "mean_margin_pct": 0.046,
+       "worst_loss_streak": 9,
+       "taken_mean_r": -0.3461,
+       "blocked_mean_r": -0.1556,
+       "survived": true
+      },
+      "severe": {
+       "start": 500,
+       "end": 253.73,
+       "return_pct": -0.4925,
+       "max_dd_pct": 0.4925,
+       "recovery_needed_pct": 0.9706,
+       "min_equity": 253.73,
+       "trades": 225,
+       "rejected": 4228,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4228
+       },
+       "mean_planned_risk_pct": 0.0081,
+       "max_planned_risk_pct": 0.01,
+       "max_single_loss_pct": 0.0138,
+       "loss_overshoot_vs_planned": 1.4521,
+       "max_margin_pct": 0.0847,
+       "mean_margin_pct": 0.0455,
+       "worst_loss_streak": 8,
+       "taken_mean_r": -0.7561,
+       "blocked_mean_r": -0.3135,
+       "survived": true
+      }
+     }
+    },
+    "1000": {
+     "CURRENT": {
+      "normal": {
+       "start": 1000,
+       "end": 933.26,
+       "return_pct": -0.0667,
+       "max_dd_pct": 0.2892,
+       "recovery_needed_pct": 0.4069,
+       "min_equity": 799.19,
+       "trades": 1133,
+       "rejected": 0,
+       "rejected_by_reason": {},
+       "mean_planned_risk_pct": 0.0086,
+       "max_planned_risk_pct": 0.0587,
+       "max_single_loss_pct": 0.041,
+       "loss_overshoot_vs_planned": 1.1427,
+       "max_margin_pct": 0.0273,
+       "mean_margin_pct": 0.0194,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.0771,
+       "blocked_mean_r": null,
+       "survived": true
+      },
+      "moderate": {
+       "start": 1000,
+       "end": 512,
+       "return_pct": -0.488,
+       "max_dd_pct": 0.6271,
+       "recovery_needed_pct": 1.6817,
+       "min_equity": 394.89,
+       "trades": 1128,
+       "rejected": 0,
+       "rejected_by_reason": {},
+       "mean_planned_risk_pct": 0.0118,
+       "max_planned_risk_pct": 0.1148,
+       "max_single_loss_pct": 0.0557,
+       "loss_overshoot_vs_planned": 1.186,
+       "max_margin_pct": 0.0552,
+       "mean_margin_pct": 0.0263,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.1836,
+       "blocked_mean_r": null,
+       "survived": true
+      },
+      "severe": {
+       "start": 1000,
+       "end": 69.12,
+       "return_pct": -0.9309,
+       "max_dd_pct": 0.9312,
+       "recovery_needed_pct": 13.5407,
+       "min_equity": 69.12,
+       "trades": 867,
+       "rejected": 1094,
+       "rejected_by_reason": {
+        "CURRENT_MARGIN_SAFETY_VETO": 1094
+       },
+       "mean_planned_risk_pct": 0.0284,
+       "max_planned_risk_pct": 0.3005,
+       "max_single_loss_pct": 0.2397,
+       "loss_overshoot_vs_planned": 1.4521,
+       "max_margin_pct": 0.2805,
+       "mean_margin_pct": 0.0599,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.3638,
+       "blocked_mean_r": -0.4178,
+       "survived": true
+      }
+     },
+     "PCT_0.001": {
+      "normal": {
+       "start": 1000,
+       "end": 1000,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 1000,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.0886,
+       "survived": true
+      },
+      "moderate": {
+       "start": 1000,
+       "end": 1000,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 1000,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.1831,
+       "survived": true
+      },
+      "severe": {
+       "start": 1000,
+       "end": 1000,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 1000,
+       "trades": 0,
+       "rejected": 4858,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4858
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.3467,
+       "survived": true
+      }
+     },
+     "PCT_0.0025": {
+      "normal": {
+       "start": 1000,
+       "end": 960.38,
+       "return_pct": -0.0396,
+       "max_dd_pct": 0.0469,
+       "recovery_needed_pct": 0.0492,
+       "min_equity": 960.38,
+       "trades": 128,
+       "rejected": 4499,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4499
+       },
+       "mean_planned_risk_pct": 0.0022,
+       "max_planned_risk_pct": 0.0025,
+       "max_single_loss_pct": 0.0025,
+       "loss_overshoot_vs_planned": 1,
+       "max_margin_pct": 0.023,
+       "mean_margin_pct": 0.0177,
+       "worst_loss_streak": 8,
+       "taken_mean_r": -0.2665,
+       "blocked_mean_r": -0.078,
+       "survived": true
+      },
+      "moderate": {
+       "start": 1000,
+       "end": 938.97,
+       "return_pct": -0.061,
+       "max_dd_pct": 0.0638,
+       "recovery_needed_pct": 0.0681,
+       "min_equity": 937.95,
+       "trades": 77,
+       "rejected": 4649,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4649
+       },
+       "mean_planned_risk_pct": 0.0023,
+       "max_planned_risk_pct": 0.0025,
+       "max_single_loss_pct": 0.0027,
+       "loss_overshoot_vs_planned": 1.1,
+       "max_margin_pct": 0.023,
+       "mean_margin_pct": 0.0177,
+       "worst_loss_streak": 8,
+       "taken_mean_r": -0.6854,
+       "blocked_mean_r": -0.1675,
+       "survived": true
+      },
+      "severe": {
+       "start": 1000,
+       "end": 948.8,
+       "return_pct": -0.0512,
+       "max_dd_pct": 0.0538,
+       "recovery_needed_pct": 0.0568,
+       "min_equity": 948.8,
+       "trades": 40,
+       "rejected": 4759,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4759
+       },
+       "mean_planned_risk_pct": 0.0024,
+       "max_planned_risk_pct": 0.0025,
+       "max_single_loss_pct": 0.0035,
+       "loss_overshoot_vs_planned": 1.4521,
+       "max_margin_pct": 0.0203,
+       "mean_margin_pct": 0.0174,
+       "worst_loss_streak": 6,
+       "taken_mean_r": -1.1764,
+       "blocked_mean_r": -0.3386,
+       "survived": true
+      }
+     },
+     "PCT_0.005": {
+      "normal": {
+       "start": 1000,
+       "end": 772.31,
+       "return_pct": -0.2277,
+       "max_dd_pct": 0.2457,
+       "recovery_needed_pct": 0.3257,
+       "min_equity": 772.31,
+       "trades": 586,
+       "rejected": 3129,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 3129
+       },
+       "mean_planned_risk_pct": 0.004,
+       "max_planned_risk_pct": 0.005,
+       "max_single_loss_pct": 0.0057,
+       "loss_overshoot_vs_planned": 1.1427,
+       "max_margin_pct": 0.0471,
+       "mean_margin_pct": 0.0223,
+       "worst_loss_streak": 19,
+       "taken_mean_r": -0.1769,
+       "blocked_mean_r": -0.0596,
+       "survived": true
+      },
+      "moderate": {
+       "start": 1000,
+       "end": 702.18,
+       "return_pct": -0.2978,
+       "max_dd_pct": 0.3035,
+       "recovery_needed_pct": 0.4358,
+       "min_equity": 702.18,
+       "trades": 483,
+       "rejected": 3445,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 3445
+       },
+       "mean_planned_risk_pct": 0.004,
+       "max_planned_risk_pct": 0.005,
+       "max_single_loss_pct": 0.0054,
+       "loss_overshoot_vs_planned": 1.1847,
+       "max_margin_pct": 0.04,
+       "mean_margin_pct": 0.0222,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.3601,
+       "blocked_mean_r": -0.1497,
+       "survived": true
+      },
+      "severe": {
+       "start": 1000,
+       "end": 610.82,
+       "return_pct": -0.3892,
+       "max_dd_pct": 0.3892,
+       "recovery_needed_pct": 0.6371,
+       "min_equity": 610.82,
+       "trades": 343,
+       "rejected": 3866,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 3866
+       },
+       "mean_planned_risk_pct": 0.004,
+       "max_planned_risk_pct": 0.005,
+       "max_single_loss_pct": 0.0072,
+       "loss_overshoot_vs_planned": 1.4521,
+       "max_margin_pct": 0.0372,
+       "mean_margin_pct": 0.0223,
+       "worst_loss_streak": 9,
+       "taken_mean_r": -0.7218,
+       "blocked_mean_r": -0.292,
+       "survived": true
+      }
+     },
+     "PCT_0.0075": {
+      "normal": {
+       "start": 1000,
+       "end": 594.5,
+       "return_pct": -0.4055,
+       "max_dd_pct": 0.4362,
+       "recovery_needed_pct": 0.7738,
+       "min_equity": 592.76,
+       "trades": 809,
+       "rejected": 2296,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 2296
+       },
+       "mean_planned_risk_pct": 0.0059,
+       "max_planned_risk_pct": 0.0075,
+       "max_single_loss_pct": 0.0075,
+       "loss_overshoot_vs_planned": 1.1427,
+       "max_margin_pct": 0.0709,
+       "mean_margin_pct": 0.0285,
+       "worst_loss_streak": 23,
+       "taken_mean_r": -0.1572,
+       "blocked_mean_r": -0.0516,
+       "survived": true
+      },
+      "moderate": {
+       "start": 1000,
+       "end": 521.28,
+       "return_pct": -0.4787,
+       "max_dd_pct": 0.4883,
+       "recovery_needed_pct": 0.9543,
+       "min_equity": 521.28,
+       "trades": 681,
+       "rejected": 2699,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 2699
+       },
+       "mean_planned_risk_pct": 0.0059,
+       "max_planned_risk_pct": 0.0075,
+       "max_single_loss_pct": 0.0086,
+       "loss_overshoot_vs_planned": 1.186,
+       "max_margin_pct": 0.0629,
+       "mean_margin_pct": 0.0286,
+       "worst_loss_streak": 20,
+       "taken_mean_r": -0.295,
+       "blocked_mean_r": -0.1512,
+       "survived": true
+      },
+      "severe": {
+       "start": 1000,
+       "end": 422.87,
+       "return_pct": -0.5771,
+       "max_dd_pct": 0.5792,
+       "recovery_needed_pct": 1.3767,
+       "min_equity": 422.87,
+       "trades": 458,
+       "rejected": 3460,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 3460
+       },
+       "mean_planned_risk_pct": 0.0059,
+       "max_planned_risk_pct": 0.0075,
+       "max_single_loss_pct": 0.0109,
+       "loss_overshoot_vs_planned": 1.4521,
+       "max_margin_pct": 0.0542,
+       "mean_margin_pct": 0.0295,
+       "worst_loss_streak": 15,
+       "taken_mean_r": -0.6248,
+       "blocked_mean_r": -0.2947,
+       "survived": true
+      }
+     },
+     "PCT_0.01": {
+      "normal": {
+       "start": 1000,
+       "end": 524.94,
+       "return_pct": -0.4751,
+       "max_dd_pct": 0.5204,
+       "recovery_needed_pct": 1.0849,
+       "min_equity": 515.15,
+       "trades": 958,
+       "rejected": 1573,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 1573
+       },
+       "mean_planned_risk_pct": 0.0079,
+       "max_planned_risk_pct": 0.01,
+       "max_single_loss_pct": 0.01,
+       "loss_overshoot_vs_planned": 1.1427,
+       "max_margin_pct": 0.0927,
+       "mean_margin_pct": 0.0346,
+       "worst_loss_streak": 18,
+       "taken_mean_r": -0.1339,
+       "blocked_mean_r": -0.0362,
+       "survived": true
+      },
+      "moderate": {
+       "start": 1000,
+       "end": 382.61,
+       "return_pct": -0.6174,
+       "max_dd_pct": 0.6354,
+       "recovery_needed_pct": 1.7424,
+       "min_equity": 382.61,
+       "trades": 744,
+       "rejected": 2407,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 2407
+       },
+       "mean_planned_risk_pct": 0.0079,
+       "max_planned_risk_pct": 0.01,
+       "max_single_loss_pct": 0.0113,
+       "loss_overshoot_vs_planned": 1.186,
+       "max_margin_pct": 0.0796,
+       "mean_margin_pct": 0.0363,
+       "worst_loss_streak": 22,
+       "taken_mean_r": -0.2742,
+       "blocked_mean_r": -0.1694,
+       "survived": true
+      },
+      "severe": {
+       "start": 1000,
+       "end": 310.59,
+       "return_pct": -0.6894,
+       "max_dd_pct": 0.6918,
+       "recovery_needed_pct": 2.2446,
+       "min_equity": 310.59,
+       "trades": 571,
+       "rejected": 2984,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 2984
+       },
+       "mean_planned_risk_pct": 0.0079,
+       "max_planned_risk_pct": 0.01,
+       "max_single_loss_pct": 0.0137,
+       "loss_overshoot_vs_planned": 1.4521,
+       "max_margin_pct": 0.0729,
+       "mean_margin_pct": 0.0352,
+       "worst_loss_streak": 19,
+       "taken_mean_r": -0.5149,
+       "blocked_mean_r": -0.2925,
+       "survived": true
+      }
+     }
+    },
+    "5000": {
+     "CURRENT": {
+      "normal": {
+       "start": 5000,
+       "end": 4933.26,
+       "return_pct": -0.0133,
+       "max_dd_pct": 0.0635,
+       "recovery_needed_pct": 0.0678,
+       "min_equity": 4799.19,
+       "trades": 1133,
+       "rejected": 0,
+       "rejected_by_reason": {},
+       "mean_planned_risk_pct": 0.0017,
+       "max_planned_risk_pct": 0.0103,
+       "max_single_loss_pct": 0.0084,
+       "loss_overshoot_vs_planned": 1.1427,
+       "max_margin_pct": 0.0047,
+       "mean_margin_pct": 0.0038,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.0771,
+       "blocked_mean_r": null,
+       "survived": true
+      },
+      "moderate": {
+       "start": 5000,
+       "end": 4512,
+       "return_pct": -0.0976,
+       "max_dd_pct": 0.1313,
+       "recovery_needed_pct": 0.1511,
+       "min_equity": 4394.89,
+       "trades": 1128,
+       "rejected": 0,
+       "rejected_by_reason": {},
+       "mean_planned_risk_pct": 0.0018,
+       "max_planned_risk_pct": 0.0114,
+       "max_single_loss_pct": 0.0089,
+       "loss_overshoot_vs_planned": 1.186,
+       "max_margin_pct": 0.0051,
+       "mean_margin_pct": 0.004,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.1836,
+       "blocked_mean_r": null,
+       "survived": true
+      },
+      "severe": {
+       "start": 5000,
+       "end": 3655.11,
+       "return_pct": -0.269,
+       "max_dd_pct": 0.2847,
+       "recovery_needed_pct": 0.398,
+       "min_equity": 3580.02,
+       "trades": 1122,
+       "rejected": 0,
+       "rejected_by_reason": {},
+       "mean_planned_risk_pct": 0.002,
+       "max_planned_risk_pct": 0.014,
+       "max_single_loss_pct": 0.0139,
+       "loss_overshoot_vs_planned": 1.4521,
+       "max_margin_pct": 0.0063,
+       "mean_margin_pct": 0.0044,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.3681,
+       "blocked_mean_r": null,
+       "survived": true
+      }
+     },
+     "PCT_0.001": {
+      "normal": {
+       "start": 5000,
+       "end": 4748.28,
+       "return_pct": -0.0503,
+       "max_dd_pct": 0.0564,
+       "recovery_needed_pct": 0.0598,
+       "min_equity": 4742.25,
+       "trades": 689,
+       "rejected": 2798,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 2798
+       },
+       "mean_planned_risk_pct": 0.0008,
+       "max_planned_risk_pct": 0.001,
+       "max_single_loss_pct": 0.001,
+       "loss_overshoot_vs_planned": 1.1427,
+       "max_margin_pct": 0.0093,
+       "mean_margin_pct": 0.0042,
+       "worst_loss_streak": 20,
+       "taken_mean_r": -0.1515,
+       "blocked_mean_r": -0.0456,
+       "survived": true
+      },
+      "moderate": {
+       "start": 5000,
+       "end": 4515.36,
+       "return_pct": -0.0969,
+       "max_dd_pct": 0.0992,
+       "recovery_needed_pct": 0.1101,
+       "min_equity": 4515.36,
+       "trades": 631,
+       "rejected": 2984,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 2984
+       },
+       "mean_planned_risk_pct": 0.0008,
+       "max_planned_risk_pct": 0.001,
+       "max_single_loss_pct": 0.0011,
+       "loss_overshoot_vs_planned": 1.186,
+       "max_margin_pct": 0.0095,
+       "mean_margin_pct": 0.0041,
+       "worst_loss_streak": 20,
+       "taken_mean_r": -0.3596,
+       "blocked_mean_r": -0.1201,
+       "survived": true
+      },
+      "severe": {
+       "start": 5000,
+       "end": 4298.57,
+       "return_pct": -0.1403,
+       "max_dd_pct": 0.1405,
+       "recovery_needed_pct": 0.1634,
+       "min_equity": 4298.57,
+       "trades": 564,
+       "rejected": 3181,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 3181
+       },
+       "mean_planned_risk_pct": 0.0008,
+       "max_planned_risk_pct": 0.001,
+       "max_single_loss_pct": 0.0014,
+       "loss_overshoot_vs_planned": 1.4521,
+       "max_margin_pct": 0.008,
+       "mean_margin_pct": 0.004,
+       "worst_loss_streak": 18,
+       "taken_mean_r": -0.6684,
+       "blocked_mean_r": -0.2565,
+       "survived": true
+      }
+     },
+     "PCT_0.0025": {
+      "normal": {
+       "start": 5000,
+       "end": 4114.99,
+       "return_pct": -0.177,
+       "max_dd_pct": 0.1911,
+       "recovery_needed_pct": 0.2362,
+       "min_equity": 4087.86,
+       "trades": 1155,
+       "rejected": 607,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 607
+       },
+       "mean_planned_risk_pct": 0.002,
+       "max_planned_risk_pct": 0.0025,
+       "max_single_loss_pct": 0.0025,
+       "loss_overshoot_vs_planned": 1.1427,
+       "max_margin_pct": 0.0258,
+       "mean_margin_pct": 0.0075,
+       "worst_loss_streak": 17,
+       "taken_mean_r": -0.1294,
+       "blocked_mean_r": 0.1363,
+       "survived": true
+      },
+      "moderate": {
+       "start": 5000,
+       "end": 3568.56,
+       "return_pct": -0.2863,
+       "max_dd_pct": 0.2903,
+       "recovery_needed_pct": 0.4091,
+       "min_equity": 3556.23,
+       "trades": 1118,
+       "rejected": 787,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 787
+       },
+       "mean_planned_risk_pct": 0.002,
+       "max_planned_risk_pct": 0.0025,
+       "max_single_loss_pct": 0.0027,
+       "loss_overshoot_vs_planned": 1.186,
+       "max_margin_pct": 0.0238,
+       "mean_margin_pct": 0.0074,
+       "worst_loss_streak": 17,
+       "taken_mean_r": -0.258,
+       "blocked_mean_r": 0.0127,
+       "survived": true
+      },
+      "severe": {
+       "start": 5000,
+       "end": 2875.38,
+       "return_pct": -0.4249,
+       "max_dd_pct": 0.427,
+       "recovery_needed_pct": 0.7452,
+       "min_equity": 2870.84,
+       "trades": 1057,
+       "rejected": 1094,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 1094
+       },
+       "mean_planned_risk_pct": 0.0019,
+       "max_planned_risk_pct": 0.0025,
+       "max_single_loss_pct": 0.0035,
+       "loss_overshoot_vs_planned": 1.4521,
+       "max_margin_pct": 0.0219,
+       "mean_margin_pct": 0.0073,
+       "worst_loss_streak": 17,
+       "taken_mean_r": -0.478,
+       "blocked_mean_r": -0.1646,
+       "survived": true
+      }
+     },
+     "PCT_0.005": {
+      "normal": {
+       "start": 5000,
+       "end": 3921.06,
+       "return_pct": -0.2158,
+       "max_dd_pct": 0.2674,
+       "recovery_needed_pct": 0.3651,
+       "min_equity": 3843.59,
+       "trades": 1150,
+       "rejected": 69,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 69
+       },
+       "mean_planned_risk_pct": 0.0042,
+       "max_planned_risk_pct": 0.005,
+       "max_single_loss_pct": 0.0054,
+       "loss_overshoot_vs_planned": 1.1427,
+       "max_margin_pct": 0.05,
+       "mean_margin_pct": 0.0145,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.0747,
+       "blocked_mean_r": 0.0376,
+       "survived": true
+      },
+      "moderate": {
+       "start": 5000,
+       "end": 2936.15,
+       "return_pct": -0.4128,
+       "max_dd_pct": 0.4362,
+       "recovery_needed_pct": 0.7737,
+       "min_equity": 2897.96,
+       "trades": 1172,
+       "rejected": 161,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 161
+       },
+       "mean_planned_risk_pct": 0.0041,
+       "max_planned_risk_pct": 0.005,
+       "max_single_loss_pct": 0.0056,
+       "loss_overshoot_vs_planned": 1.186,
+       "max_margin_pct": 0.0437,
+       "mean_margin_pct": 0.0141,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.1909,
+       "blocked_mean_r": 0.1576,
+       "survived": true
+      },
+      "severe": {
+       "start": 5000,
+       "end": 1640.88,
+       "return_pct": -0.6718,
+       "max_dd_pct": 0.6768,
+       "recovery_needed_pct": 2.0945,
+       "min_equity": 1622.25,
+       "trades": 1119,
+       "rejected": 507,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 507
+       },
+       "mean_planned_risk_pct": 0.004,
+       "max_planned_risk_pct": 0.005,
+       "max_single_loss_pct": 0.007,
+       "loss_overshoot_vs_planned": 1.4521,
+       "max_margin_pct": 0.0391,
+       "mean_margin_pct": 0.0137,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.4306,
+       "blocked_mean_r": 0.0283,
+       "survived": true
+      }
+     },
+     "PCT_0.0075": {
+      "normal": {
+       "start": 5000,
+       "end": 3421.68,
+       "return_pct": -0.3157,
+       "max_dd_pct": 0.3853,
+       "recovery_needed_pct": 0.6268,
+       "min_equity": 3353.18,
+       "trades": 1151,
+       "rejected": 25,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 25
+       },
+       "mean_planned_risk_pct": 0.0066,
+       "max_planned_risk_pct": 0.0075,
+       "max_single_loss_pct": 0.0081,
+       "loss_overshoot_vs_planned": 1.1427,
+       "max_margin_pct": 0.0758,
+       "mean_margin_pct": 0.0224,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.0753,
+       "blocked_mean_r": 0.544,
+       "survived": true
+      },
+      "moderate": {
+       "start": 5000,
+       "end": 2215.01,
+       "return_pct": -0.557,
+       "max_dd_pct": 0.5911,
+       "recovery_needed_pct": 1.4455,
+       "min_equity": 2164.17,
+       "trades": 1148,
+       "rejected": 77,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 77
+       },
+       "mean_planned_risk_pct": 0.0064,
+       "max_planned_risk_pct": 0.0075,
+       "max_single_loss_pct": 0.0083,
+       "loss_overshoot_vs_planned": 1.186,
+       "max_margin_pct": 0.0675,
+       "mean_margin_pct": 0.0212,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.1775,
+       "blocked_mean_r": 0.1887,
+       "survived": true
+      },
+      "severe": {
+       "start": 5000,
+       "end": 931.54,
+       "return_pct": -0.8137,
+       "max_dd_pct": 0.8157,
+       "recovery_needed_pct": 4.4263,
+       "min_equity": 926.99,
+       "trades": 1111,
+       "rejected": 518,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 518
+       },
+       "mean_planned_risk_pct": 0.0062,
+       "max_planned_risk_pct": 0.0075,
+       "max_single_loss_pct": 0.0108,
+       "loss_overshoot_vs_planned": 1.4521,
+       "max_margin_pct": 0.0638,
+       "mean_margin_pct": 0.0209,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.4213,
+       "blocked_mean_r": -0.0055,
+       "survived": true
+      }
+     },
+     "PCT_0.01": {
+      "normal": {
+       "start": 5000,
+       "end": 2792.12,
+       "return_pct": -0.4416,
+       "max_dd_pct": 0.52,
+       "recovery_needed_pct": 1.0833,
+       "min_equity": 2713.88,
+       "trades": 1149,
+       "rejected": 16,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 16
+       },
+       "mean_planned_risk_pct": 0.009,
+       "max_planned_risk_pct": 0.01,
+       "max_single_loss_pct": 0.0114,
+       "loss_overshoot_vs_planned": 1.1427,
+       "max_margin_pct": 0.0999,
+       "mean_margin_pct": 0.0302,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.075,
+       "blocked_mean_r": 0.4703,
+       "survived": true
+      },
+      "moderate": {
+       "start": 5000,
+       "end": 1633.14,
+       "return_pct": -0.6734,
+       "max_dd_pct": 0.7093,
+       "recovery_needed_pct": 2.4404,
+       "min_equity": 1582.31,
+       "trades": 1144,
+       "rejected": 65,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 65
+       },
+       "mean_planned_risk_pct": 0.0087,
+       "max_planned_risk_pct": 0.01,
+       "max_single_loss_pct": 0.0112,
+       "loss_overshoot_vs_planned": 1.186,
+       "max_margin_pct": 0.0907,
+       "mean_margin_pct": 0.0284,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.1778,
+       "blocked_mean_r": 0.3309,
+       "survived": true
+      },
+      "severe": {
+       "start": 5000,
+       "end": 601.69,
+       "return_pct": -0.8797,
+       "max_dd_pct": 0.883,
+       "recovery_needed_pct": 7.5492,
+       "min_equity": 592.89,
+       "trades": 1087,
+       "rejected": 561,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 561
+       },
+       "mean_planned_risk_pct": 0.0084,
+       "max_planned_risk_pct": 0.01,
+       "max_single_loss_pct": 0.0141,
+       "loss_overshoot_vs_planned": 1.4521,
+       "max_margin_pct": 0.0794,
+       "mean_margin_pct": 0.0282,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.4027,
+       "blocked_mean_r": -0.0346,
+       "survived": true
+      }
+     }
+    },
+    "10000": {
+     "CURRENT": {
+      "normal": {
+       "start": 10000,
+       "end": 9933.26,
+       "return_pct": -0.0067,
+       "max_dd_pct": 0.0321,
+       "recovery_needed_pct": 0.0332,
+       "min_equity": 9799.19,
+       "trades": 1133,
+       "rejected": 0,
+       "rejected_by_reason": {},
+       "mean_planned_risk_pct": 0.0008,
+       "max_planned_risk_pct": 0.0051,
+       "max_single_loss_pct": 0.0042,
+       "loss_overshoot_vs_planned": 1.1427,
+       "max_margin_pct": 0.0023,
+       "mean_margin_pct": 0.0019,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.0771,
+       "blocked_mean_r": null,
+       "survived": true
+      },
+      "moderate": {
+       "start": 10000,
+       "end": 9512,
+       "return_pct": -0.0488,
+       "max_dd_pct": 0.066,
+       "recovery_needed_pct": 0.0707,
+       "min_equity": 9394.89,
+       "trades": 1128,
+       "rejected": 0,
+       "rejected_by_reason": {},
+       "mean_planned_risk_pct": 0.0009,
+       "max_planned_risk_pct": 0.0053,
+       "max_single_loss_pct": 0.0044,
+       "loss_overshoot_vs_planned": 1.186,
+       "max_margin_pct": 0.0024,
+       "mean_margin_pct": 0.0019,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.1836,
+       "blocked_mean_r": null,
+       "survived": true
+      },
+      "severe": {
+       "start": 10000,
+       "end": 8655.11,
+       "return_pct": -0.1345,
+       "max_dd_pct": 0.1424,
+       "recovery_needed_pct": 0.1661,
+       "min_equity": 8580.02,
+       "trades": 1122,
+       "rejected": 0,
+       "rejected_by_reason": {},
+       "mean_planned_risk_pct": 0.0009,
+       "max_planned_risk_pct": 0.0059,
+       "max_single_loss_pct": 0.0064,
+       "loss_overshoot_vs_planned": 1.4521,
+       "max_margin_pct": 0.0026,
+       "mean_margin_pct": 0.002,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.3681,
+       "blocked_mean_r": null,
+       "survived": true
+      }
+     },
+     "PCT_0.001": {
+      "normal": {
+       "start": 10000,
+       "end": 9419.97,
+       "return_pct": -0.058,
+       "max_dd_pct": 0.0694,
+       "recovery_needed_pct": 0.0746,
+       "min_equity": 9386.48,
+       "trades": 1120,
+       "rejected": 878,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 878
+       },
+       "mean_planned_risk_pct": 0.0008,
+       "max_planned_risk_pct": 0.001,
+       "max_single_loss_pct": 0.001,
+       "loss_overshoot_vs_planned": 1.1427,
+       "max_margin_pct": 0.0094,
+       "mean_margin_pct": 0.0031,
+       "worst_loss_streak": 17,
+       "taken_mean_r": -0.1175,
+       "blocked_mean_r": 0.0404,
+       "survived": true
+      },
+      "moderate": {
+       "start": 10000,
+       "end": 8782.99,
+       "return_pct": -0.1217,
+       "max_dd_pct": 0.128,
+       "recovery_needed_pct": 0.1467,
+       "min_equity": 8767.67,
+       "trades": 1098,
+       "rejected": 994,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 994
+       },
+       "mean_planned_risk_pct": 0.0008,
+       "max_planned_risk_pct": 0.001,
+       "max_single_loss_pct": 0.0011,
+       "loss_overshoot_vs_planned": 1.186,
+       "max_margin_pct": 0.0098,
+       "mean_margin_pct": 0.003,
+       "worst_loss_streak": 18,
+       "taken_mean_r": -0.2562,
+       "blocked_mean_r": -0.0051,
+       "survived": true
+      },
+      "severe": {
+       "start": 10000,
+       "end": 7988.17,
+       "return_pct": -0.2012,
+       "max_dd_pct": 0.204,
+       "recovery_needed_pct": 0.2563,
+       "min_equity": 7969.54,
+       "trades": 1068,
+       "rejected": 1161,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 1161
+       },
+       "mean_planned_risk_pct": 0.0008,
+       "max_planned_risk_pct": 0.001,
+       "max_single_loss_pct": 0.0014,
+       "loss_overshoot_vs_planned": 1.4521,
+       "max_margin_pct": 0.0081,
+       "mean_margin_pct": 0.0029,
+       "worst_loss_streak": 18,
+       "taken_mean_r": -0.4927,
+       "blocked_mean_r": -0.1527,
+       "survived": true
+      }
+     },
+     "PCT_0.0025": {
+      "normal": {
+       "start": 10000,
+       "end": 8747.61,
+       "return_pct": -0.1252,
+       "max_dd_pct": 0.1528,
+       "recovery_needed_pct": 0.1804,
+       "min_equity": 8687.15,
+       "trades": 1154,
+       "rejected": 55,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 55
+       },
+       "mean_planned_risk_pct": 0.0021,
+       "max_planned_risk_pct": 0.0025,
+       "max_single_loss_pct": 0.0027,
+       "loss_overshoot_vs_planned": 1.1427,
+       "max_margin_pct": 0.0247,
+       "mean_margin_pct": 0.0073,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.0784,
+       "blocked_mean_r": 0.2035,
+       "survived": true
+      },
+      "moderate": {
+       "start": 10000,
+       "end": 7662.97,
+       "return_pct": -0.2337,
+       "max_dd_pct": 0.2504,
+       "recovery_needed_pct": 0.334,
+       "min_equity": 7589.79,
+       "trades": 1161,
+       "rejected": 86,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 86
+       },
+       "mean_planned_risk_pct": 0.0021,
+       "max_planned_risk_pct": 0.0025,
+       "max_single_loss_pct": 0.0029,
+       "loss_overshoot_vs_planned": 1.186,
+       "max_margin_pct": 0.0226,
+       "mean_margin_pct": 0.007,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.1854,
+       "blocked_mean_r": 0.007,
+       "survived": true
+      },
+      "severe": {
+       "start": 10000,
+       "end": 6021.89,
+       "return_pct": -0.3978,
+       "max_dd_pct": 0.4031,
+       "recovery_needed_pct": 0.6752,
+       "min_equity": 5981.34,
+       "trades": 1170,
+       "rejected": 159,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 159
+       },
+       "mean_planned_risk_pct": 0.0021,
+       "max_planned_risk_pct": 0.0025,
+       "max_single_loss_pct": 0.0035,
+       "loss_overshoot_vs_planned": 1.4521,
+       "max_margin_pct": 0.0212,
+       "mean_margin_pct": 0.0067,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.376,
+       "blocked_mean_r": -0.0048,
+       "survived": true
+      }
+     },
+     "PCT_0.005": {
+      "normal": {
+       "start": 10000,
+       "end": 7833.42,
+       "return_pct": -0.2167,
+       "max_dd_pct": 0.2845,
+       "recovery_needed_pct": 0.3976,
+       "min_equity": 7631.52,
+       "trades": 1141,
+       "rejected": 6,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6
+       },
+       "mean_planned_risk_pct": 0.0045,
+       "max_planned_risk_pct": 0.005,
+       "max_single_loss_pct": 0.0054,
+       "loss_overshoot_vs_planned": 1.1427,
+       "max_margin_pct": 0.0504,
+       "mean_margin_pct": 0.0152,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.0705,
+       "blocked_mean_r": -0.194,
+       "survived": true
+      },
+      "moderate": {
+       "start": 10000,
+       "end": 5644.95,
+       "return_pct": -0.4355,
+       "max_dd_pct": 0.4636,
+       "recovery_needed_pct": 0.8642,
+       "min_equity": 5571.74,
+       "trades": 1144,
+       "rejected": 16,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 16
+       },
+       "mean_planned_risk_pct": 0.0045,
+       "max_planned_risk_pct": 0.005,
+       "max_single_loss_pct": 0.0057,
+       "loss_overshoot_vs_planned": 1.186,
+       "max_margin_pct": 0.0486,
+       "mean_margin_pct": 0.0145,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.1811,
+       "blocked_mean_r": 0.4606,
+       "survived": true
+      },
+      "severe": {
+       "start": 10000,
+       "end": 3562,
+       "return_pct": -0.6438,
+       "max_dd_pct": 0.6476,
+       "recovery_needed_pct": 1.8373,
+       "min_equity": 3552.41,
+       "trades": 1137,
+       "rejected": 50,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 50
+       },
+       "mean_planned_risk_pct": 0.0043,
+       "max_planned_risk_pct": 0.005,
+       "max_single_loss_pct": 0.0072,
+       "loss_overshoot_vs_planned": 1.4521,
+       "max_margin_pct": 0.0416,
+       "mean_margin_pct": 0.0135,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.3596,
+       "blocked_mean_r": 0.1702,
+       "survived": true
+      }
+     },
+     "PCT_0.0075": {
+      "normal": {
+       "start": 10000,
+       "end": 6542.05,
+       "return_pct": -0.3458,
+       "max_dd_pct": 0.423,
+       "recovery_needed_pct": 0.7331,
+       "min_equity": 6334.32,
+       "trades": 1132,
+       "rejected": 1,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 1
+       },
+       "mean_planned_risk_pct": 0.007,
+       "max_planned_risk_pct": 0.0075,
+       "max_single_loss_pct": 0.0081,
+       "loss_overshoot_vs_planned": 1.1427,
+       "max_margin_pct": 0.0769,
+       "mean_margin_pct": 0.0234,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.0786,
+       "blocked_mean_r": 1.6975,
+       "survived": true
+      },
+      "moderate": {
+       "start": 10000,
+       "end": 4237.9,
+       "return_pct": -0.5762,
+       "max_dd_pct": 0.6118,
+       "recovery_needed_pct": 1.576,
+       "min_equity": 4133.54,
+       "trades": 1139,
+       "rejected": 8,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 8
+       },
+       "mean_planned_risk_pct": 0.0068,
+       "max_planned_risk_pct": 0.0075,
+       "max_single_loss_pct": 0.0085,
+       "loss_overshoot_vs_planned": 1.186,
+       "max_margin_pct": 0.071,
+       "mean_margin_pct": 0.022,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.178,
+       "blocked_mean_r": -0.4128,
+       "survived": true
+      },
+      "severe": {
+       "start": 10000,
+       "end": 2091.75,
+       "return_pct": -0.7908,
+       "max_dd_pct": 0.7945,
+       "recovery_needed_pct": 3.8668,
+       "min_equity": 2067.12,
+       "trades": 1137,
+       "rejected": 69,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 69
+       },
+       "mean_planned_risk_pct": 0.0066,
+       "max_planned_risk_pct": 0.0075,
+       "max_single_loss_pct": 0.0108,
+       "loss_overshoot_vs_planned": 1.4521,
+       "max_margin_pct": 0.0606,
+       "mean_margin_pct": 0.0204,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.3623,
+       "blocked_mean_r": 0.2183,
+       "survived": true
+      }
+     },
+     "PCT_0.01": {
+      "normal": {
+       "start": 10000,
+       "end": 5624.27,
+       "return_pct": -0.4376,
+       "max_dd_pct": 0.5304,
+       "recovery_needed_pct": 1.1296,
+       "min_equity": 5352.65,
+       "trades": 1132,
+       "rejected": 1,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 1
+       },
+       "mean_planned_risk_pct": 0.0095,
+       "max_planned_risk_pct": 0.01,
+       "max_single_loss_pct": 0.0109,
+       "loss_overshoot_vs_planned": 1.1427,
+       "max_margin_pct": 0.105,
+       "mean_margin_pct": 0.0314,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.0786,
+       "blocked_mean_r": 1.6975,
+       "survived": true
+      },
+      "moderate": {
+       "start": 10000,
+       "end": 3118.09,
+       "return_pct": -0.6882,
+       "max_dd_pct": 0.723,
+       "recovery_needed_pct": 2.6099,
+       "min_equity": 3013.74,
+       "trades": 1128,
+       "rejected": 5,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 5
+       },
+       "mean_planned_risk_pct": 0.0092,
+       "max_planned_risk_pct": 0.01,
+       "max_single_loss_pct": 0.0118,
+       "loss_overshoot_vs_planned": 1.186,
+       "max_margin_pct": 0.0959,
+       "mean_margin_pct": 0.0297,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.1839,
+       "blocked_mean_r": 0.0202,
+       "survived": true
+      },
+      "severe": {
+       "start": 10000,
+       "end": 1185.89,
+       "return_pct": -0.8814,
+       "max_dd_pct": 0.8836,
+       "recovery_needed_pct": 7.592,
+       "min_equity": 1173.23,
+       "trades": 1153,
+       "rejected": 113,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 113
+       },
+       "mean_planned_risk_pct": 0.0088,
+       "max_planned_risk_pct": 0.01,
+       "max_single_loss_pct": 0.0145,
+       "loss_overshoot_vs_planned": 1.4521,
+       "max_margin_pct": 0.0806,
+       "mean_margin_pct": 0.0276,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.3683,
+       "blocked_mean_r": -0.0022,
+       "survived": true
+      }
+     }
+    }
+   },
+   "controls_at_approved": {},
+   "monte_carlo": {
+    "0.001": {
+     "paths": 2000,
+     "trades_per_year": 1535,
+     "p_dd_ge_10": 0.3,
+     "p_dd_ge_20": 0,
+     "p_dd_ge_30": 0,
+     "p_dd_ge_50": 0,
+     "median_dd": 0.0852,
+     "p95_dd": 0.135
+    },
+    "0.0025": {
+     "paths": 2000,
+     "trades_per_year": 1535,
+     "p_dd_ge_10": 0.956,
+     "p_dd_ge_20": 0.5065,
+     "p_dd_ge_30": 0.063,
+     "p_dd_ge_50": 0,
+     "median_dd": 0.2014,
+     "p95_dd": 0.3059
+    },
+    "0.005": {
+     "paths": 2000,
+     "trades_per_year": 1535,
+     "p_dd_ge_10": 0.9995,
+     "p_dd_ge_20": 0.9495,
+     "p_dd_ge_30": 0.7145,
+     "p_dd_ge_50": 0.0815,
+     "median_dd": 0.3668,
+     "p95_dd": 0.5221
+    },
+    "0.0075": {
+     "paths": 2000,
+     "trades_per_year": 1535,
+     "p_dd_ge_10": 1,
+     "p_dd_ge_20": 0.993,
+     "p_dd_ge_30": 0.936,
+     "p_dd_ge_50": 0.505,
+     "median_dd": 0.502,
+     "p95_dd": 0.6737
+    },
+    "0.01": {
+     "paths": 2000,
+     "trades_per_year": 1535,
+     "p_dd_ge_10": 1,
+     "p_dd_ge_20": 0.9995,
+     "p_dd_ge_30": 0.983,
+     "p_dd_ge_50": 0.7715,
+     "median_dd": 0.6109,
+     "p95_dd": 0.7788
+    }
+   },
+   "units_n": 1133
+  },
+  "HOLD": {
+   "signals": 6553,
+   "sessions": 209,
+   "grid": {
+    "100": {
+     "CURRENT": {
+      "normal": {
+       "start": 100,
+       "end": 69.48,
+       "return_pct": -0.3052,
+       "max_dd_pct": 0.4931,
+       "recovery_needed_pct": 0.9726,
+       "min_equity": 69.48,
+       "trades": 10,
+       "rejected": 6503,
+       "rejected_by_reason": {
+        "CURRENT_MARGIN_SAFETY_VETO": 6503
+       },
+       "mean_planned_risk_pct": 0.0943,
+       "max_planned_risk_pct": 0.3144,
+       "max_single_loss_pct": 0.3144,
+       "loss_overshoot_vs_planned": 1,
+       "max_margin_pct": 0.2837,
+       "mean_margin_pct": 0.1919,
+       "worst_loss_streak": 6,
+       "taken_mean_r": -0.2665,
+       "blocked_mean_r": -0.0446,
+       "survived": true
+      },
+      "moderate": {
+       "start": 100,
+       "end": 65.88,
+       "return_pct": -0.3412,
+       "max_dd_pct": 0.5142,
+       "recovery_needed_pct": 1.0586,
+       "min_equity": 65.88,
+       "trades": 10,
+       "rejected": 6503,
+       "rejected_by_reason": {
+        "CURRENT_MARGIN_SAFETY_VETO": 6503
+       },
+       "mean_planned_risk_pct": 0.0975,
+       "max_planned_risk_pct": 0.3241,
+       "max_single_loss_pct": 0.3259,
+       "loss_overshoot_vs_planned": 1.06,
+       "max_margin_pct": 0.2961,
+       "mean_margin_pct": 0.1951,
+       "worst_loss_streak": 6,
+       "taken_mean_r": -0.3537,
+       "blocked_mean_r": -0.1039,
+       "survived": true
+      },
+      "severe": {
+       "start": 100,
+       "end": 66.65,
+       "return_pct": -0.3335,
+       "max_dd_pct": 0.5012,
+       "recovery_needed_pct": 1.0048,
+       "min_equity": 66.65,
+       "trades": 9,
+       "rejected": 6505,
+       "rejected_by_reason": {
+        "CURRENT_MARGIN_SAFETY_VETO": 6505
+       },
+       "mean_planned_risk_pct": 0.1019,
+       "max_planned_risk_pct": 0.3471,
+       "max_single_loss_pct": 0.3519,
+       "loss_overshoot_vs_planned": 1.3639,
+       "max_margin_pct": 0.2174,
+       "mean_margin_pct": 0.1885,
+       "worst_loss_streak": 5,
+       "taken_mean_r": -0.3888,
+       "blocked_mean_r": -0.2202,
+       "survived": true
+      }
+     },
+     "PCT_0.001": {
+      "normal": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.0433,
+       "survived": true
+      },
+      "moderate": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.1027,
+       "survived": true
+      },
+      "severe": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.2188,
+       "survived": true
+      }
+     },
+     "PCT_0.0025": {
+      "normal": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.0433,
+       "survived": true
+      },
+      "moderate": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.1027,
+       "survived": true
+      },
+      "severe": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.2188,
+       "survived": true
+      }
+     },
+     "PCT_0.005": {
+      "normal": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.0433,
+       "survived": true
+      },
+      "moderate": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.1027,
+       "survived": true
+      },
+      "severe": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.2188,
+       "survived": true
+      }
+     },
+     "PCT_0.0075": {
+      "normal": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.0433,
+       "survived": true
+      },
+      "moderate": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.1027,
+       "survived": true
+      },
+      "severe": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.2188,
+       "survived": true
+      }
+     },
+     "PCT_0.01": {
+      "normal": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.0433,
+       "survived": true
+      },
+      "moderate": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.1027,
+       "survived": true
+      },
+      "severe": {
+       "start": 100,
+       "end": 100,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 100,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.2188,
+       "survived": true
+      }
+     }
+    },
+    "250": {
+     "CURRENT": {
+      "normal": {
+       "start": 250,
+       "end": 68.08,
+       "return_pct": -0.7277,
+       "max_dd_pct": 0.884,
+       "recovery_needed_pct": 7.6221,
+       "min_equity": 68.08,
+       "trades": 221,
+       "rejected": 5551,
+       "rejected_by_reason": {
+        "CURRENT_MARGIN_SAFETY_VETO": 5551
+       },
+       "mean_planned_risk_pct": 0.0853,
+       "max_planned_risk_pct": 0.5649,
+       "max_single_loss_pct": 0.4116,
+       "loss_overshoot_vs_planned": 3.0794,
+       "max_margin_pct": 0.2998,
+       "mean_margin_pct": 0.1233,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.1518,
+       "blocked_mean_r": -0.0377,
+       "survived": true
+      },
+      "moderate": {
+       "start": 250,
+       "end": -49.75,
+       "return_pct": -1.199,
+       "max_dd_pct": 1.1742,
+       "recovery_needed_pct": -6.7417,
+       "min_equity": -49.75,
+       "trades": 121,
+       "rejected": 5998,
+       "rejected_by_reason": {
+        "CURRENT_MARGIN_SAFETY_VETO": 175,
+        "EQUITY_EXHAUSTED": 5823
+       },
+       "mean_planned_risk_pct": 0.0743,
+       "max_planned_risk_pct": 0.6969,
+       "max_single_loss_pct": 1.6878,
+       "loss_overshoot_vs_planned": 2.4219,
+       "max_margin_pct": 0.3085,
+       "mean_margin_pct": 0.1321,
+       "worst_loss_streak": 8,
+       "taken_mean_r": -0.1851,
+       "blocked_mean_r": -0.0986,
+       "survived": false
+      },
+      "severe": {
+       "start": 250,
+       "end": 66.78,
+       "return_pct": -0.7329,
+       "max_dd_pct": 0.7645,
+       "recovery_needed_pct": 3.2468,
+       "min_equity": 66.78,
+       "trades": 84,
+       "rejected": 6187,
+       "rejected_by_reason": {
+        "CURRENT_MARGIN_SAFETY_VETO": 6187
+       },
+       "mean_planned_risk_pct": 0.0677,
+       "max_planned_risk_pct": 0.2734,
+       "max_single_loss_pct": 0.192,
+       "loss_overshoot_vs_planned": 1.3639,
+       "max_margin_pct": 0.3152,
+       "mean_margin_pct": 0.1491,
+       "worst_loss_streak": 8,
+       "taken_mean_r": -0.2823,
+       "blocked_mean_r": -0.2139,
+       "survived": true
+      }
+     },
+     "PCT_0.001": {
+      "normal": {
+       "start": 250,
+       "end": 250,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 250,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.0433,
+       "survived": true
+      },
+      "moderate": {
+       "start": 250,
+       "end": 250,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 250,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.1027,
+       "survived": true
+      },
+      "severe": {
+       "start": 250,
+       "end": 250,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 250,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.2188,
+       "survived": true
+      }
+     },
+     "PCT_0.0025": {
+      "normal": {
+       "start": 250,
+       "end": 250,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 250,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.0433,
+       "survived": true
+      },
+      "moderate": {
+       "start": 250,
+       "end": 250,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 250,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.1027,
+       "survived": true
+      },
+      "severe": {
+       "start": 250,
+       "end": 250,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 250,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.2188,
+       "survived": true
+      }
+     },
+     "PCT_0.005": {
+      "normal": {
+       "start": 250,
+       "end": 250,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 250,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.0433,
+       "survived": true
+      },
+      "moderate": {
+       "start": 250,
+       "end": 250,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 250,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.1027,
+       "survived": true
+      },
+      "severe": {
+       "start": 250,
+       "end": 250,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 250,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.2188,
+       "survived": true
+      }
+     },
+     "PCT_0.0075": {
+      "normal": {
+       "start": 250,
+       "end": 250,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 250,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.0433,
+       "survived": true
+      },
+      "moderate": {
+       "start": 250,
+       "end": 250,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 250,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.1027,
+       "survived": true
+      },
+      "severe": {
+       "start": 250,
+       "end": 250,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 250,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.2188,
+       "survived": true
+      }
+     },
+     "PCT_0.01": {
+      "normal": {
+       "start": 250,
+       "end": 247.44,
+       "return_pct": -0.0102,
+       "max_dd_pct": 0.0199,
+       "recovery_needed_pct": 0.0203,
+       "min_equity": 245.9,
+       "trades": 8,
+       "rejected": 6538,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6538
+       },
+       "mean_planned_risk_pct": 0.009,
+       "max_planned_risk_pct": 0.0099,
+       "max_single_loss_pct": 0.0096,
+       "loss_overshoot_vs_planned": 1,
+       "max_margin_pct": 0.0938,
+       "mean_margin_pct": 0.089,
+       "worst_loss_streak": 2,
+       "taken_mean_r": -0.1647,
+       "blocked_mean_r": -0.0416,
+       "survived": true
+      },
+      "moderate": {
+       "start": 250,
+       "end": 251.26,
+       "return_pct": 0.005,
+       "max_dd_pct": 0.0102,
+       "recovery_needed_pct": 0.0103,
+       "min_equity": 248,
+       "trades": 4,
+       "rejected": 6545,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6545
+       },
+       "mean_planned_risk_pct": 0.0089,
+       "max_planned_risk_pct": 0.0094,
+       "max_single_loss_pct": 0.0102,
+       "loss_overshoot_vs_planned": 1.0853,
+       "max_margin_pct": 0.0938,
+       "mean_margin_pct": 0.091,
+       "worst_loss_streak": 1,
+       "taken_mean_r": 0.3276,
+       "blocked_mean_r": -0.1021,
+       "survived": true
+      },
+      "severe": {
+       "start": 250,
+       "end": 251.23,
+       "return_pct": 0.0049,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 250,
+       "trades": 2,
+       "rejected": 6551,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6551
+       },
+       "mean_planned_risk_pct": 0.0091,
+       "max_planned_risk_pct": 0.0092,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0.0938,
+       "mean_margin_pct": 0.091,
+       "worst_loss_streak": 0,
+       "taken_mean_r": 0.5841,
+       "blocked_mean_r": -0.219,
+       "survived": true
+      }
+     }
+    },
+    "500": {
+     "CURRENT": {
+      "normal": {
+       "start": 500,
+       "end": 706.95,
+       "return_pct": 0.4139,
+       "max_dd_pct": 0.8209,
+       "recovery_needed_pct": 4.5829,
+       "min_equity": 149.91,
+       "trades": 1510,
+       "rejected": 0,
+       "rejected_by_reason": {},
+       "mean_planned_risk_pct": 0.03,
+       "max_planned_risk_pct": 0.1721,
+       "max_single_loss_pct": 0.2094,
+       "loss_overshoot_vs_planned": 3.0794,
+       "max_margin_pct": 0.1494,
+       "mean_margin_pct": 0.0532,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.0225,
+       "blocked_mean_r": null,
+       "survived": true
+      },
+      "moderate": {
+       "start": 500,
+       "end": 51.95,
+       "return_pct": -0.8961,
+       "max_dd_pct": 0.9338,
+       "recovery_needed_pct": 14.0981,
+       "min_equity": 51.95,
+       "trades": 751,
+       "rejected": 3458,
+       "rejected_by_reason": {
+        "CURRENT_MARGIN_SAFETY_VETO": 3458
+       },
+       "mean_planned_risk_pct": 0.062,
+       "max_planned_risk_pct": 0.3694,
+       "max_single_loss_pct": 0.2998,
+       "loss_overshoot_vs_planned": 3.0767,
+       "max_margin_pct": 0.3217,
+       "mean_margin_pct": 0.1096,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.113,
+       "blocked_mean_r": -0.1252,
+       "survived": true
+      },
+      "severe": {
+       "start": 500,
+       "end": 61.71,
+       "return_pct": -0.8766,
+       "max_dd_pct": 0.9011,
+       "recovery_needed_pct": 9.112,
+       "min_equity": 61.71,
+       "trades": 219,
+       "rejected": 5555,
+       "rejected_by_reason": {
+        "CURRENT_MARGIN_SAFETY_VETO": 5555
+       },
+       "mean_planned_risk_pct": 0.0647,
+       "max_planned_risk_pct": 0.4319,
+       "max_single_loss_pct": 0.3255,
+       "loss_overshoot_vs_planned": 3.0744,
+       "max_margin_pct": 0.3323,
+       "mean_margin_pct": 0.0867,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.3279,
+       "blocked_mean_r": -0.2189,
+       "survived": true
+      }
+     },
+     "PCT_0.001": {
+      "normal": {
+       "start": 500,
+       "end": 500,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 500,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.0433,
+       "survived": true
+      },
+      "moderate": {
+       "start": 500,
+       "end": 500,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 500,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.1027,
+       "survived": true
+      },
+      "severe": {
+       "start": 500,
+       "end": 500,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 500,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.2188,
+       "survived": true
+      }
+     },
+     "PCT_0.0025": {
+      "normal": {
+       "start": 500,
+       "end": 500,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 500,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.0433,
+       "survived": true
+      },
+      "moderate": {
+       "start": 500,
+       "end": 500,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 500,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.1027,
+       "survived": true
+      },
+      "severe": {
+       "start": 500,
+       "end": 500,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 500,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.2188,
+       "survived": true
+      }
+     },
+     "PCT_0.005": {
+      "normal": {
+       "start": 500,
+       "end": 497.44,
+       "return_pct": -0.0051,
+       "max_dd_pct": 0.01,
+       "recovery_needed_pct": 0.0101,
+       "min_equity": 495.9,
+       "trades": 8,
+       "rejected": 6538,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6538
+       },
+       "mean_planned_risk_pct": 0.0045,
+       "max_planned_risk_pct": 0.0049,
+       "max_single_loss_pct": 0.0048,
+       "loss_overshoot_vs_planned": 1,
+       "max_margin_pct": 0.0469,
+       "mean_margin_pct": 0.0443,
+       "worst_loss_streak": 2,
+       "taken_mean_r": -0.1647,
+       "blocked_mean_r": -0.0416,
+       "survived": true
+      },
+      "moderate": {
+       "start": 500,
+       "end": 501.26,
+       "return_pct": 0.0025,
+       "max_dd_pct": 0.0051,
+       "recovery_needed_pct": 0.0051,
+       "min_equity": 498,
+       "trades": 4,
+       "rejected": 6545,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6545
+       },
+       "mean_planned_risk_pct": 0.0044,
+       "max_planned_risk_pct": 0.0047,
+       "max_single_loss_pct": 0.0051,
+       "loss_overshoot_vs_planned": 1.0853,
+       "max_margin_pct": 0.0469,
+       "mean_margin_pct": 0.0455,
+       "worst_loss_streak": 1,
+       "taken_mean_r": 0.3276,
+       "blocked_mean_r": -0.1021,
+       "survived": true
+      },
+      "severe": {
+       "start": 500,
+       "end": 501.23,
+       "return_pct": 0.0025,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 500,
+       "trades": 2,
+       "rejected": 6551,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6551
+       },
+       "mean_planned_risk_pct": 0.0046,
+       "max_planned_risk_pct": 0.0046,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0.0469,
+       "mean_margin_pct": 0.0455,
+       "worst_loss_streak": 0,
+       "taken_mean_r": 0.5841,
+       "blocked_mean_r": -0.219,
+       "survived": true
+      }
+     },
+     "PCT_0.0075": {
+      "normal": {
+       "start": 500,
+       "end": 460.86,
+       "return_pct": -0.0783,
+       "max_dd_pct": 0.1145,
+       "recovery_needed_pct": 0.1293,
+       "min_equity": 457.5,
+       "trades": 201,
+       "rejected": 5980,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 5980
+       },
+       "mean_planned_risk_pct": 0.0066,
+       "max_planned_risk_pct": 0.0075,
+       "max_single_loss_pct": 0.0075,
+       "loss_overshoot_vs_planned": 1,
+       "max_margin_pct": 0.054,
+       "mean_margin_pct": 0.0449,
+       "worst_loss_streak": 11,
+       "taken_mean_r": -0.0898,
+       "blocked_mean_r": -0.038,
+       "survived": true
+      },
+      "moderate": {
+       "start": 500,
+       "end": 438.13,
+       "return_pct": -0.1237,
+       "max_dd_pct": 0.1285,
+       "recovery_needed_pct": 0.1474,
+       "min_equity": 438.13,
+       "trades": 119,
+       "rejected": 6217,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6217
+       },
+       "mean_planned_risk_pct": 0.0067,
+       "max_planned_risk_pct": 0.0075,
+       "max_single_loss_pct": 0.0079,
+       "loss_overshoot_vs_planned": 1.0853,
+       "max_margin_pct": 0.0543,
+       "mean_margin_pct": 0.0474,
+       "worst_loss_streak": 6,
+       "taken_mean_r": -0.2768,
+       "blocked_mean_r": -0.091,
+       "survived": true
+      },
+      "severe": {
+       "start": 500,
+       "end": 436.97,
+       "return_pct": -0.1261,
+       "max_dd_pct": 0.1326,
+       "recovery_needed_pct": 0.1529,
+       "min_equity": 436.97,
+       "trades": 64,
+       "rejected": 6383,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6383
+       },
+       "mean_planned_risk_pct": 0.0068,
+       "max_planned_risk_pct": 0.0075,
+       "max_single_loss_pct": 0.0104,
+       "loss_overshoot_vs_planned": 1.4242,
+       "max_margin_pct": 0.0526,
+       "mean_margin_pct": 0.0481,
+       "worst_loss_streak": 5,
+       "taken_mean_r": -0.5834,
+       "blocked_mean_r": -0.2107,
+       "survived": true
+      }
+     },
+     "PCT_0.01": {
+      "normal": {
+       "start": 500,
+       "end": 415.68,
+       "return_pct": -0.1686,
+       "max_dd_pct": 0.2915,
+       "recovery_needed_pct": 0.4114,
+       "min_equity": 393.25,
+       "trades": 497,
+       "rejected": 5058,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 5058
+       },
+       "mean_planned_risk_pct": 0.0081,
+       "max_planned_risk_pct": 0.01,
+       "max_single_loss_pct": 0.01,
+       "loss_overshoot_vs_planned": 1.1293,
+       "max_margin_pct": 0.0984,
+       "mean_margin_pct": 0.0456,
+       "worst_loss_streak": 9,
+       "taken_mean_r": -0.0721,
+       "blocked_mean_r": -0.0232,
+       "survived": true
+      },
+      "moderate": {
+       "start": 500,
+       "end": 356.83,
+       "return_pct": -0.2863,
+       "max_dd_pct": 0.3116,
+       "recovery_needed_pct": 0.4527,
+       "min_equity": 354.95,
+       "trades": 354,
+       "rejected": 5516,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 5516
+       },
+       "mean_planned_risk_pct": 0.0084,
+       "max_planned_risk_pct": 0.01,
+       "max_single_loss_pct": 0.0112,
+       "loss_overshoot_vs_planned": 1.1693,
+       "max_margin_pct": 0.0996,
+       "mean_margin_pct": 0.0495,
+       "worst_loss_streak": 11,
+       "taken_mean_r": -0.191,
+       "blocked_mean_r": -0.0857,
+       "survived": true
+      },
+      "severe": {
+       "start": 500,
+       "end": 338.46,
+       "return_pct": -0.3231,
+       "max_dd_pct": 0.3307,
+       "recovery_needed_pct": 0.4941,
+       "min_equity": 338.46,
+       "trades": 200,
+       "rejected": 5988,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 5988
+       },
+       "mean_planned_risk_pct": 0.0087,
+       "max_planned_risk_pct": 0.01,
+       "max_single_loss_pct": 0.0139,
+       "loss_overshoot_vs_planned": 1.4242,
+       "max_margin_pct": 0.0657,
+       "mean_margin_pct": 0.0534,
+       "worst_loss_streak": 7,
+       "taken_mean_r": -0.4325,
+       "blocked_mean_r": -0.2065,
+       "survived": true
+      }
+     }
+    },
+    "1000": {
+     "CURRENT": {
+      "normal": {
+       "start": 1000,
+       "end": 1206.95,
+       "return_pct": 0.2069,
+       "max_dd_pct": 0.5139,
+       "recovery_needed_pct": 1.0571,
+       "min_equity": 649.92,
+       "trades": 1510,
+       "rejected": 0,
+       "rejected_by_reason": {},
+       "mean_planned_risk_pct": 0.0133,
+       "max_planned_risk_pct": 0.0634,
+       "max_single_loss_pct": 0.1249,
+       "loss_overshoot_vs_planned": 3.0794,
+       "max_margin_pct": 0.0382,
+       "mean_margin_pct": 0.0236,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.0225,
+       "blocked_mean_r": null,
+       "survived": true
+      },
+      "moderate": {
+       "start": 1000,
+       "end": 743.98,
+       "return_pct": -0.256,
+       "max_dd_pct": 0.6961,
+       "recovery_needed_pct": 2.2911,
+       "min_equity": 390.27,
+       "trades": 1509,
+       "rejected": 0,
+       "rejected_by_reason": {},
+       "mean_planned_risk_pct": 0.0174,
+       "max_planned_risk_pct": 0.0928,
+       "max_single_loss_pct": 0.1308,
+       "loss_overshoot_vs_planned": 3.0767,
+       "max_margin_pct": 0.0574,
+       "mean_margin_pct": 0.0308,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.0847,
+       "blocked_mean_r": null,
+       "survived": true
+      },
+      "severe": {
+       "start": 1000,
+       "end": 57.28,
+       "return_pct": -0.9427,
+       "max_dd_pct": 0.949,
+       "recovery_needed_pct": 18.6251,
+       "min_equity": 57.28,
+       "trades": 675,
+       "rejected": 3798,
+       "rejected_by_reason": {
+        "CURRENT_MARGIN_SAFETY_VETO": 3798
+       },
+       "mean_planned_risk_pct": 0.04,
+       "max_planned_risk_pct": 0.218,
+       "max_single_loss_pct": 0.2108,
+       "loss_overshoot_vs_planned": 3.0744,
+       "max_margin_pct": 0.3107,
+       "mean_margin_pct": 0.0691,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.2359,
+       "blocked_mean_r": -0.2459,
+       "survived": true
+      }
+     },
+     "PCT_0.001": {
+      "normal": {
+       "start": 1000,
+       "end": 1000,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 1000,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.0433,
+       "survived": true
+      },
+      "moderate": {
+       "start": 1000,
+       "end": 1000,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 1000,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.1027,
+       "survived": true
+      },
+      "severe": {
+       "start": 1000,
+       "end": 1000,
+       "return_pct": 0,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 1000,
+       "trades": 0,
+       "rejected": 6553,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6553
+       },
+       "mean_planned_risk_pct": null,
+       "max_planned_risk_pct": 0,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0,
+       "mean_margin_pct": null,
+       "worst_loss_streak": 0,
+       "taken_mean_r": null,
+       "blocked_mean_r": -0.2188,
+       "survived": true
+      }
+     },
+     "PCT_0.0025": {
+      "normal": {
+       "start": 1000,
+       "end": 997.44,
+       "return_pct": -0.0026,
+       "max_dd_pct": 0.005,
+       "recovery_needed_pct": 0.005,
+       "min_equity": 995.9,
+       "trades": 8,
+       "rejected": 6538,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6538
+       },
+       "mean_planned_risk_pct": 0.0022,
+       "max_planned_risk_pct": 0.0024,
+       "max_single_loss_pct": 0.0024,
+       "loss_overshoot_vs_planned": 1,
+       "max_margin_pct": 0.0235,
+       "mean_margin_pct": 0.0221,
+       "worst_loss_streak": 2,
+       "taken_mean_r": -0.1647,
+       "blocked_mean_r": -0.0416,
+       "survived": true
+      },
+      "moderate": {
+       "start": 1000,
+       "end": 1001.26,
+       "return_pct": 0.0013,
+       "max_dd_pct": 0.0025,
+       "recovery_needed_pct": 0.0026,
+       "min_equity": 998,
+       "trades": 4,
+       "rejected": 6545,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6545
+       },
+       "mean_planned_risk_pct": 0.0022,
+       "max_planned_risk_pct": 0.0023,
+       "max_single_loss_pct": 0.0025,
+       "loss_overshoot_vs_planned": 1.0853,
+       "max_margin_pct": 0.0235,
+       "mean_margin_pct": 0.0227,
+       "worst_loss_streak": 1,
+       "taken_mean_r": 0.3276,
+       "blocked_mean_r": -0.1021,
+       "survived": true
+      },
+      "severe": {
+       "start": 1000,
+       "end": 1001.23,
+       "return_pct": 0.0012,
+       "max_dd_pct": 0,
+       "recovery_needed_pct": 0,
+       "min_equity": 1000,
+       "trades": 2,
+       "rejected": 6551,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 6551
+       },
+       "mean_planned_risk_pct": 0.0023,
+       "max_planned_risk_pct": 0.0023,
+       "max_single_loss_pct": 0,
+       "loss_overshoot_vs_planned": 0,
+       "max_margin_pct": 0.0235,
+       "mean_margin_pct": 0.0228,
+       "worst_loss_streak": 0,
+       "taken_mean_r": 0.5841,
+       "blocked_mean_r": -0.219,
+       "survived": true
+      }
+     },
+     "PCT_0.005": {
+      "normal": {
+       "start": 1000,
+       "end": 899.32,
+       "return_pct": -0.1007,
+       "max_dd_pct": 0.18,
+       "recovery_needed_pct": 0.2196,
+       "min_equity": 877.18,
+       "trades": 511,
+       "rejected": 5010,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 5010
+       },
+       "mean_planned_risk_pct": 0.004,
+       "max_planned_risk_pct": 0.005,
+       "max_single_loss_pct": 0.005,
+       "loss_overshoot_vs_planned": 1.1293,
+       "max_margin_pct": 0.0475,
+       "mean_margin_pct": 0.0225,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.0854,
+       "blocked_mean_r": -0.0227,
+       "survived": true
+      },
+      "moderate": {
+       "start": 1000,
+       "end": 807.23,
+       "return_pct": -0.1928,
+       "max_dd_pct": 0.2089,
+       "recovery_needed_pct": 0.264,
+       "min_equity": 803.5,
+       "trades": 410,
+       "rejected": 5336,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 5336
+       },
+       "mean_planned_risk_pct": 0.0042,
+       "max_planned_risk_pct": 0.005,
+       "max_single_loss_pct": 0.0055,
+       "loss_overshoot_vs_planned": 1.1693,
+       "max_margin_pct": 0.0513,
+       "mean_margin_pct": 0.0238,
+       "worst_loss_streak": 9,
+       "taken_mean_r": -0.2162,
+       "blocked_mean_r": -0.0763,
+       "survived": true
+      },
+      "severe": {
+       "start": 1000,
+       "end": 751.08,
+       "return_pct": -0.2489,
+       "max_dd_pct": 0.2552,
+       "recovery_needed_pct": 0.3426,
+       "min_equity": 751.08,
+       "trades": 277,
+       "rejected": 5748,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 5748
+       },
+       "mean_planned_risk_pct": 0.0043,
+       "max_planned_risk_pct": 0.005,
+       "max_single_loss_pct": 0.007,
+       "loss_overshoot_vs_planned": 1.4118,
+       "max_margin_pct": 0.0509,
+       "mean_margin_pct": 0.0253,
+       "worst_loss_streak": 8,
+       "taken_mean_r": -0.4512,
+       "blocked_mean_r": -0.1942,
+       "survived": true
+      }
+     },
+     "PCT_0.0075": {
+      "normal": {
+       "start": 1000,
+       "end": 695.38,
+       "return_pct": -0.3046,
+       "max_dd_pct": 0.3918,
+       "recovery_needed_pct": 0.6442,
+       "min_equity": 669.39,
+       "trades": 904,
+       "rejected": 3711,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 3711
+       },
+       "mean_planned_risk_pct": 0.0058,
+       "max_planned_risk_pct": 0.0075,
+       "max_single_loss_pct": 0.0075,
+       "loss_overshoot_vs_planned": 1.1293,
+       "max_margin_pct": 0.0675,
+       "mean_margin_pct": 0.0271,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.1091,
+       "blocked_mean_r": 0.0052,
+       "survived": true
+      },
+      "moderate": {
+       "start": 1000,
+       "end": 572.7,
+       "return_pct": -0.4273,
+       "max_dd_pct": 0.4604,
+       "recovery_needed_pct": 0.8531,
+       "min_equity": 553.39,
+       "trades": 700,
+       "rejected": 4384,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4384
+       },
+       "mean_planned_risk_pct": 0.006,
+       "max_planned_risk_pct": 0.0075,
+       "max_single_loss_pct": 0.0078,
+       "loss_overshoot_vs_planned": 1.1693,
+       "max_margin_pct": 0.071,
+       "mean_margin_pct": 0.0293,
+       "worst_loss_streak": 9,
+       "taken_mean_r": -0.2056,
+       "blocked_mean_r": -0.051,
+       "survived": true
+      },
+      "severe": {
+       "start": 1000,
+       "end": 498.75,
+       "return_pct": -0.5012,
+       "max_dd_pct": 0.5056,
+       "recovery_needed_pct": 1.0227,
+       "min_equity": 498.75,
+       "trades": 492,
+       "rejected": 5065,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 5065
+       },
+       "mean_planned_risk_pct": 0.0062,
+       "max_planned_risk_pct": 0.0075,
+       "max_single_loss_pct": 0.0104,
+       "loss_overshoot_vs_planned": 1.4118,
+       "max_margin_pct": 0.0644,
+       "mean_margin_pct": 0.0314,
+       "worst_loss_streak": 12,
+       "taken_mean_r": -0.4039,
+       "blocked_mean_r": -0.1675,
+       "survived": true
+      }
+     },
+     "PCT_0.01": {
+      "normal": {
+       "start": 1000,
+       "end": 718.2,
+       "return_pct": -0.2818,
+       "max_dd_pct": 0.3157,
+       "recovery_needed_pct": 0.4614,
+       "min_equity": 711.84,
+       "trades": 1161,
+       "rejected": 2752,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 2752
+       },
+       "mean_planned_risk_pct": 0.0078,
+       "max_planned_risk_pct": 0.01,
+       "max_single_loss_pct": 0.0109,
+       "loss_overshoot_vs_planned": 1.1293,
+       "max_margin_pct": 0.1087,
+       "mean_margin_pct": 0.032,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.071,
+       "blocked_mean_r": -0.0093,
+       "survived": true
+      },
+      "moderate": {
+       "start": 1000,
+       "end": 392.72,
+       "return_pct": -0.6073,
+       "max_dd_pct": 0.625,
+       "recovery_needed_pct": 1.6665,
+       "min_equity": 384.76,
+       "trades": 846,
+       "rejected": 3950,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 3950
+       },
+       "mean_planned_risk_pct": 0.0079,
+       "max_planned_risk_pct": 0.01,
+       "max_single_loss_pct": 0.0107,
+       "loss_overshoot_vs_planned": 1.1693,
+       "max_margin_pct": 0.0979,
+       "mean_margin_pct": 0.0356,
+       "worst_loss_streak": 9,
+       "taken_mean_r": -0.2164,
+       "blocked_mean_r": -0.0352,
+       "survived": true
+      },
+      "severe": {
+       "start": 1000,
+       "end": 373.01,
+       "return_pct": -0.627,
+       "max_dd_pct": 0.6338,
+       "recovery_needed_pct": 1.731,
+       "min_equity": 373.01,
+       "trades": 617,
+       "rejected": 4663,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 4663
+       },
+       "mean_planned_risk_pct": 0.008,
+       "max_planned_risk_pct": 0.01,
+       "max_single_loss_pct": 0.0139,
+       "loss_overshoot_vs_planned": 1.4118,
+       "max_margin_pct": 0.0811,
+       "mean_margin_pct": 0.0376,
+       "worst_loss_streak": 8,
+       "taken_mean_r": -0.3578,
+       "blocked_mean_r": -0.1696,
+       "survived": true
+      }
+     }
+    },
+    "5000": {
+     "CURRENT": {
+      "normal": {
+       "start": 5000,
+       "end": 5206.95,
+       "return_pct": 0.0414,
+       "max_dd_pct": 0.1287,
+       "recovery_needed_pct": 0.1478,
+       "min_equity": 4649.92,
+       "trades": 1510,
+       "rejected": 0,
+       "rejected_by_reason": {},
+       "mean_planned_risk_pct": 0.0026,
+       "max_planned_risk_pct": 0.0105,
+       "max_single_loss_pct": 0.0295,
+       "loss_overshoot_vs_planned": 3.0794,
+       "max_margin_pct": 0.0056,
+       "mean_margin_pct": 0.0046,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.0225,
+       "blocked_mean_r": null,
+       "survived": true
+      },
+      "moderate": {
+       "start": 5000,
+       "end": 4743.98,
+       "return_pct": -0.0512,
+       "max_dd_pct": 0.1692,
+       "recovery_needed_pct": 0.2037,
+       "min_equity": 4390.27,
+       "trades": 1509,
+       "rejected": 0,
+       "rejected_by_reason": {},
+       "mean_planned_risk_pct": 0.0027,
+       "max_planned_risk_pct": 0.0111,
+       "max_single_loss_pct": 0.0299,
+       "loss_overshoot_vs_planned": 3.0767,
+       "max_margin_pct": 0.0057,
+       "mean_margin_pct": 0.0048,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.0847,
+       "blocked_mean_r": null,
+       "survived": true
+      },
+      "severe": {
+       "start": 5000,
+       "end": 3625.37,
+       "return_pct": -0.2749,
+       "max_dd_pct": 0.2927,
+       "recovery_needed_pct": 0.4139,
+       "min_equity": 3624.16,
+       "trades": 1499,
+       "rejected": 0,
+       "rejected_by_reason": {},
+       "mean_planned_risk_pct": 0.0032,
+       "max_planned_risk_pct": 0.013,
+       "max_single_loss_pct": 0.031,
+       "loss_overshoot_vs_planned": 3.0744,
+       "max_margin_pct": 0.0062,
+       "mean_margin_pct": 0.0055,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.2122,
+       "blocked_mean_r": null,
+       "survived": true
+      }
+     },
+     "PCT_0.001": {
+      "normal": {
+       "start": 5000,
+       "end": 4907.71,
+       "return_pct": -0.0185,
+       "max_dd_pct": 0.0341,
+       "recovery_needed_pct": 0.0353,
+       "min_equity": 4881.72,
+       "trades": 503,
+       "rejected": 5037,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 5037
+       },
+       "mean_planned_risk_pct": 0.0008,
+       "max_planned_risk_pct": 0.001,
+       "max_single_loss_pct": 0.001,
+       "loss_overshoot_vs_planned": 1.1293,
+       "max_margin_pct": 0.0092,
+       "mean_margin_pct": 0.0045,
+       "worst_loss_streak": 8,
+       "taken_mean_r": -0.0758,
+       "blocked_mean_r": -0.028,
+       "survived": true
+      },
+      "moderate": {
+       "start": 5000,
+       "end": 4790.84,
+       "return_pct": -0.0418,
+       "max_dd_pct": 0.05,
+       "recovery_needed_pct": 0.0527,
+       "min_equity": 4768.28,
+       "trades": 467,
+       "rejected": 5166,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 5166
+       },
+       "mean_planned_risk_pct": 0.0008,
+       "max_planned_risk_pct": 0.001,
+       "max_single_loss_pct": 0.0011,
+       "loss_overshoot_vs_planned": 1.1693,
+       "max_margin_pct": 0.0092,
+       "mean_margin_pct": 0.0045,
+       "worst_loss_streak": 10,
+       "taken_mean_r": -0.1993,
+       "blocked_mean_r": -0.0737,
+       "survived": true
+      },
+      "severe": {
+       "start": 5000,
+       "end": 4597.19,
+       "return_pct": -0.0806,
+       "max_dd_pct": 0.0853,
+       "recovery_needed_pct": 0.0933,
+       "min_equity": 4578.54,
+       "trades": 399,
+       "rejected": 5381,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 5381
+       },
+       "mean_planned_risk_pct": 0.0008,
+       "max_planned_risk_pct": 0.001,
+       "max_single_loss_pct": 0.0013,
+       "loss_overshoot_vs_planned": 1.4118,
+       "max_margin_pct": 0.0096,
+       "mean_margin_pct": 0.0046,
+       "worst_loss_streak": 9,
+       "taken_mean_r": -0.4662,
+       "blocked_mean_r": -0.1782,
+       "survived": true
+      }
+     },
+     "PCT_0.0025": {
+      "normal": {
+       "start": 5000,
+       "end": 4286.82,
+       "return_pct": -0.1426,
+       "max_dd_pct": 0.1521,
+       "recovery_needed_pct": 0.1794,
+       "min_equity": 4268.22,
+       "trades": 1372,
+       "rejected": 1933,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 1933
+       },
+       "mean_planned_risk_pct": 0.002,
+       "max_planned_risk_pct": 0.0025,
+       "max_single_loss_pct": 0.0025,
+       "loss_overshoot_vs_planned": 1.1293,
+       "max_margin_pct": 0.025,
+       "mean_margin_pct": 0.0073,
+       "worst_loss_streak": 11,
+       "taken_mean_r": -0.0778,
+       "blocked_mean_r": -0.0073,
+       "survived": true
+      },
+      "moderate": {
+       "start": 5000,
+       "end": 3846.88,
+       "return_pct": -0.2306,
+       "max_dd_pct": 0.2346,
+       "recovery_needed_pct": 0.3065,
+       "min_equity": 3846.88,
+       "trades": 1322,
+       "rejected": 2126,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 2126
+       },
+       "mean_planned_risk_pct": 0.0019,
+       "max_planned_risk_pct": 0.0025,
+       "max_single_loss_pct": 0.0027,
+       "loss_overshoot_vs_planned": 1.1693,
+       "max_margin_pct": 0.0245,
+       "mean_margin_pct": 0.0072,
+       "worst_loss_streak": 11,
+       "taken_mean_r": -0.1709,
+       "blocked_mean_r": -0.0214,
+       "survived": true
+      },
+      "severe": {
+       "start": 5000,
+       "end": 3200.22,
+       "return_pct": -0.36,
+       "max_dd_pct": 0.363,
+       "recovery_needed_pct": 0.5699,
+       "min_equity": 3200.22,
+       "trades": 1221,
+       "rejected": 2503,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 2503
+       },
+       "mean_planned_risk_pct": 0.0019,
+       "max_planned_risk_pct": 0.0025,
+       "max_single_loss_pct": 0.0035,
+       "loss_overshoot_vs_planned": 1.4118,
+       "max_margin_pct": 0.022,
+       "mean_margin_pct": 0.0072,
+       "worst_loss_streak": 11,
+       "taken_mean_r": -0.3439,
+       "blocked_mean_r": -0.1168,
+       "survived": true
+      }
+     },
+     "PCT_0.005": {
+      "normal": {
+       "start": 5000,
+       "end": 4296.81,
+       "return_pct": -0.1406,
+       "max_dd_pct": 0.166,
+       "recovery_needed_pct": 0.199,
+       "min_equity": 4245.81,
+       "trades": 1589,
+       "rejected": 492,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 492
+       },
+       "mean_planned_risk_pct": 0.0041,
+       "max_planned_risk_pct": 0.005,
+       "max_single_loss_pct": 0.0055,
+       "loss_overshoot_vs_planned": 1.1293,
+       "max_margin_pct": 0.053,
+       "mean_margin_pct": 0.0129,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.0229,
+       "blocked_mean_r": 0.0949,
+       "survived": true
+      },
+      "moderate": {
+       "start": 5000,
+       "end": 3381.04,
+       "return_pct": -0.3238,
+       "max_dd_pct": 0.3369,
+       "recovery_needed_pct": 0.508,
+       "min_equity": 3367.06,
+       "trades": 1586,
+       "rejected": 598,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 598
+       },
+       "mean_planned_risk_pct": 0.004,
+       "max_planned_risk_pct": 0.005,
+       "max_single_loss_pct": 0.0054,
+       "loss_overshoot_vs_planned": 1.1693,
+       "max_margin_pct": 0.0479,
+       "mean_margin_pct": 0.0124,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.0981,
+       "blocked_mean_r": 0.1439,
+       "survived": true
+      },
+      "severe": {
+       "start": 5000,
+       "end": 1829.55,
+       "return_pct": -0.6341,
+       "max_dd_pct": 0.639,
+       "recovery_needed_pct": 1.7702,
+       "min_equity": 1829.55,
+       "trades": 1505,
+       "rejected": 1214,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 1214
+       },
+       "mean_planned_risk_pct": 0.0039,
+       "max_planned_risk_pct": 0.005,
+       "max_single_loss_pct": 0.0069,
+       "loss_overshoot_vs_planned": 1.4118,
+       "max_margin_pct": 0.0441,
+       "mean_margin_pct": 0.0126,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.2835,
+       "blocked_mean_r": -0.0598,
+       "survived": true
+      }
+     },
+     "PCT_0.0075": {
+      "normal": {
+       "start": 5000,
+       "end": 4131.83,
+       "return_pct": -0.1736,
+       "max_dd_pct": 0.2422,
+       "recovery_needed_pct": 0.3195,
+       "min_equity": 3891.73,
+       "trades": 1570,
+       "rejected": 196,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 196
+       },
+       "mean_planned_risk_pct": 0.0063,
+       "max_planned_risk_pct": 0.0075,
+       "max_single_loss_pct": 0.0077,
+       "loss_overshoot_vs_planned": 1.1233,
+       "max_margin_pct": 0.0824,
+       "mean_margin_pct": 0.019,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.0228,
+       "blocked_mean_r": 0.0772,
+       "survived": true
+      },
+      "moderate": {
+       "start": 5000,
+       "end": 2819.69,
+       "return_pct": -0.4361,
+       "max_dd_pct": 0.4549,
+       "recovery_needed_pct": 0.8344,
+       "min_equity": 2789.53,
+       "trades": 1586,
+       "rejected": 273,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 273
+       },
+       "mean_planned_risk_pct": 0.0062,
+       "max_planned_risk_pct": 0.0075,
+       "max_single_loss_pct": 0.008,
+       "loss_overshoot_vs_planned": 1.1693,
+       "max_margin_pct": 0.0748,
+       "mean_margin_pct": 0.0184,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.0916,
+       "blocked_mean_r": 0.0029,
+       "survived": true
+      },
+      "severe": {
+       "start": 5000,
+       "end": 1158.53,
+       "return_pct": -0.7683,
+       "max_dd_pct": 0.7732,
+       "recovery_needed_pct": 3.4101,
+       "min_equity": 1158.53,
+       "trades": 1544,
+       "rejected": 896,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 896
+       },
+       "mean_planned_risk_pct": 0.006,
+       "max_planned_risk_pct": 0.0075,
+       "max_single_loss_pct": 0.0104,
+       "loss_overshoot_vs_planned": 1.4081,
+       "max_margin_pct": 0.0653,
+       "mean_margin_pct": 0.0185,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.2603,
+       "blocked_mean_r": -0.051,
+       "survived": true
+      }
+     },
+     "PCT_0.01": {
+      "normal": {
+       "start": 5000,
+       "end": 3780.66,
+       "return_pct": -0.2439,
+       "max_dd_pct": 0.3317,
+       "recovery_needed_pct": 0.4962,
+       "min_equity": 3467.01,
+       "trades": 1541,
+       "rejected": 99,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 99
+       },
+       "mean_planned_risk_pct": 0.0086,
+       "max_planned_risk_pct": 0.01,
+       "max_single_loss_pct": 0.0108,
+       "loss_overshoot_vs_planned": 1.1233,
+       "max_margin_pct": 0.1107,
+       "mean_margin_pct": 0.0254,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.0196,
+       "blocked_mean_r": 0.2549,
+       "survived": true
+      },
+      "moderate": {
+       "start": 5000,
+       "end": 2245.4,
+       "return_pct": -0.5509,
+       "max_dd_pct": 0.5694,
+       "recovery_needed_pct": 1.3226,
+       "min_equity": 2229.79,
+       "trades": 1573,
+       "rejected": 177,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 177
+       },
+       "mean_planned_risk_pct": 0.0084,
+       "max_planned_risk_pct": 0.01,
+       "max_single_loss_pct": 0.0107,
+       "loss_overshoot_vs_planned": 1.1617,
+       "max_margin_pct": 0.1042,
+       "mean_margin_pct": 0.0244,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.0838,
+       "blocked_mean_r": 0.0362,
+       "survived": true
+      },
+      "severe": {
+       "start": 5000,
+       "end": 631.88,
+       "return_pct": -0.8736,
+       "max_dd_pct": 0.8782,
+       "recovery_needed_pct": 7.2084,
+       "min_equity": 628.28,
+       "trades": 1486,
+       "rejected": 1121,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 1121
+       },
+       "mean_planned_risk_pct": 0.008,
+       "max_planned_risk_pct": 0.01,
+       "max_single_loss_pct": 0.0134,
+       "loss_overshoot_vs_planned": 1.4081,
+       "max_margin_pct": 0.0892,
+       "mean_margin_pct": 0.0249,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.2901,
+       "blocked_mean_r": -0.0589,
+       "survived": true
+      }
+     }
+    },
+    "10000": {
+     "CURRENT": {
+      "normal": {
+       "start": 10000,
+       "end": 10206.94,
+       "return_pct": 0.0207,
+       "max_dd_pct": 0.0665,
+       "recovery_needed_pct": 0.0712,
+       "min_equity": 9649.91,
+       "trades": 1510,
+       "rejected": 0,
+       "rejected_by_reason": {},
+       "mean_planned_risk_pct": 0.0013,
+       "max_planned_risk_pct": 0.0051,
+       "max_single_loss_pct": 0.0151,
+       "loss_overshoot_vs_planned": 3.0794,
+       "max_margin_pct": 0.0028,
+       "mean_margin_pct": 0.0023,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.0225,
+       "blocked_mean_r": null,
+       "survived": true
+      },
+      "moderate": {
+       "start": 10000,
+       "end": 9743.98,
+       "return_pct": -0.0256,
+       "max_dd_pct": 0.0869,
+       "recovery_needed_pct": 0.0952,
+       "min_equity": 9390.27,
+       "trades": 1509,
+       "rejected": 0,
+       "rejected_by_reason": {},
+       "mean_planned_risk_pct": 0.0013,
+       "max_planned_risk_pct": 0.0053,
+       "max_single_loss_pct": 0.0152,
+       "loss_overshoot_vs_planned": 3.0767,
+       "max_margin_pct": 0.0028,
+       "mean_margin_pct": 0.0023,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.0847,
+       "blocked_mean_r": null,
+       "survived": true
+      },
+      "severe": {
+       "start": 10000,
+       "end": 8625.37,
+       "return_pct": -0.1375,
+       "max_dd_pct": 0.1481,
+       "recovery_needed_pct": 0.1739,
+       "min_equity": 8624.16,
+       "trades": 1499,
+       "rejected": 0,
+       "rejected_by_reason": {},
+       "mean_planned_risk_pct": 0.0014,
+       "max_planned_risk_pct": 0.0057,
+       "max_single_loss_pct": 0.0155,
+       "loss_overshoot_vs_planned": 3.0744,
+       "max_margin_pct": 0.0029,
+       "mean_margin_pct": 0.0025,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.2122,
+       "blocked_mean_r": null,
+       "survived": true
+      }
+     },
+     "PCT_0.001": {
+      "normal": {
+       "start": 10000,
+       "end": 9730.44,
+       "return_pct": -0.027,
+       "max_dd_pct": 0.0354,
+       "recovery_needed_pct": 0.0367,
+       "min_equity": 9711.89,
+       "trades": 1234,
+       "rejected": 2514,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 2514
+       },
+       "mean_planned_risk_pct": 0.0008,
+       "max_planned_risk_pct": 0.001,
+       "max_single_loss_pct": 0.001,
+       "loss_overshoot_vs_planned": 1.1293,
+       "max_margin_pct": 0.0112,
+       "mean_margin_pct": 0.0031,
+       "worst_loss_streak": 17,
+       "taken_mean_r": -0.0611,
+       "blocked_mean_r": -0.0022,
+       "survived": true
+      },
+      "moderate": {
+       "start": 10000,
+       "end": 9230.37,
+       "return_pct": -0.077,
+       "max_dd_pct": 0.0793,
+       "recovery_needed_pct": 0.0861,
+       "min_equity": 9229.34,
+       "trades": 1196,
+       "rejected": 2675,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 2675
+       },
+       "mean_planned_risk_pct": 0.0008,
+       "max_planned_risk_pct": 0.001,
+       "max_single_loss_pct": 0.0011,
+       "loss_overshoot_vs_planned": 1.1693,
+       "max_margin_pct": 0.0095,
+       "mean_margin_pct": 0.0031,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.1612,
+       "blocked_mean_r": -0.0322,
+       "survived": true
+      },
+      "severe": {
+       "start": 10000,
+       "end": 8425.12,
+       "return_pct": -0.1575,
+       "max_dd_pct": 0.1591,
+       "recovery_needed_pct": 0.1891,
+       "min_equity": 8425.12,
+       "trades": 1140,
+       "rejected": 2851,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 2851
+       },
+       "mean_planned_risk_pct": 0.0008,
+       "max_planned_risk_pct": 0.001,
+       "max_single_loss_pct": 0.0014,
+       "loss_overshoot_vs_planned": 1.4118,
+       "max_margin_pct": 0.0078,
+       "mean_margin_pct": 0.003,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.3577,
+       "blocked_mean_r": -0.1167,
+       "survived": true
+      }
+     },
+     "PCT_0.0025": {
+      "normal": {
+       "start": 10000,
+       "end": 9289.3,
+       "return_pct": -0.0711,
+       "max_dd_pct": 0.083,
+       "recovery_needed_pct": 0.0905,
+       "min_equity": 9258.97,
+       "trades": 1590,
+       "rejected": 447,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 447
+       },
+       "mean_planned_risk_pct": 0.002,
+       "max_planned_risk_pct": 0.0025,
+       "max_single_loss_pct": 0.0026,
+       "loss_overshoot_vs_planned": 1.1293,
+       "max_margin_pct": 0.0274,
+       "mean_margin_pct": 0.0064,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.028,
+       "blocked_mean_r": 0.1537,
+       "survived": true
+      },
+      "moderate": {
+       "start": 10000,
+       "end": 8052.82,
+       "return_pct": -0.1947,
+       "max_dd_pct": 0.2036,
+       "recovery_needed_pct": 0.2556,
+       "min_equity": 8026.04,
+       "trades": 1587,
+       "rejected": 524,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 524
+       },
+       "mean_planned_risk_pct": 0.002,
+       "max_planned_risk_pct": 0.0025,
+       "max_single_loss_pct": 0.0026,
+       "loss_overshoot_vs_planned": 1.1693,
+       "max_margin_pct": 0.0262,
+       "mean_margin_pct": 0.0062,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.0966,
+       "blocked_mean_r": 0.1083,
+       "survived": true
+      },
+      "severe": {
+       "start": 10000,
+       "end": 6359.8,
+       "return_pct": -0.364,
+       "max_dd_pct": 0.3684,
+       "recovery_needed_pct": 0.5833,
+       "min_equity": 6359.1,
+       "trades": 1584,
+       "rejected": 664,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 664
+       },
+       "mean_planned_risk_pct": 0.002,
+       "max_planned_risk_pct": 0.0025,
+       "max_single_loss_pct": 0.0035,
+       "loss_overshoot_vs_planned": 1.4081,
+       "max_margin_pct": 0.0226,
+       "mean_margin_pct": 0.0061,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.2328,
+       "blocked_mean_r": 0.0341,
+       "survived": true
+      }
+     },
+     "PCT_0.005": {
+      "normal": {
+       "start": 10000,
+       "end": 8881.08,
+       "return_pct": -0.1119,
+       "max_dd_pct": 0.1762,
+       "recovery_needed_pct": 0.2138,
+       "min_equity": 8392.83,
+       "trades": 1541,
+       "rejected": 88,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 88
+       },
+       "mean_planned_risk_pct": 0.0044,
+       "max_planned_risk_pct": 0.005,
+       "max_single_loss_pct": 0.0055,
+       "loss_overshoot_vs_planned": 1.1233,
+       "max_margin_pct": 0.056,
+       "mean_margin_pct": 0.0128,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.0203,
+       "blocked_mean_r": 0.3945,
+       "survived": true
+      },
+      "moderate": {
+       "start": 10000,
+       "end": 6666.01,
+       "return_pct": -0.3334,
+       "max_dd_pct": 0.3465,
+       "recovery_needed_pct": 0.5302,
+       "min_equity": 6651.98,
+       "trades": 1549,
+       "rejected": 99,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 99
+       },
+       "mean_planned_risk_pct": 0.0043,
+       "max_planned_risk_pct": 0.005,
+       "max_single_loss_pct": 0.0056,
+       "loss_overshoot_vs_planned": 1.1617,
+       "max_margin_pct": 0.0507,
+       "mean_margin_pct": 0.0123,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.084,
+       "blocked_mean_r": 0.3061,
+       "survived": true
+      },
+      "severe": {
+       "start": 10000,
+       "end": 4100.94,
+       "return_pct": -0.5899,
+       "max_dd_pct": 0.5961,
+       "recovery_needed_pct": 1.4759,
+       "min_equity": 4100.94,
+       "trades": 1569,
+       "rejected": 196,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 196
+       },
+       "mean_planned_risk_pct": 0.0042,
+       "max_planned_risk_pct": 0.005,
+       "max_single_loss_pct": 0.007,
+       "loss_overshoot_vs_planned": 1.4081,
+       "max_margin_pct": 0.0466,
+       "mean_margin_pct": 0.0118,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.2127,
+       "blocked_mean_r": -0.0642,
+       "survived": true
+      }
+     },
+     "PCT_0.0075": {
+      "normal": {
+       "start": 10000,
+       "end": 8533.89,
+       "return_pct": -0.1466,
+       "max_dd_pct": 0.2397,
+       "recovery_needed_pct": 0.3153,
+       "min_equity": 7886.99,
+       "trades": 1523,
+       "rejected": 26,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 26
+       },
+       "mean_planned_risk_pct": 0.0068,
+       "max_planned_risk_pct": 0.0075,
+       "max_single_loss_pct": 0.008,
+       "loss_overshoot_vs_planned": 1.1233,
+       "max_margin_pct": 0.0846,
+       "mean_margin_pct": 0.0196,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.0152,
+       "blocked_mean_r": 0.2805,
+       "survived": true
+      },
+      "moderate": {
+       "start": 10000,
+       "end": 5779.77,
+       "return_pct": -0.422,
+       "max_dd_pct": 0.4417,
+       "recovery_needed_pct": 0.7911,
+       "min_equity": 5734.09,
+       "trades": 1541,
+       "rejected": 33,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 33
+       },
+       "mean_planned_risk_pct": 0.0067,
+       "max_planned_risk_pct": 0.0075,
+       "max_single_loss_pct": 0.0084,
+       "loss_overshoot_vs_planned": 1.1617,
+       "max_margin_pct": 0.0765,
+       "mean_margin_pct": 0.0188,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.0788,
+       "blocked_mean_r": 0.1418,
+       "survived": true
+      },
+      "severe": {
+       "start": 10000,
+       "end": 2727.79,
+       "return_pct": -0.7272,
+       "max_dd_pct": 0.7338,
+       "recovery_needed_pct": 2.757,
+       "min_equity": 2727.79,
+       "trades": 1549,
+       "rejected": 95,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 95
+       },
+       "mean_planned_risk_pct": 0.0064,
+       "max_planned_risk_pct": 0.0075,
+       "max_single_loss_pct": 0.0104,
+       "loss_overshoot_vs_planned": 1.4081,
+       "max_margin_pct": 0.0712,
+       "mean_margin_pct": 0.0177,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.2041,
+       "blocked_mean_r": 0.1167,
+       "survived": true
+      }
+     },
+     "PCT_0.01": {
+      "normal": {
+       "start": 10000,
+       "end": 7927.07,
+       "return_pct": -0.2073,
+       "max_dd_pct": 0.3208,
+       "recovery_needed_pct": 0.4724,
+       "min_equity": 7089.1,
+       "trades": 1522,
+       "rejected": 11,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 11
+       },
+       "mean_planned_risk_pct": 0.0093,
+       "max_planned_risk_pct": 0.01,
+       "max_single_loss_pct": 0.0111,
+       "loss_overshoot_vs_planned": 1.1233,
+       "max_margin_pct": 0.1143,
+       "mean_margin_pct": 0.0264,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.0175,
+       "blocked_mean_r": 0.6802,
+       "survived": true
+      },
+      "moderate": {
+       "start": 10000,
+       "end": 4842.15,
+       "return_pct": -0.5158,
+       "max_dd_pct": 0.5381,
+       "recovery_needed_pct": 1.1651,
+       "min_equity": 4793.7,
+       "trades": 1528,
+       "rejected": 13,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 13
+       },
+       "mean_planned_risk_pct": 0.0091,
+       "max_planned_risk_pct": 0.01,
+       "max_single_loss_pct": 0.0109,
+       "loss_overshoot_vs_planned": 1.1617,
+       "max_margin_pct": 0.1057,
+       "mean_margin_pct": 0.0254,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.076,
+       "blocked_mean_r": 0.4094,
+       "survived": true
+      },
+      "severe": {
+       "start": 10000,
+       "end": 1679.9,
+       "return_pct": -0.832,
+       "max_dd_pct": 0.8375,
+       "recovery_needed_pct": 5.1536,
+       "min_equity": 1679.9,
+       "trades": 1556,
+       "rejected": 88,
+       "rejected_by_reason": {
+        "RISK_BELOW_MIN_LOT": 88
+       },
+       "mean_planned_risk_pct": 0.0085,
+       "max_planned_risk_pct": 0.01,
+       "max_single_loss_pct": 0.0139,
+       "loss_overshoot_vs_planned": 1.4081,
+       "max_margin_pct": 0.0885,
+       "mean_margin_pct": 0.0236,
+       "worst_loss_streak": 16,
+       "taken_mean_r": -0.2066,
+       "blocked_mean_r": -0.0284,
+       "survived": true
+      }
+     }
+    }
+   },
+   "controls_at_approved": {},
+   "monte_carlo": {
+    "0.001": {
+     "paths": 2000,
+     "trades_per_year": 1821,
+     "p_dd_ge_10": 0.0655,
+     "p_dd_ge_20": 0,
+     "p_dd_ge_30": 0,
+     "p_dd_ge_50": 0,
+     "median_dd": 0.0559,
+     "p95_dd": 0.1045
+    },
+    "0.0025": {
+     "paths": 2000,
+     "trades_per_year": 1821,
+     "p_dd_ge_10": 0.753,
+     "p_dd_ge_20": 0.156,
+     "p_dd_ge_30": 0.0055,
+     "p_dd_ge_50": 0,
+     "median_dd": 0.1356,
+     "p95_dd": 0.2435
+    },
+    "0.005": {
+     "paths": 2000,
+     "trades_per_year": 1821,
+     "p_dd_ge_10": 0.994,
+     "p_dd_ge_20": 0.7185,
+     "p_dd_ge_30": 0.339,
+     "p_dd_ge_50": 0.0085,
+     "median_dd": 0.2575,
+     "p95_dd": 0.4326
+    },
+    "0.0075": {
+     "paths": 2000,
+     "trades_per_year": 1821,
+     "p_dd_ge_10": 1,
+     "p_dd_ge_20": 0.9525,
+     "p_dd_ge_30": 0.684,
+     "p_dd_ge_50": 0.1555,
+     "median_dd": 0.3672,
+     "p95_dd": 0.5786
+    },
+    "0.01": {
+     "paths": 2000,
+     "trades_per_year": 1821,
+     "p_dd_ge_10": 1,
+     "p_dd_ge_20": 0.9925,
+     "p_dd_ge_30": 0.8955,
+     "p_dd_ge_50": 0.4025,
+     "median_dd": 0.4631,
+     "p95_dd": 0.6898
+    }
+   },
+   "units_n": 1510
+  }
+ },
+ "integrity": {
+  "replay": {
+   "deterministic": true,
+   "restart_equals_uninterrupted": true,
+   "restart_prefix_consistent": true,
+   "duplicate_prevented": true
+  },
+  "pct_never_above_approved": true,
+  "hold_checks": {}
+ },
+ "math": {
+  "recovery": {
+   "0.01": 0.0101,
+   "0.05": 0.0526,
+   "0.1": 0.1111,
+   "0.2": 0.25,
+   "0.3": 0.4286,
+   "0.4": 0.6667,
+   "0.5": 1
+  },
+  "streaks": {
+   "0.001": {
+    "5": {
+     "normal": 0.005,
+     "severe_1_25x": 0.0062
+    },
+    "10": {
+     "normal": 0.01,
+     "severe_1_25x": 0.0124
+    },
+    "15": {
+     "normal": 0.0149,
+     "severe_1_25x": 0.0186
+    },
+    "20": {
+     "normal": 0.0198,
+     "severe_1_25x": 0.0247
+    }
+   },
+   "0.0025": {
+    "5": {
+     "normal": 0.0124,
+     "severe_1_25x": 0.0155
+    },
+    "10": {
+     "normal": 0.0247,
+     "severe_1_25x": 0.0308
+    },
+    "15": {
+     "normal": 0.0369,
+     "severe_1_25x": 0.0459
+    },
+    "20": {
+     "normal": 0.0488,
+     "severe_1_25x": 0.0607
+    }
+   },
+   "0.005": {
+    "5": {
+     "normal": 0.0248,
+     "severe_1_25x": 0.0309
+    },
+    "10": {
+     "normal": 0.0489,
+     "severe_1_25x": 0.0608
+    },
+    "15": {
+     "normal": 0.0724,
+     "severe_1_25x": 0.0898
+    },
+    "20": {
+     "normal": 0.0954,
+     "severe_1_25x": 0.1178
+    }
+   },
+   "0.0075": {
+    "5": {
+     "normal": 0.0369,
+     "severe_1_25x": 0.046
+    },
+    "10": {
+     "normal": 0.0725,
+     "severe_1_25x": 0.0899
+    },
+    "15": {
+     "normal": 0.1068,
+     "severe_1_25x": 0.1318
+    },
+    "20": {
+     "normal": 0.1398,
+     "severe_1_25x": 0.1717
+    }
+   },
+   "0.01": {
+    "5": {
+     "normal": 0.049,
+     "severe_1_25x": 0.061
+    },
+    "10": {
+     "normal": 0.0956,
+     "severe_1_25x": 0.1182
+    },
+    "15": {
+     "normal": 0.1399,
+     "severe_1_25x": 0.1719
+    },
+    "20": {
+     "normal": 0.1821,
+     "severe_1_25x": 0.2224
+    }
+   }
+  },
+  "current_fixed_lot_streak": {
+   "median_worst_loss_usd_001lot": 7.47,
+   "p90_worst_loss_usd_001lot": 16.15,
+   "by_account": {
+    "100": {
+     "risk_pct_median": 0.0746,
+     "risk_pct_p90": 0.1615,
+     "equity_after_k_losses_median": {
+      "5": 62.68,
+      "10": 25.35,
+      "15": 0,
+      "20": 0
+     }
+    },
+    "250": {
+     "risk_pct_median": 0.0299,
+     "risk_pct_p90": 0.0646,
+     "equity_after_k_losses_median": {
+      "5": 212.68,
+      "10": 175.35,
+      "15": 138.03,
+      "20": 100.7
+     }
+    },
+    "500": {
+     "risk_pct_median": 0.0149,
+     "risk_pct_p90": 0.0323,
+     "equity_after_k_losses_median": {
+      "5": 462.68,
+      "10": 425.35,
+      "15": 388.03,
+      "20": 350.7
+     }
+    },
+    "1000": {
+     "risk_pct_median": 0.0075,
+     "risk_pct_p90": 0.0161,
+     "equity_after_k_losses_median": {
+      "5": 962.68,
+      "10": 925.35,
+      "15": 888.03,
+      "20": 850.7
+     }
+    },
+    "5000": {
+     "risk_pct_median": 0.0015,
+     "risk_pct_p90": 0.0032,
+     "equity_after_k_losses_median": {
+      "5": 4962.68,
+      "10": 4925.35,
+      "15": 4888.02,
+      "20": 4850.7
+     }
+    },
+    "10000": {
+     "risk_pct_median": 0.0007,
+     "risk_pct_p90": 0.0016,
+     "equity_after_k_losses_median": {
+      "5": 9962.67,
+      "10": 9925.35,
+      "15": 9888.03,
+      "20": 9850.7
+     }
+    }
+   }
+  }
+ },
+ "decision": {
+  "mechanics": "see tests/risk_capital_v10.test.js (must pass)",
+  "supported_on_dev": false,
+  "hold_confirms": false,
+  "never_above_approved": true,
+  "replay_ok": true,
+  "RISK_MODEL": "INCONCLUSIVE",
+  "PROPOSED_RISK_SPEC": "NO"
+ }
+}
