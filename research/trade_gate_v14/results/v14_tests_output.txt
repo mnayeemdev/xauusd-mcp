@@ -1,0 +1,42 @@
+▶ WAIT states (every WAIT carries a deterministic reason)
+  ✔ no setup: no pattern / pattern only (2.3568ms)
+  ✔ setup without trigger (0.1521ms)
+  ✔ trigger without direction: no eligible candidate, CHOP, HTF / ENTRY conflict (0.2818ms)
+  ✔ invalid location / SL / RR and entry quality (engine rules, never repaired) (0.9596ms)
+  ✔ stale data: engine stale, missing stages, late signal, out-of-order or duplicate bar (0.4538ms)
+  ✔ unknown engine state fails closed (0.2001ms)
+✔ WAIT states (every WAIT carries a deterministic reason) (5.3545ms)
+▶ risk firewall (valid entry + unsafe risk = VALID_ENTRY + RISK_REJECTED, never modified)
+  ✔ risk percentage UNRESOLVED: every valid entry is RISK_REJECTED; nothing is eligible (0.2722ms)
+  ✔ minimum lot rejection and margin rejection stay VALID_ENTRY (1.0903ms)
+  ✔ risk accepted -> TRADE_ELIGIBLE with every invariant satisfied; the entry hash is unchanged (0.6254ms)
+  ✔ broker rejection, broker order rules and unsafe broker data -> WAIT_BROKER_UNSAFE (no retry, no resize) (0.5961ms)
+  ✔ the CURRENT production model goes through the production margin veto (0.6041ms)
+✔ risk firewall (valid entry + unsafe risk = VALID_ENTRY + RISK_REJECTED, never modified) (3.5002ms)
+▶ safety breakers, exposure, conflict
+  ✔ production consecutive-loss limit (REAL 2 per UTC day) and daily ceiling; reset on the next UTC day; kill switch; recorded news block (0.9346ms)
+  ✔ single exposure: a valid entry while a position is open is RISK_REJECTED (never stacked) (0.3442ms)
+  ✔ strategy conflict: recorded; follows the existing priority chain when defined, WAIT_CONFLICT when no resolution is defined; never a new vote (0.3256ms)
+✔ safety breakers, exposure, conflict (1.7753ms)
+▶ determinism, restart, duplicates, no-lookahead, no forced entry
+  ✔ same input + same state = same decision (1,000 repeats) (29.3494ms)
+  ✔ decideGate never mutates its inputs; a serialized state resumes identically (restart) (0.2631ms)
+  ✔ duplicate signal delivery is rejected (also after restart) (0.119ms)
+  ✔ no lookahead: a decision depends only on the current input and prior state (later inputs never change it) (0.3071ms)
+  ✔ no forced entry or direction: the gate is never eligible when the engine waits, and never picks a side (0.2345ms)
+  ✔ engine signal without a verified trigger or outside the bias-aware triggers fails closed (discrepancy flagged) (0.207ms)
+  ✔ invariants catch any eligible record that is missing a precondition (0.1486ms)
+✔ determinism, restart, duplicates, no-lookahead, no forced entry (30.8647ms)
+▶ forward-shadow adapter and research boundaries
+  ✔ a live record without quote age fails closed under a risk model (missing field), but is fully determined under the unresolved risk model (0.3279ms)
+  ✔ no execution code, no new indicators / filters / scores (1.263ms)
+  ✔ replay results (local, skipped when absent): no failure condition, V11 parity, zero eligible under PRIMARY, status consistent (0.7101ms)
+✔ forward-shadow adapter and research boundaries (2.437ms)
+ℹ tests 24
+ℹ suites 5
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 124.5114

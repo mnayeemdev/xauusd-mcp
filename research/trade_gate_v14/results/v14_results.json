@@ -1,0 +1,507 @@
+{
+ "generated_utc": "2026-10-02T15:33:04.670Z",
+ "prereg_sha": "aa330171e135066426e158cf3a237e8be406b1bd2872ce8e47c05f65f95f5839",
+ "gate_sha": "ae58a7249fb27c84c59f156e3d2e1bc240b9205f6afc165c83e1234bd8d04d72",
+ "study_sha": "6e7fd4b83ccb2f5569ad813927ad23b05e61d8fdef44898c48709963966ae130",
+ "splits": {
+  "DEV": {
+   "rows": 46593,
+   "configs": {
+    "PRIMARY": {
+     "decisions": 46593,
+     "by_state": {
+      "WAIT_STALE_DATA": 424,
+      "WAIT_SAFETY_BREAKER": 0,
+      "WAIT_NO_SETUP": 8063,
+      "WAIT_NO_TRIGGER": 16683,
+      "WAIT_DIRECTION_UNCLEAR": 9955,
+      "WAIT_CONFLICT": 0,
+      "WAIT_INVALID_LOCATION": 781,
+      "WAIT_INVALID_SL": 0,
+      "WAIT_INVALID_RR": 5004,
+      "WAIT_ENTRY_QUALITY": 825,
+      "WAIT_RISK_UNSAFE": 4858,
+      "WAIT_BROKER_UNSAFE": 0,
+      "TRADE_ELIGIBLE": 0
+     },
+     "by_reason": {
+      "WAIT_DIRECTION_UNCLEAR:NO_ELIGIBLE_STRATEGY": 9341,
+      "WAIT_NO_TRIGGER:SETUP_WITHOUT_TRIGGER": 16683,
+      "WAIT_ENTRY_QUALITY:NO_GOOD_ENTRY": 825,
+      "WAIT_INVALID_RR:RR_NOT_ACCEPTABLE": 2793,
+      "WAIT_NO_SETUP:PATTERN_ONLY": 8063,
+      "WAIT_RISK_UNSAFE:RISK_PERCENTAGE_UNRESOLVED": 4858,
+      "WAIT_INVALID_LOCATION:OVEREXTENDED": 781,
+      "WAIT_DIRECTION_UNCLEAR:HTF_CONFLICT": 336,
+      "WAIT_DIRECTION_UNCLEAR:ENTRY_CONFLICT": 261,
+      "WAIT_STALE_DATA:DATA_UNAVAILABLE_STALE": 424,
+      "WAIT_INVALID_RR:VOLATILITY_INSUFFICIENT": 2211,
+      "WAIT_DIRECTION_UNCLEAR:CHOP": 17
+     },
+     "engine_signals": 4858,
+     "valid_entries": 4858,
+     "risk_rejected_valid_entries": 4858,
+     "broker_rejections": 0,
+     "safety_rejections": 0,
+     "strategy_conflicts": 36,
+     "conflicts_resolved_by_existing_priority": 36,
+     "trade_eligible": 0,
+     "discrepancies": {},
+     "invariant_violations": [],
+     "hypothetical_trades_with_outcome": 0,
+     "end_equity_10k": 10000
+    },
+    "ILLUSTRATIVE_PCT_0_50_10K": {
+     "decisions": 46593,
+     "by_state": {
+      "WAIT_STALE_DATA": 424,
+      "WAIT_SAFETY_BREAKER": 378,
+      "WAIT_NO_SETUP": 8063,
+      "WAIT_NO_TRIGGER": 16683,
+      "WAIT_DIRECTION_UNCLEAR": 9955,
+      "WAIT_CONFLICT": 0,
+      "WAIT_INVALID_LOCATION": 781,
+      "WAIT_INVALID_SL": 0,
+      "WAIT_INVALID_RR": 5004,
+      "WAIT_ENTRY_QUALITY": 825,
+      "WAIT_RISK_UNSAFE": 3339,
+      "WAIT_BROKER_UNSAFE": 0,
+      "TRADE_ELIGIBLE": 1141
+     },
+     "by_reason": {
+      "WAIT_DIRECTION_UNCLEAR:NO_ELIGIBLE_STRATEGY": 9341,
+      "WAIT_NO_TRIGGER:SETUP_WITHOUT_TRIGGER": 16683,
+      "WAIT_ENTRY_QUALITY:NO_GOOD_ENTRY": 825,
+      "WAIT_INVALID_RR:RR_NOT_ACCEPTABLE": 2793,
+      "WAIT_NO_SETUP:PATTERN_ONLY": 8063,
+      "TRADE_ELIGIBLE:ALL_CHECKS_PASSED": 1141,
+      "WAIT_RISK_UNSAFE:POSITION_OPEN_MAX_SIMULTANEOUS_1": 3333,
+      "WAIT_INVALID_LOCATION:OVEREXTENDED": 781,
+      "WAIT_DIRECTION_UNCLEAR:HTF_CONFLICT": 336,
+      "WAIT_DIRECTION_UNCLEAR:ENTRY_CONFLICT": 261,
+      "WAIT_STALE_DATA:DATA_UNAVAILABLE_STALE": 424,
+      "WAIT_SAFETY_BREAKER:STALE_SAME_SETUP": 341,
+      "WAIT_INVALID_RR:VOLATILITY_INSUFFICIENT": 2211,
+      "WAIT_SAFETY_BREAKER:REVENGE_GUARD": 37,
+      "WAIT_DIRECTION_UNCLEAR:CHOP": 17,
+      "WAIT_RISK_UNSAFE:RISK_BELOW_MIN_LOT": 6
+     },
+     "engine_signals": 4858,
+     "valid_entries": 4858,
+     "risk_rejected_valid_entries": 3339,
+     "broker_rejections": 0,
+     "safety_rejections": 378,
+     "strategy_conflicts": 36,
+     "conflicts_resolved_by_existing_priority": 36,
+     "trade_eligible": 1141,
+     "discrepancies": {},
+     "invariant_violations": [],
+     "hypothetical_trades_with_outcome": 1141,
+     "end_equity_10k": 7833.42,
+     "lifecycle_lookahead_violations": 0
+    },
+    "ILLUSTRATIVE_CURRENT_10K": {
+     "decisions": 46593,
+     "by_state": {
+      "WAIT_STALE_DATA": 424,
+      "WAIT_SAFETY_BREAKER": 17449,
+      "WAIT_NO_SETUP": 5085,
+      "WAIT_NO_TRIGGER": 10485,
+      "WAIT_DIRECTION_UNCLEAR": 6012,
+      "WAIT_CONFLICT": 0,
+      "WAIT_INVALID_LOCATION": 521,
+      "WAIT_INVALID_SL": 0,
+      "WAIT_INVALID_RR": 3329,
+      "WAIT_ENTRY_QUALITY": 491,
+      "WAIT_RISK_UNSAFE": 2122,
+      "WAIT_BROKER_UNSAFE": 0,
+      "TRADE_ELIGIBLE": 675
+     },
+     "by_reason": {
+      "WAIT_DIRECTION_UNCLEAR:NO_ELIGIBLE_STRATEGY": 5605,
+      "WAIT_NO_TRIGGER:SETUP_WITHOUT_TRIGGER": 10485,
+      "WAIT_ENTRY_QUALITY:NO_GOOD_ENTRY": 491,
+      "WAIT_INVALID_RR:RR_NOT_ACCEPTABLE": 1685,
+      "WAIT_NO_SETUP:PATTERN_ONLY": 5085,
+      "TRADE_ELIGIBLE:ALL_CHECKS_PASSED": 675,
+      "WAIT_RISK_UNSAFE:POSITION_OPEN_MAX_SIMULTANEOUS_1": 2122,
+      "WAIT_INVALID_LOCATION:OVEREXTENDED": 521,
+      "WAIT_SAFETY_BREAKER:CONSECUTIVE_LOSS_LIMIT": 17165,
+      "WAIT_STALE_DATA:DATA_UNAVAILABLE_STALE": 424,
+      "WAIT_SAFETY_BREAKER:STALE_SAME_SETUP": 184,
+      "WAIT_DIRECTION_UNCLEAR:ENTRY_CONFLICT": 171,
+      "WAIT_DIRECTION_UNCLEAR:HTF_CONFLICT": 229,
+      "WAIT_SAFETY_BREAKER:DAILY_TRADE_CEILING": 86,
+      "WAIT_INVALID_RR:VOLATILITY_INSUFFICIENT": 1644,
+      "WAIT_SAFETY_BREAKER:REVENGE_GUARD": 14,
+      "WAIT_DIRECTION_UNCLEAR:CHOP": 7
+     },
+     "engine_signals": 4858,
+     "valid_entries": 2995,
+     "risk_rejected_valid_entries": 2122,
+     "broker_rejections": 0,
+     "safety_rejections": 17449,
+     "strategy_conflicts": 21,
+     "conflicts_resolved_by_existing_priority": 21,
+     "trade_eligible": 675,
+     "discrepancies": {},
+     "invariant_violations": [],
+     "hypothetical_trades_with_outcome": 675,
+     "end_equity_10k": 10243.2,
+     "lifecycle_lookahead_violations": 0
+    }
+   },
+   "v11_parity": {
+    "gate_trades": 1141,
+    "v11_trades": 1141,
+    "gate_end_equity": 7833.42,
+    "v11_end_equity": 7833.42,
+    "same": true
+   }
+  },
+  "HOLD": {
+   "rows": 52788,
+   "configs": {
+    "PRIMARY": {
+     "decisions": 52788,
+     "by_state": {
+      "WAIT_STALE_DATA": 509,
+      "WAIT_SAFETY_BREAKER": 0,
+      "WAIT_NO_SETUP": 9195,
+      "WAIT_NO_TRIGGER": 19175,
+      "WAIT_DIRECTION_UNCLEAR": 11478,
+      "WAIT_CONFLICT": 0,
+      "WAIT_INVALID_LOCATION": 914,
+      "WAIT_INVALID_SL": 0,
+      "WAIT_INVALID_RR": 3853,
+      "WAIT_ENTRY_QUALITY": 1111,
+      "WAIT_RISK_UNSAFE": 6553,
+      "WAIT_BROKER_UNSAFE": 0,
+      "TRADE_ELIGIBLE": 0
+     },
+     "by_reason": {
+      "WAIT_STALE_DATA:DATA_UNAVAILABLE_STALE": 509,
+      "WAIT_NO_SETUP:PATTERN_ONLY": 9195,
+      "WAIT_DIRECTION_UNCLEAR:HTF_CONFLICT": 517,
+      "WAIT_ENTRY_QUALITY:NO_GOOD_ENTRY": 1111,
+      "WAIT_INVALID_RR:RR_NOT_ACCEPTABLE": 3850,
+      "WAIT_NO_TRIGGER:SETUP_WITHOUT_TRIGGER": 19175,
+      "WAIT_RISK_UNSAFE:RISK_PERCENTAGE_UNRESOLVED": 6553,
+      "WAIT_DIRECTION_UNCLEAR:NO_ELIGIBLE_STRATEGY": 10588,
+      "WAIT_INVALID_LOCATION:OVEREXTENDED": 914,
+      "WAIT_DIRECTION_UNCLEAR:ENTRY_CONFLICT": 357,
+      "WAIT_DIRECTION_UNCLEAR:CHOP": 16,
+      "WAIT_INVALID_RR:VOLATILITY_INSUFFICIENT": 3
+     },
+     "engine_signals": 6553,
+     "valid_entries": 6553,
+     "risk_rejected_valid_entries": 6553,
+     "broker_rejections": 0,
+     "safety_rejections": 0,
+     "strategy_conflicts": 66,
+     "conflicts_resolved_by_existing_priority": 66,
+     "trade_eligible": 0,
+     "discrepancies": {},
+     "invariant_violations": [],
+     "hypothetical_trades_with_outcome": 0,
+     "end_equity_10k": 10000
+    },
+    "ILLUSTRATIVE_PCT_0_50_10K": {
+     "decisions": 52788,
+     "by_state": {
+      "WAIT_STALE_DATA": 509,
+      "WAIT_SAFETY_BREAKER": 608,
+      "WAIT_NO_SETUP": 9195,
+      "WAIT_NO_TRIGGER": 19175,
+      "WAIT_DIRECTION_UNCLEAR": 11478,
+      "WAIT_CONFLICT": 0,
+      "WAIT_INVALID_LOCATION": 914,
+      "WAIT_INVALID_SL": 0,
+      "WAIT_INVALID_RR": 3853,
+      "WAIT_ENTRY_QUALITY": 1111,
+      "WAIT_RISK_UNSAFE": 4404,
+      "WAIT_BROKER_UNSAFE": 0,
+      "TRADE_ELIGIBLE": 1541
+     },
+     "by_reason": {
+      "WAIT_STALE_DATA:DATA_UNAVAILABLE_STALE": 509,
+      "WAIT_NO_SETUP:PATTERN_ONLY": 9195,
+      "WAIT_DIRECTION_UNCLEAR:HTF_CONFLICT": 517,
+      "WAIT_ENTRY_QUALITY:NO_GOOD_ENTRY": 1111,
+      "WAIT_INVALID_RR:RR_NOT_ACCEPTABLE": 3850,
+      "WAIT_NO_TRIGGER:SETUP_WITHOUT_TRIGGER": 19175,
+      "TRADE_ELIGIBLE:ALL_CHECKS_PASSED": 1541,
+      "WAIT_RISK_UNSAFE:POSITION_OPEN_MAX_SIMULTANEOUS_1": 4316,
+      "WAIT_DIRECTION_UNCLEAR:NO_ELIGIBLE_STRATEGY": 10588,
+      "WAIT_INVALID_LOCATION:OVEREXTENDED": 914,
+      "WAIT_SAFETY_BREAKER:STALE_SAME_SETUP": 546,
+      "WAIT_SAFETY_BREAKER:REVENGE_GUARD": 62,
+      "WAIT_DIRECTION_UNCLEAR:ENTRY_CONFLICT": 357,
+      "WAIT_RISK_UNSAFE:RISK_BELOW_MIN_LOT": 88,
+      "WAIT_DIRECTION_UNCLEAR:CHOP": 16,
+      "WAIT_INVALID_RR:VOLATILITY_INSUFFICIENT": 3
+     },
+     "engine_signals": 6553,
+     "valid_entries": 6553,
+     "risk_rejected_valid_entries": 4404,
+     "broker_rejections": 0,
+     "safety_rejections": 608,
+     "strategy_conflicts": 66,
+     "conflicts_resolved_by_existing_priority": 66,
+     "trade_eligible": 1541,
+     "discrepancies": {},
+     "invariant_violations": [],
+     "hypothetical_trades_with_outcome": 1541,
+     "end_equity_10k": 8881.08,
+     "lifecycle_lookahead_violations": 0
+    },
+    "ILLUSTRATIVE_CURRENT_10K": {
+     "decisions": 52788,
+     "by_state": {
+      "WAIT_STALE_DATA": 509,
+      "WAIT_SAFETY_BREAKER": 24391,
+      "WAIT_NO_SETUP": 5116,
+      "WAIT_NO_TRIGGER": 10542,
+      "WAIT_DIRECTION_UNCLEAR": 5982,
+      "WAIT_CONFLICT": 0,
+      "WAIT_INVALID_LOCATION": 512,
+      "WAIT_INVALID_SL": 0,
+      "WAIT_INVALID_RR": 1878,
+      "WAIT_ENTRY_QUALITY": 603,
+      "WAIT_RISK_UNSAFE": 2463,
+      "WAIT_BROKER_UNSAFE": 0,
+      "TRADE_ELIGIBLE": 792
+     },
+     "by_reason": {
+      "WAIT_STALE_DATA:DATA_UNAVAILABLE_STALE": 509,
+      "WAIT_NO_SETUP:PATTERN_ONLY": 5116,
+      "WAIT_DIRECTION_UNCLEAR:HTF_CONFLICT": 276,
+      "WAIT_ENTRY_QUALITY:NO_GOOD_ENTRY": 603,
+      "WAIT_INVALID_RR:RR_NOT_ACCEPTABLE": 1876,
+      "WAIT_NO_TRIGGER:SETUP_WITHOUT_TRIGGER": 10542,
+      "TRADE_ELIGIBLE:ALL_CHECKS_PASSED": 792,
+      "WAIT_RISK_UNSAFE:POSITION_OPEN_MAX_SIMULTANEOUS_1": 2463,
+      "WAIT_DIRECTION_UNCLEAR:NO_ELIGIBLE_STRATEGY": 5498,
+      "WAIT_INVALID_LOCATION:OVEREXTENDED": 512,
+      "WAIT_SAFETY_BREAKER:CONSECUTIVE_LOSS_LIMIT": 23869,
+      "WAIT_SAFETY_BREAKER:STALE_SAME_SETUP": 248,
+      "WAIT_DIRECTION_UNCLEAR:ENTRY_CONFLICT": 200,
+      "WAIT_SAFETY_BREAKER:REVENGE_GUARD": 19,
+      "WAIT_DIRECTION_UNCLEAR:CHOP": 8,
+      "WAIT_SAFETY_BREAKER:DAILY_TRADE_CEILING": 255,
+      "WAIT_INVALID_RR:VOLATILITY_INSUFFICIENT": 2
+     },
+     "engine_signals": 6553,
+     "valid_entries": 3522,
+     "risk_rejected_valid_entries": 2463,
+     "broker_rejections": 0,
+     "safety_rejections": 24391,
+     "strategy_conflicts": 24,
+     "conflicts_resolved_by_existing_priority": 24,
+     "trade_eligible": 792,
+     "discrepancies": {},
+     "invariant_violations": [],
+     "hypothetical_trades_with_outcome": 792,
+     "end_equity_10k": 10640.89,
+     "lifecycle_lookahead_violations": 0
+    }
+   },
+   "v11_parity": {
+    "gate_trades": 1541,
+    "v11_trades": 1541,
+    "gate_end_equity": 8881.08,
+    "v11_end_equity": 8881.08,
+    "same": true
+   }
+  }
+ },
+ "replay": {
+  "deterministic_primary": true,
+  "deterministic_current": true,
+  "restart_equals_uninterrupted": true,
+  "restart_split_at": 26394,
+  "prefix_stable_no_lookahead": true,
+  "duplicate_and_out_of_order": {
+   "first": "WAIT_DIRECTION_UNCLEAR",
+   "repeat": "WAIT_STALE_DATA:OUT_OF_ORDER_OR_DUPLICATE_BAR",
+   "older": "WAIT_STALE_DATA:OUT_OF_ORDER_OR_DUPLICATE_BAR"
+  }
+ },
+ "forward_shadow": {
+  "records": 143,
+  "period": [
+   "2026-10-01T11:55:00.000Z",
+   "2026-10-02T15:30:00.000Z"
+  ],
+  "primary": {
+   "decisions": 143,
+   "by_state": {
+    "WAIT_STALE_DATA": 2,
+    "WAIT_SAFETY_BREAKER": 1,
+    "WAIT_NO_SETUP": 22,
+    "WAIT_NO_TRIGGER": 39,
+    "WAIT_DIRECTION_UNCLEAR": 44,
+    "WAIT_CONFLICT": 0,
+    "WAIT_INVALID_LOCATION": 0,
+    "WAIT_INVALID_SL": 0,
+    "WAIT_INVALID_RR": 22,
+    "WAIT_ENTRY_QUALITY": 2,
+    "WAIT_RISK_UNSAFE": 11,
+    "WAIT_BROKER_UNSAFE": 0,
+    "TRADE_ELIGIBLE": 0
+   },
+   "by_reason": {
+    "WAIT_RISK_UNSAFE:RISK_PERCENTAGE_UNRESOLVED": 11,
+    "WAIT_NO_TRIGGER:SETUP_WITHOUT_TRIGGER": 39,
+    "WAIT_INVALID_RR:RR_NOT_ACCEPTABLE": 22,
+    "WAIT_NO_SETUP:PATTERN_ONLY": 22,
+    "WAIT_DIRECTION_UNCLEAR:NO_ELIGIBLE_STRATEGY": 44,
+    "WAIT_ENTRY_QUALITY:NO_GOOD_ENTRY": 2,
+    "WAIT_STALE_DATA:DATA_UNAVAILABLE": 1,
+    "WAIT_STALE_DATA:SIGNAL_AGE_ABOVE_LIMIT": 1,
+    "WAIT_SAFETY_BREAKER:NEWS_BLOCK": 1
+   },
+   "engine_signals": 12,
+   "valid_entries": 11,
+   "risk_rejected_valid_entries": 11,
+   "broker_rejections": 0,
+   "safety_rejections": 1,
+   "strategy_conflicts": 0,
+   "conflicts_resolved_by_existing_priority": 0,
+   "trade_eligible": 0,
+   "discrepancies": {},
+   "invariant_violations": []
+  },
+  "illustrative_stateless": {
+   "decisions": 143,
+   "by_state": {
+    "WAIT_STALE_DATA": 13,
+    "WAIT_SAFETY_BREAKER": 1,
+    "WAIT_NO_SETUP": 22,
+    "WAIT_NO_TRIGGER": 39,
+    "WAIT_DIRECTION_UNCLEAR": 44,
+    "WAIT_CONFLICT": 0,
+    "WAIT_INVALID_LOCATION": 0,
+    "WAIT_INVALID_SL": 0,
+    "WAIT_INVALID_RR": 22,
+    "WAIT_ENTRY_QUALITY": 2,
+    "WAIT_RISK_UNSAFE": 0,
+    "WAIT_BROKER_UNSAFE": 0,
+    "TRADE_ELIGIBLE": 0
+   },
+   "by_reason": {
+    "WAIT_STALE_DATA:DATA_STALE_QUOTE": 11,
+    "WAIT_NO_TRIGGER:SETUP_WITHOUT_TRIGGER": 39,
+    "WAIT_INVALID_RR:RR_NOT_ACCEPTABLE": 22,
+    "WAIT_NO_SETUP:PATTERN_ONLY": 22,
+    "WAIT_DIRECTION_UNCLEAR:NO_ELIGIBLE_STRATEGY": 44,
+    "WAIT_ENTRY_QUALITY:NO_GOOD_ENTRY": 2,
+    "WAIT_STALE_DATA:DATA_UNAVAILABLE": 1,
+    "WAIT_STALE_DATA:SIGNAL_AGE_ABOVE_LIMIT": 1,
+    "WAIT_SAFETY_BREAKER:NEWS_BLOCK": 1
+   },
+   "engine_signals": 12,
+   "valid_entries": 11,
+   "risk_rejected_valid_entries": 0,
+   "broker_rejections": 0,
+   "safety_rejections": 1,
+   "strategy_conflicts": 0,
+   "conflicts_resolved_by_existing_priority": 0,
+   "trade_eligible": 0,
+   "discrepancies": {},
+   "invariant_violations": []
+  },
+  "engine_signals": 12,
+  "eligible_where_engine_waited": 0,
+  "missing_field_fail_closed": 11,
+  "missing_field": "quote age (tick time) is not recorded in forward-shadow decisions",
+  "signal_examples": [
+   {
+    "ts": "2026-10-01T11:50:00.000Z",
+    "engine": "BUY",
+    "decision": "WAIT_STALE_DATA",
+    "reason": "DATA_STALE_QUOTE"
+   },
+   {
+    "ts": "2026-10-01T11:55:00.000Z",
+    "engine": "BUY",
+    "decision": "WAIT_STALE_DATA",
+    "reason": "DATA_STALE_QUOTE"
+   },
+   {
+    "ts": "2026-10-01T12:00:00.000Z",
+    "engine": "BUY",
+    "decision": "WAIT_STALE_DATA",
+    "reason": "DATA_STALE_QUOTE"
+   },
+   {
+    "ts": "2026-10-01T12:30:00.000Z",
+    "engine": "BUY",
+    "decision": "WAIT_STALE_DATA",
+    "reason": "DATA_STALE_QUOTE"
+   },
+   {
+    "ts": "2026-10-01T13:15:00.000Z",
+    "engine": "SELL",
+    "decision": "WAIT_STALE_DATA",
+    "reason": "DATA_STALE_QUOTE"
+   },
+   {
+    "ts": "2026-10-01T13:20:00.000Z",
+    "engine": "SELL",
+    "decision": "WAIT_STALE_DATA",
+    "reason": "DATA_STALE_QUOTE"
+   },
+   {
+    "ts": "2026-10-01T13:50:00.000Z",
+    "engine": "SELL",
+    "decision": "WAIT_STALE_DATA",
+    "reason": "DATA_STALE_QUOTE"
+   },
+   {
+    "ts": "2026-10-01T13:55:00.000Z",
+    "engine": "SELL",
+    "decision": "WAIT_STALE_DATA",
+    "reason": "DATA_STALE_QUOTE"
+   },
+   {
+    "ts": "2026-10-01T15:25:00.000Z",
+    "engine": "BUY",
+    "decision": "WAIT_STALE_DATA",
+    "reason": "DATA_STALE_QUOTE"
+   },
+   {
+    "ts": "2026-10-01T17:40:00.000Z",
+    "engine": "BUY",
+    "decision": "WAIT_STALE_DATA",
+    "reason": "DATA_STALE_QUOTE"
+   },
+   {
+    "ts": "2026-10-01T17:45:00.000Z",
+    "engine": "BUY",
+    "decision": "WAIT_STALE_DATA",
+    "reason": "DATA_STALE_QUOTE"
+   },
+   {
+    "ts": "2026-10-02T13:20:00.000Z",
+    "engine": "BUY",
+    "decision": "WAIT_SAFETY_BREAKER",
+    "reason": "NEWS_BLOCK"
+   }
+  ]
+ },
+ "decision": {
+  "failure_conditions": {
+   "invariant_violations": 0,
+   "eligible_without_engine_entry": 0,
+   "nondeterministic": false,
+   "restart_mismatch": false,
+   "lookahead": false,
+   "v11_parity_failed": false
+  },
+  "unit_tests": "see tests/trade_gate_v14.test.js (must pass)",
+  "forward_shadow_runs": true,
+  "forward_shadow_missing_field": "quote age (tick time) is not recorded in forward-shadow decisions",
+  "TRADE_GATE_STATUS": "GATE_PARTIALLY_VALIDATED"
+ }
+}
