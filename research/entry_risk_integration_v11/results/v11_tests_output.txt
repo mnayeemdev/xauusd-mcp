@@ -1,0 +1,55 @@
+▶ entry validity is upstream and immutable
+  ✔ the entry record is deep-frozen; any mutation throws; the hash covers every entry field (1.7733ms)
+  ✔ risk can never modify entry validity: across 400 risk / account / spec scenarios the entry hash is unchanged and valid_entry stays true (8.2638ms)
+  ✔ a valid entry that risk cannot support is REJECTED and stays visible as VALID_ENTRY + RISK_REJECTED (never altered to fit) (0.206ms)
+  ✔ structural SL preserved; RR fixed at 1.70; the broker SL is the hard fail-safe 1.5 R + spread outside the structural SL (0.2183ms)
+  ✔ entry geometry is verified against the engine rules (never repaired); a defect fails closed with the entry unchanged (0.6761ms)
+✔ entry validity is upstream and immutable (12.1002ms)
+▶ risk translation, broker rules, margin, exposure
+  ✔ percentage risk -> size rounded down -> actual risk <= approved; the independent tick-value path agrees exactly (0.3425ms)
+  ✔ broker validation: step multiple, min / max, SL side, stops and freeze level; never resizes (0.2538ms)
+  ✔ margin insufficient -> RISK_REJECTED; margin availability never increases the size (0.2372ms)
+  ✔ single exposure: an entry arriving while a position is open is EXPOSURE_BLOCKED and still recorded (0.3161ms)
+  ✔ CURRENT model: fixed 0.01 lot through the production margin veto; planned risk cross-checked independently (0.4969ms)
+✔ risk translation, broker rules, margin, exposure (1.9666ms)
+▶ fail closed (no trade, entry unchanged)
+  ✔ equity unavailable (0.2501ms)
+  ✔ equity zero (0.0478ms)
+  ✔ equity NaN (0.0634ms)
+  ✔ broker spec unavailable (0.0457ms)
+  ✔ spec field missing (0.0958ms)
+  ✔ spec contract zero (0.0714ms)
+  ✔ tick value unavailable (0.0454ms)
+  ✔ tick value inconsistent (0.0395ms)
+  ✔ quote stale (0.0453ms)
+  ✔ quote age unknown (0.0607ms)
+  ✔ signal stale (0.0381ms)
+  ✔ spread above limit (0.0411ms)
+  ✔ spread unknown (0.0382ms)
+  ✔ position size invalid (0.1234ms)
+  ✔ risk calculation inconsistent (0.0908ms)
+  ✔ limits at the boundary pass (quote 90 s, signal 600 s, spread 0.60) (0.1339ms)
+  ✔ missing SL in the delivered record fails closed (SL_UNAVAILABLE) (0.0782ms)
+  ✔ minimum lot exceeds risk -> RISK_REJECTED; broker rejection -> recorded, no retry, no resize, no position (0.1993ms)
+  ✔ production safety limits are read from production (not assumed) (0.0743ms)
+✔ fail closed (no trade, entry unchanged) (1.9964ms)
+▶ platform spec and tick value
+  ✔ reads profit / account currency from the platform record; derives tick value only for same-currency; cross-checks a platform value (3.2572ms)
+✔ platform spec and tick value (3.3249ms)
+▶ restart, duplicate delivery, costs (slippage, swap, gap)
+  ✔ restart: a serialized controller state reproduces the same decision; a duplicate delivery is rejected, also after restart (0.2926ms)
+  ✔ a BUY held across the daily rollover is charged the swap; the planned worst case excludes it (realized can exceed planned) (0.7966ms)
+  ✔ slippage above the allowance raises the realized loss one-for-one at the hard stop (0.2415ms)
+✔ restart, duplicate delivery, costs (slippage, swap, gap) (1.4732ms)
+▶ research boundaries and frozen results
+  ✔ no execution code; production imported only for limits, params and the pure CURRENT veto; no credential reference (0.931ms)
+  ✔ frozen study (local, skipped when absent): hashes, identity, entry preservation, parity, fail-closed, decision consistent (3.0831ms)
+✔ research boundaries and frozen results (4.0897ms)
+ℹ tests 35
+ℹ suites 6
+ℹ pass 35
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 117.4845

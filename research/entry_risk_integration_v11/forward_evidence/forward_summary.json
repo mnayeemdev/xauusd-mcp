@@ -1,0 +1,227 @@
+{
+ "generated_utc": "2026-10-02T10:30:35.344Z",
+ "observation": {
+  "start": "2026-10-01T11:58:45.000Z",
+  "end": "2026-10-02T10:30:00.000Z",
+  "elapsed_hours": 22.520833333333332
+ },
+ "sample_size_gate": "NONE",
+ "trade_count_target": "NONE",
+ "evidence": {
+  "V8": {
+   "total_candidates": 30,
+   "valid_setups": 5,
+   "shadow_signals": 5,
+   "missed_valid_setups": 0,
+   "incorrect_blocks": 0,
+   "invalid_setups_accepted": 0,
+   "late_signals": 0,
+   "wrong_direction_decisions": 1,
+   "valid_losing_trades": 3,
+   "implementation_errors": 0,
+   "model_distribution": {
+    "MC": 0,
+    "PB": 0,
+    "BO": 4,
+    "SR": 0,
+    "MR": 1
+   },
+   "d1_d6_regressions": 0
+  },
+  "CONTROL": {
+   "total_candidates": 33,
+   "valid_setups": 9,
+   "shadow_signals": 5,
+   "missed_valid_setups": 0,
+   "incorrect_blocks": 0,
+   "invalid_setups_accepted": 8,
+   "late_signals": 0,
+   "wrong_direction_decisions": 0,
+   "valid_losing_trades": 0,
+   "implementation_errors": 8,
+   "model_distribution": {
+    "MC": 0,
+    "PB": 0,
+    "BO": 7,
+    "SR": 1,
+    "MR": 1
+   },
+   "d1_d6_regressions": 101
+  }
+ },
+ "V8": {
+  "decisions": 81,
+  "valid_setups": 5,
+  "signals": 5,
+  "labelled": 5,
+  "per_signal": {
+   "n": 5,
+   "win_rate": 0.4,
+   "avg_win": 1.662,
+   "avg_loss": 1.4723333333333333,
+   "expectancy": -0.21860000000000007,
+   "pf": 0.7525469775865973,
+   "max_dd": 3.137,
+   "loss_streak": 2,
+   "mfe": 3.2012,
+   "mae": 2.4633999999999996,
+   "reach170": 0.4,
+   "giveback": 1.7405000000000002,
+   "duration": 1.8,
+   "wrong": 0.2
+  },
+  "stress": {
+   "n": 5,
+   "win_rate": 0.4,
+   "avg_win": 1.6235,
+   "avg_loss": 1.5670000000000002,
+   "expectancy": -0.29080000000000006,
+   "pf": 0.6907041055094659,
+   "max_dd": 3.322,
+   "loss_streak": 2,
+   "mfe": 3.2012,
+   "mae": 2.4633999999999996,
+   "reach170": 0.4,
+   "giveback": 1.7025,
+   "duration": 1.8,
+   "wrong": 0.2
+  },
+  "missed": {
+   "UNCERTAIN": 5,
+   "BLOCKED_CORRECTLY": 2
+  },
+  "wrong": {
+   "VALID_LOSING_TRADE": 3
+  },
+  "regression": {
+   "D1": {
+    "OK": 81,
+    "VIOLATION": 0,
+    "VIOLATION_ON_SIGNALS": 0
+   },
+   "D2": {
+    "OK": 81,
+    "VIOLATION": 0,
+    "VIOLATION_ON_SIGNALS": 0
+   },
+   "D3": {
+    "OK": 0,
+    "VIOLATION": 0,
+    "VIOLATION_ON_SIGNALS": 0
+   },
+   "D4": {
+    "OK": 1,
+    "VIOLATION": 0,
+    "VIOLATION_ON_SIGNALS": 0
+   },
+   "D5": {
+    "OK": 10,
+    "VIOLATION": 0,
+    "VIOLATION_ON_SIGNALS": 0
+   },
+   "D6": {
+    "OK": 10,
+    "VIOLATION": 0,
+    "VIOLATION_ON_SIGNALS": 0
+   }
+  },
+  "parity": {
+   "checked": 16,
+   "inputs_equal": 3,
+   "match": 3,
+   "mismatch": 0,
+   "input_changed": 13
+  }
+ },
+ "CONTROL": {
+  "decisions": 81,
+  "valid_setups": 9,
+  "signals": 5,
+  "labelled": 5,
+  "per_signal": {
+   "n": 5,
+   "win_rate": 0.2,
+   "avg_win": 1.656,
+   "avg_loss": 1.5067500000000003,
+   "expectancy": -0.8742000000000001,
+   "pf": 0.27476356396217017,
+   "max_dd": 4.747,
+   "loss_streak": 3,
+   "mfe": 2.9176,
+   "mae": 2.7382,
+   "reach170": 0.2,
+   "giveback": 2.2592000000000003,
+   "duration": 4.2,
+   "wrong": 0
+  },
+  "stress": {
+   "n": 5,
+   "win_rate": 0.2,
+   "avg_win": 1.611,
+   "avg_loss": 1.615,
+   "expectancy": -0.9698,
+   "pf": 0.24938080495356038,
+   "max_dd": 5.081,
+   "loss_streak": 3,
+   "mfe": 2.9176,
+   "mae": 2.7382,
+   "reach170": 0.2,
+   "giveback": 2.2548000000000004,
+   "duration": 4.2,
+   "wrong": 0
+  },
+  "missed": {
+   "UNCERTAIN": 7
+  },
+  "wrong": {
+   "PATTERN_ERROR": 4
+  },
+  "regression": {
+   "D1": {
+    "OK": 44,
+    "VIOLATION": 37,
+    "VIOLATION_ON_SIGNALS": 7
+   },
+   "D2": {
+    "OK": 17,
+    "VIOLATION": 64,
+    "VIOLATION_ON_SIGNALS": 12
+   },
+   "D3": {
+    "OK": 0,
+    "VIOLATION": 0,
+    "VIOLATION_ON_SIGNALS": 0
+   },
+   "D4": {
+    "OK": 3,
+    "VIOLATION": 0,
+    "VIOLATION_ON_SIGNALS": 0
+   },
+   "D5": {
+    "OK": 15,
+    "VIOLATION": 0,
+    "VIOLATION_ON_SIGNALS": 0
+   },
+   "D6": {
+    "OK": 15,
+    "VIOLATION": 0,
+    "VIOLATION_ON_SIGNALS": 0
+   }
+  },
+  "parity": {
+   "checked": 20,
+   "inputs_equal": 3,
+   "match": 3,
+   "mismatch": 0,
+   "input_changed": 17
+  }
+ },
+ "events": 7,
+ "flags": [
+  "model share shift > 15 points: BO (V8 5 / CONTROL 5 signals)",
+  "model share shift > 15 points: SR (V8 5 / CONTROL 5 signals)"
+ ],
+ "clean": true,
+ "core_rule_correctness": "NO RULE VIOLATION OBSERVED SO FAR",
+ "demo_eligible": "NO"
+}

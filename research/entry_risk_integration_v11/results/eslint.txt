@@ -1,0 +1,21 @@
+$ npx eslint research/entry_risk_integration_v11 tests/entry_risk_integration_v11.test.js
+(no output: 0 problems)
+
+$ npm run lint   (eslint src/; src unchanged by V11)
+
+> tradingview-mcp@1.0.0 lint
+> eslint src/
+
+
+C:\Users\Techn\tradingview-mcp-main\src\core\data.js
+  384:78  warning  'e' is defined but never used  no-unused-vars
+  447:16  warning  'e' is defined but never used  no-unused-vars
+
+C:\Users\Techn\tradingview-mcp-main\src\core\pane.js
+  5:35  warning  'getClient' is defined but never used. Allowed unused vars must match /^_/u  no-unused-vars
+
+C:\Users\Techn\tradingview-mcp-main\src\tools\watchlist.js
+  22:16  warning  '_' is defined but never used  no-unused-vars
+
+✖ 4 problems (0 errors, 4 warnings)
+
