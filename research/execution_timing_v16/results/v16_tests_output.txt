@@ -1,0 +1,51 @@
+▶ owner parameters and clock model
+  ✔ MAX_EXECUTION_SIGNAL_AGE = 6 s; scenarios 0-6 s (+8 s beyond); existing limits only (0.9972ms)
+  ✔ no application clock offset exists in the V16 decision path (no +1000 / +1230 / +2000 ms, no offset parameter) (0.832ms)
+  ✔ tracker: a tick is aged from the last poll that did not have it; the first tick after (re)start has no witnessed arrival -> age UNAVAILABLE (1.1578ms)
+  ✔ clock drift is not latency: a PC wall clock 1230 ms behind the broker changes only the monitor, never the decision (7.127ms)
+✔ owner parameters and clock model (11.016ms)
+▶ delay scenarios 0-6 s: tolerated when the original V8 conditions still hold
+  ✔ 0, 1, 2, 3, 4, 5 and 6 s: a still-valid signal is re-validated (ILLUSTRATIVE -> TRADE_ELIGIBLE; PRIMARY -> VALID_ENTRY + RISK_REJECTED) (3.6129ms)
+  ✔ a 1-second delay is not an automatic rejection; the 6 s boundary is inclusive (0.3115ms)
+  ✔ > 6 s: the original signal is never carried forward (WAIT_SIGNAL_EXPIRED); only a newer bar with a valid entry is a NEW signal (0.2819ms)
+✔ delay scenarios 0-6 s: tolerated when the original V8 conditions still hold (4.4183ms)
+▶ revalidation: the decision depends on the state, not on the delay number
+  ✔ signal invalidated / direction changed / trigger gone / location / SL / RR / drift / safety / risk / broker -> WAIT at every delay 0-6 s (5.0854ms)
+  ✔ no forced trade: across the whole grid TRADE_ELIGIBLE appears only for still-valid states and ages <= 6 s (12.8348ms)
+  ✔ trigger gone maps through the unchanged V14 gate (reason ORIGINAL_SIGNAL_INVALIDATED:*); a changed identity names what changed (0.3416ms)
+✔ revalidation: the decision depends on the state, not on the delay number (18.5083ms)
+▶ execution price, structural SL, RR, risk firewall
+  ✔ BUY executes at the current ASK, SELL at the current BID; never the mid or the old signal price (0.4569ms)
+  ✔ structural SL is never moved, widened or tightened by delay; RR = 1.70 from the execution price and that SL (6.5997ms)
+  ✔ existing-rule geometry: beyond SL, inside the engine minimum risk, overextended, drift, RR to the engine objective (0.1623ms)
+  ✔ risk firewall: risk can only reject; the entry, SL and identity are unchanged; an unresolved risk % never approves (2.5212ms)
+  ✔ broker rejection fails closed without retry or size change (0.1212ms)
+  ✔ duplicate signal: a second delivery after an eligible one is blocked by the existing exposure / duplicate rules (0.2254ms)
+✔ execution price, structural SL, RR, risk firewall (10.2598ms)
+▶ quote data and timestamps fail closed
+  ✔ stale quote (> 6 s) and missing quote -> WAIT_STALE_DATA; a 1-5 s quote is not stale by itself (0.2897ms)
+  ✔ future / impossible timestamps -> CLOCK_OR_DATA_ERROR -> WAIT_STALE_DATA at every delay (0.8184ms)
+  ✔ missing timestamps -> WAIT_STALE_DATA (signal, decision, quote time, receipt, bars) (0.2193ms)
+  ✔ bid / ask missing or invalid -> WAIT_BROKER_UNSAFE (0.1307ms)
+✔ quote data and timestamps fail closed (1.5757ms)
+▶ replay, restart, no-lookahead (probe orchestrator)
+  ✔ probes decide at k s after observation with inputs received before the instant; replay reproduces every decision (3.2661ms)
+  ✔ the same probe schedule with the trigger disappearing at 3 s turns WAIT from 3 s on (state, not delay) (0.6902ms)
+  ✔ same input = same decision; restart (fresh tracker) cannot make an unwitnessed tick look fresh (0.2048ms)
+  ✔ a contract of fields (owner §15 / §25) is present on every decision (0.132ms)
+✔ replay, restart, no-lookahead (probe orchestrator) (4.4069ms)
+▶ runner integration (fake read-only reader, injected timing)
+  ✔ every decision record carries the V16 block; forward-live V8 signals get 0-6 s and 8 s probes; nothing is executed (1650.609ms)
+✔ runner integration (fake read-only reader, injected timing) (1654.6733ms)
+▶ research boundaries
+  ✔ no order / position code in V16; no trade-count target; zero trades valid (1.6635ms)
+  ✔ results (when present) are consistent with the pre-registered decision states (1.1908ms)
+✔ research boundaries (3.1561ms)
+ℹ tests 27
+ℹ suites 8
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1815.7776

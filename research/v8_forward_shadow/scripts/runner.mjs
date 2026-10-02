@@ -14,6 +14,9 @@ import { fileURLToPath } from 'node:url';
 import { REPO, SCHEMA, TF_SEC, WINDOW, V8_ENGINE_DIR, CONTROL_ENGINE_DIR, verifyFrozenV8Engine, loadEngine, evaluateEngine, regressionChecks, safetyStage, labelOutcome, wrongDirectionClass, moveEventAt, classifyMissed, decisionId, windowHash, sha } from './lib.mjs';
 
 import { buildQuote, validateQuote, CONTRACT as QUOTE_CONTRACT } from '../../quote_integrity_v15/scripts/quote.mjs';
+import { initTracker, observePoll, quoteSnapshot, CONTRACT as TIMING_CONTRACT, POLL_INTERVAL_MS } from '../../execution_timing_v16/scripts/timing.mjs';
+import { revalidate, engineSnapshot } from '../../execution_timing_v16/scripts/revalidate.mjs';
+import { runProbes } from '../../execution_timing_v16/scripts/probes.mjs';
 
 export const STATE_DIR = join(REPO, 'state', 'v8_shadow');
 // V15 quote contract (2026-10-02): every decision record carries the broker tick (time_msc, bid, ask, flags), the receive and decision
@@ -29,7 +32,8 @@ const iso = (t) => new Date(t * 1000).toISOString();
 function jsonl(p) { if (!existsSync(p)) return []; return readFileSync(p, 'utf8').split('\n').filter(Boolean).map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean); }
 
 /** dir: state directory; reader: { rates(symbol, tf, count), tick(symbol) } read-only; prod: { calendar(), lastProtection() } read-only; newsEval(cal, nowSec) -> { state, event }. */
-export async function createForwardShadow({ dir = STATE_DIR, reader, prod = null, newsEval = null, now = () => Date.now() / 1000, log = () => {}, engines = null } = {}) {
+/** timing (V16, optional): { mono(), wallMs(), getQuote(), sleepUntil(mono), spec, probes } -- monotonic durations, broker identity, no clock offset. */
+export async function createForwardShadow({ dir = STATE_DIR, reader, prod = null, newsEval = null, now = () => Date.now() / 1000, log = () => {}, engines = null, timing = null } = {}) {
   mkdirSync(dir, { recursive: true });
   const P = (f) => join(dir, f);
   const frozen = engines ? { files: 'injected' } : verifyFrozenV8Engine();
@@ -64,13 +68,14 @@ export async function createForwardShadow({ dir = STATE_DIR, reader, prod = null
     const windows = Object.fromEntries(TFS.map((tf) => [tf, fetched[tf].filter((b) => b.time + TF_SEC[tf] <= nowSec).sort((a, b) => a.time - b.time).slice(-WINDOW).map((b) => ({ time: b.time, open: b.open, high: b.high, low: b.low, close: b.close }))]));
     const integ = integrity(windows, barTime, nowSec); const hashes = Object.fromEntries(TFS.map((tf) => [tf, windowHash(windows[tf])])); const lastBars = Object.fromEntries(TFS.map((tf) => [tf, windows[tf].at(-1)?.time ?? null]));
     const spread = tick && Number.isFinite(tick.ask) && Number.isFinite(tick.bid) ? tick.ask - tick.bid : null;
-    let news = null; try { const cal = prod?.calendar?.(); news = cal && newsEval ? newsEval(cal, nowSec) : { state: 'DATA_UNAVAILABLE' }; } catch { news = { state: 'DATA_UNAVAILABLE' }; }
-    let shock = { state: 'UNKNOWN' }; try { const lp = prod?.lastProtection?.(); if (lp && nowSec - Date.parse(lp.at) / 1000 <= 900) shock = { state: lp.shock_state ?? 'UNKNOWN', at: lp.at }; else shock = { state: 'NORMAL_OR_STALE', at: lp?.at ?? null }; } catch { /* keep UNKNOWN */ }
+    const { news, shock } = safetyInputs(nowSec);
     const integrityFail = Object.values(integ).includes('FAIL');
+    const barsInfo = { last_closed_open: windows['5m'].at(-1)?.time ?? null, latest_open: fetched['5m'].length ? Math.max(...fetched['5m'].map((b) => b.time)) : null }; let probeSignal = null;
     for (const engine of ['V8', 'CONTROL']) {
       const id = decisionId(engine, barTime); if (decIds.has(id)) continue;
       if (integrityFail) { record({ ...base, id, engine, action: 'WAIT', engine_action: 'WAIT', wait_category: 'DATA_UNAVAILABLE', wait_detail: `data integrity: ${Object.entries(integ).filter(([, v]) => v === 'FAIL').map(([k]) => k).join(', ')}`, data_integrity: integ, input_hashes: hashes, input_last_bars: lastBars, valid_setup: false, shadow_signal: false, counted_signal: false }); continue; }
       const d = evaluateEngine(ENG[engine], windows, nowSec, { applyStaleGate: engine === 'V8' });
+      const obsMono = timing ? timing.mono() : null, obsWall = timing ? timing.wallMs() : null; // V16: the moment the signal exists (monotonic + wall)
       const regression = regressionChecks(d, windows);
       let action = d.engine_action, wc = d.wait_category, wd = d.wait_detail, safety = null;
       if (isSig(d.engine_action)) { safety = safetyStage({ spread, news, shock, candidate: d.candidate }); if (safety.block) { action = 'WAIT'; wc = safety.block.category; wd = safety.block.detail; } }
@@ -78,8 +83,36 @@ export async function createForwardShadow({ dir = STATE_DIR, reader, prod = null
       // duplicate identity: same engine, model, side and anchor within 12 bars of a counted signal
       const prior = decisions.filter((x) => x.engine === engine && x.counted_signal && x.candidate && rec.candidate && x.candidate.model === rec.candidate.model && x.candidate.side === rec.candidate.side && Math.round(x.candidate.anchor * 100) === Math.round(rec.candidate.anchor * 100) && barTime - x.bar_time <= DUP_BARS * 300);
       rec.duplicate = rec.valid_setup && prior.length > 0; rec.counted_signal = rec.shadow_signal && !rec.duplicate && provenance === 'FORWARD_LIVE';
+      if (timing) { try { const v = v16Block({ engine, d, rec, windows, integ, barsInfo, news, shock, obsMono, obsWall, barTime }); rec.v16 = v.block; if (v.probe) probeSignal = v.probe; } catch (e) { rec.v16 = { contract: TIMING_CONTRACT, error: String(e?.message ?? e) }; } }
       record(rec);
     }
+    // V16: re-validate a forward-live V8 signal at 0-6 s (and 8 s) after its observation; measure only, nothing is executed
+    if (timing?.probes && probeSignal) { try { await runProbes({ ...probeSignal, deps: probeDeps() }); } catch (e) { log(`[v8shadow] timing probes error: ${e.message}`); } }
+  }
+  function safetyInputs(nowSec) {
+    let news = null; try { const cal = prod?.calendar?.(); news = cal && newsEval ? newsEval(cal, nowSec) : { state: 'DATA_UNAVAILABLE' }; } catch { news = { state: 'DATA_UNAVAILABLE' }; }
+    let shock = { state: 'UNKNOWN' }; try { const lp = prod?.lastProtection?.(); if (lp && nowSec - Date.parse(lp.at) / 1000 <= 900) shock = { state: lp.shock_state ?? 'UNKNOWN', at: lp.at }; else shock = { state: 'NORMAL_OR_STALE', at: lp?.at ?? null }; } catch { /* keep UNKNOWN */ }
+    return { news, shock };
+  }
+  // ---------- V16 execution timing (research, measure-only) ----------
+  function atrOf(engine, windows) { try { const v = ENG[engine].math.atr(windows['5m'], 14).at(-1); return Number.isFinite(v) ? v : null; } catch { return null; } }
+  function v16Block({ engine, d, rec, windows, integ, barsInfo, news, shock, obsMono, obsWall, barTime }) {
+    const q = timing.getQuote(); const dm = timing.mono(), dw = timing.wallMs(); const sig = isSig(d.engine_action);
+    const snap = engineSnapshot({ ...d, data_integrity: integ }, barTime, { atrExact: atrOf(engine, windows) });
+    const inline = sig && engine === 'V8' ? revalidate({ original: snap, current: snap, quote: q, signal: { observed_mono: obsMono, observed_wall_ms: obsWall }, decision: { mono: dm, wallMs: dw }, bars: barsInfo, news, shock, spec: timing.spec, configName: 'PRIMARY' }) : null;
+    const qAge = q && Number.isFinite(q.appeared_after_mono) ? Math.round((dm - q.appeared_after_mono) * 1000) / 1000 : null;
+    const block = { contract: TIMING_CONTRACT, symbol: 'XAUUSDm', timeframe: '5m', signal_timestamp: sig ? { bar_close_utc: iso(barTime + 300), observed_wall_utc: new Date(obsWall).toISOString(), observed_mono_ms: obsMono } : null, quote_timestamp_ms: q?.quote_timestamp_ms ?? null, decision_timestamp: { wall_utc: new Date(dw).toISOString(), mono_ms: dm },
+      signal_age_seconds: inline?.signal_age_seconds ?? null, quote_age_ms: inline?.quote_age_ms ?? qAge, bid: q?.bid ?? null, ask: q?.ask ?? null, spread: q?.spread ?? null, entry: inline?.entry_price ?? null, sl: sig ? d.candidate?.stop_loss ?? null : null, rr: inline?.rr ?? null,
+      final_decision: inline ? inline.decision : rec.action, decision_reason: inline ? inline.reason : rec.wait_category ?? rec.engine_wait_reason ?? null, revalidated_by_v16: !!inline, revalidation: inline, clock_monitor: q && Number.isFinite(q.first_seen_wall_ms) ? { wall_minus_broker_ms: q.first_seen_wall_ms - q.quote_timestamp_ms, note: 'monitor only (first receipt on the PC wall clock minus broker tick time)' } : null };
+    const probe = sig && engine === 'V8' && rec.provenance === 'FORWARD_LIVE' ? { original: snap, signal: { observed_mono: obsMono, observed_wall_ms: obsWall, bar_time: barTime }, signalId: rec.id } : null;
+    return { block, probe };
+  }
+  function probeDeps() {
+    return { mono: timing.mono, wallMs: timing.wallMs, sleepUntil: timing.sleepUntil, getQuote: timing.getQuote, spec: timing.spec ?? null, onRecord: (r) => append('timing_probes.jsonl', r),
+      fetchContext: async () => { const nowSec = Math.floor(now()); const fetched = {}; for (const tf of TFS) { const r = await reader.rates('XAUUSDm', tf, WINDOW + 6); if (!r.ok) throw new Error(r.error ?? 'rates not ok'); fetched[tf] = r.bars ?? []; }
+        const windows = Object.fromEntries(TFS.map((tf) => [tf, fetched[tf].filter((b) => b.time + TF_SEC[tf] <= nowSec).sort((a, b) => a.time - b.time).slice(-WINDOW).map((b) => ({ time: b.time, open: b.open, high: b.high, low: b.low, close: b.close }))]));
+        const lastBar = windows['5m'].at(-1)?.time ?? null; const integ = integrity(windows, lastBar, nowSec); const d = evaluateEngine(ENG.V8, windows, nowSec, { applyStaleGate: true }); const { news, shock } = safetyInputs(nowSec);
+        return { current: engineSnapshot({ ...d, data_integrity: integ }, lastBar, { atrExact: atrOf('V8', windows) }), bars: { last_closed_open: lastBar, latest_open: fetched['5m'].length ? Math.max(...fetched['5m'].map((b) => b.time)) : null }, news, shock }; } };
   }
   function record(rec) { if (decIds.has(rec.id)) return; decIds.add(rec.id); decisions.push(rec); append('decisions.jsonl', rec); }
   const sessionOf = (t) => { const h = new Date(t * 1000).getUTCHours(); return h >= 8 && h < 13 ? 'LONDON' : h >= 13 && h < 21 ? 'NEW_YORK' : h < 8 ? 'ASIA' : 'OTHER'; };
@@ -108,7 +141,7 @@ export async function createForwardShadow({ dir = STATE_DIR, reader, prod = null
     } catch (e) { st.last_error = `${iso(nowSec)} ${e.message}`; log(`[v8shadow] cycle error: ${e.message}`); }
     writeStatus();
   }
-  return { cycle, status: () => ({ ...st, ...summaryCounts() }), decisions: () => decisions, outcomes: () => outcomes, events: () => events, parity: () => parity, archive: () => archive, dir };
+  return { cycle, probeDeps: timing ? probeDeps : null, status: () => ({ ...st, ...summaryCounts() }), decisions: () => decisions, outcomes: () => outcomes, events: () => events, parity: () => parity, archive: () => archive, dir };
 }
 
 // ---------------- live entry point ----------------
@@ -123,10 +156,16 @@ if (isMain) {
   const { createMt5Reader } = await import('../../../src/shadow/mt5Reader.js'); const { createProductionReader } = await import('../../../src/shadow/production.js'); const { PROD_FILES } = await import('../../../src/shadow/observer.js'); const { evaluateNewsState, NEWS_RISK_PARAMS } = await import('../../../src/engine/newsRisk.js');
   const reader = createMt5Reader({ log }); const hello = await reader.start(); log(`reader hello read_only=${hello?.read_only ?? 'n/a'}`); try { await reader.select('XAUUSDm'); } catch { /* ignore */ }
   const prod = createProductionReader(PROD_FILES);
+  // V16 execution timing (2026-10-02): continuous read-only quote polling; monotonic clock for every duration, broker time for identity, no clock offset.
+  const { loadPlatformSpec } = await import('../../entry_risk_integration_v11/scripts/integrate.mjs'); let spec = null; try { spec = loadPlatformSpec(join(REPO, 'state', 'xauusd_mt5_real_trade_log.jsonl')); } catch (e) { log(`V16 platform spec unavailable (risk fails closed): ${e.message}`); }
+  let tracker = initTracker(); let polling = true; const perf = globalThis.performance;
+  const sleepUntil = async (m) => { const rem = m - perf.now(); if (rem > 20) await new Promise((r) => setTimeout(r, rem - 20)); while (perf.now() < m) { /* sub-20 ms spin to the instant */ } };
+  (async () => { while (polling) { const t0 = perf.now(); try { const r = await reader.tick('XAUUSDm'); tracker = observePoll(tracker, { requestMono: t0, receiveMono: perf.now(), receiveWallMs: Date.now(), ok: !!r?.ok, tick: r?.tick ?? null }); } catch { tracker = observePoll(tracker, { ok: false }); } await new Promise((r) => setTimeout(r, Math.max(0, POLL_INTERVAL_MS - (perf.now() - t0)))); } })();
+  const timing = { mono: () => perf.now(), wallMs: () => Date.now(), getQuote: () => quoteSnapshot(tracker), sleepUntil, spec, probes: true };
   const newsEval = (cal, nowSec) => { const s = evaluateNewsState({ events: cal.events, now: new Date(nowSec * 1000), calendar: { status: 'OK', source: cal.source, source_timestamp: cal.source_timestamp, last_success_at: cal.fetched_at, error: null, consecutive_failures: 0 }, params: NEWS_RISK_PARAMS }); return { state: s.state, event: s.event ? `${s.event.event_name} ${s.event.tier ?? ''}`.trim() : null }; };
-  const fs = await createForwardShadow({ reader, prod, newsEval, log });
-  log(`v8 forward shadow started pid=${process.pid} frozen=${JSON.stringify(fs.status().frozen_engine)} execution_authority=NONE`);
-  let stopping = false; const shutdown = async (sig) => { if (stopping) return; stopping = true; log(`stopping (${sig})`); try { await reader.stop(); } catch { /* ignore */ } try { if (existsSync(lock) && readFileSync(lock, 'utf8').trim() === String(process.pid)) unlinkSync(lock); } catch { /* ignore */ } process.exit(0); };
+  const fs = await createForwardShadow({ reader, prod, newsEval, log, timing });
+  log(`v8 forward shadow started pid=${process.pid} frozen=${JSON.stringify(fs.status().frozen_engine)} execution_authority=NONE v16_timing=${TIMING_CONTRACT} spec=${spec ? 'ok' : 'unavailable'}`);
+  let stopping = false; const shutdown = async (sig) => { if (stopping) return; stopping = true; polling = false; log(`stopping (${sig})`); try { await reader.stop(); } catch { /* ignore */ } try { if (existsSync(lock) && readFileSync(lock, 'utf8').trim() === String(process.pid)) unlinkSync(lock); } catch { /* ignore */ } process.exit(0); };
   process.on('SIGINT', () => shutdown('SIGINT')); process.on('SIGTERM', () => shutdown('SIGTERM'));
   let n = 0; const loop = async () => { /* one evaluation per completed 5m candle; no sample-size gate, no trade target */ if (stopping) return; if (!reader.alive()) { try { await reader.start(); log('reader restarted'); } catch (e) { log(`reader restart failed: ${e.message}`); } } await fs.cycle(); n++; if (n % 120 === 0) log(`cycle ${n}: ${JSON.stringify({ signals: fs.status().FORWARD_SIGNAL_COUNT, valid: fs.status().FORWARD_VALID_SETUP_COUNT, last_bar: fs.status().last_decided_bar, err: fs.status().last_error })}`); setTimeout(loop, 5000); };
   loop();

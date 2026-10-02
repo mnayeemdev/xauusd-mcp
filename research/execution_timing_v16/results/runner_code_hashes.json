@@ -1,0 +1,13 @@
+{
+ "runner_pid": 59052,
+ "runner_started_utc": "2026-10-02T17:17:33.457Z",
+ "note": "code loaded by the live runner; the study replays probes with the same files",
+ "files": {
+  "research/execution_timing_v16/scripts/timing.mjs": "0116408e4fe96b9a998f39df2580d09c5f06804951e5102696a427d39a3a0436",
+  "research/execution_timing_v16/scripts/revalidate.mjs": "ae4b704cef06e4143cc40d97e6cab9ef2aa05616750f5451c20122df49483c09",
+  "research/execution_timing_v16/scripts/probes.mjs": "85423f180087215c0a7faa5276f19d927284d1ecc3ffa1b0f84a599dbecba772",
+  "research/v8_forward_shadow/scripts/runner.mjs": "003fd1d685492bd969df144c63187aee29d6a910bcf83180ee0ecbfbaf28a6f5",
+  "research/trade_gate_v14/scripts/gate.mjs": "ae58a7249fb27c84c59f156e3d2e1bc240b9205f6afc165c83e1234bd8d04d72",
+  "research/entry_risk_integration_v11/scripts/integrate.mjs": "82c1e6c773745b43a5d22087384c8b79e68cb51a70edcb0fb78ba6b09de8cff1"
+ }
+}

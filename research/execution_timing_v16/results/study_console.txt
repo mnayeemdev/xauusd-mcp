@@ -1,0 +1,203 @@
+{
+ "decision": {
+  "logic": {
+   "tests_pass": true,
+   "grid_invariants_0": true,
+   "no_forced_trade": true,
+   "delays_0_6_tolerated_when_valid": true,
+   "invalid_states_wait": true,
+   "beyond_6s_expired": true,
+   "sl_never_moved": true,
+   "rr_170": true,
+   "primary_never_eligible": true,
+   "no_wall_clock_decision_input": true
+  },
+  "live": {
+   "live_signal_revalidated": true,
+   "replay_parity": true,
+   "no_lookahead": true,
+   "live_invariants_0": true,
+   "eligible_without_ages_0": true,
+   "code_unchanged_since_runner_start": true
+  },
+  "EXECUTION_TIMING_STATUS": "EXECUTION_TIMING_VALIDATED",
+  "clock_integrity_reported_separately": "NOT_SYNCHRONIZED (Leap Indicator 3, Local CMOS Clock)"
+ },
+ "grid": {
+  "cells": 800,
+  "invariant_violations": 0,
+  "forced_trades": 0,
+  "delay_allowed": {
+   "0": true,
+   "1": true,
+   "2": true,
+   "3": true,
+   "4": true,
+   "5": true,
+   "6": true
+  },
+  "state_dependence": {
+   "0": 10,
+   "1": 10,
+   "2": 10,
+   "3": 10,
+   "4": 10,
+   "5": 10,
+   "6": 10
+  }
+ },
+ "live": {
+  "probe_records": 8,
+  "signals": 1,
+  "replay_mismatches": 0,
+  "lookahead": 0,
+  "by_delay": {
+   "0": {
+    "n": 1,
+    "revalidated": 1,
+    "illustrative": {
+     "TRADE_ELIGIBLE:ALL_CHECKS_PASSED": 1
+    }
+   },
+   "1": {
+    "n": 1,
+    "revalidated": 1,
+    "illustrative": {
+     "TRADE_ELIGIBLE:ALL_CHECKS_PASSED": 1
+    }
+   },
+   "2": {
+    "n": 1,
+    "revalidated": 1,
+    "illustrative": {
+     "TRADE_ELIGIBLE:ALL_CHECKS_PASSED": 1
+    }
+   },
+   "3": {
+    "n": 1,
+    "revalidated": 1,
+    "illustrative": {
+     "TRADE_ELIGIBLE:ALL_CHECKS_PASSED": 1
+    }
+   },
+   "4": {
+    "n": 1,
+    "revalidated": 1,
+    "illustrative": {
+     "TRADE_ELIGIBLE:ALL_CHECKS_PASSED": 1
+    }
+   },
+   "5": {
+    "n": 1,
+    "revalidated": 1,
+    "illustrative": {
+     "TRADE_ELIGIBLE:ALL_CHECKS_PASSED": 1
+    }
+   },
+   "6": {
+    "n": 1,
+    "revalidated": 1,
+    "illustrative": {
+     "TRADE_ELIGIBLE:ALL_CHECKS_PASSED": 1
+    }
+   },
+   "8": {
+    "n": 1,
+    "revalidated": 0,
+    "illustrative": {
+     "WAIT_SIGNAL_EXPIRED:SIGNAL_AGE_ABOVE_EXECUTION_TOLERANCE": 1
+    }
+   }
+  }
+ },
+ "live_records": {
+  "records": 330,
+  "with_v16": 4,
+  "legacy_without_v16": 326,
+  "first_v16_utc": "2026-10-02T17:15:09.000Z",
+  "final_decisions": {
+   "V8:WAIT": 1,
+   "CONTROL:WAIT": 1,
+   "V8:WAIT_RISK_UNSAFE": 1,
+   "CONTROL:SELL": 1
+  },
+  "quote_age_ms": {
+   "n": 4,
+   "min": 648.812,
+   "p50": 767.348,
+   "p90": 789.677,
+   "max": 789.677
+  },
+  "v8_signals_revalidated": 1,
+  "fields_complete": 4
+ },
+ "clock": {
+  "pc_time_service": "NOT_SYNCHRONIZED (Leap Indicator 3, Local CMOS Clock)",
+  "ntp_minus_pc_ms_v15": 1230,
+  "broker_vs_ntp_ms_v15": -144,
+  "live_wall_minus_broker_ms": {
+   "n": 4,
+   "min": -1089,
+   "p50": -915,
+   "p90": -915,
+   "max": -915
+  },
+  "interpretation": "wall_minus_broker = PC first receipt (wall) - broker tick time = transport delay + PC clock error; with the PC ~1.23 s behind NTP it is negative. It is a monitor only; every V16 duration uses the monotonic clock and every identity the broker clock.",
+  "decision_inputs_using_wall_clock": 0
+ },
+ "band": {
+  "signals": 16,
+  "width": {
+   "n": 16,
+   "min": 0.48,
+   "p50": 2.545,
+   "p90": 4,
+   "max": 4
+  },
+  "inside": 15
+ },
+ "moves": {
+  "1": {
+   "n": 683,
+   "min": 0,
+   "p50": 0.186,
+   "p90": 0.552,
+   "max": 1.133
+  },
+  "2": {
+   "n": 679,
+   "min": 0,
+   "p50": 0.27,
+   "p90": 0.755,
+   "max": 1.467
+  },
+  "3": {
+   "n": 675,
+   "min": 0.005,
+   "p50": 0.305,
+   "p90": 0.901,
+   "max": 1.642
+  },
+  "4": {
+   "n": 671,
+   "min": 0.002,
+   "p50": 0.327,
+   "p90": 1.062,
+   "max": 1.606
+  },
+  "5": {
+   "n": 667,
+   "min": 0,
+   "p50": 0.38,
+   "p90": 1.112,
+   "max": 2.114
+  },
+  "6": {
+   "n": 664,
+   "min": 0,
+   "p50": 0.387,
+   "p90": 1.123,
+   "max": 2.393
+  }
+ }
+}

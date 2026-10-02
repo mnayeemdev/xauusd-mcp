@@ -1,0 +1,7 @@
+$ npx eslint research/execution_timing_v16 research/v8_forward_shadow tests/execution_timing_v16.test.js
+(no output: 0 problems)
+
+$ npm run lint   (eslint src/; src unchanged by V16)
+
+✖ 4 problems (0 errors, 4 warnings)
+
