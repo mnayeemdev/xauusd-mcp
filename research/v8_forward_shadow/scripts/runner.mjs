@@ -13,7 +13,14 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { REPO, SCHEMA, TF_SEC, WINDOW, V8_ENGINE_DIR, CONTROL_ENGINE_DIR, verifyFrozenV8Engine, loadEngine, evaluateEngine, regressionChecks, safetyStage, labelOutcome, wrongDirectionClass, moveEventAt, classifyMissed, decisionId, windowHash, sha } from './lib.mjs';
 
+import { buildQuote, validateQuote, CONTRACT as QUOTE_CONTRACT } from '../../quote_integrity_v15/scripts/quote.mjs';
+
 export const STATE_DIR = join(REPO, 'state', 'v8_shadow');
+// V15 quote contract (2026-10-02): every decision record carries the broker tick (time_msc, bid, ask, flags), the receive and decision
+// timestamps and the computed quote age; nothing is reconstructed. Broker clock = UTC per the V15 live calibration (median of
+// time_msc - received, rounded to 15 min = 0). Freshness limit = the existing production rule REAL_DEFAULTS.maxQuoteAgeSec (90 s).
+export const QUOTE_SERVER_UTC_OFFSET_MS = 0; export const QUOTE_MAX_AGE_MS = 90_000;
+const QUOTE_OFFSET_SOURCE = 'V15 live calibration 2026-10-02: median(time_msc - received) rounded to 15 min = 0 (broker clock = UTC)';
 const TFS = ['5m', '15m', '30m', '1H'];
 const FRESH_SEC = 120; const SETTLE_SEC = 8; const DUP_BARS = 12;
 const isSig = (a) => a === 'BUY' || a === 'SELL';
@@ -41,13 +48,17 @@ export async function createForwardShadow({ dir = STATE_DIR, reader, prod = null
   const sortedArchive = (tf) => [...archive[tf].values()].sort((a, b) => a.time - b.time);
   // ---------- data integrity ----------
   function integrity(windows, barTime, nowSec) { const r = {}; for (const tf of TFS) { const w = windows[tf]; r[`${tf}_length`] = w.length === WINDOW ? 'PASS' : 'FAIL'; r[`${tf}_monotonic`] = w.every((b, i) => i === 0 || b.time > w[i - 1].time) ? 'PASS' : 'FAIL'; r[`${tf}_aligned`] = w.every((b) => b.time % TF_SEC[tf] === 0) ? 'PASS' : 'FAIL'; r[`${tf}_no_forming_bar`] = w.every((b) => b.time + TF_SEC[tf] <= nowSec) ? 'PASS' : 'FAIL'; r[`${tf}_geometry`] = w.every((b) => b.high >= Math.max(b.open, b.close) && b.low <= Math.min(b.open, b.close)) ? 'PASS' : 'FAIL'; } r['5m_complete_decision_bar'] = windows['5m'].at(-1)?.time === barTime ? 'PASS' : 'FAIL'; return r; }
+  let lastQuote = null; // last accepted quote (V15 ordering / duplicate check)
   // ---------- one decision ----------
   async function decide(barTime, nowSec) {
     const fetched = {}; let fetchErr = null;
     for (const tf of TFS) { try { const r = await reader.rates('XAUUSDm', tf, WINDOW + 6); if (!r.ok) throw new Error(r.error ?? 'rates not ok'); fetched[tf] = r.bars ?? []; } catch (e) { fetchErr = `${tf}: ${e.message}`; break; } }
-    let tick = null; try { const t = await reader.tick('XAUUSDm'); tick = t.ok ? t.tick : null; } catch { tick = null; }
+    let tick = null, tickReceivedMs = null; try { const t = await reader.tick('XAUUSDm'); tick = t.ok ? t.tick : null; tickReceivedMs = Number.isFinite(t.received_ms) ? t.received_ms : null; } catch { tick = null; }
+    const quote = buildQuote({ symbol: 'XAUUSDm', tick, receivedMs: tickReceivedMs, decisionMs: Math.round(now() * 1000), serverUtcOffsetMs: QUOTE_SERVER_UTC_OFFSET_MS, offsetSource: QUOTE_OFFSET_SOURCE });
+    const qc = validateQuote(quote, { prev: lastQuote, maxAgeMs: QUOTE_MAX_AGE_MS }); if (qc.status === 'VALID' || qc.status === 'STALE') lastQuote = quote;
+    const quoteFields = { quote_contract: QUOTE_CONTRACT, quote, quote_check: { status: qc.status, reasons: qc.reasons, duplicate: qc.duplicate, quote_age_ms: qc.quote_age_ms } };
     const latency = Math.round(nowSec - (barTime + 300)); const provenance = latency <= FRESH_SEC ? 'FORWARD_LIVE' : 'LATE_DECISION';
-    const base = { schema: SCHEMA, record: 'decision', symbol: 'XAUUSDm', timeframe: '5m', bar_time: barTime, bar_close_utc: iso(barTime + 300), decision_time_utc: iso(nowSec), latency_sec: latency, provenance, executed: false, execution_authority: 'NONE' };
+    const base = { schema: SCHEMA, record: 'decision', symbol: 'XAUUSDm', timeframe: '5m', bar_time: barTime, bar_close_utc: iso(barTime + 300), decision_time_utc: iso(nowSec), latency_sec: latency, provenance, executed: false, execution_authority: 'NONE', ...quoteFields };
     if (fetchErr) { for (const engine of ['V8', 'CONTROL']) record({ ...base, id: decisionId(engine, barTime), engine, action: 'WAIT', engine_action: 'WAIT', wait_category: 'DATA_UNAVAILABLE', wait_detail: `fetch failed: ${fetchErr}`, valid_setup: false, shadow_signal: false, counted_signal: false }); return; }
     for (const tf of TFS) archiveBars(tf, fetched[tf], nowSec);
     const windows = Object.fromEntries(TFS.map((tf) => [tf, fetched[tf].filter((b) => b.time + TF_SEC[tf] <= nowSec).sort((a, b) => a.time - b.time).slice(-WINDOW).map((b) => ({ time: b.time, open: b.open, high: b.high, low: b.low, close: b.close }))]));

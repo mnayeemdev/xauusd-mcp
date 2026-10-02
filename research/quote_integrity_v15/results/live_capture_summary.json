@@ -1,0 +1,74 @@
+{
+ "captured_utc": "2026-10-02T15:52:44.273Z",
+ "duration_s": 180,
+ "interval_ms": 250,
+ "reader_read_only": true,
+ "observations": 687,
+ "ok": 687,
+ "errors": 0,
+ "quote_timestamp_captured": 687,
+ "quote_timestamp_capture_share": 1,
+ "time_s_consistent_with_time_msc": true,
+ "server_utc_offset_ms": 0,
+ "receive_minus_quote_ms": {
+  "min": -1085,
+  "p50": -934,
+  "p99": -74,
+  "max": 737
+ },
+ "quote_age_ms": {
+  "n": 687,
+  "min": -1086,
+  "p10": -1065,
+  "p50": -934,
+  "p90": -500,
+  "p99": -74,
+  "max": 737
+ },
+ "negative_ages": 682,
+ "ipc_latency_ms": {
+  "p50": 0,
+  "p99": 1,
+  "max": 1
+ },
+ "distinct_ticks": 477,
+ "tick_updates_per_s": 2.65,
+ "observations_with_new_tick": 685,
+ "duplicates": 2,
+ "validation": {
+  "INVALID_QUOTE:CLOCK_OR_DATA_ERROR:QUOTE_AFTER_RECEIPT": 682,
+  "VALID": 5
+ },
+ "out_of_order": 0,
+ "spread": {
+  "min": 0.24,
+  "p50": 0.24,
+  "max": 0.26,
+  "negative": 0
+ },
+ "technical_scenarios": {
+  "100": 0.9942,
+  "250": 0.9971,
+  "500": 0.9985,
+  "1000": 1,
+  "2000": 1,
+  "5000": 1
+ },
+ "production_limit_ms": 90000,
+ "within_production_limit": 687,
+ "candle_reference": [
+  {
+   "time": 1790955900,
+   "close": 4135.317
+  },
+  {
+   "time": 1790956200,
+   "close": 4130.151
+  },
+  {
+   "time": 1790956500,
+   "close": 4129.657
+  }
+ ],
+ "note_candle_vs_quote": "candle time = bar OPEN time in seconds (server clock); it is never used as a quote timestamp"
+}

@@ -1,0 +1,43 @@
+▶ quote contract and age
+  ✔ fresh quote: every contract field present; age = decision - quote (broker clock = UTC); BUY uses ask, SELL bid, never mid (1.0343ms)
+  ✔ a non-UTC broker clock is converted explicitly by the offset (no silent mixing) (0.1568ms)
+  ✔ stale / delayed quote: age above the production limit (90 s) -> STALE -> WAIT_STALE_DATA (0.142ms)
+  ✔ technical scenarios are measurement settings only: a quote passing 90 s may fail 100 ms (0.1101ms)
+✔ quote contract and age (2.1206ms)
+▶ fail closed (never repaired, never guessed)
+  ✔ missing quote timestamp (0.1972ms)
+  ✔ missing quote age (no clock offset) (0.0536ms)
+  ✔ missing decision timestamp (0.0596ms)
+  ✔ future quote timestamp (after receipt) (0.0627ms)
+  ✔ decision before receipt (0.0674ms)
+  ✔ bid missing (0.0977ms)
+  ✔ ask missing (0.0945ms)
+  ✔ invalid bid (0.0637ms)
+  ✔ invalid ask (0.0341ms)
+  ✔ negative spread (ask below bid) (0.0342ms)
+  ✔ negative quote age is CLOCK_OR_DATA_ERROR (never clamped to 0) (0.1003ms)
+  ✔ out-of-order and replayed ticks are rejected; an exact duplicate is labelled (age keeps growing) (0.09ms)
+  ✔ clock drift: a PC clock lagging the broker by 1.2 s makes every age negative -> fail closed; a synchronized clock passes (0.4649ms)
+  ✔ historical / legacy data: quote age is UNAVAILABLE and never reconstructed from candle timestamps (0.398ms)
+✔ fail closed (never repaired, never guessed) (2.206ms)
+▶ live-gate wrapper (unchanged V14 gate; quote integrity first)
+  ✔ valid entry + invalid or missing quote -> WAIT_STALE_DATA / WAIT_BROKER_UNSAFE, risk data INCOMPLETE, nothing opened (2.1096ms)
+  ✔ valid fresh quote: the illustrative risk path can reach TRADE_ELIGIBLE, with the quote age recorded; PRIMARY stays RISK_REJECTED (0.7951ms)
+  ✔ executable geometry at the side price (existing production recheck): beyond the structural stop -> WAIT_INVALID_SL; effective RR below 1.70 -> WAIT_INVALID_RR; the SL is never moved (0.3765ms)
+  ✔ entry drift above the production limit (2.0 USD) -> WAIT_BROKER_UNSAFE (0.1946ms)
+  ✔ same input + same state = same decision; restart from a serialized state resumes identically; no lookahead (later quotes never change earlier decisions) (0.9504ms)
+✔ live-gate wrapper (unchanged V14 gate; quote integrity first) (5.1195ms)
+▶ forward-shadow runner and reader contract
+  ✔ runner writes the quote contract with the existing production freshness limit and the calibrated broker offset (0.2858ms)
+  ✔ reader: tick adds time_msc, flags and the receive time; still read-only (no trading call) (0.2438ms)
+  ✔ no execution code in V15 scripts (0.6766ms)
+  ✔ study results (local, skipped when absent): no fabricated quote age, nothing eligible without a valid quote age, deterministic replay (0.3775ms)
+✔ forward-shadow runner and reader contract (1.7064ms)
+ℹ tests 27
+ℹ suites 4
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 97.1062

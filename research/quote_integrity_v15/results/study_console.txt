@@ -1,0 +1,195 @@
+{
+ "decision": {
+  "criteria": {
+   "quote_timestamp_captured_ge_99pct": true,
+   "quote_age_computed_every_observation": true,
+   "no_unexplained_negative_age": false,
+   "clock_negative_ages_explained": "PC clock not synchronized: it lags NTP by ~1230 ms; the broker clock agrees with NTP within ~144 ms",
+   "forward_shadow_ge_3_valid_quote_records": false,
+   "replay_ok": true,
+   "eligible_without_quote_age": 0,
+   "fabricated_historical_quote_age": 0
+  },
+  "DATA_INTEGRITY_STATUS": "DATA_INTEGRITY_PARTIALLY_VALIDATED"
+ },
+ "clock": {
+  "pc_time_service": "NOT_SYNCHRONIZED (Leap Indicator 3, Source: Local CMOS Clock, never synced)",
+  "ntp_reference": "time.windows.com (w32tm /stripchart, read-only)",
+  "ntp_minus_pc_ms_median": 1230,
+  "broker_minus_pc_ms_estimate": 1086,
+  "broker_vs_ntp_ms": -144,
+  "terminal_ping_us": 253189,
+  "conversion_scenario": {
+   "description": "decision and receive times converted from the PC clock to UTC by the measured NTP offset; documented research conversion, NOT used for any decision",
+   "ages": {
+    "n": 687,
+    "min": 144,
+    "p10": 165,
+    "p50": 296,
+    "p90": 730,
+    "p99": 1156,
+    "max": 1967
+   },
+   "negative_ages": 0,
+   "statuses": {
+    "VALID": 579,
+    "INVALID_QUOTE:DECISION_BEFORE_RECEIPT": 108
+   },
+   "technical_scenarios": {
+    "100": 0,
+    "250": 0.4047,
+    "500": 0.7729,
+    "1000": 0.9665,
+    "2000": 1,
+    "5000": 1
+   },
+   "min_age_vs_half_ping_ms": [
+    144,
+    127
+   ]
+  }
+ },
+ "live": {
+  "observations": 687,
+  "server_utc_offset_ms": 0,
+  "replay_deterministic": true,
+  "replay_matches_capture_summary": true,
+  "restart_equals_uninterrupted": true,
+  "prefix_stable": true,
+  "raw_pc_clock": {
+   "ages": {
+    "n": 687,
+    "min": -1086,
+    "p10": -1065,
+    "p50": -934,
+    "p90": -500,
+    "p99": -74,
+    "max": 737
+   },
+   "statuses": {
+    "INVALID_QUOTE:CLOCK_OR_DATA_ERROR:QUOTE_AFTER_RECEIPT": 682,
+    "VALID": 5
+   }
+  }
+ },
+ "historical": {
+  "DEV": {
+   "PRIMARY": {
+    "decisions": 46593,
+    "valid_entries": 4858,
+    "by_state": {
+     "WAIT_DIRECTION_UNCLEAR": 9955,
+     "WAIT_NO_TRIGGER": 16683,
+     "WAIT_ENTRY_QUALITY": 825,
+     "WAIT_INVALID_RR": 5004,
+     "WAIT_NO_SETUP": 8063,
+     "WAIT_STALE_DATA": 5282,
+     "WAIT_INVALID_LOCATION": 781
+    },
+    "valid_entry_reasons": {
+     "QUOTE:QUOTE_TIMESTAMP_UNAVAILABLE": 4858
+    },
+    "trade_eligible": 0,
+    "fabricated_quote_age": 0
+   },
+   "ILLUSTRATIVE_PCT_0_50_10K": {
+    "decisions": 46593,
+    "valid_entries": 4858,
+    "by_state": {
+     "WAIT_DIRECTION_UNCLEAR": 9955,
+     "WAIT_NO_TRIGGER": 16683,
+     "WAIT_ENTRY_QUALITY": 825,
+     "WAIT_INVALID_RR": 5004,
+     "WAIT_NO_SETUP": 8063,
+     "WAIT_STALE_DATA": 5282,
+     "WAIT_INVALID_LOCATION": 781
+    },
+    "valid_entry_reasons": {
+     "QUOTE:QUOTE_TIMESTAMP_UNAVAILABLE": 4858
+    },
+    "trade_eligible": 0,
+    "fabricated_quote_age": 0
+   }
+  },
+  "HOLD": {
+   "PRIMARY": {
+    "decisions": 52788,
+    "valid_entries": 6553,
+    "by_state": {
+     "WAIT_STALE_DATA": 7062,
+     "WAIT_NO_SETUP": 9195,
+     "WAIT_DIRECTION_UNCLEAR": 11478,
+     "WAIT_ENTRY_QUALITY": 1111,
+     "WAIT_INVALID_RR": 3853,
+     "WAIT_NO_TRIGGER": 19175,
+     "WAIT_INVALID_LOCATION": 914
+    },
+    "valid_entry_reasons": {
+     "QUOTE:QUOTE_TIMESTAMP_UNAVAILABLE": 6553
+    },
+    "trade_eligible": 0,
+    "fabricated_quote_age": 0
+   },
+   "ILLUSTRATIVE_PCT_0_50_10K": {
+    "decisions": 52788,
+    "valid_entries": 6553,
+    "by_state": {
+     "WAIT_STALE_DATA": 7062,
+     "WAIT_NO_SETUP": 9195,
+     "WAIT_DIRECTION_UNCLEAR": 11478,
+     "WAIT_ENTRY_QUALITY": 1111,
+     "WAIT_INVALID_RR": 3853,
+     "WAIT_NO_TRIGGER": 19175,
+     "WAIT_INVALID_LOCATION": 914
+    },
+    "valid_entry_reasons": {
+     "QUOTE:QUOTE_TIMESTAMP_UNAVAILABLE": 6553
+    },
+    "trade_eligible": 0,
+    "fabricated_quote_age": 0
+   }
+  }
+ },
+ "shadow": {
+  "records": 300,
+  "legacy_records": 296,
+  "legacy_label": "LEGACY_DATA / QUOTE_AGE_UNAVAILABLE",
+  "quote_contract_records": 4,
+  "quote_fields_complete": 4,
+  "quote_timestamp_captured": 4,
+  "quote_age_computed": 4,
+  "quote_status": {
+   "INVALID_QUOTE:CLOCK_OR_DATA_ERROR:QUOTE_AFTER_RECEIPT": 4
+  },
+  "quote_age_ms": {
+   "n": 4,
+   "min": -1054,
+   "p10": -1054,
+   "p50": -1030,
+   "p90": -1030,
+   "p99": -1030,
+   "max": -1030
+  },
+  "first_quote_record_utc": "2026-10-02T16:00:09.000Z",
+  "gate_on_v8_quote_records": [
+   {
+    "bar_close_utc": "2026-10-02T16:00:00.000Z",
+    "engine_action": "SELL",
+    "decision": "WAIT_STALE_DATA",
+    "reason": "QUOTE:CLOCK_OR_DATA_ERROR:QUOTE_AFTER_RECEIPT",
+    "quote_age_ms": -1054,
+    "quote_status": "INVALID_QUOTE",
+    "quote_reason": "CLOCK_OR_DATA_ERROR:QUOTE_AFTER_RECEIPT"
+   },
+   {
+    "bar_close_utc": "2026-10-02T16:05:00.000Z",
+    "engine_action": "SELL",
+    "decision": "WAIT_STALE_DATA",
+    "reason": "QUOTE:CLOCK_OR_DATA_ERROR:QUOTE_AFTER_RECEIPT",
+    "quote_age_ms": -1030,
+    "quote_status": "INVALID_QUOTE",
+    "quote_reason": "CLOCK_OR_DATA_ERROR:QUOTE_AFTER_RECEIPT"
+   }
+  ]
+ }
+}

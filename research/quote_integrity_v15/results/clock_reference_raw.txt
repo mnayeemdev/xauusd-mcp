@@ -1,0 +1,25 @@
+﻿# captured_utc 2026-10-02T15:57:40.7359858Z
+# w32tm /query /status (read-only)
+Leap Indicator: 3(not synchronized)
+Stratum: 0 (unspecified)
+Precision: -23 (119.209ns per tick)
+Root Delay: 0.0000000s
+Root Dispersion: 0.0000000s
+ReferenceId: 0x00000000 (unspecified)
+Last Successful Sync Time: unspecified
+Source: Local CMOS Clock
+Poll Interval: 10 (1024s)
+
+
+# w32tm /stripchart /computer:time.windows.com /dataonly /samples:7 (read-only; the offset is the remote clock minus this PC)
+Tracking time.windows.com [[64:ff9b::2851:5e41]:123].
+Collecting 7 samples.
+The current time is 02-10-2026 21:27:28.
+21:27:28, +01.2303004s
+21:27:30, +01.2258772s
+21:27:32, +01.2335045s
+21:27:34, +01.2302733s
+21:27:36, +01.2293068s
+21:27:38, +01.2910683s
+21:27:40, +01.2275147s
+

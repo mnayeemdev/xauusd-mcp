@@ -33,7 +33,10 @@ def main():
                 out({"id": req.get("id"), **rates(req["symbol"], req.get("tf", "5m"), req.get("count", 300))})
             elif cmd == "tick":
                 t = mt5.symbol_info_tick(req["symbol"])
-                out({"id": req.get("id"), "ok": t is not None, "tick": None if t is None else {"time": int(t.time), "bid": float(t.bid), "ask": float(t.ask)}, "now": time.time()})
+                rcv = time.time()
+                # V15 quote contract (2026-10-02): time_msc = broker-server tick time in ms, flags as given, received_ms = PC UTC at receipt.
+                # Backward compatible: time / bid / ask / now unchanged. Nothing is reconstructed; a missing tick stays None.
+                out({"id": req.get("id"), "ok": t is not None, "tick": None if t is None else {"time": int(t.time), "time_msc": int(t.time_msc), "bid": float(t.bid), "ask": float(t.ask), "flags": int(t.flags)}, "now": rcv, "received_ms": int(rcv * 1000)})
             elif cmd == "select":
                 si = mt5.symbol_info(req["symbol"])
                 if si is None:

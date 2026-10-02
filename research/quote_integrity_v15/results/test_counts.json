@@ -1,0 +1,6 @@
+{
+ "V15 tests (tests/quote_integrity_v15.test.js)": "27 / 27 (fail 0, skipped 0)",
+ "V8 forward shadow + authority isolation (runner / reader changes)": "40 / 40 (fail 0, skipped 0)",
+ "unit suite (npm run test:unit)": "2676 / 2676 (fail 0, skipped 0)",
+ "freeze suite (npm run test:freeze)": "527 / 527 (fail 0, skipped 0)"
+}
