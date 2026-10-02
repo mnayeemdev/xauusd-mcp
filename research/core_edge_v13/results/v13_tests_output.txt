@@ -1,0 +1,24 @@
+▶ pre-registered groupings (existing pre-entry attributes only)
+  ✔ six groupings, fixed levels (1.198ms)
+  ✔ no hindsight: groupings ignore every outcome field (adding future / outcome data never changes a level) (0.4455ms)
+✔ pre-registered groupings (existing pre-entry attributes only) (2.4057ms)
+▶ decision rules
+  ✔ stage class: DEMONSTRATED only above 0 on both splits; NEGATIVE only below 0 on both (0.1778ms)
+  ✔ edge criteria: sample >= 100, gross and normal CI above 0, stress mean above 0, and (strategy) a positive walk -- on BOTH splits (0.2153ms)
+  ✔ cost label: zero gross that costs make negative = NO_COST_RESILIENT_EDGE (0.111ms)
+  ✔ direction: only a CI-separated difference on BOTH splits counts; a sign flip is NO_DIRECTION_EDGE (0.0743ms)
+  ✔ sample label and final status (0.1887ms)
+  ✔ cost bases are the pre-registered levels (0.1654ms)
+✔ decision rules (1.2347ms)
+▶ research boundaries and frozen results
+  ✔ no execution code; no new indicators or filters (1.5468ms)
+  ✔ frozen study (local, skipped when absent): prereg, freeze, holdout isolation, replay parity, decision consistent (2.7657ms)
+✔ research boundaries and frozen results (4.4697ms)
+ℹ tests 10
+ℹ suites 3
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 85.7239

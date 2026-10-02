@@ -1,0 +1,11 @@
+{
+ "frozen_utc": "2026-10-02T13:20:50.942Z",
+ "prereg_sha": "22f3109e020335b12b8ee6ef856307eacee8b3849ae005005e1516ecbb87e8a8",
+ "lean_sha": "0a26f26cff0cb1d6333f748cdae8c2fce5183cfc395df40161c2285d9fa71380",
+ "study_sha": "e90d3d21776d4657a47e0e62c872b3aa1339161571ab175c0981ca2202799cb8",
+ "v12_isolation_sha": "54edd01a7d37fb4a62147adc7763d4476f290458e19e7902eec827f84af94ada",
+ "subgroups_screened": 66,
+ "candidates_frozen": [
+  "ALL|LOCATION|MARGINAL_2.0_2.5"
+ ]
+}
