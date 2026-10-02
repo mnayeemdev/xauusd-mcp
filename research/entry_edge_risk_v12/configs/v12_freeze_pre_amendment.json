@@ -1,0 +1,166 @@
+{
+ "frozen_utc": "2026-10-02T12:49:10.388Z",
+ "prereg_sha": "529a0ed5590d97d1aa7d2b5723be62675b10ac9e054d5ac15cac77070df6c599",
+ "isolation_sha": "54edd01a7d37fb4a62147adc7763d4476f290458e19e7902eec827f84af94ada",
+ "envelope_sha": "94f10f33e35ba871634022c0509e852d4470fe91ed8b061053b4b79e414ce2bb",
+ "study_sha": "99f811ec83cf3a0e5e35dacc68dda884bc8655b0f2306ba0244e42cd9e4079f1",
+ "v11_integrate_sha": "82c1e6c773745b43a5d22087384c8b79e68cb51a70edcb0fb78ba6b09de8cff1",
+ "v10_risk_sha": "2fc1806a1e14748e430e75e6eb0fa58ce6ebf79ad63f4262d9275c0366e49cd0",
+ "buffers": {
+  "slip_buffer": 0.2,
+  "gap_buffer_r": 0.2707,
+  "swap_rate": 0.5674,
+  "swap_source": "max |swap_long| in the platform record history",
+  "slip_source": "ASSUMPTION: MODERATE level (3 recorded fills, no stop-out fill data)"
+ },
+ "timing_cuts": {
+  "MC": {
+   "bars_from_origin": [
+    0,
+    1,
+    2
+   ],
+   "anchor_dist_atr": [
+    0.31086063348413656,
+    0.7061009174312187,
+    1.288917800118246
+   ],
+   "sl_atr": [
+    1.88,
+    2.42,
+    3.14
+   ],
+   "bo_bars_since_event": null,
+   "mr_bars_since_sweep": null
+  },
+  "PB": {
+   "bars_from_origin": [
+    0,
+    1,
+    2
+   ],
+   "anchor_dist_atr": [
+    0.9713256704981942,
+    1.5101485219898978,
+    1.9510420475319266
+   ],
+   "sl_atr": [
+    1.22,
+    1.76,
+    2.2
+   ],
+   "bo_bars_since_event": null,
+   "mr_bars_since_sweep": null
+  },
+  "BO": {
+   "bars_from_origin": [
+    2,
+    5,
+    7
+   ],
+   "anchor_dist_atr": [
+    0.26666666666665895,
+    0.565696551724215,
+    1.0681818181817955
+   ],
+   "sl_atr": [
+    0.83,
+    1.26,
+    1.82
+   ],
+   "bo_bars_since_event": [
+    2,
+    5,
+    7
+   ],
+   "mr_bars_since_sweep": null
+  },
+  "SR": {
+   "bars_from_origin": [
+    0,
+    0,
+    0
+   ],
+   "anchor_dist_atr": [
+    0.28590265486730765,
+    0.49067961165057994,
+    0.7796426332288016
+   ],
+   "sl_atr": [
+    0.75,
+    0.91,
+    1.06
+   ],
+   "bo_bars_since_event": null,
+   "mr_bars_since_sweep": null
+  },
+  "MR": {
+   "bars_from_origin": [
+    0,
+    1,
+    2
+   ],
+   "anchor_dist_atr": [
+    0.08145251396660345,
+    0.22434653465348867,
+    0.5017241379309599
+   ],
+   "sl_atr": [
+    0.75,
+    1.01,
+    1.29
+   ],
+   "bo_bars_since_event": null,
+   "mr_bars_since_sweep": [
+    0,
+    1,
+    2
+   ]
+  }
+ },
+ "candidates_dev": {
+  "C1_LOCATION_MARGINAL": {
+   "n_group": 314,
+   "n_rest": 4544,
+   "mean_group": 0.2459,
+   "mean_rest": -0.1117,
+   "diff": {
+    "mean": 0.3577,
+    "lo": 0.1492,
+    "hi": 0.5557,
+    "n": 314,
+    "days": 186
+   },
+   "pass": false
+  },
+  "C2_LATE_TRIGGER": {
+   "n_group": 939,
+   "n_rest": 3919,
+   "mean_group": -0.121,
+   "mean_rest": -0.0808,
+   "diff": {
+    "mean": -0.0402,
+    "lo": -0.1444,
+    "hi": 0.0639,
+    "n": 939,
+    "days": 186
+   },
+   "pass": false
+  },
+  "C3_EARLY_TRIGGER": {
+   "n_group": 1526,
+   "n_rest": 3332,
+   "mean_group": -0.0243,
+   "mean_rest": -0.118,
+   "diff": {
+    "mean": 0.0937,
+    "lo": 0.0007,
+    "hi": 0.1929,
+    "n": 1526,
+    "days": 186
+   },
+   "pass": false
+  }
+ },
+ "candidates_frozen": []
+}

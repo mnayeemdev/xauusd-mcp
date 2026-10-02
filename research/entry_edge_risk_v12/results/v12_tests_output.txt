@@ -1,0 +1,39 @@
+▶ stage decoding, funnel and attribution
+  ✔ stage strings decode per model; the funnel is nested (PATTERN ⊇ SETUP ⊇ TRIGGER ⊇ DIRECTION) (0.9246ms)
+  ✔ attribution follows pipeline order: PATTERN / SETUP / TRIGGER / DIRECTION / LOCATION / SL / RR / UNKNOWN / VALID (0.3472ms)
+  ✔ SR trigger: stage 2 counter-structure is valid only when the 15m bias supports the side (the frozen SR rule) (0.1479ms)
+  ✔ hindsight outcome labels are labels only (MFE thresholds 0.5 / 1.2 R); the mirror keeps entry and SL distance (0.1071ms)
+✔ stage decoding, funnel and attribution (2.1823ms)
+▶ no lookahead
+  ✔ timing / location features use only the signal bar and earlier fields (0.1633ms)
+  ✔ the probe at bar i is unchanged when every later bar is corrupted (causal ATR, entry = close of bar i) (0.3562ms)
+  ✔ calendar functions depend only on the bar schedule, never on future prices (0.2479ms)
+✔ no lookahead (0.9449ms)
+▶ swap, slippage and gap exposure
+  ✔ calendar nights: Friday -> Monday = 3; intraday = 0; closure reachability detects a > 24 h gap in the horizon (0.3319ms)
+  ✔ swap buffer: BUY = nights possible x rate, SELL = 0; unavailable rate fails closed (0.1558ms)
+  ✔ worst plausible loss = 1.5 R + spread + 0.10 + slippage + gap + swap buffers (0.1336ms)
+  ✔ gap-through: fill at the open when the bar opens beyond the broker level (BUY / SELL), otherwise 0 (0.1039ms)
+  ✔ realized P&L: SCENARIO as simulated; REALISTIC replaces simulator swap / deterministic gap with calendar swap and data gap-through (0.0832ms)
+  ✔ the platform swap history is read, not assumed (local, skipped when absent) (1.2519ms)
+✔ swap, slippage and gap exposure (2.2573ms)
+▶ risk firewall under the envelope (V11 integration, V10 library unchanged)
+  ✔ envelope sizing: lots x worst plausible loss <= approved; the entry is never modified; minimum lot -> RISK_REJECTED (1.6765ms)
+  ✔ actual risk is recalculated through the independent tick-value path with the envelope allowance (consistent; never above approved) (0.2875ms)
+  ✔ restart and duplicate delivery; fail-closed paths still precede risk (stale data, missing SL) (0.7322ms)
+✔ risk firewall under the envelope (V11 integration, V10 library unchanged) (2.7941ms)
+▶ statistics helpers
+  ✔ day-block bootstrap is deterministic and centred on the point estimate; summary maths (4.4722ms)
+✔ statistics helpers (4.5404ms)
+▶ research boundaries, holdout isolation and frozen results
+  ✔ no execution code; no new indicators; production imported read-only (1.0656ms)
+  ✔ frozen study (local, skipped when absent): amended prereg, freeze, holdout isolation, parity, firewall, decision states (2.7054ms)
+✔ research boundaries, holdout isolation and frozen results (3.8537ms)
+ℹ tests 19
+ℹ suites 6
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 90.8202
