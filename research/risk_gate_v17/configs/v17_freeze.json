@@ -1,0 +1,54 @@
+{
+ "written_utc": "2026-10-02T18:00:16.804Z",
+ "phase": "DEV",
+ "prereg_sha": "ed1af456b6e92ee03633992dbff0ac03d855b6972ba40e61a4b68d7c27d39919",
+ "broker_capture_utc": "2026-10-02T17:55:12Z",
+ "swap": {
+  "ok": true,
+  "long": -0.5132000000000001,
+  "short": 0,
+  "rollover3days": 3,
+  "mode": "POINTS"
+ },
+ "envelope_swap_max_charged_nights_dev": 5,
+ "scenarios": {
+  "NORMAL": {
+   "spread": 0.24,
+   "slip": 0.1,
+   "source": "V5/V9/V10 normal; production CAPITAL_DEFAULTS"
+  },
+  "MODERATE": {
+   "spread": 0.6,
+   "slip": 0.3,
+   "source": "production maxSpreadUsd; V12 moderate slippage level"
+  },
+  "SEVERE": {
+   "spread": 0.6,
+   "slip": 9.608,
+   "source": "DEV maximum in-session 5m discontinuity (2025-11-28T08:10:00.000Z)"
+  }
+ },
+ "reopen_gap_levels_dev": {
+  "DAILY_BREAK": {
+   "normal_p50": 1.535,
+   "moderate_p90": 4.85,
+   "severe_p99": 9.017,
+   "historical_max": 15.752,
+   "n": 135
+  },
+  "CLOSURE": {
+   "normal_p50": 4.064,
+   "moderate_p90": 13.693,
+   "severe_p99": 44.567,
+   "historical_max": 44.567,
+   "n": 35
+  }
+ },
+ "in_session_discontinuity_dev": {
+  "normal_p50": 0.035,
+  "moderate_p90": 0.075,
+  "severe_p99": 0.116,
+  "historical_max": 9.608,
+  "n": 46421
+ }
+}

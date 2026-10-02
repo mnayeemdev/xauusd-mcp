@@ -1,0 +1,6 @@
+$ npx eslint research/risk_gate_v17 tests/risk_gate_v17.test.js
+(no output: 0 problems)
+
+$ npm run lint   (eslint src/; src unchanged by V17)
+✖ 4 problems (0 errors, 4 warnings)
+

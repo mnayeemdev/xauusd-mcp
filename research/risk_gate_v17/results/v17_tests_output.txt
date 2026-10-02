@@ -1,0 +1,50 @@
+▶ position sizing (owner §4): equity -> risk % -> cash -> price -> SL -> size -> rounding -> actual exposure
+  ✔ normal risk: size rounded DOWN to the step; actual exposure recalculated after rounding and never above the cash risk (0.7835ms)
+  ✔ deterministic: the same inputs give the same size and record (0.1306ms)
+  ✔ research risk % are comparison scenarios only (0.10 / 0.25 / 0.50 / 1.00) (0.4697ms)
+  ✔ minimum lot: rejected when the minimum lot would exceed the risk; never rounded up, SL and entry untouched (0.1549ms)
+  ✔ maximum lot: rejected (RISK_REJECTED_BROKER_LIMIT); the size is never silently capped (0.1005ms)
+  ✔ lot step: an off-grid volume is RISK_REJECTED_INVALID_SIZE; a broker step / minimum mismatch is broker-data invalid (0.114ms)
+  ✔ broker rounding: across many sizes the rounded exposure is never above the approved cash risk (no BROKER_ROUNDING_EXCEEDANCE) (1.3784ms)
+✔ position sizing (owner §4): equity -> risk % -> cash -> price -> SL -> size -> rounding -> actual exposure (3.9907ms)
+▶ structural SL, RR, entry firewall, PRIMARY
+  ✔ structural SL is an input only: never widened, tightened or moved; the hard broker stop = fill -/+ (1.5 x structural distance + spread) (0.1584ms)
+  ✔ risk never modifies the entry: the signal is unchanged and its hash recorded; a rejection keeps VALID_ENTRY (1.3866ms)
+  ✔ PRIMARY (risk % unresolved): every valid entry is VALID_ENTRY + RISK_PERCENTAGE_UNRESOLVED, never accepted (0.1832ms)
+✔ structural SL, RR, entry firewall, PRIMARY (1.9222ms)
+▶ margin, exposure, duplicates, breakers, no loss-based sizing
+  ✔ margin: required = lots x contract x price / leverage; insufficient / above cap / low level after loss -> MARGIN_REJECTED (0.1577ms)
+  ✔ existing exposure: MAX_SIMULTANEOUS_TRADES = 1 (a second signal while a position is open is rejected) (0.1568ms)
+  ✔ duplicate prevention: the same signal id is decided once (0.1504ms)
+  ✔ no martingale / recovery sizing: after a loss the next cash risk is the same % of the (lower) equity (0.1863ms)
+  ✔ breakers: production 2 consecutive losses per day; daily loss policy stays unresolved (production disabled) (0.0709ms)
+✔ margin, exposure, duplicates, breakers, no loss-based sizing (0.835ms)
+▶ realized risk: stop loss, commission, swap, slippage, gap -- planned SL is not the guaranteed loss
+  ✔ commission: production estimate 0 per side, recorded separately (0.1616ms)
+  ✔ normal slippage (allowance 0.10) stays WITHIN_RISK; moderate (0.30) and severe exceed as SLIPPAGE_EXCEEDANCE (0.0664ms)
+  ✔ swap measured separately: a BUY held over rollovers pays -swap_long x point per oz per charged night (triple on Wednesday) (0.0813ms)
+  ✔ rollover calendar: intraday 0; Mon->Tue 1; Wed->Thu triple 3; Fri->Mon 1 (Sat / Sun rollovers not charged) (0.126ms)
+  ✔ gap: normal / moderate / severe reopen gaps through the stop are GAP_EXCEEDANCE; the stop is not a guaranteed loss (0.0848ms)
+✔ realized risk: stop loss, commission, swap, slippage, gap -- planned SL is not the guaranteed loss (0.6054ms)
+▶ broker data and quote integrity fail closed
+  ✔ missing or invalid broker data -> RISK_REJECTED_BROKER_DATA (every required field) (0.1401ms)
+  ✔ the live read-only capture (when present) validates and its margin equals the MT5 calculation (0.4813ms)
+  ✔ missing / stale / invalid quote (V16 timing) -> RISK_REJECTED_QUOTE; a 1-6 s delay is not a quote failure (0.7305ms)
+  ✔ fail closed: equity unavailable, invalid risk, invalid SL, inconsistent inputs (0.1204ms)
+✔ broker data and quote integrity fail closed (1.6081ms)
+▶ replay, restart, no-lookahead
+  ✔ restart: a serialized state resumes with identical decisions (0.3043ms)
+  ✔ no-lookahead: sizing reads only entry-time inputs (an outcome field on the input changes nothing) (0.1378ms)
+✔ replay, restart, no-lookahead (0.5144ms)
+▶ research boundaries
+  ✔ no order / position-modification code; the broker capture is read-only and records no identity (0.5901ms)
+  ✔ results (when present): no over-risk after rounding, RR 1.70, PRIMARY never accepted, replay parity (0.974ms)
+✔ research boundaries (1.642ms)
+ℹ tests 28
+ℹ suites 7
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 93.9829

@@ -1,0 +1,6 @@
+{
+ "V17 tests (tests/risk_gate_v17.test.js)": "28 / 28 (fail 0, skipped 0)",
+ "related: V8 forward shadow + authority isolation + V16 timing": "67 / 67 (fail 0, skipped 0)",
+ "unit suite (npm run test:unit)": "2731 / 2731 (fail 0, skipped 0)",
+ "freeze suite (npm run test:freeze)": "582 / 582 (fail 0, skipped 0)"
+}

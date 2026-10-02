@@ -1,0 +1,348 @@
+{
+ "decision": {
+  "integrity": {
+   "tests_pass": true,
+   "no_rounding_up_or_overrisk": true,
+   "rr_170": true,
+   "no_broker_rounding_exceedance": true,
+   "primary_never_accepts": true,
+   "replay_parity": true
+  },
+  "measured": {
+   "broker_data_validated": true,
+   "components_measured_dev": true,
+   "components_measured_hold": true
+  },
+  "RISK_GATE_STATUS": "RISK_GATE_VALIDATED",
+  "GAP_RISK": "UNRESOLVED",
+  "SLIPPAGE_RISK": "UNRESOLVED (no stop-fill evidence; scenarios are documented assumptions plus the DEV in-session maximum)",
+  "RISK_PERCENTAGE": "UNRESOLVED",
+  "DAILY_LOSS_POLICY": "UNRESOLVED"
+ },
+ "broker_ok": true,
+ "invariants": {
+  "rounding_violations": 0,
+  "rr_violations": 0,
+  "broker_rounding_exceedance": 0,
+  "other_exceedance": 0,
+  "primary_accepted": 0
+ },
+ "replay": {
+  "DEV": {
+   "deterministic": true,
+   "restart_equals_uninterrupted": true,
+   "hash": "da326e33975658477de78fe6525ab7615e3c7009d2db65ea1cd6eb916627f389"
+  },
+  "HOLD": {
+   "deterministic": true,
+   "restart_equals_uninterrupted": true,
+   "hash": "75477244428b2950f21a904d9ae86b9b414e8822c786b6527b7572c7bf562834"
+  }
+ },
+ "primary": {
+  "DEV": {
+   "RISK_PERCENTAGE_UNRESOLVED": 4858
+  },
+  "HOLD": {
+   "RISK_PERCENTAGE_UNRESOLVED": 6553
+  }
+ },
+ "headline_0_50_envelope": {
+  "DEV": {
+   "NORMAL": {
+    "accepted": 676,
+    "losing": 364,
+    "exceedance": {
+     "WITHIN_RISK": 362,
+     "GAP_EXCEEDANCE": 2
+    },
+    "mult": {
+     "n": 364,
+     "mean": 0.7399,
+     "p50": 0.7122,
+     "p90": 1,
+     "p99": 1,
+     "max": 1.4957
+    },
+    "gap_events": 2
+   },
+   "MODERATE": {
+    "accepted": 654,
+    "losing": 367,
+    "exceedance": {
+     "SLIPPAGE_EXCEEDANCE": 83,
+     "WITHIN_RISK": 284
+    },
+    "mult": {
+     "n": 367,
+     "mean": 0.7754,
+     "p50": 0.7405,
+     "p90": 1.0379,
+     "p99": 1.0734,
+     "max": 1.5008
+    },
+    "gap_events": 2
+   },
+   "SEVERE": {
+    "accepted": 339,
+    "losing": 320,
+    "exceedance": {
+     "WITHIN_RISK": 77,
+     "SLIPPAGE_EXCEEDANCE": 243
+    },
+    "mult": {
+     "n": 320,
+     "mean": 1.7173,
+     "p50": 1.7202,
+     "p90": 2.979,
+     "p99": 4.2534,
+     "max": 4.5879
+    },
+    "gap_events": 0
+   }
+  },
+  "HOLD": {
+   "NORMAL": {
+    "accepted": 795,
+    "losing": 440,
+    "exceedance": {
+     "WITHIN_RISK": 439,
+     "GAP_EXCEEDANCE": 1
+    },
+    "mult": {
+     "n": 440,
+     "mean": 0.7981,
+     "p50": 0.7613,
+     "p90": 1,
+     "p99": 1,
+     "max": 6.6025
+    },
+    "gap_events": 1
+   },
+   "MODERATE": {
+    "accepted": 791,
+    "losing": 438,
+    "exceedance": {
+     "WITHIN_RISK": 327,
+     "SLIPPAGE_EXCEEDANCE": 111
+    },
+    "mult": {
+     "n": 438,
+     "mean": 0.8247,
+     "p50": 0.7818,
+     "p90": 1.0303,
+     "p99": 1.063,
+     "max": 6.2979
+    },
+    "gap_events": 1
+   },
+   "SEVERE": {
+    "accepted": 475,
+    "losing": 400,
+    "exceedance": {
+     "WITHIN_RISK": 102,
+     "SLIPPAGE_EXCEEDANCE": 298
+    },
+    "mult": {
+     "n": 400,
+     "mean": 1.5272,
+     "p50": 1.5369,
+     "p90": 2.6918,
+     "p99": 3.8856,
+     "max": 4.3071
+    },
+    "gap_events": 1
+   }
+  }
+ },
+ "gap": {
+  "DEV": {
+   "events": 2,
+   "by_kind": {
+    "CLOSURE": 2
+   },
+   "gap_impact_usd": {
+    "n": 2,
+    "mean": 17.4785,
+    "p50": 24.713,
+    "p90": 24.713,
+    "p99": 24.713,
+    "max": 24.713
+   },
+   "multiplier": {
+    "n": 2,
+    "mean": 1.3494,
+    "p50": 1.4957,
+    "p90": 1.4957,
+    "p99": 1.4957,
+    "max": 1.4957
+   },
+   "worst": {
+    "id": "42448|SELL",
+    "i": 42448,
+    "t": 1764969900,
+    "side": "SELL",
+    "model": "BO",
+    "entry_price": 4197.03,
+    "engine_entry": 4197.03,
+    "sl_price": 4199.36,
+    "broker_sl": 4200.765,
+    "position_size": 0.13,
+    "planned_risk_amount": 50.6706,
+    "cash_risk_raw": 50.67064900000003,
+    "actual_stop_risk_raw": 49.85499999999859,
+    "planned_risk_pct": 0.005,
+    "actual_stop_risk": 49.855,
+    "actual_stop_risk_pct": 0.0049,
+    "rr": 1.7,
+    "exit": "BROKER_SL",
+    "exitBar": 42455,
+    "swap_category": "OVERNIGHT",
+    "charged_nights": 1,
+    "boundary_category": "OVERNIGHT",
+    "gap_kind": "CLOSURE",
+    "stop_loss_loss": 48.555,
+    "commission": 0,
+    "swap": 0,
+    "slippage": 1.3,
+    "gap_impact": 24.713,
+    "total_realized": 74.568,
+    "risk_multiplier": 1.4957,
+    "exceedance": "GAP_EXCEEDANCE",
+    "margin_required": 272.81
+   }
+  },
+  "HOLD": {
+   "events": 1,
+   "by_kind": {
+    "CLOSURE": 1
+   },
+   "gap_impact_usd": {
+    "n": 1,
+    "mean": 251.216,
+    "p50": 251.216,
+    "p90": 251.216,
+    "p99": 251.216,
+    "max": 251.216
+   },
+   "multiplier": {
+    "n": 1,
+    "mean": 6.6025,
+    "p50": 6.6025,
+    "p90": 6.6025,
+    "p99": 6.6025,
+    "max": 6.6025
+   },
+   "worst": {
+    "id": "74604|SELL",
+    "i": 74604,
+    "t": 1779476700,
+    "side": "SELL",
+    "model": "BO",
+    "entry_price": 4508.73,
+    "engine_entry": 4508.73,
+    "sl_price": 4512.24,
+    "broker_sl": 4514.235,
+    "position_size": 0.08,
+    "planned_risk_amount": 48.4386,
+    "cash_risk_raw": 48.43856200000001,
+    "actual_stop_risk_raw": 44.84000000000262,
+    "planned_risk_pct": 0.005,
+    "actual_stop_risk": 44.84,
+    "actual_stop_risk_pct": 0.0046,
+    "rr": 1.7,
+    "exit": "BROKER_SL",
+    "exitBar": 74627,
+    "swap_category": "OVERNIGHT",
+    "charged_nights": 1,
+    "boundary_category": "OVERNIGHT",
+    "gap_kind": "CLOSURE",
+    "stop_loss_loss": 44.04,
+    "commission": 0,
+    "swap": 0,
+    "slippage": 0.8,
+    "gap_impact": 251.216,
+    "total_realized": 296.056,
+    "risk_multiplier": 6.6025,
+    "exceedance": "GAP_EXCEEDANCE",
+    "margin_required": 180.35
+   }
+  }
+ },
+ "envelope": {
+  "DEV": {
+   "losing": 364,
+   "within_envelope_excluding_gap": 364,
+   "exceed_excluding_gap": {},
+   "gap_tail": 2
+  },
+  "HOLD": {
+   "losing": 440,
+   "within_envelope_excluding_gap": 440,
+   "exceed_excluding_gap": {},
+   "gap_tail": 1
+  }
+ },
+ "swap_DEV": {
+  "INTRADAY": {
+   "trades": 643,
+   "buy_trades": 342,
+   "swap_cost_usd": {
+    "n": 643,
+    "mean": 0,
+    "p50": 0,
+    "p90": 0,
+    "p99": 0,
+    "max": 0
+   },
+   "swap_cost_share_of_actual_stop_risk": {
+    "n": 643,
+    "mean": 0,
+    "p50": 0,
+    "p90": 0,
+    "p99": 0,
+    "max": 0
+   }
+  },
+  "OVERNIGHT": {
+   "trades": 31,
+   "buy_trades": 18,
+   "swap_cost_usd": {
+    "n": 31,
+    "mean": 0.5463,
+    "p50": 0,
+    "p90": 2.0528,
+    "p99": 2.566,
+    "max": 2.566
+   },
+   "swap_cost_share_of_actual_stop_risk": {
+    "n": 31,
+    "mean": 0.0127,
+    "p50": 0,
+    "p90": 0.0446,
+    "p99": 0.0548,
+    "max": 0.0548
+   }
+  },
+  "TRIPLE_ROLLOVER": {
+   "trades": 2,
+   "buy_trades": 1,
+   "swap_cost_usd": {
+    "n": 2,
+    "mean": 2.3094,
+    "p50": 4.6188,
+    "p90": 4.6188,
+    "p99": 4.6188,
+    "max": 4.6188
+   },
+   "swap_cost_share_of_actual_stop_risk": {
+    "n": 2,
+    "mean": 0.0564,
+    "p50": 0.1128,
+    "p90": 0.1128,
+    "p99": 0.1128,
+    "max": 0.1128
+   }
+  }
+ }
+}
