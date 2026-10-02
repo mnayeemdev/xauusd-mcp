@@ -13,6 +13,7 @@ const tbl = (h, rows) => `| ${h.join(' | ')} |\n|${h.map(() => '---').join('|')}
 const st = (o) => (o && o.n ? `n ${o.n}; min ${o.min}; p10 ${o.p10}; p50 ${o.p50}; p90 ${o.p90}; p99 ${o.p99}; max ${o.max}` : '—'); const fmt = (o) => Object.entries(o ?? {}).map(([k, v]) => `${k}: ${v}`).join('; ') || '—';
 const HEAD = (t) => `# ${t}\n\nV15 LIVE QUOTE AGE + RISK DATA INTEGRITY · DATA-INTEGRITY STUDY (not entry research) · RESEARCH ONLY · REAL OFF · DEMO OFF · EXECUTION_AUTHORITY NONE · strategies unchanged (V8 corrected core) · structural SL unchanged · RR 1.70 · CAPITAL_HARVEST OFF · RISK_PERCENTAGE UNRESOLVED · spec ${R.prereg_sha.slice(0, 16)}…\n\n`;
 const out = {};
+const DM = LC.decision_minus_receive_ms ?? {}; const DMN = Object.values(DM).reduce((a, b) => a + b, 0); const DMNEG = Object.entries(DM).filter(([k]) => Number(k) < 0).reduce((a, [, v]) => a + v, 0);
 const CLOCK_LINE = `this PC's Windows time service is ${CK.pc_time_service}; the PC lags NTP (time.windows.com) by ≈ ${CK.ntp_minus_pc_ms_median} ms, while the broker clock agrees with NTP within ≈ ${Math.abs(CK.broker_vs_ntp_ms)} ms`;
 
 out.V15_QUOTE_DATA_CONTRACT = HEAD('V15_QUOTE_DATA_CONTRACT') + `## Contract \`${R.contract}\` (one record per observation; a field the platform does not provide is \`UNAVAILABLE\`, never guessed)
@@ -43,6 +44,8 @@ ${tbl(['Scenario', ...Object.keys(CK.conversion_scenario.technical_scenarios).ma
 - **Quote age is measurable to the millisecond.** Ticks advance about ${S.tick_updates_per_s} times per second, and IPC latency is p99 ${S.ipc_latency_ms.p99} ms.
 - **But it is only trustworthy once the PC clock is synchronized.** With the raw clock, the age is negative on ${S.negative_ages} / ${S.observations} observations, which correctly fail closed.
 - **Cross-check.** With the documented NTP conversion, the smallest age is ${CK.conversion_scenario.min_age_vs_half_ping_ms?.[0]} ms, consistent with the terminal's measured round-trip ping of ${CK.terminal_ping_us ? Math.round(CK.terminal_ping_us / 1000) : '—'} ms (one-way ≈ ${CK.conversion_scenario.min_age_vs_half_ping_ms?.[1]} ms).
+- **Second finding: 1 ms cross-process resolution.** The receive time is taken by the Python reader (time.time) and the decision time by Node (Date.now): two processes reading the same PC clock at 1 ms resolution. Decision − receive (ms) over the live capture: ${fmt(DM)}. On ${DMNEG} / ${DMN} observations the decision reads 1 ms *before* receipt, so even with a synchronized clock these fail closed as DECISION_BEFORE_RECEIPT (the ${CK.conversion_scenario.statuses['INVALID_QUOTE:DECISION_BEFORE_RECEIPT'] ?? 0} rows in the NTP scenario). This is safe (it only adds WAITs) and is reported, not repaired: no tolerance is introduced in V15. Taking both times in one process, or a documented 1 ms resolution tolerance, is an open design question for the owner.
+- **Note on \`live_capture_summary.json\`:** its \`technical_scenarios\` shares are computed on the raw (negative) ages and are therefore not meaningful; the scenario table above uses the NTP-converted ages.
 `;
 
 out.V15_CLOCK_INTEGRITY = HEAD('V15_CLOCK_INTEGRITY') + `## Clocks and conversions (documented, never mixed silently)
@@ -50,6 +53,10 @@ ${tbl(['Clock', 'Used for', 'Resolution / precision', 'Time zone'], [['broker se
 
 ## Integrity checks
 ${tbl(['Check', 'Result'], [['Windows time service', CK.pc_time_service], ['PC vs NTP (time.windows.com, read-only stripchart)', `NTP − PC = ${CK.ntp_minus_pc_ms_median} ms (samples: ${CK.ntp_minus_pc_ms_samples.map((x) => Math.round(x)).join(', ')})`], ['Broker vs PC (from live ticks)', `broker ahead of PC by ≈ ${CK.broker_minus_pc_ms_estimate} ms`], ['Broker vs NTP', `≈ ${CK.broker_vs_ntp_ms} ms`], ['Negative quote ages (raw PC clock)', `${S.negative_ages} / ${S.observations} → CLOCK_OR_DATA_ERROR → WAIT_STALE_DATA`], ['Out-of-order ticks', String(S.out_of_order)], ['Duplicate ticks', String(S.duplicates)], ['Future timestamps (quote after receipt)', `${LC.raw_pc_clock.statuses['INVALID_QUOTE:CLOCK_OR_DATA_ERROR:QUOTE_AFTER_RECEIPT'] ?? 0} (all explained by the PC clock lag)`], ['time (s) consistent with time_msc', String(S.time_s_consistent_with_time_msc)]])}
+
+## Cross-process timestamp resolution
+- Decision − receive (ms): ${fmt(DM)} (Node Date.now vs Python time.time, same PC clock, 1 ms resolution).
+- ${DMNEG} / ${DMN} observations read the decision 1 ms before receipt → DECISION_BEFORE_RECEIPT → fail closed. Reported, not repaired; no tolerance is introduced.
 
 ## CLOCK_INTEGRITY = FAIL (on this machine)
 - **Cause:** ${CLOCK_LINE}.
@@ -118,7 +125,7 @@ ${tbl(['Item', 'Count'], [['decision records in the store', FS.records], ['LEGAC
 ## Gate on the new V8 records (illustrative risk model; nothing executed)
 ${tbl(['Bar close (UTC)', 'Engine', 'Gate decision', 'Reason', 'Quote age (ms)', 'Quote status'], FS.gate_on_v8_quote_records.map((x) => [x.bar_close_utc, x.engine_action, x.decision, x.reason, x.quote_age_ms, `${x.quote_status}${x.quote_reason ? `:${x.quote_reason}` : ''}`]))}
 
-**Reading:** every new record carries the quote data the risk gate needs. On this machine the quote age is invalid because of the PC clock lag, so a live signal fails closed (WAIT_STALE_DATA) instead of being treated as fresh.
+**Reading:** every new record carries the quote data the risk gate needs. On this machine the quote age is invalid because of the PC clock lag, so a live signal fails closed (WAIT_STALE_DATA) instead of being treated as fresh. A bar without an entry is already a WAIT (no trade is considered); its quote check is still recorded.
 `;
 
 out.V15_HISTORICAL_DATA_LIMITATIONS = HEAD('V15_HISTORICAL_DATA_LIMITATIONS') + `## Rule
@@ -185,6 +192,8 @@ ${tbl(['Pre-registered criterion', 'Result'], Object.entries(D.criteria).map(([k
 - Historical quote age is never fabricated.
 
 **What keeps V15 from "validated":** ${CLOCK_LINE}. Until the clock is synchronized, every live quote age is negative and the system (correctly) refuses to trade.
+
+**Second finding (does not block, adds WAITs only):** ${DMNEG} / ${DMN} live observations read the decision time (Node) 1 ms before the receive time (Python), a cross-process 1 ms resolution artifact. Even with a synchronized clock these fail closed as DECISION_BEFORE_RECEIPT. Reported, not repaired.
 
 **V15 does not create an entry edge and does not fix the negative expectancy (V13).** DATA_VALIDITY ≠ TRADING_EDGE.
 

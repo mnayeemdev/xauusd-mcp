@@ -22,6 +22,10 @@ V15 LIVE QUOTE AGE + RISK DATA INTEGRITY · DATA-INTEGRITY STUDY (not entry rese
 | Future timestamps (quote after receipt) | 682 (all explained by the PC clock lag) |
 | time (s) consistent with time_msc | true |
 
+## Cross-process timestamp resolution
+- Decision − receive (ms): 0: 547; 1: 32; -1: 108 (Node Date.now vs Python time.time, same PC clock, 1 ms resolution).
+- 108 / 687 observations read the decision 1 ms before receipt → DECISION_BEFORE_RECEIPT → fail closed. Reported, not repaired; no tolerance is introduced.
+
 ## CLOCK_INTEGRITY = FAIL (on this machine)
 - **Cause:** this PC's Windows time service is NOT_SYNCHRONIZED (Leap Indicator 3, Source: Local CMOS Clock, never synced); the PC lags NTP (time.windows.com) by ≈ 1230 ms, while the broker clock agrees with NTP within ≈ 144 ms.
 - **Behaviour:** the system does exactly what the specification requires. It refuses to compute a trustworthy quote age: negative ages are CLOCK_OR_DATA_ERROR and fail closed, so no quote is assumed fresh.

@@ -11,14 +11,14 @@ V15 LIVE QUOTE AGE + RISK DATA INTEGRITY · DATA-INTEGRITY STUDY (not entry rese
 ## Records
 | Item | Count |
 |---|---|
-| decision records in the store | 300 |
+| decision records in the store | 302 |
 | LEGACY_DATA / QUOTE_AGE_UNAVAILABLE (before the update) | 296 |
-| records with the quote contract | 4 |
-| … with every contract field present | 4 |
-| … with a broker quote timestamp | 4 |
-| … with a computed quote age | 4 |
-| quote status | INVALID_QUOTE:CLOCK_OR_DATA_ERROR:QUOTE_AFTER_RECEIPT: 4 |
-| quote age (ms) | n 4; min -1054; p10 -1054; p50 -1030; p90 -1030; p99 -1030; max -1030 |
+| records with the quote contract | 6 |
+| … with every contract field present | 6 |
+| … with a broker quote timestamp | 6 |
+| … with a computed quote age | 6 |
+| quote status | INVALID_QUOTE:CLOCK_OR_DATA_ERROR:QUOTE_AFTER_RECEIPT: 6 |
+| quote age (ms) | n 6; min -1082; p10 -1082; p50 -1054; p90 -1030; p99 -1030; max -1030 |
 | first quote-contract record | 2026-10-02T16:00:09.000Z |
 
 ## Gate on the new V8 records (illustrative risk model; nothing executed)
@@ -26,5 +26,6 @@ V15 LIVE QUOTE AGE + RISK DATA INTEGRITY · DATA-INTEGRITY STUDY (not entry rese
 |---|---|---|---|---|---|
 | 2026-10-02T16:00:00.000Z | SELL | WAIT_STALE_DATA | QUOTE:CLOCK_OR_DATA_ERROR:QUOTE_AFTER_RECEIPT | -1054 | INVALID_QUOTE:CLOCK_OR_DATA_ERROR:QUOTE_AFTER_RECEIPT |
 | 2026-10-02T16:05:00.000Z | SELL | WAIT_STALE_DATA | QUOTE:CLOCK_OR_DATA_ERROR:QUOTE_AFTER_RECEIPT | -1030 | INVALID_QUOTE:CLOCK_OR_DATA_ERROR:QUOTE_AFTER_RECEIPT |
+| 2026-10-02T16:10:00.000Z | WAIT | WAIT_NO_TRIGGER | SETUP_WITHOUT_TRIGGER | -1082 | INVALID_QUOTE:CLOCK_OR_DATA_ERROR:QUOTE_AFTER_RECEIPT |
 
-**Reading:** every new record carries the quote data the risk gate needs. On this machine the quote age is invalid because of the PC clock lag, so a live signal fails closed (WAIT_STALE_DATA) instead of being treated as fresh.
+**Reading:** every new record carries the quote data the risk gate needs. On this machine the quote age is invalid because of the PC clock lag, so a live signal fails closed (WAIT_STALE_DATA) instead of being treated as fresh. A bar without an entry is already a WAIT (no trade is considered); its quote check is still recorded.

@@ -24,6 +24,8 @@ V15 LIVE QUOTE AGE + RISK DATA INTEGRITY · DATA-INTEGRITY STUDY (not entry rese
 
 **What keeps V15 from "validated":** this PC's Windows time service is NOT_SYNCHRONIZED (Leap Indicator 3, Source: Local CMOS Clock, never synced); the PC lags NTP (time.windows.com) by ≈ 1230 ms, while the broker clock agrees with NTP within ≈ 144 ms. Until the clock is synchronized, every live quote age is negative and the system (correctly) refuses to trade.
 
+**Second finding (does not block, adds WAITs only):** 108 / 687 live observations read the decision time (Node) 1 ms before the receive time (Python), a cross-process 1 ms resolution artifact. Even with a synchronized clock these fail closed as DECISION_BEFORE_RECEIPT. Reported, not repaired.
+
 **V15 does not create an entry edge and does not fix the negative expectancy (V13).** DATA_VALIDITY ≠ TRADING_EDGE.
 
 ## Final terminal summary

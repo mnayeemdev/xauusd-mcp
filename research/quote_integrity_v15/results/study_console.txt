@@ -70,6 +70,11 @@
     "INVALID_QUOTE:CLOCK_OR_DATA_ERROR:QUOTE_AFTER_RECEIPT": 682,
     "VALID": 5
    }
+  },
+  "decision_minus_receive_ms": {
+   "0": 547,
+   "1": 32,
+   "-1": 108
   }
  },
  "historical": {
@@ -151,21 +156,21 @@
   }
  },
  "shadow": {
-  "records": 300,
+  "records": 302,
   "legacy_records": 296,
   "legacy_label": "LEGACY_DATA / QUOTE_AGE_UNAVAILABLE",
-  "quote_contract_records": 4,
-  "quote_fields_complete": 4,
-  "quote_timestamp_captured": 4,
-  "quote_age_computed": 4,
+  "quote_contract_records": 6,
+  "quote_fields_complete": 6,
+  "quote_timestamp_captured": 6,
+  "quote_age_computed": 6,
   "quote_status": {
-   "INVALID_QUOTE:CLOCK_OR_DATA_ERROR:QUOTE_AFTER_RECEIPT": 4
+   "INVALID_QUOTE:CLOCK_OR_DATA_ERROR:QUOTE_AFTER_RECEIPT": 6
   },
   "quote_age_ms": {
-   "n": 4,
-   "min": -1054,
-   "p10": -1054,
-   "p50": -1030,
+   "n": 6,
+   "min": -1082,
+   "p10": -1082,
+   "p50": -1054,
    "p90": -1030,
    "p99": -1030,
    "max": -1030
@@ -187,6 +192,15 @@
     "decision": "WAIT_STALE_DATA",
     "reason": "QUOTE:CLOCK_OR_DATA_ERROR:QUOTE_AFTER_RECEIPT",
     "quote_age_ms": -1030,
+    "quote_status": "INVALID_QUOTE",
+    "quote_reason": "CLOCK_OR_DATA_ERROR:QUOTE_AFTER_RECEIPT"
+   },
+   {
+    "bar_close_utc": "2026-10-02T16:10:00.000Z",
+    "engine_action": "WAIT",
+    "decision": "WAIT_NO_TRIGGER",
+    "reason": "SETUP_WITHOUT_TRIGGER",
+    "quote_age_ms": -1082,
     "quote_status": "INVALID_QUOTE",
     "quote_reason": "CLOCK_OR_DATA_ERROR:QUOTE_AFTER_RECEIPT"
    }

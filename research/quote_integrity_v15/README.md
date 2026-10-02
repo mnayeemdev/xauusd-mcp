@@ -13,6 +13,7 @@ RESEARCH ONLY.
 - **Historical replays:** quote age is UNAVAILABLE and never fabricated.
 - **What keeps it partial:** this PC's clock is not synchronized (it lags NTP by about 1.23 s; the broker clock ≈ NTP). Every live quote age is therefore negative, and the system correctly refuses to trade.
 - **The fix:** enabling Windows time sync is an owner action (see `reports/V15_CLOCK_INTEGRITY.md`).
+- **Second finding:** the receive time (Python reader) and the decision time (Node) are read in two processes at 1 ms resolution. On 108 / 687 live observations the decision reads 1 ms before receipt, so these fail closed (DECISION_BEFORE_RECEIPT) even with a synced clock. This only adds WAITs; it is reported, not repaired.
 
 ## Layout
 | Path | Content |
